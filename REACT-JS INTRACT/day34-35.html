@@ -1,0 +1,2094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Splitting & Lazy Loading - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 35px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            border-left: 6px solid #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin: 25px 0 15px 0;
+            font-size: 1.5em;
+        }
+
+        .hinglish {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 3px 10px rgba(255, 193, 7, 0.2);
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 25px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'CODE';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #667eea;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+
+        .keyword { color: #c678dd; font-weight: bold; }
+        .string { color: #98c379; }
+        .function { color: #61afef; }
+        .comment { color: #5c6370; font-style: italic; }
+        .number { color: #d19a66; }
+
+        .interactive-demo {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 3px solid #667eea;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .demo-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: white;
+        }
+
+        .bundle-visualizer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .bundle-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 3px solid #e9ecef;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .bundle-box:hover {
+            border-color: #667eea;
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .bundle-box.loaded {
+            border-color: #28a745;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        }
+
+        .bundle-size {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 15px 0;
+        }
+
+        .loading-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 25px auto;
+            display: none;
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        .comparison-table td {
+            padding: 18px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            border-left: 5px solid #0c5460;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(12, 84, 96, 0.1);
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            border-left: 5px solid #856404;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(133, 100, 4, 0.1);
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 5px solid #155724;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(21, 87, 36, 0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .chunk-diagram {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 25px 0;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+
+        .chunk {
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-width: 120px;
+        }
+
+        .chunk:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .chunk-main { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .chunk-vendor { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .chunk-route { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .chunk-component { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+
+        .quiz-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 40px;
+            border-radius: 15px;
+            margin-top: 50px;
+        }
+
+        .quiz-section h2 {
+            color: white;
+            margin-bottom: 35px;
+            font-size: 2.5em;
+        }
+
+        .question-card {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .question-card h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .difficulty.easy { 
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724; 
+        }
+        .difficulty.medium { 
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            color: #856404; 
+        }
+        .difficulty.hard { 
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24; 
+        }
+
+        .toggle-answer {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-answer:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .answer {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #28a745;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.95em;
+        }
+
+        .image-lazy-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-placeholder:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .image-placeholder.loaded {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .image-placeholder::after {
+            content: '📷';
+            font-size: 3em;
+            position: absolute;
+            opacity: 0.3;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .bundle-visualizer {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: 600;
+            color: #856404;
+        }
+
+        code {
+            background: #f8f9fa;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+            font-size: 0.9em;
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-top: 15px;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        strong {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ Code Splitting & Lazy Loading</h1>
+            <p>Performance Optimization ka Complete Guide</p>
+            <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.9;">React Applications ko Fast aur Efficient Banao</p>
+        </header>
+
+        <div class="content">
+            <!-- Introduction -->
+            <div class="section">
+                <h2>📚 Code Splitting & Lazy Loading Kya Hai?</h2>
+                <div class="hinglish">
+                    <strong>Code Splitting</strong> ek technique hai jisme aap apne application ke code ko chhote-chhote bundles (chunks) mein divide karte ho. Iska matlab hai ki user ko sirf wahi code load hota hai jo use us waqt chahiye, baaki ka code baad mein on-demand load hota hai.
+                    <br><br>
+                    <strong>Lazy Loading</strong> iska implementation hai jisme components, routes, ya resources ko tab load kiya jata hai jab unki zaroorat ho. Isse initial page load time bahut kam ho jata hai aur application faster feel hoti hai.
+                </div>
+
+                <h3>🎯 Kyun Zaroori Hai?</h3>
+                <ul>
+                    <li><strong>Faster Initial Load:</strong> Kam code = Kam download time = Faster app</li>
+                    <li><strong>Better Performance:</strong> Browser ko kam JavaScript parse aur execute karna padta hai</li>
+                    <li><strong>Improved User Experience:</strong> Users ko jaldi content dikhta hai</li>
+                    <li><strong>Reduced Bandwidth:</strong> Users sirf wahi download karte hain jo use karte hain</li>
+                    <li><strong>Better Caching:</strong> Individual chunks cache ho sakte hain</li>
+                </ul>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">70%</div>
+                        <div class="stat-label">Bundle Size Reduction</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">3x</div>
+                        <div class="stat-label">Faster Load Time</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">50%</div>
+                        <div class="stat-label">Less Memory Usage</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">90+</div>
+                        <div class="stat-label">Lighthouse Score</div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Real-World Impact:</strong> Netflix ne code splitting implement karke apni initial load time 50% tak reduce kar di. Amazon ne dekha ki har 100ms ki delay se 1% revenue loss hota hai!
+                </div>
+            </div>
+
+            <!-- React.lazy & Suspense -->
+            <div class="section">
+                <h2>1️⃣ React.lazy & Suspense</h2>
+                <div class="hinglish">
+                    <strong>React.lazy()</strong> ek function hai jo aapko components ko dynamically import karne deta hai. Yeh component tab load hota hai jab woh render hone wala ho. <strong>Suspense</strong> ek component hai jo loading state handle karta hai jab tak lazy component load nahi ho jata.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Traditional Import (Eager Loading)</span>
+<span class="keyword">import</span> <span class="function">HeavyComponent</span> <span class="keyword">from</span> <span class="string">'./HeavyComponent'</span>;
+
+<span class="comment">// Lazy Import (On-Demand Loading)</span>
+<span class="keyword">const</span> <span class="function">HeavyComponent</span> = <span class="function">React.lazy</span>(() => <span class="keyword">import</span>(<span class="string">'./HeavyComponent'</span>));
+
+<span class="comment">// Usage with Suspense</span>
+<span class="keyword">import</span> { lazy, <span class="function">Suspense</span> } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">const</span> <span class="function">Dashboard</span> = <span class="function">lazy</span>(() => <span class="keyword">import</span>(<span class="string">'./Dashboard'</span>));
+<span class="keyword">const</span> <span class="function">Profile</span> = <span class="function">lazy</span>(() => <span class="keyword">import</span>(<span class="string">'./Profile'</span>));
+<span class="keyword">const</span> <span class="function">Settings</span> = <span class="function">lazy</span>(() => <span class="keyword">import</span>(<span class="string">'./Settings'</span>));
+
+<span class="keyword">function</span> <span class="function">App</span>() {
+  <span class="keyword">return</span> (
+    &lt;<span class="function">Suspense</span> fallback={&lt;div&gt;Loading...&lt;/div&gt;}&gt;
+      &lt;<span class="function">Dashboard</span> /&gt;
+      &lt;<span class="function">Profile</span> /&gt;
+      &lt;<span class="function">Settings</span> /&gt;
+    &lt;/<span class="function">Suspense</span>&gt;
+  );
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: React.lazy Loading</div>
+                    <p style="margin-bottom: 20px;">Click buttons to simulate lazy loading of components:</p>
+                    
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 25px;">
+                        <button class="btn btn-primary" onclick="loadComponent('Dashboard')">Load Dashboard</button>
+                        <button class="btn btn-primary" onclick="loadComponent('Profile')">Load Profile</button>
+                        <button class="btn btn-primary" onclick="loadComponent('Settings')">Load Settings</button>
+                        <button class="btn btn-danger" onclick="resetDemo()">Reset</button>
+                    </div>
+
+                    <div class="loading-spinner" id="spinner"></div>
+                    
+                    <div id="component-display" style="padding: 25px; background: #f8f9fa; border-radius: 10px; min-height: 150px;">
+                        <p style="color: #6c757d; text-align: center;">No component loaded yet. Click a button to see lazy loading in action!</p>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <strong>📊 Loading Stats:</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="load-progress" style="width: 0%;">0%</div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
+                            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <strong>Components Loaded:</strong><br>
+                                <span id="loaded-count" style="font-size: 1.5em; color: #667eea;">0</span>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <strong>Total Size:</strong><br>
+                                <span id="total-size" style="font-size: 1.5em; color: #667eea;">0 KB</span>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <strong>Load Time:</strong><br>
+                                <span id="load-time" style="font-size: 1.5em; color: #667eea;">0s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Important Points:</strong><br>
+                    • <code>React.lazy</code> sirf default exports ke saath kaam karta hai<br>
+                    • <code>Suspense</code> boundary zaroori hai, warna error aayega<br>
+                    • Server-side rendering (SSR) mein <code>React.lazy</code> directly kaam nahi karta<br>
+                    • Multiple lazy components ek hi Suspense boundary share kar sakte hain
+                </div>
+            </div>
+
+            <!-- Dynamic Imports -->
+            <div class="section">
+                <h2>2️⃣ Dynamic Imports</h2>
+                <div class="hinglish">
+                    <strong>Dynamic Imports</strong> JavaScript ka native feature hai jo aapko runtime pe modules import karne deta hai. Yeh <code>import()</code> function use karta hai jo ek Promise return karta hai. React.lazy internally isi ko use karta hai, lekin aap ise directly bhi use kar sakte ho non-component code ke liye.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Dynamic Import for Components</span>
+<span class="keyword">const</span> <span class="function">loadComponent</span> = <span class="keyword">async</span> () => {
+  <span class="keyword">const</span> module = <span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">'./MyComponent'</span>);
+  <span class="keyword">return</span> module.<span class="keyword">default</span>;
+};
+
+<span class="comment">// Dynamic Import for Utilities</span>
+<span class="keyword">const</span> <span class="function">loadUtility</span> = <span class="keyword">async</span> () => {
+  <span class="keyword">const</span> { <span class="function">heavyFunction</span> } = <span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">'./utils'</span>);
+  <span class="keyword">return</span> <span class="function">heavyFunction</span>();
+};
+
+<span class="comment">// Dynamic Import for Libraries</span>
+<span class="keyword">const</span> <span class="function">loadChart</span> = <span class="keyword">async</span> () => {
+  <span class="keyword">const</span> Chart = <span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">'chart.js'</span>);
+  <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Chart</span>(ctx, config);
+};
+
+<span class="comment">// Conditional Dynamic Import</span>
+<span class="keyword">const</span> <span class="function">loadFeature</span> = <span class="keyword">async</span> (featureName) => {
+  <span class="keyword">if</span> (featureName === <span class="string">'advanced'</span>) {
+    <span class="keyword">const</span> module = <span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">'./AdvancedFeature'</span>);
+    <span class="keyword">return</span> module.<span class="keyword">default</span>;
+  }
+};
+
+<span class="comment">// Error Handling</span>
+<span class="keyword">const</span> <span class="function">safeImport</span> = <span class="keyword">async</span> () => {
+  <span class="keyword">try</span> {
+    <span class="keyword">const</span> module = <span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">'./Module'</span>);
+    <span class="keyword">return</span> module.<span class="keyword">default</span>;
+  } <span class="keyword">catch</span> (error) {
+    console.<span class="function">error</span>(<span class="string">'Failed to load module'</span>, error);
+    <span class="keyword">return</span> <span class="keyword">null</span>;
+  }
+};
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: Dynamic Import Scenarios</div>
+                    
+                    <div class="bundle-visualizer">
+                        <div class="bundle-box" onclick="dynamicImportDemo('chart')">
+                            <h3>📊 Chart Library</h3>
+                            <div class="bundle-size">250 KB</div>
+                            <p>Heavy visualization library</p>
+                            <div id="chart-status" style="margin-top: 10px; color: #6c757d;">Not Loaded</div>
+                        </div>
+                        <div class="bundle-box" onclick="dynamicImportDemo('editor')">
+                            <h3>✏️ Rich Text Editor</h3>
+                            <div class="bundle-size">180 KB</div>
+                            <p>WYSIWYG editor component</p>
+                            <div id="editor-status" style="margin-top: 10px; color: #6c757d;">Not Loaded</div>
+                        </div>
+                        <div class="bundle-box" onclick="dynamicImportDemo('pdf')">
+                            <h3>📄 PDF Viewer</h3>
+                            <div class="bundle-size">320 KB</div>
+                            <p>PDF rendering library</p>
+                            <div id="pdf-status" style="margin-top: 10px; color: #6c757d;">Not Loaded</div>
+                        </div>
+                        <div class="bundle-box" onclick="dynamicImportDemo('map')">
+                            <h3>🗺️ Map Component</h3>
+                            <div class="bundle-size">400 KB</div>
+                            <p>Interactive maps library</p>
+                            <div id="map-status" style="margin-top: 10px; color: #6c757d;">Not Loaded</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px; padding: 20px; background: white; border-radius: 10px;">
+                        <strong>💾 Current Bundle Size:</strong>
+                        <div class="progress-bar" style="margin-top: 10px;">
+                            <div class="progress-fill" id="bundle-progress" style="width: 5%;">50 KB (Initial)</div>
+                        </div>
+                        <p style="margin-top: 15px; color: #6c757d;">Click on any module above to dynamically import it</p>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <strong>✅ Best Practices:</strong><br>
+                    • Heavy libraries (charts, editors, maps) ko dynamically import karo<br>
+                    • User interaction ke baad load karo (button click, tab switch)<br>
+                    • Prefetching use karo agar aapko pata hai user kya use karega<br>
+                    • Error boundaries implement karo failed imports ke liye
+                </div>
+            </div>
+
+            <!-- Route-based Code Splitting -->
+            <div class="section">
+                <h2>3️⃣ Route-based Code Splitting</h2>
+                <div class="hinglish">
+                    <strong>Route-based Code Splitting</strong> sabse common aur effective approach hai. Isme har route (page) ko alag chunk mein split karte hain. Jab user kisi route pe jata hai, sirf usi route ka code load hota hai. Yeh React Router ke saath bahut achhe se kaam karta hai.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Route-based Code Splitting with React Router</span>
+<span class="keyword">import</span> { lazy, <span class="function">Suspense</span> } <span class="keyword">from</span> <span class="string">'react'</span>;
+<span class="keyword">import</span> { <span class="function">BrowserRouter</span>, <span class="function">Routes</span>, <span class="function">Route</span> } <span class="keyword">from</span> <span class="string">'react-router-dom'</span>;
+
+<span class="comment">// Lazy load all route components</span>
+<span class="keyword">const</span> <span class="function">Home</span> = <span class="function">lazy</span>(() => <span class="keyword">import</span>(<span class="string">'./pages/Home'</span>));
+<span class="keyword">const</span> <span class="function">About</span> = <span class="function">lazy</span>(() => <span class="keyword">import</span>(<span class="string">'./pages/About'</span>));
+<span class="keyword">const</span> <span class="function">Dashboard</span> = <span class="function">lazy</span>(() => <span class="keyword">import</span>(<span class="string">'./pages/Dashboard'</span>));
+<span class="keyword">const</span> <span class="function">Profile</span> = <span class="function">lazy</span>(() => <span class="keyword">import</span>(<span class="string">'./pages/Profile'</span>));
+<span class="keyword">const</span> <span class="function">Settings</span> = <span class="function">lazy</span>(() => <span class="keyword">import</span>(<span class="string">'./pages/Settings'</span>));
+
+<span class="comment">// Loading component</span>
+<span class="keyword">const</span> <span class="function">LoadingFallback</span> = () => (
+  &lt;div <span class="keyword">style</span>={{ textAlign: <span class="string">'center'</span>, padding: <span class="string">'50px'</span> }}&gt;
+    &lt;div&gt;Loading...&lt;/div&gt;
+  &lt;/div&gt;
+);
+
+<span class="keyword">function</span> <span class="function">App</span>() {
+  <span class="keyword">return</span> (
+    &lt;<span class="function">BrowserRouter</span>&gt;
+      &lt;<span class="function">Suspense</span> fallback={&lt;<span class="function">LoadingFallback</span> /&gt;}&gt;
+        &lt;<span class="function">Routes</span>&gt;
+          &lt;<span class="function">Route</span> path=<span class="string">"/"</span> element={&lt;<span class="function">Home</span> /&gt;} /&gt;
+          &lt;<span class="function">Route</span> path=<span class="string">"/about"</span> element={&lt;<span class="function">About</span> /&gt;} /&gt;
+          &lt;<span class="function">Route</span> path=<span class="string">"/dashboard"</span> element={&lt;<span class="function">Dashboard</span> /&gt;} /&gt;
+          &lt;<span class="function">Route</span> path=<span class="string">"/profile"</span> element={&lt;<span class="function">Profile</span> /&gt;} /&gt;
+          &lt;<span class="function">Route</span> path=<span class="string">"/settings"</span> element={&lt;<span class="function">Settings</span> /&gt;} /&gt;
+        &lt;/<span class="function">Routes</span>&gt;
+      &lt;/<span class="function">Suspense</span>&gt;
+    &lt;/<span class="function">BrowserRouter</span>&gt;
+  );
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: Route-based Splitting</div>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <strong>🧭 Navigation:</strong>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
+                            <button class="btn btn-primary" onclick="navigateRoute('home')">Home</button>
+                            <button class="btn btn-primary" onclick="navigateRoute('about')">About</button>
+                            <button class="btn btn-primary" onclick="navigateRoute('dashboard')">Dashboard</button>
+                            <button class="btn btn-primary" onclick="navigateRoute('profile')">Profile</button>
+                            <button class="btn btn-primary" onclick="navigateRoute('settings')">Settings</button>
+                        </div>
+                    </div>
+
+                    <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <strong>📍 Current Route:</strong> <span id="current-route" style="color: #667eea; font-size: 1.2em;">/home</span>
+                    </div>
+
+                    <div class="loading-spinner" id="route-spinner"></div>
+
+                    <div id="route-content" style="padding: 25px; background: #f8f9fa; border-radius: 10px; min-height: 150px;">
+                        <h3 style="color: #667eea;">🏠 Home Page</h3>
+                        <p>Welcome to the home page! This is loaded on demand.</p>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <strong>📦 Loaded Chunks:</strong>
+                        <div class="chunk-diagram" id="chunk-display">
+                            <div class="chunk chunk-main">main.js<br>50 KB</div>
+                            <div class="chunk chunk-route" id="chunk-home" style="opacity: 0.3;">home.chunk.js<br>25 KB</div>
+                            <div class="chunk chunk-route" id="chunk-about" style="opacity: 0.3;">about.chunk.js<br>20 KB</div>
+                            <div class="chunk chunk-route" id="chunk-dashboard" style="opacity: 0.3;">dashboard.chunk.js<br>45 KB</div>
+                            <div class="chunk chunk-route" id="chunk-profile" style="opacity: 0.3;">profile.chunk.js<br>30 KB</div>
+                            <div class="chunk chunk-route" id="chunk-settings" style="opacity: 0.3;">settings.chunk.js<br>35 KB</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Without Code Splitting</th>
+                            <th>With Route-based Splitting</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Initial Bundle Size</strong></td>
+                            <td>500 KB</td>
+                            <td>150 KB (70% reduction)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>First Contentful Paint</strong></td>
+                            <td>3.5s</td>
+                            <td>1.2s (65% faster)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Time to Interactive</strong></td>
+                            <td>5.2s</td>
+                            <td>2.1s (60% faster)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lighthouse Score</strong></td>
+                            <td>65</td>
+                            <td>92 (42% improvement)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Image Optimization -->
+            <div class="section">
+                <h2>4️⃣ Image Optimization & Lazy Loading</h2>
+                <div class="hinglish">
+                    <strong>Image Lazy Loading</strong> ek technique hai jisme images tab load hoti hain jab woh viewport mein aane wali hoti hain. Images usually sabse bada resource hoti hain web pages mein, toh inhe optimize karna bahut zaroori hai. Modern browsers mein native lazy loading support hai.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Native Lazy Loading (HTML)</span>
+&lt;img 
+  src=<span class="string">"image.jpg"</span> 
+  loading=<span class="string">"lazy"</span> 
+  alt=<span class="string">"Description"</span> 
+/&gt;
+
+<span class="comment">// React Component with Lazy Loading</span>
+<span class="keyword">const</span> <span class="function">LazyImage</span> = ({ src, alt }) => {
+  <span class="keyword">const</span> [isLoaded, setIsLoaded] = <span class="function">useState</span>(<span class="keyword">false</span>);
+  <span class="keyword">const</span> [isInView, setIsInView] = <span class="function">useState</span>(<span class="keyword">false</span>);
+  <span class="keyword">const</span> imgRef = <span class="function">useRef</span>();
+
+  <span class="function">useEffect</span>(() => {
+    <span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="function">IntersectionObserver</span>(
+      ([entry]) => {
+        <span class="keyword">if</span> (entry.isIntersecting) {
+          <span class="function">setIsInView</span>(<span class="keyword">true</span>);
+          observer.<span class="function">disconnect</span>();
+        }
+      },
+      { threshold: <span class="number">0.1</span> }
+    );
+
+    <span class="keyword">if</span> (imgRef.current) {
+      observer.<span class="function">observe</span>(imgRef.current);
+    }
+
+    <span class="keyword">return</span> () => observer.<span class="function">disconnect</span>();
+  }, []);
+
+  <span class="keyword">return</span> (
+    &lt;div ref={imgRef}&gt;
+      {isInView ? (
+        &lt;img 
+          src={src} 
+          alt={alt}
+          onLoad={() => <span class="function">setIsLoaded</span>(<span class="keyword">true</span>)}
+          style={{ opacity: isLoaded ? <span class="number">1</span> : <span class="number">0</span> }}
+        /&gt;
+      ) : (
+        &lt;div&gt;Loading...&lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+};
+
+<span class="comment">// Progressive Image Loading</span>
+<span class="keyword">const</span> <span class="function">ProgressiveImage</span> = ({ placeholder, src, alt }) => {
+  <span class="keyword">const</span> [imgSrc, setImgSrc] = <span class="function">useState</span>(placeholder);
+
+  <span class="function">useEffect</span>(() => {
+    <span class="keyword">const</span> img = <span class="keyword">new</span> <span class="function">Image</span>();
+    img.src = src;
+    img.<span class="function">onload</span> = () => {
+      <span class="function">setImgSrc</span>(src);
+    };
+  }, [src]);
+
+  <span class="keyword">return</span> (
+    &lt;img 
+      src={imgSrc} 
+      alt={alt}
+      style={{
+        filter: imgSrc === placeholder ? <span class="string">'blur(10px)'</span> : <span class="string">'none'</span>,
+        transition: <span class="string">'filter 0.3s'</span>
+      }}
+    /&gt;
+  );
+};
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: Image Lazy Loading</div>
+                    <p style="margin-bottom: 20px;">Click "Load Images" to simulate lazy loading:</p>
+                    
+                    <button class="btn btn-success" onclick="loadImages()" style="margin-bottom: 20px;">Load Images</button>
+                    
+                    <div class="image-lazy-demo">
+                        <div class="image-placeholder" data-img="1">
+                            <span>Image 1<br>Not Loaded</span>
+                        </div>
+                        <div class="image-placeholder" data-img="2">
+                            <span>Image 2<br>Not Loaded</span>
+                        </div>
+                        <div class="image-placeholder" data-img="3">
+                            <span>Image 3<br>Not Loaded</span>
+                        </div>
+                        <div class="image-placeholder" data-img="4">
+                            <span>Image 4<br>Not Loaded</span>
+                        </div>
+                        <div class="image-placeholder" data-img="5">
+                            <span>Image 5<br>Not Loaded</span>
+                        </div>
+                        <div class="image-placeholder" data-img="6">
+                            <span>Image 6<br>Not Loaded</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px; padding: 20px; background: white; border-radius: 10px;">
+                        <strong>📊 Loading Statistics:</strong>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 2em; color: #667eea;" id="images-loaded">0/6</div>
+                                <div style="color: #6c757d;">Images Loaded</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 2em; color: #667eea;" id="data-saved">0 KB</div>
+                                <div style="color: #6c757d;">Data Saved</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 2em; color: #667eea;" id="load-speed">0s</div>
+                                <div style="color: #6c757d;">Load Time</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Image Optimization Tips:</strong><br>
+                    • Modern formats use karo: WebP, AVIF (fallback ke saath)<br>
+                    • Responsive images: <code>srcset</code> aur <code>sizes</code> attributes<br>
+                    • Proper dimensions set karo to avoid layout shift<br>
+                    • CDN use karo automatic optimization ke liye<br>
+                    • Placeholder images ya blur effect use karo better UX ke liye
+                </div>
+            </div>
+
+            <!-- Chunk Splitting Best Practices -->
+            <div class="section">
+                <h2>5️⃣ Chunk Splitting Best Practices</h2>
+                <div class="hinglish">
+                    <strong>Chunk Splitting</strong> ka matlab hai apne code ko intelligent tareeke se divide karna. Webpack aur modern bundlers automatically yeh karte hain, lekin aap configuration se ise optimize kar sakte ho. Sahi chunking strategy se caching improve hoti hai aur users ko kam data download karna padta hai.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Webpack Configuration for Chunk Splitting</span>
+module.exports = {
+  optimization: {
+    splitChunks: {
+      chunks: <span class="string">'all'</span>,
+      cacheGroups: {
+        <span class="comment">// Vendor chunk - Third-party libraries</span>
+        vendor: {
+          test: <span class="string">/[\\/]node_modules[\\/]/</span>,
+          name: <span class="string">'vendors'</span>,
+          priority: <span class="number">10</span>
+        },
+        <span class="comment">// Common chunk - Shared code</span>
+        common: {
+          minChunks: <span class="number">2</span>,
+          priority: <span class="number">5</span>,
+          reuseExistingChunk: <span class="keyword">true</span>
+        },
+        <span class="comment">// React chunk - Separate React libraries</span>
+        react: {
+          test: <span class="string">/[\\/]node_modules[\\/](react|react-dom)[\\/]/</span>,
+          name: <span class="string">'react'</span>,
+          priority: <span class="number">20</span>
+        }
+      }
+    }
+  }
+};
+
+<span class="comment">// Vite Configuration</span>
+<span class="keyword">export default</span> {
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          <span class="string">'react-vendor'</span>: [<span class="string">'react'</span>, <span class="string">'react-dom'</span>],
+          <span class="string">'router'</span>: [<span class="string">'react-router-dom'</span>],
+          <span class="string">'ui-library'</span>: [<span class="string">'@mui/material'</span>]
+        }
+      }
+    }
+  }
+};
+
+<span class="comment">// Magic Comments for Webpack</span>
+<span class="keyword">const</span> <span class="function">HeavyComponent</span> = <span class="function">lazy</span>(() => 
+  <span class="keyword">import</span>(
+    <span class="comment">/* webpackChunkName: "heavy-component" */</span>
+    <span class="comment">/* webpackPrefetch: true */</span>
+    <span class="string">'./HeavyComponent'</span>
+  )
+);
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: Chunk Strategy Comparison</div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 25px;">
+                        <div style="background: white; padding: 25px; border-radius: 12px; border: 3px solid #dc3545;">
+                            <h3 style="color: #dc3545; margin-bottom: 15px;">❌ Poor Strategy</h3>
+                            <div class="chunk-diagram" style="flex-direction: column;">
+                                <div class="chunk chunk-main" style="width: 100%;">
+                                    main.bundle.js<br>
+                                    <strong>850 KB</strong>
+                                </div>
+                            </div>
+                            <ul style="margin-top: 15px; font-size: 0.9em;">
+                                <li>Single large bundle</li>
+                                <li>Slow initial load</li>
+                                <li>Poor caching</li>
+                                <li>Wasted bandwidth</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: white; padding: 25px; border-radius: 12px; border: 3px solid #28a745;">
+                            <h3 style="color: #28a745; margin-bottom: 15px;">✅ Optimal Strategy</h3>
+                            <div class="chunk-diagram" style="flex-direction: column;">
+                                <div class="chunk chunk-main" style="width: 60%;">main.js<br>50 KB</div>
+                                <div class="chunk chunk-vendor" style="width: 80%;">vendors.js<br>200 KB</div>
+                                <div class="chunk chunk-route" style="width: 40%;">home.js<br>30 KB</div>
+                                <div class="chunk chunk-route" style="width: 50%;">dashboard.js<br>45 KB</div>
+                                <div class="chunk chunk-component" style="width: 35%;">chart.js<br>120 KB</div>
+                            </div>
+                            <ul style="margin-top: 15px; font-size: 0.9em;">
+                                <li>Multiple optimized chunks</li>
+                                <li>Fast initial load (80 KB)</li>
+                                <li>Better caching</li>
+                                <li>On-demand loading</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="background: white; padding: 25px; border-radius: 12px;">
+                        <strong>📊 Performance Comparison:</strong>
+                        <table class="comparison-table" style="margin-top: 15px;">
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Poor Strategy</th>
+                                    <th>Optimal Strategy</th>
+                                    <th>Improvement</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Initial Load</td>
+                                    <td>850 KB</td>
+                                    <td>80 KB</td>
+                                    <td style="color: #28a745; font-weight: bold;">90% faster</td>
+                                </tr>
+                                <tr>
+                                    <td>Parse Time</td>
+                                    <td>2.5s</td>
+                                    <td>0.3s</td>
+                                    <td style="color: #28a745; font-weight: bold;">88% faster</td>
+                                </tr>
+                                <tr>
+                                    <td>Cache Hit Rate</td>
+                                    <td>20%</td>
+                                    <td>85%</td>
+                                    <td style="color: #28a745; font-weight: bold;">325% better</td>
+                                </tr>
+                                <tr>
+                                    <td>Time to Interactive</td>
+                                    <td>4.8s</td>
+                                    <td>1.2s</td>
+                                    <td style="color: #28a745; font-weight: bold;">75% faster</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <strong>✅ Chunking Best Practices:</strong><br><br>
+                    <strong>1. Vendor Chunks:</strong> Third-party libraries ko alag chunk mein rakho (rarely change hoti hain)<br>
+                    <strong>2. Common Chunks:</strong> Shared code ko extract karo to avoid duplication<br>
+                    <strong>3. Route Chunks:</strong> Har route ko alag chunk (automatic with lazy loading)<br>
+                    <strong>4. Size Limits:</strong> Chunks ko 200-300 KB se chhota rakho<br>
+                    <strong>5. Prefetching:</strong> Critical chunks ko prefetch karo<br>
+                    <strong>6. Naming:</strong> Meaningful chunk names use karo debugging ke liye
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Common Mistakes:</strong><br>
+                    • Bahut zyada chhote chunks (overhead badh jata hai)<br>
+                    • Vendor chunk mein sab kuch daal dena (better to split by usage)<br>
+                    • Dynamic imports ko ignore karna<br>
+                    • Cache busting strategy na hona<br>
+                    • Bundle analyzer na use karna
+                </div>
+            </div>
+
+            <!-- Advanced Techniques -->
+            <div class="section">
+                <h2>🚀 Advanced Techniques</h2>
+                
+                <h3>Prefetching & Preloading</h3>
+                <div class="hinglish">
+                    <strong>Prefetching</strong> aur <strong>Preloading</strong> techniques hain jo future mein zaroorat padne wale resources ko pehle se load kar leti hain. Isse user experience smooth ho jata hai kyunki jab user actually resource use karta hai, woh already loaded hota hai.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Prefetch - Low priority, load when browser is idle</span>
+<span class="keyword">const</span> <span class="function">AdminPanel</span> = <span class="function">lazy</span>(() => 
+  <span class="keyword">import</span>(
+    <span class="comment">/* webpackPrefetch: true */</span>
+    <span class="string">'./AdminPanel'</span>
+  )
+);
+
+<span class="comment">// Preload - High priority, load immediately</span>
+<span class="keyword">const</span> <span class="function">CriticalComponent</span> = <span class="function">lazy</span>(() => 
+  <span class="keyword">import</span>(
+    <span class="comment">/* webpackPreload: true */</span>
+    <span class="string">'./CriticalComponent'</span>
+  )
+);
+
+<span class="comment">// Manual Prefetching</span>
+<span class="keyword">const</span> <span class="function">prefetchComponent</span> = () => {
+  <span class="keyword">const</span> link = document.<span class="function">createElement</span>(<span class="string">'link'</span>);
+  link.rel = <span class="string">'prefetch'</span>;
+  link.href = <span class="string">'/static/js/dashboard.chunk.js'</span>;
+  document.head.<span class="function">appendChild</span>(link);
+};
+
+<span class="comment">// Prefetch on hover</span>
+<span class="keyword">const</span> <span class="function">handleMouseEnter</span> = () => {
+  <span class="keyword">import</span>(<span class="string">'./HeavyComponent'</span>);
+};
+
+&lt;button onMouseEnter={handleMouseEnter}&gt;
+  Dashboard
+&lt;/button&gt;
+                </div>
+
+                <h3>Error Boundaries for Lazy Components</h3>
+                <div class="code-block">
+<span class="comment">// Error Boundary for handling lazy loading failures</span>
+<span class="keyword">class</span> <span class="function">LazyLoadErrorBoundary</span> <span class="keyword">extends</span> React.Component {
+  <span class="function">constructor</span>(props) {
+    <span class="keyword">super</span>(props);
+    <span class="keyword">this</span>.state = { hasError: <span class="keyword">false</span> };
+  }
+
+  <span class="keyword">static</span> <span class="function">getDerivedStateFromError</span>(error) {
+    <span class="keyword">return</span> { hasError: <span class="keyword">true</span> };
+  }
+
+  <span class="function">componentDidCatch</span>(error, errorInfo) {
+    console.<span class="function">error</span>(<span class="string">'Lazy loading failed:'</span>, error, errorInfo);
+  }
+
+  <span class="function">render</span>() {
+    <span class="keyword">if</span> (<span class="keyword">this</span>.state.hasError) {
+      <span class="keyword">return</span> (
+        &lt;div&gt;
+          &lt;h2&gt;Failed to load component&lt;/h2&gt;
+          &lt;button onClick={() => window.location.<span class="function">reload</span>()}&gt;
+            Retry
+          &lt;/button&gt;
+        &lt;/div&gt;
+      );
+    }
+
+    <span class="keyword">return</span> <span class="keyword">this</span>.props.children;
+  }
+}
+
+<span class="comment">// Usage</span>
+&lt;<span class="function">LazyLoadErrorBoundary</span>&gt;
+  &lt;<span class="function">Suspense</span> fallback={&lt;Loading /&gt;}&gt;
+    &lt;<span class="function">LazyComponent</span> /&gt;
+  &lt;/<span class="function">Suspense</span>&gt;
+&lt;/<span class="function">LazyLoadErrorBoundary</span>&gt;
+                </div>
+
+                <h3>Measuring Performance</h3>
+                <div class="code-block">
+<span class="comment">// Performance monitoring</span>
+<span class="keyword">const</span> <span class="function">measureLoadTime</span> = <span class="keyword">async</span> (componentName) => {
+  <span class="keyword">const</span> startTime = performance.<span class="function">now</span>();
+  
+  <span class="keyword">try</span> {
+    <span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">`./components/${componentName}`</span>);
+    <span class="keyword">const</span> endTime = performance.<span class="function">now</span>();
+    <span class="keyword">const</span> loadTime = endTime - startTime;
+    
+    console.<span class="function">log</span>(<span class="string">`${componentName} loaded in ${loadTime}ms`</span>);
+    
+    <span class="comment">// Send to analytics</span>
+    analytics.<span class="function">track</span>(<span class="string">'component_load'</span>, {
+      component: componentName,
+      loadTime: loadTime
+    });
+  } <span class="keyword">catch</span> (error) {
+    console.<span class="function">error</span>(<span class="string">`Failed to load ${componentName}`</span>, error);
+  }
+};
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="quiz-section">
+                <h2>🎯 Interview Questions</h2>
+                <p style="margin-bottom: 30px; font-size: 1.1em;">Yeh questions aapki Code Splitting & Lazy Loading understanding ko test karenge!</p>
+
+                <div class="question-card">
+                    <span class="difficulty easy">Easy</span>
+                    <h3>Q1: React.lazy aur Suspense kya hain? Yeh kaise kaam karte hain?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(1)">Show Answer</button>
+                    <div class="answer" id="answer-1">
+                        <strong>Answer:</strong><br><br>
+                        <strong>React.lazy():</strong> Ek function hai jo dynamic import ko accept karta hai aur ek React component return karta hai. Yeh component tab load hota hai jab woh pehli baar render hone wala ho.<br><br>
+                        
+                        <strong>Suspense:</strong> Ek component hai jo lazy components ke loading state ko handle karta hai. Jab tak lazy component load nahi hota, tab tak Suspense apna fallback UI show karta hai.<br><br>
+                        
+                        <strong>Working:</strong><br>
+                        1. React.lazy() ek Promise return karta hai<br>
+                        2. Jab component render hota hai, React us Promise ko resolve karta hai<br>
+                        3. Tab tak Suspense fallback show karta hai<br>
+                        4. Promise resolve hone ke baad actual component render hota hai<br><br>
+                        
+                        <strong>Example:</strong><br>
+                        <code>const MyComponent = lazy(() => import('./MyComponent'));</code><br>
+                        <code>&lt;Suspense fallback={&lt;Loading /&gt;}&gt;&lt;MyComponent /&gt;&lt;/Suspense&gt;</code><br><br>
+                        
+                        <strong>Important:</strong> React.lazy sirf default exports ke saath kaam karta hai.
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty easy">Easy</span>
+                    <h3>Q2: Code splitting se kya benefits milte hain? Real-world example do.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(2)">Show Answer</button>
+                    <div class="answer" id="answer-2">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Benefits:</strong><br>
+                        1. <strong>Faster Initial Load:</strong> Kam code download = Faster page load<br>
+                        2. <strong>Better Performance:</strong> Browser ko kam JavaScript parse karna padta hai<br>
+                        3. <strong>Improved Caching:</strong> Individual chunks cache ho sakte hain<br>
+                        4. <strong>Reduced Bandwidth:</strong> Users sirf zaroorat ka code download karte hain<br>
+                        5. <strong>Better User Experience:</strong> Content jaldi dikhta hai<br><br>
+                        
+                        <strong>Real-World Example - E-commerce Site:</strong><br><br>
+                        
+                        <strong>Without Code Splitting:</strong><br>
+                        • Initial bundle: 800 KB<br>
+                        • Load time: 4.5 seconds<br>
+                        • User ko sab kuch download karna padta hai (admin panel, checkout, product reviews, etc.)<br><br>
+                        
+                        <strong>With Code Splitting:</strong><br>
+                        • Initial bundle: 150 KB (home page)<br>
+                        • Load time: 1.2 seconds<br>
+                        • Admin panel (200 KB) - sirf admin users ke liye load hota hai<br>
+                        • Checkout (100 KB) - sirf jab user checkout pe jaye<br>
+                        • Product reviews (80 KB) - sirf jab user reviews tab khole<br><br>
+                        
+                        <strong>Result:</strong> 70% faster initial load, better conversion rate!
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Q3: Route-based code splitting aur component-based code splitting mein kya difference hai? Kab kaunsa use karoge?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(3)">Show Answer</button>
+                    <div class="answer" id="answer-3">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Route-based Code Splitting:</strong><br>
+                        • Har route (page) ko alag chunk mein split karte hain<br>
+                        • User jab route change karta hai tab load hota hai<br>
+                        • Sabse common aur recommended approach<br>
+                        • Natural split point hai application mein<br><br>
+                        
+                        <strong>Example:</strong><br>
+                        <code>const Home = lazy(() => import('./pages/Home'));</code><br>
+                        <code>const Dashboard = lazy(() => import('./pages/Dashboard'));</code><br><br>
+                        
+                        <strong>Component-based Code Splitting:</strong><br>
+                        • Individual heavy components ko split karte hain<br>
+                        • Component jab render hone wala ho tab load hota hai<br>
+                        • Specific use cases ke liye<br>
+                        • Fine-grained control milta hai<br><br>
+                        
+                        <strong>Example:</strong><br>
+                        <code>const ChartComponent = lazy(() => import('./Chart'));</code><br>
+                        <code>const RichTextEditor = lazy(() => import('./Editor'));</code><br><br>
+                        
+                        <strong>Kab Kaunsa Use Karein:</strong><br><br>
+                        
+                        <strong>Route-based use karo jab:</strong><br>
+                        • Application mein multiple pages hain<br>
+                        • Clear navigation structure hai<br>
+                        • Har page independent functionality hai<br>
+                        • Starting point chahiye code splitting ke liye<br><br>
+                        
+                        <strong>Component-based use karo jab:</strong><br>
+                        • Heavy third-party libraries use kar rahe ho (charts, editors)<br>
+                        • Conditional rendering hai (modals, tabs)<br>
+                        • User interaction ke baad load karna hai<br>
+                        • Route-based splitting ke saath combine karke<br><br>
+                        
+                        <strong>Best Practice:</strong> Dono ko combine karo - routes ko split karo, aur heavy components ko bhi!
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Q4: Webpack ke splitChunks configuration ko explain karo. Vendor chunks kyun important hain?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(4)">Show Answer</button>
+                    <div class="answer" id="answer-4">
+                        <strong>Answer:</strong><br><br>
+                        <strong>splitChunks Configuration:</strong><br>
+                        Webpack ka optimization feature hai jo automatically code ko multiple chunks mein divide karta hai based on certain rules.<br><br>
+                        
+                        <strong>Key Options:</strong><br>
+                        • <code>chunks: 'all'</code> - All chunks ko split karo (async + sync)<br>
+                        • <code>minSize</code> - Minimum chunk size<br>
+                        • <code>maxSize</code> - Maximum chunk size<br>
+                        • <code>minChunks</code> - Kitni baar use hona chahiye<br>
+                        • <code>cacheGroups</code> - Custom splitting rules<br><br>
+                        
+                        <strong>Vendor Chunks Kyun Important Hain:</strong><br><br>
+                        
+                        <strong>1. Caching Benefits:</strong><br>
+                        • Third-party libraries rarely change hoti hain<br>
+                        • Ek baar load ho gayi toh cache mein reh sakti hain<br>
+                        • Har deployment pe users ko download nahi karni padti<br><br>
+                        
+                        <strong>2. Parallel Loading:</strong><br>
+                        • Browser multiple chunks parallel mein download kar sakta hai<br>
+                        • Vendor chunk aur app chunk simultaneously load ho sakte hain<br><br>
+                        
+                        <strong>3. Better Organization:</strong><br>
+                        • Your code aur third-party code separate<br>
+                        • Debugging aur analysis easy ho jata hai<br><br>
+                        
+                        <strong>4. Optimal Size:</strong><br>
+                        • Large vendor libraries ko separate rakhne se main bundle chhota rehta hai<br><br>
+                        
+                        <strong>Example Configuration:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin-top: 10px;">
+splitChunks: {
+  cacheGroups: {
+    vendor: {
+      test: /[\\/]node_modules[\\/]/,
+      name: 'vendors',
+      chunks: 'all',
+      priority: 10
+    },
+    react: {
+      test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+      name: 'react',
+      priority: 20
+    }
+  }
+}</pre><br>
+                        
+                        <strong>Result:</strong><br>
+                        • main.js (50 KB) - Your app code<br>
+                        • react.js (120 KB) - React libraries (cached)<br>
+                        • vendors.js (200 KB) - Other libraries (cached)<br>
+                        • Total initial: 370 KB, but 320 KB cached on repeat visits!
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Q5: Prefetching aur Preloading mein kya difference hai? Kab kaunsa use karoge?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(5)">Show Answer</button>
+                    <div class="answer" id="answer-5">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Prefetching:</strong><br>
+                        • Low priority resource loading<br>
+                        • Browser idle hone pe load hota hai<br>
+                        • Future navigation ke liye<br>
+                        • <code>&lt;link rel="prefetch"&gt;</code><br><br>
+                        
+                        <strong>Preloading:</strong><br>
+                        • High priority resource loading<br>
+                        • Immediately load hota hai<br>
+                        • Current page ke liye critical resources<br>
+                        • <code>&lt;link rel="preload"&gt;</code><br><br>
+                        
+                        <strong>Detailed Comparison:</strong><br><br>
+                        
+                        <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                            <tr style="background: #f8f9fa;">
+                                <th style="padding: 10px; border: 1px solid #dee2e6;">Feature</th>
+                                <th style="padding: 10px; border: 1px solid #dee2e6;">Prefetch</th>
+                                <th style="padding: 10px; border: 1px solid #dee2e6;">Preload</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">Priority</td>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">Low</td>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">High</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">When</td>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">Browser idle time</td>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">Immediately</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">Use Case</td>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">Future pages</td>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">Current page</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">Cache</td>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">HTTP cache</td>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">Memory cache</td>
+                            </tr>
+                        </table><br>
+                        
+                        <strong>Kab Prefetch Use Karein:</strong><br>
+                        • Next page jo user visit kar sakta hai<br>
+                        • Dashboard link pe hover karne pe<br>
+                        • Login ke baad dashboard prefetch karo<br>
+                        • Analytics se predict karo user kahan jayega<br><br>
+                        
+                        <strong>Example:</strong><br>
+                        <code>const Dashboard = lazy(() => import(/* webpackPrefetch: true */ './Dashboard'));</code><br><br>
+                        
+                        <strong>Kab Preload Use Karein:</strong><br>
+                        • Critical fonts jo immediately chahiye<br>
+                        • Above-the-fold images<br>
+                        • Critical CSS<br>
+                        • Hero section resources<br><br>
+                        
+                        <strong>Example:</strong><br>
+                        <code>&lt;link rel="preload" href="font.woff2" as="font" type="font/woff2" crossorigin&gt;</code><br><br>
+                        
+                        <strong>⚠️ Warning:</strong> Preload ka overuse mat karo, warna bandwidth waste hoga aur actual performance kharab ho jayega!
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty hard">Hard</span>
+                    <h3>Q6: Image lazy loading implement karne ke different approaches kya hain? Intersection Observer API ko detail mein explain karo.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(6)">Show Answer</button>
+                    <div class="answer" id="answer-6">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Image Lazy Loading Approaches:</strong><br><br>
+                        
+                        <strong>1. Native Lazy Loading:</strong><br>
+                        • HTML attribute: <code>loading="lazy"</code><br>
+                        • Browser built-in support<br>
+                        • Sabse simple approach<br>
+                        • Limited customization<br>
+                        <code>&lt;img src="image.jpg" loading="lazy" alt="Description"&gt;</code><br><br>
+                        
+                        <strong>2. Intersection Observer API:</strong><br>
+                        • Modern JavaScript API<br>
+                        • Viewport visibility detect karta hai<br>
+                        • Highly customizable<br>
+                        • Better performance than scroll events<br><br>
+                        
+                        <strong>Intersection Observer Detailed Explanation:</strong><br><br>
+                        
+                        <strong>Kya Hai:</strong><br>
+                        Ek API jo asynchronously observe karta hai ki ek element viewport mein visible hai ya nahi. Yeh scroll events se better hai kyunki yeh main thread ko block nahi karta.<br><br>
+                        
+                        <strong>Kaise Kaam Karta Hai:</strong><br>
+                        1. Observer create karo with callback function<br>
+                        2. Target elements ko observe karo<br>
+                        3. Jab element viewport mein aaye, callback trigger hota hai<br>
+                        4. Callback mein image load karo<br>
+                        5. Observer disconnect karo<br><br>
+                        
+                        <strong>Implementation:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin-top: 10px;">
+const imageObserver = new IntersectionObserver(
+  (entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src; // Load actual image
+        img.classList.add('loaded');
+        observer.unobserve(img); // Stop observing
+      }
+    });
+  },
+  {
+    root: null, // viewport
+    rootMargin: '50px', // Load 50px before visible
+    threshold: 0.1 // 10% visible hone pe trigger
+  }
+);
+
+// Observe all lazy images
+document.querySelectorAll('img[data-src]').forEach(img => {
+  imageObserver.observe(img);
+});</pre><br>
+                        
+                        <strong>3. React Implementation:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin-top: 10px;">
+const LazyImage = ({ src, alt }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const imgRef = useRef();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1, rootMargin: '100px' }
+    );
+
+    if (imgRef.current) {
+      observer.observe(imgRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    &lt;div ref={imgRef}&gt;
+      {isInView ? (
+        &lt;img 
+          src={src} 
+          alt={alt}
+          onLoad={() => setIsLoaded(true)}
+          style={{ 
+            opacity: isLoaded ? 1 : 0,
+            transition: 'opacity 0.3s'
+          }}
+        /&gt;
+      ) : (
+        &lt;div className="placeholder"&gt;Loading...&lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+};</pre><br>
+                        
+                        <strong>4. Progressive Image Loading:</strong><br>
+                        • Pehle low-quality placeholder load karo<br>
+                        • Phir high-quality image load karo<br>
+                        • Smooth transition effect<br><br>
+                        
+                        <strong>Benefits of Intersection Observer:</strong><br>
+                        • No scroll event listeners (better performance)<br>
+                        • Asynchronous (non-blocking)<br>
+                        • Customizable thresholds<br>
+                        • Root margin for early loading<br>
+                        • Multiple elements efficiently observe kar sakta hai<br><br>
+                        
+                        <strong>Browser Support:</strong> 95%+ modern browsers (polyfill available for older browsers)
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty hard">Hard</span>
+                    <h3>Q7: Production environment mein code splitting failures ko kaise handle karoge? Error boundaries aur retry mechanisms explain karo.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(7)">Show Answer</button>
+                    <div class="answer" id="answer-7">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Code Splitting Failures Kyun Hoti Hain:</strong><br>
+                        • Network issues (slow/unstable connection)<br>
+                        • Chunk files not found (deployment issues)<br>
+                        • Browser cache issues<br>
+                        • CDN failures<br>
+                        • Version mismatches<br><br>
+                        
+                        <strong>Comprehensive Error Handling Strategy:</strong><br><br>
+                        
+                        <strong>1. Error Boundary Implementation:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin-top: 10px;">
+class LazyLoadErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { 
+      hasError: false, 
+      error: null,
+      retryCount: 0 
+    };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    // Log to error tracking service
+    console.error('Lazy load failed:', error, errorInfo);
+    
+    // Send to analytics
+    analytics.track('lazy_load_error', {
+      error: error.message,
+      component: this.props.componentName,
+      retryCount: this.state.retryCount
+    });
+  }
+
+  handleRetry = () => {
+    this.setState(prevState => ({
+      hasError: false,
+      error: null,
+      retryCount: prevState.retryCount + 1
+    }));
+  };
+
+  handleReload = () => {
+    window.location.reload();
+  };
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        &lt;div className="error-container"&gt;
+          &lt;h2&gt;Failed to load component&lt;/h2&gt;
+          &lt;p&gt;{this.state.error?.message}&lt;/p&gt;
+          
+          {this.state.retryCount < 3 ? (
+            &lt;button onClick={this.handleRetry}&gt;
+              Retry ({this.state.retryCount}/3)
+            &lt;/button&gt;
+          ) : (
+            &lt;button onClick={this.handleReload}&gt;
+              Reload Page
+            &lt;/button&gt;
+          )}
+        &lt;/div&gt;
+      );
+    }
+
+    return this.props.children;
+  }
+}</pre><br>
+                        
+                        <strong>2. Retry Mechanism with Exponential Backoff:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin-top: 10px;">
+const lazyWithRetry = (componentImport, retries = 3, interval = 1000) => {
+  return new Promise((resolve, reject) => {
+    componentImport()
+      .then(resolve)
+      .catch((error) => {
+        if (retries === 0) {
+          reject(error);
+          return;
+        }
+
+        setTimeout(() => {
+          console.log(`Retrying... (${retries} attempts left)`);
+          lazyWithRetry(componentImport, retries - 1, interval * 2)
+            .then(resolve)
+            .catch(reject);
+        }, interval);
+      });
+  });
+};
+
+// Usage
+const Dashboard = lazy(() => 
+  lazyWithRetry(() => import('./Dashboard'))
+);</pre><br>
+                        
+                        <strong>3. Fallback Component Strategy:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin-top: 10px;">
+const LazyComponentWrapper = ({ 
+  importFunc, 
+  fallbackComponent: FallbackComponent 
+}) => {
+  const [Component, setComponent] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    importFunc()
+      .then(module => setComponent(() => module.default))
+      .catch(err => {
+        setError(err);
+        // Load fallback
+        if (FallbackComponent) {
+          setComponent(() => FallbackComponent);
+        }
+      });
+  }, []);
+
+  if (error && !Component) {
+    return &lt;ErrorDisplay error={error} /&gt;;
+  }
+
+  if (!Component) {
+    return &lt;LoadingSpinner /&gt;;
+  }
+
+  return &lt;Component /&gt;;
+};</pre><br>
+                        
+                        <strong>4. Version Mismatch Detection:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin-top: 10px;">
+// Store app version in localStorage
+const APP_VERSION = '1.2.3';
+
+const checkVersion = () => {
+  const storedVersion = localStorage.getItem('appVersion');
+  
+  if (storedVersion && storedVersion !== APP_VERSION) {
+    // New version deployed, clear cache
+    if ('caches' in window) {
+      caches.keys().then(names => {
+        names.forEach(name => caches.delete(name));
+      });
+    }
+    localStorage.setItem('appVersion', APP_VERSION);
+    window.location.reload(true);
+  } else {
+    localStorage.setItem('appVersion', APP_VERSION);
+  }
+};
+
+// Call on app initialization
+checkVersion();</pre><br>
+                        
+                        <strong>5. Monitoring & Analytics:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin-top: 10px;">
+const trackLazyLoadMetrics = (componentName, success, loadTime, error) => {
+  // Send to analytics service
+  analytics.track('lazy_load_metrics', {
+    component: componentName,
+    success: success,
+    loadTime: loadTime,
+    error: error?.message,
+    userAgent: navigator.userAgent,
+    connection: navigator.connection?.effectiveType,
+    timestamp: Date.now()
+  });
+};</pre><br>
+                        
+                        <strong>6. Complete Production Setup:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin-top: 10px;">
+// App.js
+function App() {
+  return (
+    &lt;LazyLoadErrorBoundary componentName="App"&gt;
+      &lt;Suspense fallback={&lt;LoadingScreen /&gt;}&gt;
+        &lt;Router&gt;
+          &lt;Routes&gt;
+            &lt;Route 
+              path="/dashboard" 
+              element={
+                &lt;LazyLoadErrorBoundary componentName="Dashboard"&gt;
+                  &lt;Suspense fallback={&lt;PageLoader /&gt;}&gt;
+                    &lt;Dashboard /&gt;
+                  &lt;/Suspense&gt;
+                &lt;/LazyLoadErrorBoundary&gt;
+              } 
+            /&gt;
+          &lt;/Routes&gt;
+        &lt;/Router&gt;
+      &lt;/Suspense&gt;
+    &lt;/LazyLoadErrorBoundary&gt;
+  );
+}</pre><br>
+                        
+                        <strong>Best Practices:</strong><br>
+                        • Multiple layers of error boundaries<br>
+                        • Automatic retry with exponential backoff<br>
+                        • User-friendly error messages<br>
+                        • Analytics tracking for monitoring<br>
+                        • Version checking mechanism<br>
+                        • Graceful degradation with fallbacks<br>
+                        • Clear cache on version updates<br>
+                        • Network status detection<br><br>
+                        
+                        <strong>Result:</strong> Robust production app jo failures ko gracefully handle karta hai aur users ko smooth experience deta hai!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Component Loading Demo
+        let loadedComponents = 0;
+        let totalSize = 0;
+        const componentSizes = {
+            'Dashboard': 45,
+            'Profile': 30,
+            'Settings': 35
+        };
+
+        function loadComponent(name) {
+            const spinner = document.getElementById('spinner');
+            const display = document.getElementById('component-display');
+            const progress = document.getElementById('load-progress');
+            
+            spinner.classList.add('active');
+            display.innerHTML = '<p style="color: #6c757d; text-align: center;">Loading ' + name + '...</p>';
+            
+            setTimeout(() => {
+                spinner.classList.remove('active');
+                loadedComponents++;
+                totalSize += componentSizes[name];
+                
+                const content = {
+                    'Dashboard': '<h3 style="color: #667eea;">📊 Dashboard Component Loaded!</h3><p>Analytics, charts, and metrics are now available.</p><p><strong>Size:</strong> 45 KB | <strong>Load Time:</strong> 1.2s</p>',
+                    'Profile': '<h3 style="color: #667eea;">👤 Profile Component Loaded!</h3><p>User profile information and settings.</p><p><strong>Size:</strong> 30 KB | <strong>Load Time:</strong> 0.8s</p>',
+                    'Settings': '<h3 style="color: #667eea;">⚙️ Settings Component Loaded!</h3><p>Application configuration and preferences.</p><p><strong>Size:</strong> 35 KB | <strong>Load Time:</strong> 0.9s</p>'
+                };
+                
+                display.innerHTML = content[name];
+                
+                const percentage = Math.min((loadedComponents / 3) * 100, 100);
+                progress.style.width = percentage + '%';
+                progress.textContent = Math.round(percentage) + '%';
+                
+                document.getElementById('loaded-count').textContent = loadedComponents;
+                document.getElementById('total-size').textContent = totalSize + ' KB';
+                document.getElementById('load-time').textContent = (loadedComponents * 0.9).toFixed(1) + 's';
+            }, 1500);
+        }
+
+        function resetDemo() {
+            loadedComponents = 0;
+            totalSize = 0;
+            document.getElementById('component-display').innerHTML = '<p style="color: #6c757d; text-align: center;">No component loaded yet. Click a button to see lazy loading in action!</p>';
+            document.getElementById('load-progress').style.width = '0%';
+            document.getElementById('load-progress').textContent = '0%';
+            document.getElementById('loaded-count').textContent = '0';
+            document.getElementById('total-size').textContent = '0 KB';
+            document.getElementById('load-time').textContent = '0s';
+        }
+
+        // Dynamic Import Demo
+        let currentBundleSize = 50;
+        const loadedModules = new Set();
+
+        function dynamicImportDemo(module) {
+            if (loadedModules.has(module)) {
+                alert('Module already loaded!');
+                return;
+            }
+
+            const moduleSizes = {
+                'chart': 250,
+                'editor': 180,
+                'pdf': 320,
+                'map': 400
+            };
+
+            const box = event.target.closest('.bundle-box');
+            const statusEl = document.getElementById(module + '-status');
+            
+            statusEl.textContent = 'Loading...';
+            statusEl.style.color = '#ffc107';
+            
+            setTimeout(() => {
+                loadedModules.add(module);
+                currentBundleSize += moduleSizes[module];
+                
+                box.classList.add('loaded');
+                statusEl.textContent = '✅ Loaded';
+                statusEl.style.color = '#28a745';
+                
+                const percentage = Math.min((currentBundleSize / 1200) * 100, 100);
+                const bundleProgress = document.getElementById('bundle-progress');
+                bundleProgress.style.width = percentage + '%';
+                bundleProgress.textContent = currentBundleSize + ' KB';
+            }, 1000);
+        }
+
+        // Route Navigation Demo
+        const routeContent = {
+            'home': {
+                title: '🏠 Home Page',
+                content: 'Welcome to the home page! This is loaded on demand.',
+                size: 25
+            },
+            'about': {
+                title: 'ℹ️ About Page',
+                content: 'Learn more about our application and features.',
+                size: 20
+            },
+            'dashboard': {
+                title: '📊 Dashboard',
+                content: 'Analytics and metrics dashboard with charts.',
+                size: 45
+            },
+            'profile': {
+                title: '👤 Profile',
+                content: 'User profile information and settings.',
+                size: 30
+            },
+            'settings': {
+                title: '⚙️ Settings',
+                content: 'Application configuration and preferences.',
+                size: 35
+            }
+        };
+
+        const loadedRoutes = new Set(['home']);
+
+        function navigateRoute(route) {
+            const spinner = document.getElementById('route-spinner');
+            const content = document.getElementById('route-content');
+            const currentRoute = document.getElementById('current-route');
+            
+            spinner.classList.add('active');
+            content.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                spinner.classList.remove('active');
+                content.style.opacity = '1';
+                
+                const routeData = routeContent[route];
+                content.innerHTML = `
+                    <h3 style="color: #667eea;">${routeData.title}</h3>
+                    <p>${routeData.content}</p>
+                    <p style="margin-top: 15px; color: #6c757d;"><strong>Chunk Size:</strong> ${routeData.size} KB</p>
+                `;
+                
+                currentRoute.textContent = '/' + route;
+                
+                if (!loadedRoutes.has(route)) {
+                    loadedRoutes.add(route);
+                    const chunkEl = document.getElementById('chunk-' + route);
+                    if (chunkEl) {
+                        chunkEl.style.opacity = '1';
+                    }
+                }
+            }, 800);
+        }
+
+        // Image Lazy Loading Demo
+        let imagesLoaded = 0;
+        const totalImages = 6;
+        const imageSize = 150; // KB per image
+
+        function loadImages() {
+            const placeholders = document.querySelectorAll('.image-placeholder:not(.loaded)');
+            
+            placeholders.forEach((placeholder, index) => {
+                setTimeout(() => {
+                    placeholder.classList.add('loaded');
+                    placeholder.innerHTML = '<span>✅ Image ' + placeholder.dataset.img + '<br>Loaded!</span>';
+                    imagesLoaded++;
+                    
+                    document.getElementById('images-loaded').textContent = imagesLoaded + '/' + totalImages;
+                    document.getElementById('data-saved').textContent = ((totalImages - imagesLoaded) * imageSize) + ' KB';
+                    document.getElementById('load-speed').textContent = (imagesLoaded * 0.3).toFixed(1) + 's';
+                }, index * 300);
+            });
+        }
+
+        // Toggle Answer Function
+        function toggleAnswer(num) {
+            const answer = document.getElementById('answer-' + num);
+            const button = answer.previousElementSibling;
+            
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                button.textContent = 'Show Answer';
+            } else {
+                answer.classList.add('show');
+                button.textContent = 'Hide Answer';
+            }
+        }
+
+        // Initialize first route chunk as loaded
+        document.getElementById('chunk-home').style.opacity = '1';
+    </script>
+</body>
+</html>

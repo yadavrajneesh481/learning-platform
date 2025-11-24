@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Router v6 - Interactive Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+        }
+
+        .hinglish {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .keyword { color: #c678dd; }
+        .string { color: #98c379; }
+        .function { color: #61afef; }
+        .comment { color: #5c6370; font-style: italic; }
+
+        .interactive-demo {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #667eea;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #764ba2;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #63408a;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .route-visualizer {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .route-tree {
+            font-family: monospace;
+            line-height: 2;
+        }
+
+        .route-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .route-item:hover {
+            background: #e7f3ff;
+            transform: translateX(5px);
+        }
+
+        .route-item.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .nested {
+            margin-left: 30px;
+        }
+
+        .browser-mockup {
+            border: 3px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .browser-bar {
+            background: #f1f3f4;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .browser-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+
+        .url-bar {
+            flex: 1;
+            padding: 8px 15px;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+        }
+
+        .browser-content {
+            background: white;
+            padding: 30px;
+            min-height: 200px;
+        }
+
+        .nav-demo {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            padding: 10px 20px;
+            background: #e9ecef;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-link.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .quiz-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+
+        .quiz-section h2 {
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .question-card {
+            background: white;
+            color: #333;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .question-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .difficulty.easy { background: #d4edda; color: #155724; }
+        .difficulty.medium { background: #fff3cd; color: #856404; }
+        .difficulty.hard { background: #f8d7da; color: #721c24; }
+
+        .toggle-answer {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .answer {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        .protected-demo {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .auth-panel {
+            flex: 1;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .auth-status {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .auth-status.logged-in {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .auth-status.logged-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .route-params-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .param-card {
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .param-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .lazy-loading-demo {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .protected-demo {
+                flex-direction: column;
+            }
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 React Router v6</h1>
+            <p>Complete Interactive Learning Guide</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Navigation aur Routing ka Master Course</p>
+        </header>
+
+        <div class="content">
+            <!-- Introduction -->
+            <div class="section">
+                <h2>📚 React Router v6 Kya Hai?</h2>
+                <div class="hinglish">
+                    <strong>React Router</strong> ek powerful library hai jo aapke React application mein <strong>client-side routing</strong> implement karne mein help karti hai. Iska matlab hai ki aap bina page reload kiye different views/pages ke beech navigate kar sakte ho. Version 6 mein bahut saare improvements aur simplified APIs aaye hain jo development ko aur bhi easy banate hain.
+                </div>
+                
+                <h3>Key Features:</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>Declarative Routing:</strong> Routes ko JSX components ki tarah define karo</li>
+                    <li><strong>Nested Routes:</strong> Routes ke andar routes banao</li>
+                    <li><strong>Dynamic Routing:</strong> URL parameters ke saath flexible routing</li>
+                    <li><strong>Code Splitting:</strong> Lazy loading se performance improve karo</li>
+                    <li><strong>Protected Routes:</strong> Authentication-based access control</li>
+                </ul>
+
+                <div class="info-box">
+                    <strong>💡 Pro Tip:</strong> React Router v6 ne v5 se kaafi changes kiye hain. <code>Switch</code> ab <code>Routes</code> ban gaya hai, aur <code>component</code> prop ab <code>element</code> prop ban gaya hai.
+                </div>
+            </div>
+
+            <!-- Creating Routes -->
+            <div class="section">
+                <h2>1️⃣ Creating Routes (Basic Setup)</h2>
+                <div class="hinglish">
+                    Routes create karna bahut simple hai. Sabse pehle aapko <code>BrowserRouter</code> se apne app ko wrap karna hota hai, phir <code>Routes</code> aur <code>Route</code> components use karke individual routes define karte hain.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// App.js</span>
+<span class="keyword">import</span> { <span class="function">BrowserRouter</span>, <span class="function">Routes</span>, <span class="function">Route</span> } <span class="keyword">from</span> <span class="string">'react-router-dom'</span>;
+
+<span class="keyword">function</span> <span class="function">App</span>() {
+  <span class="keyword">return</span> (
+    &lt;<span class="function">BrowserRouter</span>&gt;
+      &lt;<span class="function">Routes</span>&gt;
+        &lt;<span class="function">Route</span> path=<span class="string">"/"</span> element={&lt;<span class="function">Home</span> /&gt;} /&gt;
+        &lt;<span class="function">Route</span> path=<span class="string">"/about"</span> element={&lt;<span class="function">About</span> /&gt;} /&gt;
+        &lt;<span class="function">Route</span> path=<span class="string">"/contact"</span> element={&lt;<span class="function">Contact</span> /&gt;} /&gt;
+      &lt;/<span class="function">Routes</span>&gt;
+    &lt;/<span class="function">BrowserRouter</span>&gt;
+  );
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo: Basic Routing</h3>
+                    <div class="browser-mockup">
+                        <div class="browser-bar">
+                            <div class="browser-dots">
+                                <div class="dot red"></div>
+                                <div class="dot yellow"></div>
+                                <div class="dot green"></div>
+                            </div>
+                            <div class="url-bar" id="url-bar-1">http://localhost:3000/</div>
+                        </div>
+                        <div class="browser-content">
+                            <div class="nav-demo">
+                                <div class="nav-link active" data-route="/" data-demo="1">Home</div>
+                                <div class="nav-link" data-route="/about" data-demo="1">About</div>
+                                <div class="nav-link" data-route="/contact" data-demo="1">Contact</div>
+                            </div>
+                            <div id="content-1">
+                                <h2>🏠 Home Page</h2>
+                                <p>Welcome to the home page! Yeh aapka landing page hai.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nested Routes -->
+            <div class="section">
+                <h2>2️⃣ Nested Routes</h2>
+                <div class="hinglish">
+                    <strong>Nested Routes</strong> ka matlab hai routes ke andar routes. Jaise agar aapke paas ek <code>/dashboard</code> route hai, aur uske andar <code>/dashboard/profile</code> aur <code>/dashboard/settings</code> chahiye, toh nested routes use karte hain. Isse aapka code organized aur maintainable rehta hai.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Nested Routes Example</span>
+&lt;<span class="function">Routes</span>&gt;
+  &lt;<span class="function">Route</span> path=<span class="string">"/"</span> element={&lt;<span class="function">Home</span> /&gt;} /&gt;
+  &lt;<span class="function">Route</span> path=<span class="string">"/dashboard"</span> element={&lt;<span class="function">Dashboard</span> /&gt;}&gt;
+    &lt;<span class="function">Route</span> path=<span class="string">"profile"</span> element={&lt;<span class="function">Profile</span> /&gt;} /&gt;
+    &lt;<span class="function">Route</span> path=<span class="string">"settings"</span> element={&lt;<span class="function">Settings</span> /&gt;} /&gt;
+    &lt;<span class="function">Route</span> path=<span class="string">"analytics"</span> element={&lt;<span class="function">Analytics</span> /&gt;} /&gt;
+  &lt;/<span class="function">Route</span>&gt;
+&lt;/<span class="function">Routes</span>&gt;
+
+<span class="comment">// Dashboard.js - Parent component mein Outlet use karo</span>
+<span class="keyword">import</span> { <span class="function">Outlet</span> } <span class="keyword">from</span> <span class="string">'react-router-dom'</span>;
+
+<span class="keyword">function</span> <span class="function">Dashboard</span>() {
+  <span class="keyword">return</span> (
+    &lt;div&gt;
+      &lt;h1&gt;Dashboard&lt;/h1&gt;
+      &lt;<span class="function">Outlet</span> /&gt; <span class="comment">{/* Nested routes yahan render honge */}</span>
+    &lt;/div&gt;
+  );
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo: Nested Routes Visualizer</h3>
+                    <div class="route-visualizer">
+                        <div class="route-tree">
+                            <div class="route-item" data-path="/">
+                                📁 / (Root)
+                            </div>
+                            <div class="route-item" data-path="/dashboard">
+                                📁 /dashboard
+                            </div>
+                            <div class="route-item nested" data-path="/dashboard/profile">
+                                📄 /dashboard/profile
+                            </div>
+                            <div class="route-item nested" data-path="/dashboard/settings">
+                                📄 /dashboard/settings
+                            </div>
+                            <div class="route-item nested" data-path="/dashboard/analytics">
+                                📄 /dashboard/analytics
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 5px;">
+                            <strong>Selected Route:</strong> <span id="selected-route">/</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Important:</strong> Parent route component mein <code>&lt;Outlet /&gt;</code> component use karna zaroori hai, warna nested routes render nahi honge!
+                </div>
+            </div>
+
+            <!-- Layout Routes -->
+            <div class="section">
+                <h2>3️⃣ Layout Routes</h2>
+                <div class="hinglish">
+                    <strong>Layout Routes</strong> ek special type ke routes hain jo common layout provide karte hain multiple pages ke liye. Jaise agar aapko har page pe same navbar aur footer chahiye, toh layout route use karo. Isse code duplication kam hota hai aur maintenance easy ho jata hai.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Layout Component</span>
+<span class="keyword">import</span> { <span class="function">Outlet</span> } <span class="keyword">from</span> <span class="string">'react-router-dom'</span>;
+
+<span class="keyword">function</span> <span class="function">Layout</span>() {
+  <span class="keyword">return</span> (
+    &lt;div&gt;
+      &lt;<span class="function">Navbar</span> /&gt;
+      &lt;main&gt;
+        &lt;<span class="function">Outlet</span> /&gt; <span class="comment">{/* Child routes yahan render honge */}</span>
+      &lt;/main&gt;
+      &lt;<span class="function">Footer</span> /&gt;
+    &lt;/div&gt;
+  );
+}
+
+<span class="comment">// Routes with Layout</span>
+&lt;<span class="function">Routes</span>&gt;
+  &lt;<span class="function">Route</span> element={&lt;<span class="function">Layout</span> /&gt;}&gt;
+    &lt;<span class="function">Route</span> path=<span class="string">"/"</span> element={&lt;<span class="function">Home</span> /&gt;} /&gt;
+    &lt;<span class="function">Route</span> path=<span class="string">"/about"</span> element={&lt;<span class="function">About</span> /&gt;} /&gt;
+    &lt;<span class="function">Route</span> path=<span class="string">"/contact"</span> element={&lt;<span class="function">Contact</span> /&gt;} /&gt;
+  &lt;/<span class="function">Route</span>&gt;
+&lt;/<span class="function">Routes</span>&gt;
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo: Layout Routes</h3>
+                    <div class="browser-mockup">
+                        <div class="browser-bar">
+                            <div class="browser-dots">
+                                <div class="dot red"></div>
+                                <div class="dot yellow"></div>
+                                <div class="dot green"></div>
+                            </div>
+                            <div class="url-bar" id="url-bar-2">http://localhost:3000/</div>
+                        </div>
+                        <div class="browser-content" style="padding: 0;">
+                            <div style="background: #667eea; color: white; padding: 15px;">
+                                <strong>🧭 Navbar (Layout - Always Visible)</strong>
+                            </div>
+                            <div style="padding: 30px;">
+                                <div class="nav-demo">
+                                    <div class="nav-link active" data-route="/" data-demo="2">Home</div>
+                                    <div class="nav-link" data-route="/about" data-demo="2">About</div>
+                                    <div class="nav-link" data-route="/contact" data-demo="2">Contact</div>
+                                </div>
+                                <div id="content-2" style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                                    <h2>🏠 Home Content</h2>
+                                    <p>Yeh content change hota hai, but navbar aur footer same rehte hain!</p>
+                                </div>
+                            </div>
+                            <div style="background: #764ba2; color: white; padding: 15px; text-align: center;">
+                                <strong>📧 Footer (Layout - Always Visible)</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Route Parameters -->
+            <div class="section">
+                <h2>4️⃣ Route Parameters (Dynamic Routes)</h2>
+                <div class="hinglish">
+                    <strong>Route Parameters</strong> se aap dynamic URLs create kar sakte ho. Jaise <code>/user/123</code> ya <code>/product/laptop</code>. Yeh parameters <code>useParams</code> hook se access kar sakte ho. Isse ek hi component multiple IDs ke liye reuse ho sakta hai.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Route with parameter</span>
+&lt;<span class="function">Route</span> path=<span class="string">"/user/:userId"</span> element={&lt;<span class="function">UserProfile</span> /&gt;} /&gt;
+&lt;<span class="function">Route</span> path=<span class="string">"/product/:productId"</span> element={&lt;<span class="function">ProductDetail</span> /&gt;} /&gt;
+
+<span class="comment">// UserProfile.js - useParams hook se parameter access karo</span>
+<span class="keyword">import</span> { <span class="function">useParams</span> } <span class="keyword">from</span> <span class="string">'react-router-dom'</span>;
+
+<span class="keyword">function</span> <span class="function">UserProfile</span>() {
+  <span class="keyword">const</span> { userId } = <span class="function">useParams</span>();
+  
+  <span class="keyword">return</span> (
+    &lt;div&gt;
+      &lt;h1&gt;User Profile&lt;/h1&gt;
+      &lt;p&gt;User ID: {userId}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo: Route Parameters</h3>
+                    <p style="margin-bottom: 15px;">Click on any user card to see dynamic routing in action:</p>
+                    <div class="route-params-demo">
+                        <div class="param-card" data-user-id="101">
+                            <h3>👤 User 101</h3>
+                            <p>Rajesh Kumar</p>
+                        </div>
+                        <div class="param-card" data-user-id="102">
+                            <h3>👤 User 102</h3>
+                            <p>Priya Sharma</p>
+                        </div>
+                        <div class="param-card" data-user-id="103">
+                            <h3>👤 User 103</h3>
+                            <p>Amit Patel</p>
+                        </div>
+                    </div>
+                    <div id="param-result" style="padding: 20px; background: #f8f9fa; border-radius: 10px; margin-top: 15px;">
+                        <strong>Current Route:</strong> /user/<span id="current-param">-</span><br>
+                        <strong>useParams() returns:</strong> <code id="params-output">{ }</code>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Multiple Parameters:</strong> Aap ek route mein multiple parameters bhi use kar sakte ho:<br>
+                    <code>/blog/:category/:postId</code> → <code>{ category: 'tech', postId: '123' }</code>
+                </div>
+            </div>
+
+            <!-- Search Params -->
+            <div class="section">
+                <h2>5️⃣ Search Params (Query Parameters)</h2>
+                <div class="hinglish">
+                    <strong>Search Parameters</strong> wo query strings hain jo URL mein <code>?</code> ke baad aate hain. Jaise <code>/products?category=electronics&sort=price</code>. Inhe <code>useSearchParams</code> hook se manage karte hain. Yeh filtering, sorting, pagination ke liye bahut useful hain.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// useSearchParams hook</span>
+<span class="keyword">import</span> { <span class="function">useSearchParams</span> } <span class="keyword">from</span> <span class="string">'react-router-dom'</span>;
+
+<span class="keyword">function</span> <span class="function">Products</span>() {
+  <span class="keyword">const</span> [searchParams, setSearchParams] = <span class="function">useSearchParams</span>();
+  
+  <span class="keyword">const</span> category = searchParams.<span class="function">get</span>(<span class="string">'category'</span>);
+  <span class="keyword">const</span> sort = searchParams.<span class="function">get</span>(<span class="string">'sort'</span>);
+  
+  <span class="keyword">const</span> <span class="function">updateFilter</span> = (key, value) =&gt; {
+    <span class="function">setSearchParams</span>({ [key]: value });
+  };
+  
+  <span class="keyword">return</span> (
+    &lt;div&gt;
+      &lt;p&gt;Category: {category}&lt;/p&gt;
+      &lt;p&gt;Sort: {sort}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo: Search Parameters</h3>
+                    <div class="browser-mockup">
+                        <div class="browser-bar">
+                            <div class="browser-dots">
+                                <div class="dot red"></div>
+                                <div class="dot yellow"></div>
+                                <div class="dot green"></div>
+                            </div>
+                            <div class="url-bar" id="search-url">http://localhost:3000/products</div>
+                        </div>
+                        <div class="browser-content">
+                            <h3>🛍️ Products Page</h3>
+                            <div class="demo-controls">
+                                <select id="category-select" class="btn btn-primary">
+                                    <option value="">Select Category</option>
+                                    <option value="electronics">Electronics</option>
+                                    <option value="clothing">Clothing</option>
+                                    <option value="books">Books</option>
+                                </select>
+                                <select id="sort-select" class="btn btn-primary">
+                                    <option value="">Sort By</option>
+                                    <option value="price">Price</option>
+                                    <option value="name">Name</option>
+                                    <option value="rating">Rating</option>
+                                </select>
+                                <button class="btn btn-danger" id="clear-params">Clear Filters</button>
+                            </div>
+                            <div id="search-params-output" style="padding: 15px; background: #f8f9fa; border-radius: 5px; margin-top: 15px;">
+                                <strong>Current Search Params:</strong> <code>{  }</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Protected Routes -->
+            <div class="section">
+                <h2>6️⃣ Protected Routes + Auth Guard</h2>
+                <div class="hinglish">
+                    <strong>Protected Routes</strong> wo routes hain jo sirf authenticated users access kar sakte hain. Agar user logged in nahi hai, toh use login page pe redirect kar dete hain. Isse aap apne sensitive pages ko secure kar sakte ho. Yeh authentication aur authorization ke liye bahut important hai.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// ProtectedRoute Component</span>
+<span class="keyword">import</span> { <span class="function">Navigate</span> } <span class="keyword">from</span> <span class="string">'react-router-dom'</span>;
+
+<span class="keyword">function</span> <span class="function">ProtectedRoute</span>({ children }) {
+  <span class="keyword">const</span> isAuthenticated = <span class="function">checkAuth</span>(); <span class="comment">// Your auth logic</span>
+  
+  <span class="keyword">return</span> isAuthenticated ? children : &lt;<span class="function">Navigate</span> to=<span class="string">"/login"</span> /&gt;;
+}
+
+<span class="comment">// Usage in Routes</span>
+&lt;<span class="function">Routes</span>&gt;
+  &lt;<span class="function">Route</span> path=<span class="string">"/login"</span> element={&lt;<span class="function">Login</span> /&gt;} /&gt;
+  &lt;<span class="function">Route</span> 
+    path=<span class="string">"/dashboard"</span> 
+    element={
+      &lt;<span class="function">ProtectedRoute</span>&gt;
+        &lt;<span class="function">Dashboard</span> /&gt;
+      &lt;/<span class="function">ProtectedRoute</span>&gt;
+    } 
+  /&gt;
+&lt;/<span class="function">Routes</span>&gt;
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo: Protected Routes</h3>
+                    <div class="protected-demo">
+                        <div class="auth-panel">
+                            <h4>🔐 Authentication Panel</h4>
+                            <div class="auth-status logged-out" id="auth-status">
+                                ❌ Not Logged In
+                            </div>
+                            <button class="btn btn-success" id="login-btn">Login</button>
+                            <button class="btn btn-danger" id="logout-btn" style="display: none;">Logout</button>
+                        </div>
+                        <div class="auth-panel">
+                            <h4>📄 Try Accessing Protected Page</h4>
+                            <button class="btn btn-primary" id="access-dashboard">Go to Dashboard</button>
+                            <div id="access-result" style="margin-top: 15px; padding: 15px; background: white; border-radius: 5px; min-height: 100px;">
+                                <p>Click "Go to Dashboard" to test protected route...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Security Note:</strong> Client-side protection sirf UI ke liye hai. Real security backend/API level pe implement karni chahiye!
+                </div>
+            </div>
+
+            <!-- Lazy Loading -->
+            <div class="section">
+                <h2>7️⃣ Lazy Loading Routes (Code Splitting)</h2>
+                <div class="hinglish">
+                    <strong>Lazy Loading</strong> se aap apne components ko on-demand load kar sakte ho. Isse initial bundle size kam hota hai aur app faster load hoti hai. React ke <code>lazy()</code> aur <code>Suspense</code> ke saath use karte hain. Yeh performance optimization ke liye bahut important hai.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Lazy loading with React.lazy()</span>
+<span class="keyword">import</span> { lazy, <span class="function">Suspense</span> } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">const</span> Home = <span class="function">lazy</span>(() =&gt; <span class="keyword">import</span>(<span class="string">'./pages/Home'</span>));
+<span class="keyword">const</span> Dashboard = <span class="function">lazy</span>(() =&gt; <span class="keyword">import</span>(<span class="string">'./pages/Dashboard'</span>));
+<span class="keyword">const</span> Profile = <span class="function">lazy</span>(() =&gt; <span class="keyword">import</span>(<span class="string">'./pages/Profile'</span>));
+
+<span class="keyword">function</span> <span class="function">App</span>() {
+  <span class="keyword">return</span> (
+    &lt;<span class="function">Suspense</span> fallback={&lt;div&gt;Loading...&lt;/div&gt;}&gt;
+      &lt;<span class="function">Routes</span>&gt;
+        &lt;<span class="function">Route</span> path=<span class="string">"/"</span> element={&lt;<span class="function">Home</span> /&gt;} /&gt;
+        &lt;<span class="function">Route</span> path=<span class="string">"/dashboard"</span> element={&lt;<span class="function">Dashboard</span> /&gt;} /&gt;
+        &lt;<span class="function">Route</span> path=<span class="string">"/profile"</span> element={&lt;<span class="function">Profile</span> /&gt;} /&gt;
+      &lt;/<span class="function">Routes</span>&gt;
+    &lt;/<span class="function">Suspense</span>&gt;
+  );
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo: Lazy Loading</h3>
+                    <div class="lazy-loading-demo">
+                        <p>Click buttons to simulate lazy loading of components:</p>
+                        <div class="demo-controls">
+                            <button class="btn btn-primary lazy-load-btn" data-component="Home">Load Home</button>
+                            <button class="btn btn-primary lazy-load-btn" data-component="Dashboard">Load Dashboard</button>
+                            <button class="btn btn-primary lazy-load-btn" data-component="Profile">Load Profile</button>
+                        </div>
+                        <div class="loading-spinner" id="lazy-spinner"></div>
+                        <div id="lazy-content" style="margin-top: 20px; padding: 20px; background: white; border-radius: 10px; min-height: 100px;">
+                            <p>No component loaded yet. Click a button to see lazy loading in action!</p>
+                        </div>
+                        <div style="margin-top: 15px; padding: 15px; background: #d1ecf1; border-radius: 5px;">
+                            <strong>📊 Bundle Size Impact:</strong><br>
+                            Initial Bundle: <span id="initial-size">250 KB</span><br>
+                            Loaded Chunks: <span id="loaded-chunks">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Best Practice:</strong> Heavy components (charts, editors, large libraries) ko lazy load karo. Small components ko lazy load karne se overhead badh sakta hai.
+                </div>
+            </div>
+
+            <!-- Relative Paths -->
+            <div class="section">
+                <h2>8️⃣ Relative Link Paths</h2>
+                <div class="hinglish">
+                    <strong>Relative Paths</strong> se aap current route ke relative links create kar sakte ho. Isse code maintainable rehta hai aur refactoring easy ho jata hai. <code>Link</code> aur <code>useNavigate</code> dono mein relative paths use kar sakte ho.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Relative paths in nested routes</span>
+<span class="keyword">import</span> { <span class="function">Link</span>, <span class="function">Outlet</span> } <span class="keyword">from</span> <span class="string">'react-router-dom'</span>;
+
+<span class="keyword">function</span> <span class="function">Dashboard</span>() {
+  <span class="keyword">return</span> (
+    &lt;div&gt;
+      &lt;nav&gt;
+        <span class="comment">{/* Relative to current route */}</span>
+        &lt;<span class="function">Link</span> to=<span class="string">"profile"</span>&gt;Profile&lt;/<span class="function">Link</span>&gt;
+        &lt;<span class="function">Link</span> to=<span class="string">"settings"</span>&gt;Settings&lt;/<span class="function">Link</span>&gt;
+        
+        <span class="comment">{/* Go up one level */}</span>
+        &lt;<span class="function">Link</span> to=<span class="string">".."</span>&gt;Back&lt;/<span class="function">Link</span>&gt;
+      &lt;/nav&gt;
+      &lt;<span class="function">Outlet</span> /&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo: Relative Paths</h3>
+                    <div style="padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                        <div style="margin-bottom: 20px;">
+                            <strong>Current Location:</strong> <code id="relative-path">/dashboard</code>
+                        </div>
+                        <div class="demo-controls">
+                            <button class="btn btn-primary relative-nav" data-path="profile">to="profile"</button>
+                            <button class="btn btn-primary relative-nav" data-path="settings">to="settings"</button>
+                            <button class="btn btn-secondary relative-nav" data-path="..">to=".."</button>
+                            <button class="btn btn-secondary relative-nav" data-path="/">to="/"</button>
+                        </div>
+                        <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 5px;">
+                            <strong>Navigation Result:</strong><br>
+                            <code id="relative-result">/dashboard</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Path Types:</strong><br>
+                    • <code>"profile"</code> → Relative to current route<br>
+                    • <code>"./profile"</code> → Same as above<br>
+                    • <code>"../profile"</code> → Go up one level, then to profile<br>
+                    • <code>"/profile"</code> → Absolute path from root
+                </div>
+            </div>
+
+            <!-- Programmatic Navigation -->
+            <div class="section">
+                <h2>9️⃣ Programmatic Navigation</h2>
+                <div class="hinglish">
+                    <strong>Programmatic Navigation</strong> ka matlab hai code se navigation karna, bina user ke link click kiye. Jaise form submit ke baad redirect karna, ya authentication ke baad dashboard pe bhejna. <code>useNavigate</code> hook se yeh karte hain.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// useNavigate hook for programmatic navigation</span>
+<span class="keyword">import</span> { <span class="function">useNavigate</span> } <span class="keyword">from</span> <span class="string">'react-router-dom'</span>;
+
+<span class="keyword">function</span> <span class="function">LoginForm</span>() {
+  <span class="keyword">const</span> navigate = <span class="function">useNavigate</span>();
+  
+  <span class="keyword">const</span> <span class="function">handleSubmit</span> = <span class="keyword">async</span> (e) =&gt; {
+    e.<span class="function">preventDefault</span>();
+    <span class="keyword">const</span> success = <span class="keyword">await</span> <span class="function">login</span>(credentials);
+    
+    <span class="keyword">if</span> (success) {
+      <span class="comment">// Navigate to dashboard</span>
+      <span class="function">navigate</span>(<span class="string">'/dashboard'</span>);
+      
+      <span class="comment">// Navigate with replace (no back button)</span>
+      <span class="function">navigate</span>(<span class="string">'/dashboard'</span>, { replace: <span class="keyword">true</span> });
+      
+      <span class="comment">// Navigate back</span>
+      <span class="function">navigate</span>(-<span class="number">1</span>);
+      
+      <span class="comment">// Navigate forward</span>
+      <span class="function">navigate</span>(<span class="number">1</span>);
+    }
+  };
+  
+  <span class="keyword">return</span> &lt;form onSubmit={handleSubmit}&gt;...&lt;/form&gt;;
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo: Programmatic Navigation</h3>
+                    <div style="padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                        <div style="margin-bottom: 20px;">
+                            <strong>Navigation History:</strong>
+                            <div id="nav-history" style="padding: 15px; background: white; border-radius: 5px; margin-top: 10px; min-height: 60px;">
+                                <code>/home</code>
+                            </div>
+                        </div>
+                        <div class="demo-controls">
+                            <button class="btn btn-primary prog-nav" data-action="push" data-path="/about">navigate('/about')</button>
+                            <button class="btn btn-primary prog-nav" data-action="push" data-path="/contact">navigate('/contact')</button>
+                            <button class="btn btn-secondary prog-nav" data-action="replace" data-path="/dashboard">navigate('/dashboard', {replace: true})</button>
+                            <button class="btn btn-secondary prog-nav" data-action="back">navigate(-1)</button>
+                            <button class="btn btn-secondary prog-nav" data-action="forward">navigate(1)</button>
+                        </div>
+                        <div style="margin-top: 20px; padding: 15px; background: #d1ecf1; border-radius: 5px;">
+                            <strong>Current Position:</strong> <span id="history-position">1</span> / <span id="history-length">1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Replace vs Push:</strong><br>
+                    • <code>navigate('/path')</code> → History mein add hota hai (back button kaam karega)<br>
+                    • <code>navigate('/path', {replace: true})</code> → Current entry replace ho jati hai (back button previous page pe nahi jayega)
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="quiz-section">
+                <h2>🎯 Interview Questions</h2>
+                <p style="margin-bottom: 30px;">Yeh questions aapki React Router v6 understanding ko test karenge. Har question ke answer ko toggle kar sakte ho.</p>
+
+                <div class="question-card">
+                    <span class="difficulty easy">Easy</span>
+                    <h3>Q1: React Router v6 mein Switch component ko kya replace karta hai aur kyun?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(1)">Show Answer</button>
+                    <div class="answer" id="answer-1">
+                        <strong>Answer:</strong> React Router v6 mein <code>Switch</code> component ko <code>Routes</code> component ne replace kar diya hai. Yeh change isliye kiya gaya kyunki:<br><br>
+                        1. <strong>Better Naming:</strong> "Routes" naam zyada descriptive hai<br>
+                        2. <strong>Relative Routing:</strong> Routes component relative routing ko better support karta hai<br>
+                        3. <strong>Route Ranking:</strong> Automatic route ranking system hai jo best match find karta hai<br>
+                        4. <strong>Nested Routes:</strong> Nested routes ko handle karna zyada easy ho gaya hai<br><br>
+                        <code>&lt;Switch&gt;</code> (v5) → <code>&lt;Routes&gt;</code> (v6)
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty easy">Easy</span>
+                    <h3>Q2: useParams hook ka kya use hai? Example ke saath explain karo.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(2)">Show Answer</button>
+                    <div class="answer" id="answer-2">
+                        <strong>Answer:</strong> <code>useParams</code> hook URL parameters ko access karne ke liye use hota hai. Jab aap dynamic routes banate ho, tab yeh hook un parameters ko extract karta hai.<br><br>
+                        <strong>Example:</strong><br>
+                        Route: <code>/user/:userId/post/:postId</code><br>
+                        URL: <code>/user/123/post/456</code><br><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 10px; border-radius: 5px;">
+const { userId, postId } = useParams();
+// userId = "123"
+// postId = "456"</pre>
+                        <strong>Use Cases:</strong> User profiles, product details, blog posts, etc.
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Q3: Protected Routes ko implement karne ke different approaches kya hain? Pros aur cons discuss karo.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(3)">Show Answer</button>
+                    <div class="answer" id="answer-3">
+                        <strong>Answer:</strong> Protected Routes implement karne ke 3 main approaches hain:<br><br>
+                        <strong>1. Wrapper Component Approach:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 10px; border-radius: 5px;">
+&lt;ProtectedRoute&gt;&lt;Dashboard /&gt;&lt;/ProtectedRoute&gt;</pre>
+                        ✅ Pros: Reusable, clean syntax<br>
+                        ❌ Cons: Extra component wrapper<br><br>
+                        
+                        <strong>2. Higher Order Component (HOC):</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 10px; border-radius: 5px;">
+const ProtectedDashboard = withAuth(Dashboard);</pre>
+                        ✅ Pros: Composition pattern, flexible<br>
+                        ❌ Cons: Wrapper hell, debugging difficult<br><br>
+                        
+                        <strong>3. Layout Route with Outlet:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 10px; border-radius: 5px;">
+&lt;Route element={&lt;AuthLayout /&gt;}&gt;
+  &lt;Route path="/dashboard" element={&lt;Dashboard /&gt;} /&gt;
+&lt;/Route&gt;</pre>
+                        ✅ Pros: Scalable, multiple routes protect kar sakte ho<br>
+                        ❌ Cons: Initial setup thoda complex
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Q4: Lazy loading routes se performance kaise improve hoti hai? Trade-offs kya hain?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(4)">Show Answer</button>
+                    <div class="answer" id="answer-4">
+                        <strong>Answer:</strong> Lazy loading se performance improvement:<br><br>
+                        <strong>Benefits:</strong><br>
+                        1. <strong>Reduced Initial Bundle:</strong> Starting mein sirf required code load hota hai<br>
+                        2. <strong>Faster First Paint:</strong> Page jaldi render hota hai<br>
+                        3. <strong>Better Caching:</strong> Individual chunks cache ho sakte hain<br>
+                        4. <strong>On-Demand Loading:</strong> User jab route visit kare tabhi load ho<br><br>
+                        
+                        <strong>Trade-offs:</strong><br>
+                        1. <strong>Loading Delay:</strong> First time route visit pe delay ho sakta hai<br>
+                        2. <strong>Network Requests:</strong> Extra network calls<br>
+                        3. <strong>Complexity:</strong> Error handling aur loading states manage karne padte hain<br>
+                        4. <strong>Suspense Required:</strong> Fallback UI provide karna zaroori hai<br><br>
+                        
+                        <strong>Best Practice:</strong> Heavy components (admin panels, dashboards, editors) ko lazy load karo, frequently used components ko nahi.
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Q5: useSearchParams aur useParams mein kya difference hai? Kab kaunsa use karoge?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(5)">Show Answer</button>
+                    <div class="answer" id="answer-5">
+                        <strong>Answer:</strong><br><br>
+                        <strong>useParams:</strong><br>
+                        • URL path segments se data extract karta hai<br>
+                        • Route definition mein define hota hai: <code>/user/:id</code><br>
+                        • Read-only hai<br>
+                        • Example: <code>/user/123</code> → <code>{ id: '123' }</code><br><br>
+                        
+                        <strong>useSearchParams:</strong><br>
+                        • Query strings se data extract karta hai<br>
+                        • URL mein <code>?</code> ke baad aata hai<br>
+                        • Read aur Write dono kar sakte ho<br>
+                        • Example: <code>/products?sort=price&category=electronics</code><br><br>
+                        
+                        <strong>Use Cases:</strong><br>
+                        • <strong>useParams:</strong> Resource identification (user ID, product ID)<br>
+                        • <strong>useSearchParams:</strong> Filtering, sorting, pagination, search queries<br><br>
+                        
+                        <strong>Example:</strong> <code>/products/123?color=red&size=large</code><br>
+                        • <code>useParams()</code> → <code>{ productId: '123' }</code><br>
+                        • <code>useSearchParams()</code> → <code>{ color: 'red', size: 'large' }</code>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty hard">Hard</span>
+                    <h3>Q6: Nested routes mein Outlet component ka role explain karo. Index routes kya hote hain?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(6)">Show Answer</button>
+                    <div class="answer" id="answer-6">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Outlet Component:</strong><br>
+                        • Parent route component mein child routes render karne ke liye placeholder hai<br>
+                        • Jaise HTML mein <code>&lt;slot&gt;</code> tag hota hai, waise hi kaam karta hai<br>
+                        • Context pass kar sakta hai child routes ko<br><br>
+                        
+                        <pre style="background: #282c34; color: #abb2bf; padding: 10px; border-radius: 5px;">
+function Dashboard() {
+  return (
+    &lt;div&gt;
+      &lt;Sidebar /&gt;
+      &lt;Outlet /&gt; {/* Child routes yahan render honge */}
+    &lt;/div&gt;
+  );
+}</pre><br>
+                        
+                        <strong>Index Routes:</strong><br>
+                        • Default child route jo parent route ke exact path pe render hota hai<br>
+                        • <code>index</code> prop use karte hain, <code>path</code> nahi<br><br>
+                        
+                        <pre style="background: #282c34; color: #abb2bf; padding: 10px; border-radius: 5px;">
+&lt;Route path="/dashboard" element={&lt;Dashboard /&gt;}&gt;
+  &lt;Route index element={&lt;Overview /&gt;} /&gt;
+  &lt;Route path="settings" element={&lt;Settings /&gt;} /&gt;
+&lt;/Route&gt;</pre><br>
+                        
+                        • <code>/dashboard</code> → Overview render hoga<br>
+                        • <code>/dashboard/settings</code> → Settings render hoga
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty hard">Hard</span>
+                    <h3>Q7: React Router v6 mein route ranking kaise kaam karti hai? Ambiguous routes ko kaise handle karta hai?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(7)">Show Answer</button>
+                    <div class="answer" id="answer-7">
+                        <strong>Answer:</strong> React Router v6 automatic route ranking system use karta hai jo best match find karta hai:<br><br>
+                        
+                        <strong>Ranking Priority (High to Low):</strong><br>
+                        1. <strong>Static segments:</strong> <code>/about</code><br>
+                        2. <strong>Dynamic segments:</strong> <code>/:id</code><br>
+                        3. <strong>Splat routes:</strong> <code>/*</code><br>
+                        4. <strong>Index routes:</strong> <code>index</code><br><br>
+                        
+                        <strong>Example:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 10px; border-radius: 5px;">
+&lt;Routes&gt;
+  &lt;Route path="/users/new" element={&lt;NewUser /&gt;} /&gt;
+  &lt;Route path="/users/:id" element={&lt;UserProfile /&gt;} /&gt;
+  &lt;Route path="/users/*" element={&lt;UsersLayout /&gt;} /&gt;
+&lt;/Routes&gt;</pre><br>
+                        
+                        • <code>/users/new</code> → NewUser (static match - highest priority)<br>
+                        • <code>/users/123</code> → UserProfile (dynamic match)<br>
+                        • <code>/users/anything/else</code> → UsersLayout (splat match)<br><br>
+                        
+                        <strong>V5 vs V6:</strong><br>
+                        • V5 mein order matter karta tha (first match wins)<br>
+                        • V6 mein specificity matter karti hai (best match wins)<br>
+                        • V6 mein <code>exact</code> prop ki zaroorat nahi
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Demo 1: Basic Routing
+        document.querySelectorAll('[data-demo="1"]').forEach(link => {
+            link.addEventListener('click', function() {
+                const route = this.dataset.route;
+                document.getElementById('url-bar-1').textContent = 'http://localhost:3000' + route;
+                
+                document.querySelectorAll('[data-demo="1"]').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                const content = {
+                    '/': '<h2>🏠 Home Page</h2><p>Welcome to the home page! Yeh aapka landing page hai.</p>',
+                    '/about': '<h2>ℹ️ About Page</h2><p>Humari company ke baare mein jaankari yahan milegi.</p>',
+                    '/contact': '<h2>📧 Contact Page</h2><p>Humse contact karne ke liye form fill karo.</p>'
+                };
+                
+                document.getElementById('content-1').innerHTML = content[route];
+            });
+        });
+
+        // Demo 2: Layout Routes
+        document.querySelectorAll('[data-demo="2"]').forEach(link => {
+            link.addEventListener('click', function() {
+                const route = this.dataset.route;
+                document.getElementById('url-bar-2').textContent = 'http://localhost:3000' + route;
+                
+                document.querySelectorAll('[data-demo="2"]').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                const content = {
+                    '/': '<h2>🏠 Home Content</h2><p>Yeh content change hota hai, but navbar aur footer same rehte hain!</p>',
+                    '/about': '<h2>ℹ️ About Content</h2><p>Layout consistent rehta hai, sirf main content change hota hai.</p>',
+                    '/contact': '<h2>📧 Contact Content</h2><p>Navbar aur Footer har page pe visible hain - yeh Layout Route ka magic hai!</p>'
+                };
+                
+                document.getElementById('content-2').innerHTML = content[route];
+            });
+        });
+
+        // Route Tree Visualizer
+        document.querySelectorAll('.route-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.route-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('selected-route').textContent = this.dataset.path;
+            });
+        });
+
+        // Route Parameters Demo
+        document.querySelectorAll('.param-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const userId = this.dataset.userId;
+                document.getElementById('current-param').textContent = userId;
+                document.getElementById('params-output').textContent = `{ userId: "${userId}" }`;
+            });
+        });
+
+        // Search Parameters Demo
+        const categorySelect = document.getElementById('category-select');
+        const sortSelect = document.getElementById('sort-select');
+        const clearParams = document.getElementById('clear-params');
+        
+        function updateSearchParams() {
+            const category = categorySelect.value;
+            const sort = sortSelect.value;
+            
+            let url = 'http://localhost:3000/products';
+            let params = {};
+            
+            if (category) params.category = category;
+            if (sort) params.sort = sort;
+            
+            const queryString = Object.keys(params).length > 0 
+                ? '?' + Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&')
+                : '';
+            
+            document.getElementById('search-url').textContent = url + queryString;
+            document.getElementById('search-params-output').innerHTML = 
+                '<strong>Current Search Params:</strong> <code>' + JSON.stringify(params, null, 2) + '</code>';
+        }
+        
+        categorySelect.addEventListener('change', updateSearchParams);
+        sortSelect.addEventListener('change', updateSearchParams);
+        clearParams.addEventListener('click', () => {
+            categorySelect.value = '';
+            sortSelect.value = '';
+            updateSearchParams();
+        });
+
+        // Protected Routes Demo
+        let isLoggedIn = false;
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const authStatus = document.getElementById('auth-status');
+        const accessDashboard = document.getElementById('access-dashboard');
+        const accessResult = document.getElementById('access-result');
+        
+        loginBtn.addEventListener('click', () => {
+            isLoggedIn = true;
+            authStatus.textContent = '✅ Logged In';
+            authStatus.className = 'auth-status logged-in';
+            loginBtn.style.display = 'none';
+            logoutBtn.style.display = 'inline-block';
+        });
+        
+        logoutBtn.addEventListener('click', () => {
+            isLoggedIn = false;
+            authStatus.textContent = '❌ Not Logged In';
+            authStatus.className = 'auth-status logged-out';
+            loginBtn.style.display = 'inline-block';
+            logoutBtn.style.display = 'none';
+        });
+        
+        accessDashboard.addEventListener('click', () => {
+            if (isLoggedIn) {
+                accessResult.innerHTML = `
+                    <div style="background: #d4edda; padding: 15px; border-radius: 5px; color: #155724;">
+                        <strong>✅ Access Granted!</strong><br>
+                        Welcome to Dashboard<br>
+                        <small>User is authenticated, route accessible hai.</small>
+                    </div>
+                `;
+            } else {
+                accessResult.innerHTML = `
+                    <div style="background: #f8d7da; padding: 15px; border-radius: 5px; color: #721c24;">
+                        <strong>❌ Access Denied!</strong><br>
+                        Redirecting to /login...<br>
+                        <small>User not authenticated, protected route access nahi ho sakta.</small>
+                    </div>
+                `;
+            }
+        });
+
+        // Lazy Loading Demo
+        let loadedChunks = 0;
+        document.querySelectorAll('.lazy-load-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const component = this.dataset.component;
+                const spinner = document.getElementById('lazy-spinner');
+                const content = document.getElementById('lazy-content');
+                
+                spinner.classList.add('active');
+                content.innerHTML = '<p style="color: #999;">Loading component...</p>';
+                
+                setTimeout(() => {
+                    spinner.classList.remove('active');
+                    loadedChunks++;
+                    
+                    const componentContent = {
+                        'Home': '<h3>🏠 Home Component Loaded!</h3><p>Chunk size: ~45 KB</p><p>Load time: 1.2s</p>',
+                        'Dashboard': '<h3>📊 Dashboard Component Loaded!</h3><p>Chunk size: ~120 KB (includes charts library)</p><p>Load time: 2.1s</p>',
+                        'Profile': '<h3>👤 Profile Component Loaded!</h3><p>Chunk size: ~30 KB</p><p>Load time: 0.8s</p>'
+                    };
+                    
+                    content.innerHTML = componentContent[component];
+                    document.getElementById('loaded-chunks').textContent = loadedChunks;
+                }, 1500);
+            });
+        });
+
+        // Relative Paths Demo
+        let currentPath = '/dashboard';
+        document.getElementById('relative-path').textContent = currentPath;
+        document.getElementById('relative-result').textContent = currentPath;
+        
+        document.querySelectorAll('.relative-nav').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const path = this.dataset.path;
+                let newPath;
+                
+                if (path === '..') {
+                    const parts = currentPath.split('/').filter(p => p);
+                    parts.pop();
+                    newPath = '/' + parts.join('/') || '/';
+                } else if (path.startsWith('/')) {
+                    newPath = path;
+                } else {
+                    newPath = currentPath + '/' + path;
+                }
+                
+                currentPath = newPath;
+                document.getElementById('relative-path').textContent = currentPath;
+                document.getElementById('relative-result').textContent = newPath;
+            });
+        });
+
+        // Programmatic Navigation Demo
+        let navHistory = ['/home'];
+        let historyPosition = 0;
+        
+        function updateNavHistory() {
+            const historyDiv = document.getElementById('nav-history');
+            historyDiv.innerHTML = navHistory.map((path, index) => {
+                const isCurrent = index === historyPosition;
+                return `<code style="background: ${isCurrent ? '#667eea' : '#f8f9fa'}; color: ${isCurrent ? 'white' : '#333'}; padding: 5px 10px; border-radius: 3px; margin: 2px; display: inline-block;">${path}</code>`;
+            }).join(' → ');
+            
+            document.getElementById('history-position').textContent = historyPosition + 1;
+            document.getElementById('history-length').textContent = navHistory.length;
+        }
+        
+        document.querySelectorAll('.prog-nav').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.dataset.action;
+                const path = this.dataset.path;
+                
+                if (action === 'push') {
+                    navHistory = navHistory.slice(0, historyPosition + 1);
+                    navHistory.push(path);
+                    historyPosition = navHistory.length - 1;
+                } else if (action === 'replace') {
+                    navHistory[historyPosition] = path;
+                } else if (action === 'back' && historyPosition > 0) {
+                    historyPosition--;
+                } else if (action === 'forward' && historyPosition < navHistory.length - 1) {
+                    historyPosition++;
+                }
+                
+                updateNavHistory();
+            });
+        });
+        
+        updateNavHistory();
+
+        // Toggle Answer Function
+        function toggleAnswer(num) {
+            const answer = document.getElementById('answer-' + num);
+            const button = answer.previousElementSibling;
+            
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                button.textContent = 'Show Answer';
+            } else {
+                answer.classList.add('show');
+                button.textContent = 'Hide Answer';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React.js Master Course Roadmap (40-60 Days)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0c29;
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animated Header */
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 60px;
+            padding: 50px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        0 0 0 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: headerSlideDown 1s ease-out;
+        }
+
+        @keyframes headerSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent);
+            animation: headerShine 3s infinite;
+        }
+
+        @keyframes headerShine {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
+                         0 0 40px rgba(102, 126, 234, 0.5);
+            animation: textGlow 2s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes textGlow {
+            from {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
+                             0 0 40px rgba(102, 126, 234, 0.5);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(255, 255, 255, 0.8),
+                             0 0 60px rgba(102, 126, 234, 0.8),
+                             0 0 80px rgba(118, 75, 162, 0.6);
+            }
+        }
+
+        header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Roadmap Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, 
+                #667eea 0%, 
+                #764ba2 25%, 
+                #f093fb 50%, 
+                #4facfe 75%, 
+                #00f2fe 100%);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            animation: timelineGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes timelineGlow {
+            from {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            }
+            to {
+                box-shadow: 0 0 40px rgba(102, 126, 234, 0.9),
+                            0 0 60px rgba(118, 75, 162, 0.6);
+            }
+        }
+
+        .week-section {
+            margin-bottom: 60px;
+            position: relative;
+            animation: fadeInRight 0.8s ease-out both;
+        }
+
+        .week-section:nth-child(even) {
+            animation: fadeInLeft 0.8s ease-out both;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Week Marker on Timeline */
+        .week-marker {
+            position: absolute;
+            left: -38px;
+            top: 20px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+            box-shadow: 0 0 0 4px #0f0c29,
+                        0 0 20px rgba(102, 126, 234, 0.8);
+            animation: pulse 2s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 4px #0f0c29,
+                            0 0 20px rgba(102, 126, 234, 0.8);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 0 0 4px #0f0c29,
+                            0 0 30px rgba(102, 126, 234, 1),
+                            0 0 50px rgba(118, 75, 162, 0.6);
+            }
+        }
+
+        .week-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            font-size: 1.9em;
+            font-weight: bold;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4),
+                        0 0 0 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .week-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            transition: left 0.6s ease;
+        }
+
+        .week-header:hover::before {
+            left: 100%;
+        }
+
+        .week-header:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.6),
+                        0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Day Cards with 3D Effect */
+        .day-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 5px solid #667eea;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .day-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(102, 126, 234, 0.2), 
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        .day-card:hover::before {
+            left: 100%;
+        }
+
+        .day-card:hover {
+            transform: translateX(20px) translateZ(20px) rotateY(5deg);
+            box-shadow: -20px 20px 60px rgba(102, 126, 234, 0.4),
+                        0 0 0 1px rgba(255, 255, 255, 0.2);
+            border-left-width: 8px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .day-card:nth-child(even):hover {
+            transform: translateX(20px) translateZ(20px) rotateY(-5deg);
+        }
+
+        .day-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .day-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.5);
+            animation: iconRotate 3s ease-in-out infinite;
+        }
+
+        @keyframes iconRotate {
+            0%, 100% {
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                transform: rotate(180deg) scale(1.1);
+            }
+        }
+
+        .day-card:hover .day-icon {
+            animation: iconBounce 0.6s ease;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-10px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(0) rotate(180deg);
+            }
+            75% {
+                transform: translateY(-5px) rotate(270deg);
+            }
+        }
+
+        .topics-list {
+            list-style: none;
+            padding-left: 60px;
+        }
+
+        .topics-list li {
+            padding: 10px 0;
+            color: rgba(255, 255, 255, 0.8);
+            position: relative;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: listItemFadeIn 0.5s ease forwards;
+        }
+
+        .topics-list li:nth-child(1) { animation-delay: 0.1s; }
+        .topics-list li:nth-child(2) { animation-delay: 0.2s; }
+        .topics-list li:nth-child(3) { animation-delay: 0.3s; }
+        .topics-list li:nth-child(4) { animation-delay: 0.4s; }
+        .topics-list li:nth-child(5) { animation-delay: 0.5s; }
+        .topics-list li:nth-child(6) { animation-delay: 0.6s; }
+        .topics-list li:nth-child(7) { animation-delay: 0.7s; }
+
+        @keyframes listItemFadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .topics-list li:hover {
+            color: white;
+            transform: translateX(10px);
+        }
+
+        .topics-list li:before {
+            content: "✓";
+            position: absolute;
+            left: -30px;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2em;
+            animation: checkBounce 0.5s ease;
+        }
+
+        @keyframes checkBounce {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.3);
+            }
+        }
+
+        /* Animated Button */
+        .link-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 25px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .link-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .link-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.6),
+                        0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .link-button:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .link-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Final Result Section */
+        .final-result {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 50px;
+            border-radius: 30px;
+            margin-top: 60px;
+            box-shadow: 0 20px 60px rgba(17, 153, 142, 0.4),
+                        0 0 0 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: finalResultSlideUp 1s ease-out;
+        }
+
+        @keyframes finalResultSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .final-result::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 70%);
+            animation: resultShine 4s linear infinite;
+        }
+
+        @keyframes resultShine {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .final-result h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .final-result ul {
+            list-style: none;
+            font-size: 1.3em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .final-result ul li {
+            padding: 15px 0;
+            padding-left: 40px;
+            position: relative;
+            opacity: 0;
+            animation: resultItemFadeIn 0.6s ease forwards;
+        }
+
+        .final-result ul li:nth-child(1) { animation-delay: 0.2s; }
+        .final-result ul li:nth-child(2) { animation-delay: 0.4s; }
+        .final-result ul li:nth-child(3) { animation-delay: 0.6s; }
+        .final-result ul li:nth-child(4) { animation-delay: 0.8s; }
+        .final-result ul li:nth-child(5) { animation-delay: 1s; }
+        .final-result ul li:nth-child(6) { animation-delay: 1.2s; }
+
+        @keyframes resultItemFadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .final-result ul li:before {
+            content: "✔️";
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+            animation: checkPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes checkPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            z-index: 9999;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.8);
+            transition: width 0.1s ease;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+            box-shadow: 0 5px 25px rgba(102, 126, 234, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            animation: fabBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes fabBounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(180deg);
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.8);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .week-header {
+                font-size: 1.4em;
+            }
+
+            .timeline {
+                padding-left: 30px;
+            }
+
+            .week-marker {
+                left: -28px;
+                width: 30px;
+                height: 30px;
+                font-size: 0.7em;
+            }
+
+            .day-card:hover {
+                transform: translateX(10px);
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f0c29;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-spinner {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Floating Action Button -->
+    <div class="fab" id="fab" title="Back to Top">↑</div>
+
+    <div class="container">
+        <header>
+            <h1>🚀 Ultimate React.js Master Course</h1>
+            <p>40-60 Days | Beginner → Advanced → Industry-Ready</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">React 18+ | Hooks | Redux Toolkit | Router v6 | TypeScript | Testing | Performance</p>
+        </header>
+
+        <div class="timeline">
+            <!-- WEEK 1-2 -->
+            <div class="week-section" style="animation-delay: 0.1s;">
+                <div class="week-marker">W1-2</div>
+                <div class="week-header">📚 WEEK 1-2: React Foundations + Modern JavaScript</div>
+                
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">1-2</span>
+                        Introduction to React
+                    </div>
+                    <ul class="topics-list">
+                        <li>What is React? Why React in modern web development?</li>
+                        <li>SPA vs MPA, Virtual DOM vs Real DOM</li>
+                        <li>React Fiber architecture & React 18 new features</li>
+                        <li>Component-based UI architecture</li>
+                        <li>Setting up environment: Node.js, npm, Vite, CRA</li>
+                        <li>Creating first React App & folder structure</li>
+                    </ul>
+                    <a href="react_foundations_learning.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">3-5</span>
+                        Modern JavaScript ES6-ES2023 Review
+                    </div>
+                    <ul class="topics-list">
+                        <li>var vs let vs const, Arrow functions</li>
+                        <li>Template literals, Destructuring</li>
+                        <li>Spread & Rest operators, Default parameters</li>
+                        <li>Array methods (map, filter, reduce, find, some, every)</li>
+                        <li>Promises + async/await + error handling</li>
+                        <li>Modules, Classes, Optional chaining</li>
+                        <li>Debouncing & Throttling</li>
+                    </ul>
+                    <a href="modern-js-learning.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">6-8</span>
+                        JSX + Components
+                    </div>
+                    <ul class="topics-list">
+                        <li>Deep understanding of JSX & why it exists</li>
+                        <li>JSX rules and pitfalls</li>
+                        <li>Functional vs Class components</li>
+                        <li>Creating reusable components</li>
+                        <li>Component re-rendering cycle & composition</li>
+                        <li>Default props & propTypes</li>
+                    </ul>
+                    <a href="jsx_components_tutorial.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">9-11</span>
+                        Props & State
+                    </div>
+                    <ul class="topics-list">
+                        <li>Immutable data concept</li>
+                        <li>Props drilling problem</li>
+                        <li>State vs Props difference</li>
+                        <li>Local component state & updating correctly</li>
+                        <li>Multiple state updates batching</li>
+                        <li>useState & useEffect (simple usage)</li>
+                    </ul>
+                    <a href="react_props_state_learning.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">12-13</span>
+                        Handling Events + Forms
+                    </div>
+                    <ul class="topics-list">
+                        <li>Synthetic events & Event binding</li>
+                        <li>Controlled vs Uncontrolled components</li>
+                        <li>Form validation patterns</li>
+                        <li>Input management for large forms</li>
+                        <li>Handling checkboxes, radios, selects</li>
+                        <li>Formik + Yup introduction</li>
+                    </ul>
+                    <a href="react-events-forms-tutorial.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+            </div>
+
+            <!-- WEEK 3-4 -->
+            <div class="week-section" style="animation-delay: 0.2s;">
+                <div class="week-marker">W3-4</div>
+                <div class="week-header">🎨 WEEK 3-4: Intermediate React + APIs + UI</div>
+                
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">14-16</span>
+                        Lists, Keys & Conditional Rendering
+                    </div>
+                    <ul class="topics-list">
+                        <li>Keys: why unique keys matter</li>
+                        <li>Common mistakes ("index as key" problem)</li>
+                        <li>Rendering dynamic lists</li>
+                        <li>Map vs forEach in rendering</li>
+                        <li>Conditional rendering patterns</li>
+                    </ul>
+                    <a href="react_lists_keys_conditional.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">17-19</span>
+                        Component Lifecycle
+                    </div>
+                    <ul class="topics-list">
+                        <li>Class lifecycle methods</li>
+                        <li>Why lifecycle changed in React 16+</li>
+                        <li>Deep dive into useEffect</li>
+                        <li>Cleanup function & Dependency array traps</li>
+                        <li>Avoiding infinite loops</li>
+                        <li>useEffect vs useLayoutEffect</li>
+                    </ul>
+                    <a href="day17-19.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">20-21</span>
+                        Styling in React
+                    </div>
+                    <ul class="topics-list">
+                        <li>Global CSS & CSS Modules</li>
+                        <li>Styled-components & Emotion</li>
+                        <li>Tailwind CSS (full integration)</li>
+                        <li>Material UI / Chakra UI</li>
+                        <li>Responsive UI patterns & Dark mode</li>
+                    </ul>
+                    <a href="day20-21.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">22-24</span>
+                        API Integration
+                    </div>
+                    <ul class="topics-list">
+                        <li>Fetch API & Axios</li>
+                        <li>GET / POST / PUT / DELETE requests</li>
+                        <li>Error handling & Loading states</li>
+                        <li>Skeleton UI & API retry patterns</li>
+                        <li>AbortController for cancelling requests</li>
+                        <li>Debounced API search bar</li>
+                    </ul>
+                    <a href="day22-24.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+            </div>
+
+            <!-- WEEK 5-6 -->
+            <div class="week-section" style="animation-delay: 0.3s;">
+                <div class="week-marker">W5-6</div>
+                <div class="week-header">⚡ WEEK 5-6: Advanced State Management</div>
+                
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">25-26</span>
+                        Context API
+                    </div>
+                    <ul class="topics-list">
+                        <li>Creating & providing context</li>
+                        <li>useContext deep dive</li>
+                        <li>Avoiding re-render issues</li>
+                        <li>When to use context vs Redux</li>
+                        <li>Global theme & auth management</li>
+                    </ul>
+                    <a href="day25-26.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">27-30</span>
+                        Redux Toolkit (Modern Redux)
+                    </div>
+                    <ul class="topics-list">
+                        <li>Why Redux Toolkit replaced old Redux</li>
+                        <li>createSlice, createReducer, configureStore</li>
+                        <li>Async Thunks & Data caching</li>
+                        <li>RTK Query (full backend integration)</li>
+                        <li>Normalizing state & Immutable updates</li>
+                        <li>Redux DevTools & Enterprise structure</li>
+                    </ul>
+                    <a href="day27-30.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">31</span>
+                        Redux Middleware & Data Optimization
+                    </div>
+                    <ul class="topics-list">
+                        <li>Concept of middleware</li>
+                        <li>Custom middleware & Thunk in-depth</li>
+                        <li>Logging & error handling middleware</li>
+                        <li>Reselect for optimized selectors</li>
+                    </ul>
+                    <a href="day31.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+            </div>
+
+            <!-- WEEK 7-8 -->
+            <div class="week-section" style="animation-delay: 0.4s;">
+                <div class="week-marker">W7-8</div>
+                <div class="week-header">🚀 WEEK 7-8: Routing + Performance + Patterns</div>
+                
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">32-33</span>
+                        React Router v6
+                    </div>
+                    <ul class="topics-list">
+                        <li>Creating routes & Nested routes</li>
+                        <li>Layout routes & Route parameters</li>
+                        <li>Search params & Protected routes</li>
+                        <li>Lazy loading routes</li>
+                        <li>Programmatic navigation</li>
+                    </ul>
+                    <a href="day32-33.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">34-35</span>
+                        Code Splitting & Lazy Loading
+                    </div>
+                    <ul class="topics-list">
+                        <li>React.lazy & Suspense</li>
+                        <li>Dynamic imports</li>
+                        <li>Route-based code splitting</li>
+                        <li>Image optimization</li>
+                        <li>Chunk splitting best practices</li>
+                    </ul>
+                    <a href="day34-35.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">36-38</span>
+                        Performance Optimization
+                    </div>
+                    <ul class="topics-list">
+                        <li>React.memo detailed</li>
+                        <li>useCallback & useMemo deep dive</li>
+                        <li>Avoiding unnecessary re-renders</li>
+                        <li>Profiler tool</li>
+                        <li>Windowing large lists (React Window)</li>
+                        <li>Production performance patterns</li>
+                    </ul>
+                    <a href="day36-38.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+            </div>
+
+            <!-- WEEK 9-10 -->
+            <div class="week-section" style="animation-delay: 0.5s;">
+                <div class="week-marker">W9-10</div>
+                <div class="week-header">🔧 WEEK 9-10: Hooks, Testing, Security & Patterns</div>
+                
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">39-41</span>
+                        Advanced Hooks
+                    </div>
+                    <ul class="topics-list">
+                        <li>useReducer</li>
+                        <li>useRef (mutable values + DOM refs)</li>
+                        <li>useImperativeHandle</li>
+                        <li>useLayoutEffect</li>
+                        <li>Custom hooks (complex reusable logic)</li>
+                        <li>Deep custom hooks case studies</li>
+                    </ul>
+                    <a href="day39-41.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">42-44</span>
+                        Testing React Applications
+                    </div>
+                    <ul class="topics-list">
+                        <li>Jest basics</li>
+                        <li>React Testing Library</li>
+                        <li>Unit testing & Integration testing</li>
+                        <li>Mocking APIs</li>
+                        <li>Snapshot testing</li>
+                        <li>E2E Testing (Playwright / Cypress)</li>
+                    </ul>
+                    <a href="day42-44.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">45</span>
+                        Advanced Component Patterns
+                    </div>
+                    <ul class="topics-list">
+                        <li>Higher-Order Components (HOCs)</li>
+                        <li>Render props</li>
+                        <li>Compound components</li>
+                        <li>Provider pattern</li>
+                        <li>State reducer pattern</li>
+                        <li>Headless components pattern</li>
+                    </ul>
+                    <a href="day45.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+            </div>
+
+            <!-- WEEK 11-12 -->
+            <div class="week-section" style="animation-delay: 0.6s;">
+                <div class="week-marker">W11-12</div>
+                <div class="week-header">🏆 WEEK 11-12: Real-World Topics (Industry-Level)</div>
+                
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">46-48</span>
+                        Authentication
+                    </div>
+                    <ul class="topics-list">
+                        <li>JWT authentication flow</li>
+                        <li>LocalStorage / Cookies / HttpOnly cookie</li>
+                        <li>Login, Signup, Logout</li>
+                        <li>Protected routes</li>
+                        <li>Refresh tokens and session handling</li>
+                        <li>Firebase Auth / Auth0</li>
+                    </ul>
+                    <a href="day46-48.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">49-50</span>
+                        File Uploads + Forms + Error Systems
+                    </div>
+                    <ul class="topics-list">
+                        <li>Single & multiple file upload</li>
+                        <li>Drag-and-drop uploads</li>
+                        <li>Client-side validation architecture</li>
+                        <li>Global error boundary</li>
+                        <li>Reusable error UI</li>
+                    </ul>
+                    <a href="day49-50.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">51-52</span>
+                        Working With Realtime Data
+                    </div>
+                    <ul class="topics-list">
+                        <li>WebSockets</li>
+                        <li>Socket.io</li>
+                        <li>EventSource / SSE</li>
+                        <li>Real-time chat implementation</li>
+                    </ul>
+                    <a href="day51-54.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">53-54</span>
+                        React + TypeScript
+                    </div>
+                    <ul class="topics-list">
+                        <li>Types for props & states</li>
+                        <li>Interfaces & types</li>
+                        <li>Redux with TypeScript</li>
+                        <li>Creating typed custom hooks</li>
+                        <li>Best practices</li>
+                    </ul>
+                    <a href="day51-54.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">55-56</span>
+                        Backend Integration
+                    </div>
+                    <ul class="topics-list">
+                        <li>Full MERN integration</li>
+                        <li>CRUD operations & Pagination</li>
+                        <li>Authentication + Authorization</li>
+                        <li>Secure API integration patterns</li>
+                        <li>Error handling, retries, caching</li>
+                    </ul>
+                    <a href="day55-56.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">57</span>
+                        React Security
+                    </div>
+                    <ul class="topics-list">
+                        <li>XSS protection & CSRF</li>
+                        <li>Sanitizing input</li>
+                        <li>Safe state updates</li>
+                        <li>Avoiding memory leaks</li>
+                        <li>React Helmet for SEO + security headers</li>
+                    </ul>
+                    <a href="day57.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">58</span>
+                        Deployment
+                    </div>
+                    <ul class="topics-list">
+                        <li>Deploy on Netlify, Vercel</li>
+                        <li>Deploy on Firebase Hosting</li>
+                        <li>Build production bundle</li>
+                        <li>Environment variables</li>
+                        <li>CI/CD basics</li>
+                    </ul>
+                    <a href="day58.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">59-60</span>
+                        Capstone Project + Interview Prep
+                    </div>
+                    <ul class="topics-list">
+                        <li>E-commerce app</li>
+                        <li>Dashboard + Analytics</li>
+                        <li>Social media clone</li>
+                        <li>AI/ChatGPT integrated app</li>
+                        <li>Top 100 React Interview Questions</li>
+                        <li>System design for frontend</li>
+                    </ul>
+                    <a href="day58-60end.html" class="link-button"><span>Start Learning →</span></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Result -->
+        <div class="final-result">
+            <h2>⭐ FINAL RESULT - You Will Become:</h2>
+            <ul>
+                <li>React + Redux + Router expert</li>
+                <li>Able to build production-level apps</li>
+                <li>Interview-ready (beginner → advanced)</li>
+                <li>Confident with real-world architecture</li>
+                <li>Able to integrate backend APIs securely</li>
+                <li>Able to deploy full MERN projects</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1000);
+        });
+
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scrollProgress').style.width = scrolled + '%';
+        });
+
+        // Floating Action Button - Scroll to Top
+        document.getElementById('fab').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Generate Animated Particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.day-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Button Click Animation
+        document.querySelectorAll('.link-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.6)';
+                ripple.style.width = ripple.style.height = '100px';
+                ripple.style.left = e.offsetX - 50 + 'px';
+                ripple.style.top = e.offsetY - 50 + 'px';
+                ripple.style.animation = 'ripple 0.6s ease-out';
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+                
+                // Change button state
+                setTimeout(() => {
+                    this.style.background = 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)';
+                    this.innerHTML = '<span>✓ Completed</span>';
+                }, 300);
+            });
+        });
+
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                from {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Parallax Effect on Mouse Move
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.day-card');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            cards.forEach((card, index) => {
+                const speed = (index % 3 + 1) * 2;
+                const xOffset = (x - 0.5) * speed;
+                const yOffset = (y - 0.5) * speed;
+                card.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+            });
+        });
+
+        // Show/Hide FAB based on scroll position
+        window.addEventListener('scroll', () => {
+            const fab = document.getElementById('fab');
+            if (window.scrollY > 300) {
+                fab.style.opacity = '1';
+                fab.style.visibility = 'visible';
+            } else {
+                fab.style.opacity = '0';
+                fab.style.visibility = 'hidden';
+            }
+        });
+
+        // Initial FAB state
+        document.getElementById('fab').style.opacity = '0';
+        document.getElementById('fab').style.visibility = 'hidden';
+        document.getElementById('fab').style.transition = 'opacity 0.3s, visibility 0.3s';
+    </script>
+</body>
+</html>

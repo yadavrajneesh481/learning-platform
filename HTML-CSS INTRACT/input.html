@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Input Types Guide</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+        }
+        
+        .section h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .input-group h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .description {
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .example {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .example label {
+            min-width: 120px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        /* Basic Input Styling */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        input[type="tel"],
+        input[type="url"],
+        input[type="search"],
+        input[type="date"],
+        input[type="time"],
+        input[type="datetime-local"],
+        input[type="month"],
+        input[type="week"],
+        input[type="color"],
+        input[type="file"],
+        input[type="range"],
+        textarea,
+        select {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus,
+        input[type="tel"]:focus,
+        input[type="url"]:focus,
+        input[type="search"]:focus,
+        input[type="date"]:focus,
+        input[type="time"]:focus,
+        input[type="datetime-local"]:focus,
+        input[type="month"]:focus,
+        input[type="week"]:focus,
+        input[type="color"]:focus,
+        input[type="file"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        /* Checkbox and Radio Styling */
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            accent-color: #667eea;
+        }
+        
+        /* Button Styling */
+        input[type="submit"],
+        input[type="button"],
+        input[type="reset"],
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        input[type="submit"]:hover,
+        input[type="button"]:hover,
+        input[type="reset"]:hover,
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Range Slider Styling */
+        input[type="range"] {
+            width: 200px;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            accent-color: #667eea;
+        }
+        
+        /* File Input Styling */
+        input[type="file"] {
+            padding: 8px;
+            background: #f7fafc;
+        }
+        
+        /* Textarea Styling */
+        textarea {
+            width: 300px;
+            height: 80px;
+            resize: vertical;
+        }
+        
+        /* Select Styling */
+        select {
+            width: 200px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        /* Color Input */
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .properties {
+            margin-top: 15px;
+            padding: 15px;
+            background: #edf2f7;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .properties h4 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .properties ul {
+            margin-left: 20px;
+        }
+        
+        .properties li {
+            margin-bottom: 5px;
+            color: #4a5568;
+        }
+        
+        .code {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Complete CSS Input Types Guide</h1>
+        
+        <div class="section">
+            <h2>📝 Text Input Types</h2>
+            
+            <div class="input-group">
+                <h3>1. Text Input</h3>
+                <div class="description">For regular text input like names, addresses, etc.</div>
+                <div class="example">
+                    <label>Name:</label>
+                    <input type="text" placeholder="Enter your name">
+                </div>
+                <div class="properties">
+                    <h4>Common Properties:</h4>
+                    <ul>
+                        <li><strong>padding:</strong> Space inside the input</li>
+                        <li><strong>border:</strong> Border around the input</li>
+                        <li><strong>border-radius:</strong> Rounded corners</li>
+                        <li><strong>font-size:</strong> Size of text</li>
+                        <li><strong>width/height:</strong> Size of input box</li>
+                        <li><strong>background-color:</strong> Background color</li>
+                        <li><strong>color:</strong> Text color</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>2. Email Input</h3>
+                <div class="description">For email addresses - has built-in validation</div>
+                <div class="example">
+                    <label>Email:</label>
+                    <input type="email" placeholder="Enter your email">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>3. Password Input</h3>
+                <div class="description">For passwords - text is hidden</div>
+                <div class="example">
+                    <label>Password:</label>
+                    <input type="password" placeholder="Enter password">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>4. Search Input</h3>
+                <div class="description">For search boxes - may have special styling</div>
+                <div class="example">
+                    <label>Search:</label>
+                    <input type="search" placeholder="Search...">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>5. URL Input</h3>
+                <div class="description">For website URLs - has built-in validation</div>
+                <div class="example">
+                    <label>Website:</label>
+                    <input type="url" placeholder="https://example.com">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>6. Telephone Input</h3>
+                <div class="description">For phone numbers</div>
+                <div class="example">
+                    <label>Phone:</label>
+                    <input type="tel" placeholder="+1 (555) 123-4567">
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🔢 Number Input Types</h2>
+            
+            <div class="input-group">
+                <h3>7. Number Input</h3>
+                <div class="description">For numeric values with up/down arrows</div>
+                <div class="example">
+                    <label>Age:</label>
+                    <input type="number" min="0" max="120" placeholder="25">
+                </div>
+                <div class="properties">
+                    <h4>Special Properties:</h4>
+                    <ul>
+                        <li><strong>min:</strong> Minimum value</li>
+                        <li><strong>max:</strong> Maximum value</li>
+                        <li><strong>step:</strong> Increment step</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>8. Range Slider</h3>
+                <div class="description">For selecting values with a slider</div>
+                <div class="example">
+                    <label>Volume:</label>
+                    <input type="range" min="0" max="100" value="50">
+                </div>
+                <div class="properties">
+                    <h4>Styling Properties:</h4>
+                    <ul>
+                        <li><strong>accent-color:</strong> Color of the slider thumb</li>
+                        <li><strong>height:</strong> Height of the track</li>
+                        <li><strong>background:</strong> Track background color</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📅 Date & Time Input Types</h2>
+            
+            <div class="input-group">
+                <h3>9. Date Input</h3>
+                <div class="description">For selecting dates</div>
+                <div class="example">
+                    <label>Birthday:</label>
+                    <input type="date">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>10. Time Input</h3>
+                <div class="description">For selecting time</div>
+                <div class="example">
+                    <label>Meeting:</label>
+                    <input type="time">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>11. DateTime Local</h3>
+                <div class="description">For selecting date and time together</div>
+                <div class="example">
+                    <label>Event:</label>
+                    <input type="datetime-local">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>12. Month Input</h3>
+                <div class="description">For selecting month and year</div>
+                <div class="example">
+                    <label>Month:</label>
+                    <input type="month">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>13. Week Input</h3>
+                <div class="description">For selecting week and year</div>
+                <div class="example">
+                    <label>Week:</label>
+                    <input type="week">
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>☑️ Selection Input Types</h2>
+            
+            <div class="input-group">
+                <h3>14. Checkbox</h3>
+                <div class="description">For yes/no or multiple selections</div>
+                <div class="example">
+                    <label>
+                        <input type="checkbox"> Subscribe to newsletter
+                    </label>
+                </div>
+                <div class="example">
+                    <label>
+                        <input type="checkbox"> Terms and conditions
+                    </label>
+                </div>
+                <div class="properties">
+                    <h4>Styling Properties:</h4>
+                    <ul>
+                        <li><strong>accent-color:</strong> Color of the checkbox</li>
+                        <li><strong>width/height:</strong> Size of checkbox</li>
+                        <li><strong>margin:</strong> Space around checkbox</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>15. Radio Button</h3>
+                <div class="description">For selecting one option from multiple choices</div>
+                <div class="example">
+                    <label>
+                        <input type="radio" name="gender" value="male"> Male
+                    </label>
+                </div>
+                <div class="example">
+                    <label>
+                        <input type="radio" name="gender" value="female"> Female
+                    </label>
+                </div>
+                <div class="example">
+                    <label>
+                        <input type="radio" name="gender" value="other"> Other
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎨 Special Input Types</h2>
+            
+            <div class="input-group">
+                <h3>16. Color Input</h3>
+                <div class="description">For selecting colors</div>
+                <div class="example">
+                    <label>Favorite Color:</label>
+                    <input type="color" value="#667eea">
+                </div>
+                <div class="properties">
+                    <h4>Styling Properties:</h4>
+                    <ul>
+                        <li><strong>width/height:</strong> Size of color picker</li>
+                        <li><strong>border:</strong> Border around picker</li>
+                        <li><strong>border-radius:</strong> Make it round or square</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>17. File Input</h3>
+                <div class="description">For uploading files</div>
+                <div class="example">
+                    <label>Upload Photo:</label>
+                    <input type="file" accept="image/*">
+                </div>
+                <div class="properties">
+                    <h4>Special Properties:</h4>
+                    <ul>
+                        <li><strong>accept:</strong> File types allowed</li>
+                        <li><strong>multiple:</strong> Allow multiple files</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🔘 Button Input Types</h2>
+            
+            <div class="input-group">
+                <h3>18. Submit Button</h3>
+                <div class="description">For submitting forms</div>
+                <div class="example">
+                    <input type="submit" value="Submit Form">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>19. Button</h3>
+                <div class="description">For general actions</div>
+                <div class="example">
+                    <input type="button" value="Click Me">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>20. Reset Button</h3>
+                <div class="description">For clearing form data</div>
+                <div class="example">
+                    <input type="reset" value="Reset Form">
+                </div>
+                <div class="properties">
+                    <h4>Button Styling Properties:</h4>
+                    <ul>
+                        <li><strong>background:</strong> Background color/gradient</li>
+                        <li><strong>color:</strong> Text color</li>
+                        <li><strong>border:</strong> Border styling</li>
+                        <li><strong>padding:</strong> Space inside button</li>
+                        <li><strong>cursor:</strong> Pointer cursor on hover</li>
+                        <li><strong>transition:</strong> Smooth animations</li>
+                        <li><strong>:hover:</strong> Styling when mouse hovers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📋 Other Form Elements</h2>
+            
+            <div class="input-group">
+                <h3>21. Textarea</h3>
+                <div class="description">For multi-line text input</div>
+                <div class="example">
+                    <label>Message:</label>
+                    <textarea placeholder="Type your message here..."></textarea>
+                </div>
+                <div class="properties">
+                    <h4>Special Properties:</h4>
+                    <ul>
+                        <li><strong>resize:</strong> Control if user can resize</li>
+                        <li><strong>rows/cols:</strong> Initial size</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>22. Select Dropdown</h3>
+                <div class="description">For selecting from a dropdown list</div>
+                <div class="example">
+                    <label>Country:</label>
+                    <select>
+                        <option>Select Country</option>
+                        <option>USA</option>
+                        <option>Canada</option>
+                        <option>UK</option>
+                        <option>Australia</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 Common CSS Properties for All Inputs</h2>
+            <div class="code">
+/* Basic Styling */
+input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Focus State */
+input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+/* Hover Effect */
+input:hover {
+    border-color: #999;
+}
+
+/* Disabled State */
+input:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+/* Placeholder Styling */
+input::placeholder {
+    color: #999;
+    font-style: italic;
+}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

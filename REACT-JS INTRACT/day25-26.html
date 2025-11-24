@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Context API - Interactive Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin: 25px 0 15px 0;
+            font-size: 1.5em;
+        }
+
+        .definition {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .definition strong {
+            color: #1976D2;
+            font-size: 1.1em;
+        }
+
+        .hinglish {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ff9800;
+        }
+
+        .demo-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-dark {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        .component-tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            background: #f5f5f5;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .component-box {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin: 10px;
+            text-align: center;
+            min-width: 150px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .component-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .component-box.highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .tree-line {
+            width: 2px;
+            height: 40px;
+            background: #667eea;
+            margin: 0 auto;
+        }
+
+        .tree-branches {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            position: relative;
+        }
+
+        .tree-branches::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background: #667eea;
+        }
+
+        .code-block {
+            background: #263238;
+            color: #aed581;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'JavaScript';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .highlight {
+            color: #ffeb3b;
+        }
+
+        .comment {
+            color: #78909c;
+        }
+
+        .string {
+            color: #80cbc4;
+        }
+
+        .keyword {
+            color: #c792ea;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comparison-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .check {
+            color: #4caf50;
+            font-size: 1.2em;
+        }
+
+        .cross {
+            color: #f44336;
+            font-size: 1.2em;
+        }
+
+        .theme-demo {
+            padding: 30px;
+            border-radius: 12px;
+            margin: 20px 0;
+            transition: all 0.3s;
+        }
+
+        .theme-light {
+            background: #ffffff;
+            color: #333333;
+        }
+
+        .theme-dark {
+            background: #1e1e1e;
+            color: #ffffff;
+        }
+
+        .auth-demo {
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+        }
+
+        input[type="text"], input[type="password"] {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .render-counter {
+            display: inline-block;
+            background: #ff5722;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            animation: blink 1s ease;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .interview-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 50px;
+        }
+
+        .question {
+            background: white;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .question:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .question h4 {
+            color: #f5576c;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .question-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s;
+        }
+
+        .question.active .question-icon {
+            transform: rotate(180deg);
+        }
+
+        .answer {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #f093fb;
+        }
+
+        .answer.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .pros, .cons {
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .pros {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+
+        .cons {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+
+        .pros h3 {
+            color: #2e7d32;
+        }
+
+        .cons h3 {
+            color: #c62828;
+        }
+
+        .visual-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 30px;
+            background: #f5f5f5;
+            border-radius: 12px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            min-width: 120px;
+            margin: 10px;
+        }
+
+        .flow-arrow {
+            font-size: 2em;
+            color: #667eea;
+            animation: slideRight 2s infinite;
+        }
+
+        @keyframes slideRight {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .tree-branches {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+
+            .visual-flow {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            border-bottom: 2px dotted #667eea;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚛️ Context API Masterclass</h1>
+            <p>Day 25-26: Complete Guide with Interactive Demos</p>
+        </header>
+
+        <div class="content">
+            <!-- Introduction Section -->
+            <div class="section">
+                <h2>📚 Context API Kya Hai?</h2>
+                
+                <div class="definition">
+                    <strong>Context API:</strong> A React feature that provides a way to pass data through the component tree without having to pass props down manually at every level. It's designed to share data that can be considered "global" for a tree of React components.
+                </div>
+
+                <div class="hinglish">
+                    <p><strong>Simple shabdon mein:</strong> Imagine karo ek joint family hai. Agar dadi ko kuch batana hai pote ko, toh normal tarike se dadi → papa → beta → pota (prop drilling) karna padega. Lekin Context API ek loudspeaker ki tarah hai - dadi seedha announce kar deti hai aur pota sun leta hai! 📢</p>
+                    <p><strong>Problem ye solve karta hai:</strong> Prop drilling - jab aapko data 5-6 levels neeche bhejni ho toh har component mein props pass karna padta hai, chahe beech wale components ko us data ki zaroorat na ho.</p>
+                </div>
+
+                <h3>🎯 Prop Drilling vs Context API</h3>
+                <div class="visual-flow">
+                    <div>
+                        <h4 style="color: #f44336; margin-bottom: 15px;">❌ Prop Drilling</h4>
+                        <div class="component-tree">
+                            <div class="component-box">App (data)</div>
+                            <div class="tree-line"></div>
+                            <div class="component-box">Parent (props)</div>
+                            <div class="tree-line"></div>
+                            <div class="component-box">Child (props)</div>
+                            <div class="tree-line"></div>
+                            <div class="component-box">GrandChild (use)</div>
+                        </div>
+                        <p style="text-align: center; color: #666;">Har level pe props pass karna padta hai</p>
+                    </div>
+
+                    <div class="flow-arrow">→</div>
+
+                    <div>
+                        <h4 style="color: #4caf50; margin-bottom: 15px;">✅ Context API</h4>
+                        <div class="component-tree">
+                            <div class="component-box highlight">Provider (data)</div>
+                            <div class="tree-line"></div>
+                            <div class="component-box">Parent</div>
+                            <div class="tree-line"></div>
+                            <div class="component-box">Child</div>
+                            <div class="tree-line"></div>
+                            <div class="component-box highlight">Consumer (use)</div>
+                        </div>
+                        <p style="text-align: center; color: #666;">Seedha access, beech wale ko tension nahi</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Creating Context Section -->
+            <div class="section">
+                <h2>1️⃣ Context Create Karna & Provide Karna</h2>
+
+                <div class="definition">
+                    <strong>Creating Context:</strong> The process of initializing a new context using React.createContext(), which returns a Context object with Provider and Consumer components.
+                </div>
+
+                <div class="hinglish">
+                    <p><strong>Teen steps hain:</strong></p>
+                    <ol style="margin-left: 20px;">
+                        <li><strong>Create:</strong> Context banao using <code>createContext()</code></li>
+                        <li><strong>Provide:</strong> Provider component se data wrap karo</li>
+                        <li><strong>Consume:</strong> <code>useContext</code> hook se data access karo</li>
+                    </ol>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Step 1: Context Create karna</span>
+<span class="keyword">import</span> { createContext } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">const</span> <span class="highlight">ThemeContext</span> = createContext();
+
+<span class="comment">// Step 2: Provider Component banao</span>
+<span class="keyword">function</span> ThemeProvider({ children }) {
+  <span class="keyword">const</span> [theme, setTheme] = useState(<span class="string">'light'</span>);
+  
+  <span class="keyword">const</span> toggleTheme = () => {
+    setTheme(prev => prev === <span class="string">'light'</span> ? <span class="string">'dark'</span> : <span class="string">'light'</span>);
+  };
+
+  <span class="keyword">return</span> (
+    &lt;<span class="highlight">ThemeContext.Provider</span> value={{ theme, toggleTheme }}&gt;
+      {children}
+    &lt;/<span class="highlight">ThemeContext.Provider</span>&gt;
+  );
+}
+
+<span class="comment">// Step 3: useContext se consume karo</span>
+<span class="keyword">function</span> ThemedButton() {
+  <span class="keyword">const</span> { theme, toggleTheme } = <span class="highlight">useContext(ThemeContext)</span>;
+  
+  <span class="keyword">return</span> (
+    &lt;button onClick={toggleTheme}&gt;
+      Current theme: {theme}
+    &lt;/button&gt;
+  );
+}
+                </div>
+
+                <div class="demo-box">
+                    <h3>🎯 Live Demo: Theme Context</h3>
+                    <p>Neeche button click karke theme change karo - ye Context API use kar raha hai!</p>
+                    <div id="theme-demo" class="theme-demo theme-light">
+                        <h3>Current Theme: <span id="theme-name">Light</span></h3>
+                        <p>Ye content theme ke according change hota hai. Context API se har component ko theme ka access mil jata hai bina props pass kiye!</p>
+                        <button class="btn" onclick="toggleTheme()">Toggle Theme</button>
+                        <div style="margin-top: 20px;">
+                            <div class="component-box" style="display: inline-block;">
+                                Header Component
+                            </div>
+                            <div class="component-box" style="display: inline-block;">
+                                Sidebar Component
+                            </div>
+                            <div class="component-box" style="display: inline-block;">
+                                Footer Component
+                            </div>
+                            <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                                ☝️ Sabhi components ko same theme mil raha hai Context se
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- useContext Deep Dive Section -->
+            <div class="section">
+                <h2>2️⃣ useContext Hook - Deep Dive</h2>
+
+                <div class="definition">
+                    <strong>useContext Hook:</strong> A React Hook that lets you read and subscribe to context from your component. It accepts a context object and returns the current context value for that context.
+                </div>
+
+                <div class="hinglish">
+                    <p><strong>Kaise kaam karta hai?</strong> useContext ek subscription ki tarah hai. Jab bhi Provider mein value change hoti hai, sabhi consumers automatically re-render ho jate hain naye value ke saath. Ye real-time sync ki tarah hai!</p>
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>📥 Old Way (Consumer)</h3>
+                        <div class="code-block" style="font-size: 12px;">
+&lt;ThemeContext.Consumer&gt;
+  {value => (
+    &lt;div&gt;{value}&lt;/div&gt;
+  )}
+&lt;/ThemeContext.Consumer&gt;
+                        </div>
+                        <p style="color: #666; font-size: 14px;">Verbose aur nested</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>✅ New Way (useContext)</h3>
+                        <div class="code-block" style="font-size: 12px;">
+<span class="keyword">const</span> value = 
+  useContext(ThemeContext);
+
+<span class="keyword">return</span> &lt;div&gt;{value}&lt;/div&gt;
+                        </div>
+                        <p style="color: #666; font-size: 14px;">Clean aur simple</p>
+                    </div>
+                </div>
+
+                <div class="demo-box">
+                    <h3>🎯 Live Demo: Multiple Contexts</h3>
+                    <p>Ek component multiple contexts use kar sakta hai!</p>
+                    <div style="background: #f5f5f5; padding: 20px; border-radius: 10px;">
+                        <div style="margin-bottom: 15px;">
+                            <strong>User Context:</strong> <span id="user-context-display">Guest</span>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <strong>Language Context:</strong> <span id="lang-context-display">English</span>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <strong>Theme Context:</strong> <span id="theme-context-display">Light</span>
+                        </div>
+                        <button class="btn" onclick="updateAllContexts()">Update All Contexts</button>
+                    </div>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Multiple contexts ek saath use karna</span>
+<span class="keyword">function</span> MyComponent() {
+  <span class="keyword">const</span> { user } = <span class="highlight">useContext(UserContext)</span>;
+  <span class="keyword">const</span> { language } = <span class="highlight">useContext(LanguageContext)</span>;
+  <span class="keyword">const</span> { theme } = <span class="highlight">useContext(ThemeContext)</span>;
+
+  <span class="keyword">return</span> (
+    &lt;div className={theme}&gt;
+      &lt;h1&gt;{language === <span class="string">'hi'</span> ? <span class="string">'नमस्ते'</span> : <span class="string">'Hello'</span>}, {user.name}!&lt;/h1&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+            </div>
+
+            <!-- Re-render Issues Section -->
+            <div class="section">
+                <h2>3️⃣ Re-render Issues & Optimization</h2>
+
+                <div class="definition">
+                    <strong>Re-render Problem:</strong> When context value changes, all components consuming that context re-render, even if they only use a small part of the context value. This can cause performance issues in large applications.
+                </div>
+
+                <div class="hinglish">
+                    <p><strong>Sabse badi problem:</strong> Jab Context ki value change hoti hai, toh SABHI components jo us context ko consume kar rahe hain, wo re-render ho jate hain - chahe unko us particular value ki zaroorat ho ya na ho! 😰</p>
+                    <p><strong>Example:</strong> Agar aapke context mein user aur theme dono hain, aur sirf theme change hua, toh bhi wo components re-render honge jo sirf user use kar rahe hain!</p>
+                </div>
+
+                <div class="demo-box">
+                    <h3>🎯 Live Demo: Re-render Counter</h3>
+                    <p>Dekho kitni baar components re-render ho rahe hain!</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+                        <div style="background: #e3f2fd; padding: 15px; border-radius: 8px;">
+                            <strong>Component A</strong>
+                            <div>Renders: <span class="render-counter" id="render-a">0</span></div>
+                            <small>Uses: user.name</small>
+                        </div>
+                        <div style="background: #f3e5f5; padding: 15px; border-radius: 8px;">
+                            <strong>Component B</strong>
+                            <div>Renders: <span class="render-counter" id="render-b">0</span></div>
+                            <small>Uses: user.age</small>
+                        </div>
+                        <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
+                            <strong>Component C</strong>
+                            <div>Renders: <span class="render-counter" id="render-c">0</span></div>
+                            <small>Uses: theme</small>
+                        </div>
+                    </div>
+
+                    <button class="btn" onclick="updateUserName()">Update User Name</button>
+                    <button class="btn btn-success" onclick="updateUserAge()">Update User Age</button>
+                    <button class="btn btn-warning" onclick="updateThemeOnly()">Update Theme</button>
+                    <button class="btn btn-danger" onclick="resetRenderCounts()">Reset Counters</button>
+
+                    <div style="margin-top: 20px; padding: 15px; background: #fff3e0; border-radius: 8px;">
+                        <strong>⚠️ Problem:</strong> Sabhi components re-render ho rahe hain, chahe unko us value ki zaroorat na ho!
+                    </div>
+                </div>
+
+                <h3>✅ Solutions for Re-render Issues</h3>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>1. Split Contexts</h3>
+                        <p>Alag alag contexts banao different data ke liye</p>
+                        <div class="code-block" style="font-size: 11px;">
+<span class="comment">// ❌ Bad: Ek hi context</span>
+&lt;AppContext.Provider 
+  value={{ user, theme, 
+          settings }}&gt;
+
+<span class="comment">// ✅ Good: Alag contexts</span>
+&lt;UserContext.Provider&gt;
+  &lt;ThemeContext.Provider&gt;
+    &lt;SettingsContext.Provider&gt;
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>2. useMemo for Value</h3>
+                        <p>Context value ko memoize karo</p>
+                        <div class="code-block" style="font-size: 11px;">
+<span class="keyword">const</span> value = useMemo(
+  () => ({ user, theme }),
+  [user, theme]
+);
+
+&lt;Context.Provider 
+  value={value}&gt;
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>3. React.memo</h3>
+                        <p>Components ko memoize karo</p>
+                        <div class="code-block" style="font-size: 11px;">
+<span class="keyword">const</span> MyComponent = 
+  React.memo(<span class="keyword">function</span>() {
+  <span class="keyword">const</span> { user } = 
+    useContext(UserContext);
+  <span class="keyword">return</span> &lt;div&gt;{user}&lt;/div&gt;
+});
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>4. Context Selectors</h3>
+                        <p>Sirf required data select karo</p>
+                        <div class="code-block" style="font-size: 11px;">
+<span class="comment">// Custom hook banao</span>
+<span class="keyword">const</span> useUserName = () => {
+  <span class="keyword">const</span> { user } = 
+    useContext(UserContext);
+  <span class="keyword">return</span> user.name;
+};
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Context vs Redux Section -->
+            <div class="section">
+                <h2>4️⃣ Context API vs Redux - Kab Kya Use Karein?</h2>
+
+                <div class="definition">
+                    <strong>State Management Comparison:</strong> Context API is built into React for sharing data across components, while Redux is a separate library providing a more structured approach to state management with additional features like middleware, time-travel debugging, and strict unidirectional data flow.
+                </div>
+
+                <div class="hinglish">
+                    <p><strong>Confusion clear karte hain:</strong> Context API aur Redux dono state management ke liye hain, lekin dono ka use case alag hai. Context API React ka built-in feature hai, Redux ek external library hai with more features.</p>
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Context API</th>
+                            <th>Redux</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Setup Complexity</strong></td>
+                            <td><span class="check">✓</span> Simple & Quick</td>
+                            <td><span class="cross">✗</span> Complex Boilerplate</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bundle Size</strong></td>
+                            <td><span class="check">✓</span> 0 KB (Built-in)</td>
+                            <td><span class="cross">✗</span> ~10 KB (External)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DevTools</strong></td>
+                            <td><span class="cross">✗</span> Limited</td>
+                            <td><span class="check">✓</span> Excellent (Time-travel)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Middleware Support</strong></td>
+                            <td><span class="cross">✗</span> No</td>
+                            <td><span class="check">✓</span> Yes (Thunk, Saga)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Performance</strong></td>
+                            <td><span class="cross">✗</span> Can cause re-renders</td>
+                            <td><span class="check">✓</span> Optimized with selectors</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Learning Curve</strong></td>
+                            <td><span class="check">✓</span> Easy</td>
+                            <td><span class="cross">✗</span> Steep</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Best For</strong></td>
+                            <td>Small to medium apps, theme, auth</td>
+                            <td>Large apps, complex state logic</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h3>✅ Use Context API When:</h3>
+                        <ul style="margin-left: 20px;">
+                            <li>Small to medium sized app</li>
+                            <li>Simple state sharing (theme, language, auth)</li>
+                            <li>Don't want external dependencies</li>
+                            <li>State doesn't change frequently</li>
+                            <li>Quick prototyping</li>
+                            <li>Learning React basics</li>
+                        </ul>
+                    </div>
+
+                    <div class="cons">
+                        <h3>✅ Use Redux When:</h3>
+                        <ul style="margin-left: 20px;">
+                            <li>Large scale application</li>
+                            <li>Complex state logic & transformations</li>
+                            <li>Need middleware (API calls, logging)</li>
+                            <li>Time-travel debugging required</li>
+                            <li>Multiple developers working</li>
+                            <li>Strict state management patterns needed</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="hinglish">
+                    <p><strong>Real advice:</strong> Agar aapka app chota hai aur sirf theme/auth manage karna hai, toh Context API perfect hai. Lekin agar aapka app bada hai, bahut saari API calls hain, complex state logic hai, toh Redux better choice hai. Don't over-engineer! 🎯</p>
+                </div>
+            </div>
+
+            <!-- Theme Management Section -->
+            <div class="section">
+                <h2>5️⃣ Global Theme Management with Context</h2>
+
+                <div class="definition">
+                    <strong>Theme Management:</strong> A pattern where application-wide styling preferences (colors, fonts, spacing) are stored in context and consumed by all components, enabling features like dark mode, custom themes, and consistent UI across the application.
+                </div>
+
+                <div class="hinglish">
+                    <p><strong>Real-world use case:</strong> Aajkal har app mein dark mode hota hai. Context API se aap ek jagah theme define karo aur puri app mein use karo. User preference save kar sakte ho localStorage mein!</p>
+                </div>
+
+                <div class="demo-box">
+                    <h3>🎯 Live Demo: Complete Theme System</h3>
+                    
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <button class="btn" onclick="setAppTheme('light')">☀️ Light</button>
+                        <button class="btn btn-dark" onclick="setAppTheme('dark')">🌙 Dark</button>
+                        <button class="btn btn-success" onclick="setAppTheme('nature')">🌿 Nature</button>
+                        <button class="btn btn-warning" onclick="setAppTheme('sunset')">🌅 Sunset</button>
+                    </div>
+
+                    <div id="theme-showcase" class="theme-demo theme-light">
+                        <h3>Theme Showcase</h3>
+                        <p>Ye pura section theme ke according change ho raha hai!</p>
+                        <div style="display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap;">
+                            <div class="component-box">Button</div>
+                            <div class="component-box">Card</div>
+                            <div class="component-box">Input</div>
+                        </div>
+                        <p style="margin-top: 15px; font-size: 14px;">
+                            <strong>Current Theme:</strong> <span id="current-theme-name">Light</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Complete Theme Context Implementation</span>
+<span class="keyword">import</span> { createContext, useState, useEffect } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">const</span> themes = {
+  light: {
+    background: <span class="string">'#ffffff'</span>,
+    text: <span class="string">'#333333'</span>,
+    primary: <span class="string">'#667eea'</span>
+  },
+  dark: {
+    background: <span class="string">'#1e1e1e'</span>,
+    text: <span class="string">'#ffffff'</span>,
+    primary: <span class="string">'#bb86fc'</span>
+  }
+};
+
+<span class="keyword">export const</span> <span class="highlight">ThemeContext</span> = createContext();
+
+<span class="keyword">export function</span> ThemeProvider({ children }) {
+  <span class="keyword">const</span> [theme, setTheme] = useState(
+    localStorage.getItem(<span class="string">'theme'</span>) || <span class="string">'light'</span>
+  );
+
+  <span class="comment">// Save to localStorage whenever theme changes</span>
+  useEffect(() => {
+    localStorage.setItem(<span class="string">'theme'</span>, theme);
+    document.body.className = theme;
+  }, [theme]);
+
+  <span class="keyword">const</span> value = {
+    theme,
+    colors: themes[theme],
+    setTheme
+  };
+
+  <span class="keyword">return</span> (
+    &lt;<span class="highlight">ThemeContext.Provider</span> value={value}&gt;
+      {children}
+    &lt;/<span class="highlight">ThemeContext.Provider</span>&gt;
+  );
+}
+
+<span class="comment">// Custom hook for easy access</span>
+<span class="keyword">export const</span> useTheme = () => {
+  <span class="keyword">const</span> context = useContext(ThemeContext);
+  <span class="keyword">if</span> (!context) {
+    <span class="keyword">throw new</span> Error(<span class="string">'useTheme must be used within ThemeProvider'</span>);
+  }
+  <span class="keyword">return</span> context;
+};
+                </div>
+            </div>
+
+            <!-- Auth Management Section -->
+            <div class="section">
+                <h2>6️⃣ Authentication Management with Context</h2>
+
+                <div class="definition">
+                    <strong>Auth Context:</strong> A pattern for managing user authentication state globally, including login status, user information, tokens, and authentication-related functions accessible throughout the application.
+                </div>
+
+                <div class="hinglish">
+                    <p><strong>Sabse common use case:</strong> User login/logout ka state manage karna. Agar user logged in hai toh dashboard dikhao, nahi toh login page. Context se ye bahut easy ho jata hai - har component ko pata chal jata hai user logged in hai ya nahi!</p>
+                </div>
+
+                <div class="demo-box">
+                    <h3>🎯 Live Demo: Auth System</h3>
+                    
+                    <div class="auth-demo">
+                        <div id="auth-status">
+                            <div id="logged-out-view">
+                                <h3>🔒 Please Login</h3>
+                                <div class="login-form">
+                                    <input type="text" id="username" placeholder="Username" value="demo_user">
+                                    <input type="password" id="password" placeholder="Password" value="password123">
+                                    <button class="btn btn-success" onclick="handleLogin()">Login</button>
+                                </div>
+                            </div>
+
+                            <div id="logged-in-view" style="display: none;">
+                                <h3>✅ Welcome Back!</h3>
+                                <div class="user-card">
+                                    <div class="user-avatar" id="user-avatar">D</div>
+                                    <div>
+                                        <h4 id="user-name-display">Demo User</h4>
+                                        <p style="color: #666; font-size: 14px;">demo@example.com</p>
+                                        <span class="status-badge status-success">Active</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 8px;">
+                            <strong>Protected Components:</strong>
+                            <div id="protected-content" style="margin-top: 10px;">
+                                <span class="status-badge status-error">🔒 Login required to view</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Complete Auth Context Implementation</span>
+<span class="keyword">import</span> { createContext, useState, useEffect } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">export const</span> <span class="highlight">AuthContext</span> = createContext();
+
+<span class="keyword">export function</span> AuthProvider({ children }) {
+  <span class="keyword">const</span> [user, setUser] = useState(<span class="keyword">null</span>);
+  <span class="keyword">const</span> [loading, setLoading] = useState(<span class="keyword">true</span>);
+
+  <span class="comment">// Check if user is logged in on mount</span>
+  useEffect(() => {
+    <span class="keyword">const</span> token = localStorage.getItem(<span class="string">'token'</span>);
+    <span class="keyword">if</span> (token) {
+      <span class="comment">// Verify token and get user data</span>
+      fetchUserData(token);
+    } <span class="keyword">else</span> {
+      setLoading(<span class="keyword">false</span>);
+    }
+  }, []);
+
+  <span class="keyword">const</span> login = <span class="keyword">async</span> (credentials) => {
+    <span class="keyword">try</span> {
+      <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">'/api/login'</span>, {
+        method: <span class="string">'POST'</span>,
+        body: JSON.stringify(credentials)
+      });
+      <span class="keyword">const</span> { user, token } = <span class="keyword">await</span> response.json();
+      
+      localStorage.setItem(<span class="string">'token'</span>, token);
+      setUser(user);
+      <span class="keyword">return</span> { success: <span class="keyword">true</span> };
+    } <span class="keyword">catch</span> (error) {
+      <span class="keyword">return</span> { success: <span class="keyword">false</span>, error };
+    }
+  };
+
+  <span class="keyword">const</span> logout = () => {
+    localStorage.removeItem(<span class="string">'token'</span>);
+    setUser(<span class="keyword">null</span>);
+  };
+
+  <span class="keyword">const</span> value = {
+    user,
+    loading,
+    login,
+    logout,
+    isAuthenticated: !!user
+  };
+
+  <span class="keyword">return</span> (
+    &lt;<span class="highlight">AuthContext.Provider</span> value={value}&gt;
+      {!loading && children}
+    &lt;/<span class="highlight">AuthContext.Provider</span>&gt;
+  );
+}
+
+<span class="comment">// Protected Route Component</span>
+<span class="keyword">function</span> ProtectedRoute({ children }) {
+  <span class="keyword">const</span> { isAuthenticated } = useContext(AuthContext);
+  
+  <span class="keyword">if</span> (!isAuthenticated) {
+    <span class="keyword">return</span> &lt;Navigate to=<span class="string">"/login"</span> /&gt;;
+  }
+  
+  <span class="keyword">return</span> children;
+}
+                </div>
+            </div>
+
+            <!-- Best Practices Section -->
+            <div class="section">
+                <h2>7️⃣ Context API Best Practices</h2>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>1. ✅ Create Custom Hooks</h3>
+                        <p>Har context ke liye custom hook banao</p>
+                        <div class="code-block" style="font-size: 11px;">
+<span class="keyword">export const</span> useAuth = () => {
+  <span class="keyword">const</span> context = 
+    useContext(AuthContext);
+  <span class="keyword">if</span> (!context) {
+    <span class="keyword">throw new</span> Error(
+      <span class="string">'useAuth must be used within AuthProvider'</span>
+    );
+  }
+  <span class="keyword">return</span> context;
+};
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>2. ✅ Split Large Contexts</h3>
+                        <p>Ek context mein sab kuch mat dalo</p>
+                        <div class="code-block" style="font-size: 11px;">
+<span class="comment">// ❌ Bad</span>
+&lt;AppContext value={{
+  user, theme, settings,
+  cart, notifications
+}}&gt;
+
+<span class="comment">// ✅ Good</span>
+&lt;UserContext&gt;
+  &lt;ThemeContext&gt;
+    &lt;CartContext&gt;
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>3. ✅ Memoize Context Value</h3>
+                        <p>Unnecessary re-renders se bacho</p>
+                        <div class="code-block" style="font-size: 11px;">
+<span class="keyword">const</span> value = useMemo(
+  () => ({
+    user,
+    login,
+    logout
+  }),
+  [user]
+);
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>4. ✅ Provide Default Values</h3>
+                        <p>Context create karte waqt default value do</p>
+                        <div class="code-block" style="font-size: 11px;">
+<span class="keyword">const</span> ThemeContext = 
+  createContext({
+    theme: <span class="string">'light'</span>,
+    setTheme: () => {}
+  });
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>5. ✅ Keep Context Close</h3>
+                        <p>Provider ko sirf wahan use karo jahan zaroorat ho</p>
+                        <div class="code-block" style="font-size: 11px;">
+<span class="comment">// ❌ Bad: Root level</span>
+&lt;App&gt;
+  &lt;ModalContext&gt;
+
+<span class="comment">// ✅ Good: Specific section</span>
+&lt;Dashboard&gt;
+  &lt;ModalContext&gt;
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>6. ✅ Error Boundaries</h3>
+                        <p>Context errors ko handle karo</p>
+                        <div class="code-block" style="font-size: 11px;">
+<span class="keyword">if</span> (!context) {
+  <span class="keyword">throw new</span> Error(
+    <span class="string">'Component must be wrapped in Provider'</span>
+  );
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hinglish" style="margin-top: 20px;">
+                    <p><strong>⚠️ Common Mistakes:</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>Har choti cheez ke liye context banana (overkill)</li>
+                        <li>Context value ko directly object literal dena (har render pe naya object)</li>
+                        <li>Bahut saare contexts nest karna (provider hell)</li>
+                        <li>Context ko state management library samajhna (it's not Redux!)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Interview Questions Section -->
+            <div class="interview-section">
+                <h2>🎯 Interview Questions (Basic to Advanced)</h2>
+                <p style="margin-bottom: 20px;">Click on each question to reveal the answer</p>
+
+                <div class="question" onclick="toggleAnswer(this)">
+                    <h4>
+                        Q1. Context API kya hai aur prop drilling problem kaise solve karta hai? (Basic)
+                        <span class="question-icon">▼</span>
+                    </h4>
+                    <div class="answer">
+                        <p><strong>Answer:</strong></p>
+                        <p><strong>Context API:</strong> React ka built-in feature hai jo data ko component tree mein share karne ke liye use hota hai bina har level pe props pass kiye.</p>
+                        
+                        <p><strong>Prop Drilling Problem:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Jab data ko deeply nested components tak pass karna ho</li>
+                            <li>Beech ke components ko data ki zaroorat nahi hoti but props pass karne padte hain</li>
+                            <li>Code maintenance difficult ho jata hai</li>
+                        </ul>
+
+                        <p><strong>Context API Solution:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Provider component se data wrap karo</li>
+                            <li>Koi bhi child component directly access kar sakta hai</li>
+                            <li>Beech ke components ko touch nahi karna padta</li>
+                        </ul>
+
+                        <p><strong>Hinglish:</strong> Prop drilling matlab data ko 5-6 levels neeche bhejne ke liye har component mein props pass karna. Context API se seedha access mil jata hai, beech wale components ko tension nahi!</p>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(this)">
+                    <h4>
+                        Q2. useContext hook kaise kaam karta hai? Consumer component se kya difference hai? (Basic)
+                        <span class="question-icon">▼</span>
+                    </h4>
+                    <div class="answer">
+                        <p><strong>Answer:</strong></p>
+                        
+                        <p><strong>useContext Hook:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Modern way to consume context</li>
+                            <li>Functional components mein use hota hai</li>
+                            <li>Clean aur readable syntax</li>
+                            <li>Multiple contexts easily use kar sakte ho</li>
+                        </ul>
+
+                        <div class="code-block" style="margin: 10px 0;">
+<span class="comment">// useContext (Modern)</span>
+<span class="keyword">const</span> { user } = useContext(UserContext);
+
+<span class="comment">// Consumer (Old way)</span>
+&lt;UserContext.Consumer&gt;
+  {({ user }) => &lt;div&gt;{user.name}&lt;/div&gt;}
+&lt;/UserContext.Consumer&gt;
+                        </div>
+
+                        <p><strong>Differences:</strong></p>
+                        <table style="width: 100%; margin: 10px 0; font-size: 14px;">
+                            <tr>
+                                <th style="text-align: left; padding: 5px;">useContext</th>
+                                <th style="text-align: left; padding: 5px;">Consumer</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px;">Hook (function)</td>
+                                <td style="padding: 5px;">Component (JSX)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px;">Clean syntax</td>
+                                <td style="padding: 5px;">Nested/verbose</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px;">Easy to use multiple</td>
+                                <td style="padding: 5px;">Nesting hell</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(this)">
+                    <h4>
+                        Q3. Context value change hone pe unnecessary re-renders kaise avoid karein? (Intermediate)
+                        <span class="question-icon">▼</span>
+                    </h4>
+                    <div class="answer">
+                        <p><strong>Answer:</strong></p>
+                        
+                        <p><strong>Problem:</strong> Jab context value change hoti hai, sabhi consuming components re-render hote hain, chahe unko us particular value ki zaroorat na ho.</p>
+
+                        <p><strong>Solutions:</strong></p>
+
+                        <p><strong>1. Split Contexts:</strong></p>
+                        <div class="code-block" style="margin: 10px 0; font-size: 12px;">
+<span class="comment">// Alag contexts banao</span>
+&lt;UserContext.Provider&gt;
+  &lt;ThemeContext.Provider&gt;
+    &lt;App /&gt;
+  &lt;/ThemeContext.Provider&gt;
+&lt;/UserContext.Provider&gt;
+                        </div>
+
+                        <p><strong>2. useMemo for Context Value:</strong></p>
+                        <div class="code-block" style="margin: 10px 0; font-size: 12px;">
+<span class="keyword">const</span> value = useMemo(
+  () => ({ user, updateUser }),
+  [user]
+);
+&lt;Context.Provider value={value}&gt;
+                        </div>
+
+                        <p><strong>3. React.memo for Components:</strong></p>
+                        <div class="code-block" style="margin: 10px 0; font-size: 12px;">
+<span class="keyword">const</span> MyComponent = React.memo(() => {
+  <span class="keyword">const</span> { user } = useContext(UserContext);
+  <span class="keyword">return</span> &lt;div&gt;{user.name}&lt;/div&gt;;
+});
+                        </div>
+
+                        <p><strong>4. Context Selectors (Custom Hook):</strong></p>
+                        <div class="code-block" style="margin: 10px 0; font-size: 12px;">
+<span class="keyword">const</span> useUserName = () => {
+  <span class="keyword">const</span> { user } = useContext(UserContext);
+  <span class="keyword">return</span> user.name;
+};
+                        </div>
+
+                        <p><strong>Hinglish:</strong> Context ko chote chote parts mein todo, value ko memoize karo, aur components ko React.memo se wrap karo. Ye sab techniques combine karke unnecessary re-renders kam kar sakte ho!</p>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(this)">
+                    <h4>
+                        Q4. Context API vs Redux - kab kya use karein? Real-world scenarios explain karo (Intermediate)
+                        <span class="question-icon">▼</span>
+                    </h4>
+                    <div class="answer">
+                        <p><strong>Answer:</strong></p>
+
+                        <p><strong>Context API Use Cases:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>Theme Management:</strong> Light/dark mode toggle</li>
+                            <li><strong>Authentication:</strong> User login state, basic user info</li>
+                            <li><strong>Language/i18n:</strong> Multi-language support</li>
+                            <li><strong>UI State:</strong> Modal open/close, sidebar toggle</li>
+                            <li><strong>Small Apps:</strong> Todo apps, personal projects</li>
+                        </ul>
+
+                        <p><strong>Redux Use Cases:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>E-commerce:</strong> Cart, products, orders, complex state</li>
+                            <li><strong>Social Media:</strong> Posts, comments, likes, real-time updates</li>
+                            <li><strong>Dashboard:</strong> Multiple data sources, complex filters</li>
+                            <li><strong>Large Teams:</strong> Strict patterns, predictable state</li>
+                            <li><strong>Time-travel Debugging:</strong> Need to replay actions</li>
+                        </ul>
+
+                        <p><strong>Decision Tree:</strong></p>
+                        <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                            <p>❓ State frequently change hoti hai? → Redux</p>
+                            <p>❓ Complex async logic hai? → Redux (with middleware)</p>
+                            <p>❓ Multiple developers? → Redux (better structure)</p>
+                            <p>❓ Simple state sharing? → Context API</p>
+                            <p>❓ Small app? → Context API</p>
+                            <p>❓ Don't want dependencies? → Context API</p>
+                        </div>
+
+                        <p><strong>Real Example:</strong></p>
+                        <div class="code-block" style="margin: 10px 0; font-size: 12px;">
+<span class="comment">// E-commerce App Architecture</span>
+
+<span class="comment">// Context API for:</span>
+- Theme (light/dark)
+- Auth (user login status)
+- Language (en/hi)
+
+<span class="comment">// Redux for:</span>
+- Products (list, filters, search)
+- Cart (add, remove, update quantity)
+- Orders (history, tracking)
+- Checkout (multi-step process)
+                        </div>
+
+                        <p><strong>Hinglish:</strong> Choti app hai aur sirf theme/auth chahiye? Context API perfect hai. Badi app hai, bahut saari API calls, complex logic? Redux use karo. Don't over-engineer - start simple!</p>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(this)">
+                    <h4>
+                        Q5. Multiple nested Providers se "Provider Hell" kaise avoid karein? (Advanced)
+                        <span class="question-icon">▼</span>
+                    </h4>
+                    <div class="answer">
+                        <p><strong>Answer:</strong></p>
+
+                        <p><strong>Problem - Provider Hell:</strong></p>
+                        <div class="code-block" style="margin: 10px 0; font-size: 12px;">
+<span class="comment">// ❌ Bahut nested, unreadable</span>
+&lt;AuthProvider&gt;
+  &lt;ThemeProvider&gt;
+    &lt;LanguageProvider&gt;
+      &lt;NotificationProvider&gt;
+        &lt;ModalProvider&gt;
+          &lt;CartProvider&gt;
+            &lt;App /&gt;
+          &lt;/CartProvider&gt;
+        &lt;/ModalProvider&gt;
+      &lt;/NotificationProvider&gt;
+    &lt;/LanguageProvider&gt;
+  &lt;/ThemeProvider&gt;
+&lt;/AuthProvider&gt;
+                        </div>
+
+                        <p><strong>Solution 1: Compose Providers (Best Practice)</strong></p>
+                        <div class="code-block" style="margin: 10px 0; font-size: 12px;">
+<span class="comment">// Create a composed provider</span>
+<span class="keyword">function</span> AppProviders({ children }) {
+  <span class="keyword">return</span> (
+    &lt;AuthProvider&gt;
+      &lt;ThemeProvider&gt;
+        &lt;LanguageProvider&gt;
+          &lt;NotificationProvider&gt;
+            {children}
+          &lt;/NotificationProvider&gt;
+        &lt;/LanguageProvider&gt;
+      &lt;/ThemeProvider&gt;
+    &lt;/AuthProvider&gt;
+  );
+}
+
+<span class="comment">// Usage - Clean!</span>
+&lt;AppProviders&gt;
+  &lt;App /&gt;
+&lt;/AppProviders&gt;
+                        </div>
+
+                        <p><strong>Solution 2: Compose Function (Advanced)</strong></p>
+                        <div class="code-block" style="margin: 10px 0; font-size: 12px;">
+<span class="keyword">function</span> composeProviders(...providers) {
+  <span class="keyword">return</span> ({ children }) => {
+    <span class="keyword">return</span> providers.reduceRight(
+      (acc, Provider) => &lt;Provider&gt;{acc}&lt;/Provider&gt;,
+      children
+    );
+  };
+}
+
+<span class="comment">// Usage</span>
+<span class="keyword">const</span> AllProviders = composeProviders(
+  AuthProvider,
+  ThemeProvider,
+  LanguageProvider
+);
+
+&lt;AllProviders&gt;
+  &lt;App /&gt;
+&lt;/AllProviders&gt;
+                        </div>
+
+                        <p><strong>Solution 3: Single Context with Multiple Values</strong></p>
+                        <div class="code-block" style="margin: 10px 0; font-size: 12px;">
+<span class="comment">// Combine related contexts</span>
+<span class="keyword">const</span> AppContext = createContext();
+
+<span class="keyword">function</span> AppProvider({ children }) {
+  <span class="keyword">const</span> auth = useAuthState();
+  <span class="keyword">const</span> theme = useThemeState();
+  <span class="keyword">const</span> lang = useLanguageState();
+
+  <span class="keyword">const</span> value = { auth, theme, lang };
+
+  <span class="keyword">return</span> (
+    &lt;AppContext.Provider value={value}&gt;
+      {children}
+    &lt;/AppContext.Provider&gt;
+  );
+}
+                        </div>
+
+                        <p><strong>Best Practices:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Related contexts ko combine karo</li>
+                            <li>Compose function banao reusability ke liye</li>
+                            <li>Provider components ko separate file mein rakho</li>
+                            <li>Documentation maintain karo kis context ka kya use hai</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(this)">
+                    <h4>
+                        Q6. Context API mein performance optimization ke liye useMemo aur useCallback kab use karein? (Advanced)
+                        <span class="question-icon">▼</span>
+                    </h4>
+                    <div class="answer">
+                        <p><strong>Answer:</strong></p>
+
+                        <p><strong>Problem:</strong> Har render pe context value naya object ban jata hai, jisse sabhi consumers re-render hote hain.</p>
+
+                        <p><strong>useMemo for Context Value:</strong></p>
+                        <div class="code-block" style="margin: 10px 0; font-size: 12px;">
+<span class="comment">// ❌ Bad: Har render pe naya object</span>
+&lt;UserContext.Provider value={{ user, setUser }}&gt;
+
+<span class="comment">// ✅ Good: Memoized value</span>
+<span class="keyword">const</span> value = useMemo(
+  () => ({ user, setUser }),
+  [user]  <span class="comment">// Only recreate when user changes</span>
+);
+&lt;UserContext.Provider value={value}&gt;
+                        </div>
+
+                        <p><strong>useCallback for Functions:</strong></p>
+                        <div class="code-block" style="margin: 10px 0; font-size: 12px;">
+<span class="keyword">function</span> AuthProvider({ children }) {
+  <span class="keyword">const</span> [user, setUser] = useState(<span class="keyword">null</span>);
+
+  <span class="comment">// ❌ Bad: Har render pe naya function</span>
+  <span class="keyword">const</span> login = (credentials) => {
+    <span class="comment">// login logic</span>
+  };
+
+  <span class="comment">// ✅ Good: Memoized function</span>
+  <span class="keyword">const</span> login = useCallback((credentials) => {
+    <span class="comment">// login logic</span>
+    setUser(userData);
+  }, []); <span class="comment">// Empty deps if no external dependencies</span>
+
+  <span class="keyword">const</span> logout = useCallback(() => {
+    setUser(<span class="keyword">null</span>);
+  }, []);
+
+  <span class="keyword">const</span> value = useMemo(
+    () => ({ user, login, logout }),
+    [user, login, logout]
+  );
+
+  <span class="keyword">return</span> &lt;AuthContext.Provider value={value}&gt;{children}&lt;/AuthContext.Provider&gt;;
+}
+                        </div>
+
+                        <p><strong>Complete Optimized Example:</strong></p>
+                        <div class="code-block" style="margin: 10px 0; font-size: 12px;">
+<span class="keyword">function</span> ThemeProvider({ children }) {
+  <span class="keyword">const</span> [theme, setTheme] = useState(<span class="string">'light'</span>);
+
+  <span class="comment">// Memoize functions</span>
+  <span class="keyword">const</span> toggleTheme = useCallback(() => {
+    setTheme(prev => prev === <span class="string">'light'</span> ? <span class="string">'dark'</span> : <span class="string">'light'</span>);
+  }, []);
+
+  <span class="keyword">const</span> setCustomTheme = useCallback((newTheme) => {
+    setTheme(newTheme);
+  }, []);
+
+  <span class="comment">// Memoize entire context value</span>
+  <span class="keyword">const</span> value = useMemo(
+    () => ({
+      theme,
+      toggleTheme,
+      setCustomTheme
+    }),
+    [theme, toggleTheme, setCustomTheme]
+  );
+
+  <span class="keyword">return</span> (
+    &lt;ThemeContext.Provider value={value}&gt;
+      {children}
+    &lt;/ThemeContext.Provider&gt;
+  );
+}
+                        </div>
+
+                        <p><strong>When to Use:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>useMemo:</strong> Context value objects, computed values, expensive calculations</li>
+                            <li><strong>useCallback:</strong> Functions passed in context, event handlers, API calls</li>
+                            <li><strong>Don't overuse:</strong> Simple values (strings, numbers) don't need memoization</li>
+                        </ul>
+
+                        <p><strong>Hinglish:</strong> Context value mein object ya function pass kar rahe ho? useMemo/useCallback use karo. Warna har render pe naya reference banega aur sabhi components re-render honge. But simple values ke liye over-optimize mat karo!</p>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(this)">
+                    <h4>
+                        Q7. Context API ke saath TypeScript use karte waqt type safety kaise ensure karein? (Expert)
+                        <span class="question-icon">▼</span>
+                    </h4>
+                    <div class="answer">
+                        <p><strong>Answer:</strong></p>
+
+                        <p><strong>Complete TypeScript Implementation:</strong></p>
+                        <div class="code-block" style="margin: 10px 0; font-size: 11px;">
+<span class="comment">// 1. Define types for context value</span>
+<span class="keyword">interface</span> User {
+  id: string;
+  name: string;
+  email: string;
+  role: <span class="string">'admin'</span> | <span class="string">'user'</span>;
+}
+
+<span class="keyword">interface</span> AuthContextType {
+  user: User | <span class="keyword">null</span>;
+  loading: boolean;
+  login: (credentials: LoginCredentials) => Promise&lt;void&gt;;
+  logout: () => void;
+  isAuthenticated: boolean;
+}
+
+<span class="keyword">interface</span> LoginCredentials {
+  email: string;
+  password: string;
+}
+
+<span class="comment">// 2. Create context with type</span>
+<span class="keyword">const</span> AuthContext = createContext&lt;AuthContextType | <span class="keyword">undefined</span>&gt;(
+  <span class="keyword">undefined</span>
+);
+
+<span class="comment">// 3. Provider with proper typing</span>
+<span class="keyword">export function</span> AuthProvider({ 
+  children 
+}: { 
+  children: React.ReactNode 
+}) {
+  <span class="keyword">const</span> [user, setUser] = useState&lt;User | <span class="keyword">null</span>&gt;(<span class="keyword">null</span>);
+  <span class="keyword">const</span> [loading, setLoading] = useState(true);
+
+  <span class="keyword">const</span> login = useCallback(
+    <span class="keyword">async</span> (credentials: LoginCredentials) => {
+      <span class="keyword">try</span> {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">'/api/login'</span>, {
+          method: <span class="string">'POST'</span>,
+          body: JSON.stringify(credentials)
+        });
+        <span class="keyword">const</span> userData: User = <span class="keyword">await</span> response.json();
+        setUser(userData);
+      } <span class="keyword">catch</span> (error) {
+        console.error(error);
+      }
+    },
+    []
+  );
+
+  <span class="keyword">const</span> logout = useCallback(() => {
+    setUser(<span class="keyword">null</span>);
+  }, []);
+
+  <span class="keyword">const</span> value: AuthContextType = useMemo(
+    () => ({
+      user,
+      loading,
+      login,
+      logout,
+      isAuthenticated: !!user
+    }),
+    [user, loading, login, logout]
+  );
+
+  <span class="keyword">return</span> (
+    &lt;AuthContext.Provider value={value}&gt;
+      {children}
+    &lt;/AuthContext.Provider&gt;
+  );
+}
+
+<span class="comment">// 4. Custom hook with type safety</span>
+<span class="keyword">export function</span> useAuth(): AuthContextType {
+  <span class="keyword">const</span> context = useContext(AuthContext);
+  
+  <span class="keyword">if</span> (context === <span class="keyword">undefined</span>) {
+    <span class="keyword">throw new</span> Error(
+      <span class="string">'useAuth must be used within AuthProvider'</span>
+    );
+  }
+  
+  <span class="keyword">return</span> context;
+}
+
+<span class="comment">// 5. Usage with full type safety</span>
+<span class="keyword">function</span> Profile() {
+  <span class="keyword">const</span> { user, logout } = useAuth(); <span class="comment">// Fully typed!</span>
+  
+  <span class="keyword">if</span> (!user) {
+    <span class="keyword">return</span> &lt;div&gt;Please login&lt;/div&gt;;
+  }
+
+  <span class="keyword">return</span> (
+    &lt;div&gt;
+      &lt;h1&gt;{user.name}&lt;/h1&gt; <span class="comment">// TypeScript knows user properties</span>
+      &lt;p&gt;{user.email}&lt;/p&gt;
+      &lt;p&gt;Role: {user.role}&lt;/p&gt;
+      &lt;button onClick={logout}&gt;Logout&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+                        </div>
+
+                        <p><strong>Advanced: Generic Context Factory:</strong></p>
+                        <div class="code-block" style="margin: 10px 0; font-size: 11px;">
+<span class="comment">// Reusable context creator with types</span>
+<span class="keyword">function</span> createCtx&lt;T&gt;() {
+  <span class="keyword">const</span> ctx = createContext&lt;T | <span class="keyword">undefined</span>&gt;(<span class="keyword">undefined</span>);
+  
+  <span class="keyword">function</span> useCtx() {
+    <span class="keyword">const</span> c = useContext(ctx);
+    <span class="keyword">if</span> (!c) <span class="keyword">throw new</span> Error(<span class="string">'useCtx must be inside Provider'</span>);
+    <span class="keyword">return</span> c;
+  }
+  
+  <span class="keyword">return</span> [useCtx, ctx.Provider] <span class="keyword">as const</span>;
+}
+
+<span class="comment">// Usage</span>
+<span class="keyword">const</span> [useTheme, ThemeProvider] = createCtx&lt;ThemeContextType&gt;();
+                        </div>
+
+                        <p><strong>Benefits:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Autocomplete in IDE</li>
+                            <li>Compile-time error checking</li>
+                            <li>Better refactoring support</li>
+                            <li>Self-documenting code</li>
+                            <li>Prevents runtime errors</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Section -->
+            <div class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                <h2>📝 Quick Summary</h2>
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin: 10px 0;">✅ <strong>Context API:</strong> Prop drilling problem solve karta hai</li>
+                        <li style="margin: 10px 0;">✅ <strong>Three Steps:</strong> Create → Provide → Consume (useContext)</li>
+                        <li style="margin: 10px 0;">✅ <strong>Re-renders:</strong> Split contexts, useMemo, React.memo use karo</li>
+                        <li style="margin: 10px 0;">✅ <strong>vs Redux:</strong> Small apps = Context, Large apps = Redux</li>
+                        <li style="margin: 10px 0;">✅ <strong>Best For:</strong> Theme, Auth, Language, UI state</li>
+                        <li style="margin: 10px 0;">✅ <strong>Optimization:</strong> useMemo for values, useCallback for functions</li>
+                        <li style="margin: 10px 0;">✅ <strong>Custom Hooks:</strong> Har context ke liye custom hook banao</li>
+                        <li style="margin: 10px 0;">✅ <strong>Don't Overuse:</strong> Har choti cheez ke liye context mat banao</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state for demos
+        let currentTheme = 'light';
+        let renderCounts = { a: 0, b: 0, c: 0 };
+        let isLoggedIn = false;
+        let currentUser = null;
+
+        // Theme Toggle Demo
+        function toggleTheme() {
+            const themeDemo = document.getElementById('theme-demo');
+            const themeName = document.getElementById('theme-name');
+            
+            if (currentTheme === 'light') {
+                currentTheme = 'dark';
+                themeDemo.className = 'theme-demo theme-dark';
+                themeName.textContent = 'Dark';
+            } else {
+                currentTheme = 'light';
+                themeDemo.className = 'theme-demo theme-light';
+                themeName.textContent = 'Light';
+            }
+        }
+
+        // Multiple Contexts Demo
+        function updateAllContexts() {
+            const users = ['John Doe', 'Jane Smith', 'Admin User'];
+            const languages = ['English', 'Hindi', 'Spanish'];
+            const themes = ['Light', 'Dark', 'Auto'];
+
+            document.getElementById('user-context-display').textContent = 
+                users[Math.floor(Math.random() * users.length)];
+            document.getElementById('lang-context-display').textContent = 
+                languages[Math.floor(Math.random() * languages.length)];
+            document.getElementById('theme-context-display').textContent = 
+                themes[Math.floor(Math.random() * themes.length)];
+        }
+
+        // Re-render Counter Demo
+        function incrementRender(component) {
+            renderCounts[component]++;
+            document.getElementById(`render-${component}`).textContent = renderCounts[component];
+        }
+
+        function updateUserName() {
+            incrementRender('a');
+            incrementRender('b');
+            incrementRender('c');
+        }
+
+        function updateUserAge() {
+            incrementRender('a');
+            incrementRender('b');
+            incrementRender('c');
+        }
+
+        function updateThemeOnly() {
+            incrementRender('a');
+            incrementRender('b');
+            incrementRender('c');
+        }
+
+        function resetRenderCounts() {
+            renderCounts = { a: 0, b: 0, c: 0 };
+            document.getElementById('render-a').textContent = '0';
+            document.getElementById('render-b').textContent = '0';
+            document.getElementById('render-c').textContent = '0';
+        }
+
+        // Theme System Demo
+        const themes = {
+            light: {
+                background: '#ffffff',
+                color: '#333333'
+            },
+            dark: {
+                background: '#1e1e1e',
+                color: '#ffffff'
+            },
+            nature: {
+                background: 'linear-gradient(135deg, #667eea 0%, #38ef7d 100%)',
+                color: '#ffffff'
+            },
+            sunset: {
+                background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                color: '#ffffff'
+            }
+        };
+
+        function setAppTheme(themeName) {
+            const showcase = document.getElementById('theme-showcase');
+            const themeNameEl = document.getElementById('current-theme-name');
+            
+            const theme = themes[themeName];
+            showcase.style.background = theme.background;
+            showcase.style.color = theme.color;
+            themeNameEl.textContent = themeName.charAt(0).toUpperCase() + themeName.slice(1);
+        }
+
+        // Auth Demo
+        function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username && password) {
+                isLoggedIn = true;
+                currentUser = {
+                    name: username.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+                    email: `${username}@example.com`,
+                    avatar: username.charAt(0).toUpperCase()
+                };
+
+                document.getElementById('logged-out-view').style.display = 'none';
+                document.getElementById('logged-in-view').style.display = 'block';
+                document.getElementById('user-name-display').textContent = currentUser.name;
+                document.getElementById('user-avatar').textContent = currentUser.avatar;
+                
+                document.getElementById('protected-content').innerHTML = `
+                    <div style="padding: 15px; background: white; border-radius: 8px; margin-top: 10px;">
+                        <h4>🎉 Protected Content Unlocked!</h4>
+                        <p>Welcome ${currentUser.name}! You can now access all features.</p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Dashboard</li>
+                            <li>Profile Settings</li>
+                            <li>Premium Features</li>
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+
+        function handleLogout() {
+            isLoggedIn = false;
+            currentUser = null;
+
+            document.getElementById('logged-out-view').style.display = 'block';
+            document.getElementById('logged-in-view').style.display = 'none';
+            document.getElementById('protected-content').innerHTML = 
+                '<span class="status-badge status-error">🔒 Login required to view</span>';
+        }
+
+        // Interview Questions Toggle
+        function toggleAnswer(element) {
+            element.classList.toggle('active');
+            const answer = element.querySelector('.answer');
+            answer.classList.toggle('show');
+        }
+
+        // Smooth scroll for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

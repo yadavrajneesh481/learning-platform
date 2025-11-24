@@ -1,0 +1,2704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced React Hooks - Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 70px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '🪝';
+            position: absolute;
+            font-size: 400px;
+            opacity: 0.1;
+            top: -100px;
+            right: -100px;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        header h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.5em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 60px;
+        }
+
+        .section {
+            margin-bottom: 70px;
+            padding: 45px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 25px;
+            border-left: 10px solid #667eea;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 35px;
+            font-size: 2.8em;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin: 35px 0 25px 0;
+            font-size: 2em;
+        }
+
+        .hinglish {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            padding: 30px;
+            border-radius: 18px;
+            margin: 30px 0;
+            border-left: 8px solid #ffc107;
+            box-shadow: 0 5px 20px rgba(255, 193, 7, 0.2);
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 35px;
+            border-radius: 18px;
+            overflow-x: auto;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            position: relative;
+            border: 3px solid #667eea;
+        }
+
+        .code-block::before {
+            content: 'CODE';
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            padding: 6px 18px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .keyword { color: #c678dd; font-weight: bold; }
+        .string { color: #98c379; }
+        .function { color: #61afef; }
+        .comment { color: #5c6370; font-style: italic; }
+        .number { color: #d19a66; }
+        .operator { color: #56b6c2; }
+        .tag { color: #e06c75; }
+
+        .interactive-demo {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            margin: 35px 0;
+            border: 5px solid #667eea;
+            box-shadow: 0 10px 35px rgba(102, 126, 234, 0.25);
+        }
+
+        .demo-title {
+            font-size: 1.7em;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 16px 35px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            margin: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        .btn:active {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: #333;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+        }
+
+        .state-display {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 6px solid #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+        }
+
+        .counter-display {
+            font-size: 4em;
+            font-weight: bold;
+            color: #667eea;
+            text-align: center;
+            margin: 30px 0;
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            border-left: 8px solid #0c5460;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(12, 84, 96, 0.15);
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            border-left: 8px solid #856404;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(133, 100, 4, 0.15);
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 8px solid #155724;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(21, 87, 36, 0.15);
+        }
+
+        .danger-box {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border-left: 8px solid #721c24;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(114, 28, 36, 0.15);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 35px 0;
+        }
+
+        .comparison-card {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            transition: all 0.3s ease;
+            border: 4px solid transparent;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+        }
+
+        .comparison-card.good {
+            border-color: #28a745;
+        }
+
+        .comparison-card.bad {
+            border-color: #dc3545;
+        }
+
+        .comparison-card h4 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .comparison-card.good h4 {
+            color: #28a745;
+        }
+
+        .comparison-card.bad h4 {
+            color: #dc3545;
+        }
+
+        .ref-demo {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .ref-box {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+            transition: all 0.5s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            cursor: pointer;
+        }
+
+        .ref-box:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+
+        .input-group {
+            margin: 25px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .quiz-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 70px 60px;
+            border-radius: 25px;
+            margin-top: 70px;
+        }
+
+        .quiz-section h2 {
+            color: white;
+            margin-bottom: 50px;
+            font-size: 3.5em;
+            text-align: center;
+        }
+
+        .question-card {
+            background: white;
+            color: #333;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 18px 50px rgba(0,0,0,0.3);
+        }
+
+        .question-card h3 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 1.6em;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 35px;
+            font-size: 0.95em;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .difficulty.easy { 
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724; 
+        }
+        .difficulty.medium { 
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            color: #856404; 
+        }
+        .difficulty.hard { 
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24; 
+        }
+
+        .toggle-answer {
+            margin-top: 25px;
+            padding: 16px 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+
+        .toggle-answer:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .answer {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 8px solid #28a745;
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 22px;
+            text-align: left;
+            font-size: 1.15em;
+        }
+
+        td {
+            padding: 20px 22px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        code {
+            background: #f8f9fa;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+            font-size: 0.95em;
+        }
+
+        ul, ol {
+            margin-left: 35px;
+            margin-top: 20px;
+        }
+
+        li {
+            margin: 15px 0;
+            line-height: 1.8;
+        }
+
+        strong {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .hook-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-box {
+            padding: 25px 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            font-weight: bold;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .flow-box:hover {
+            transform: scale(1.1);
+        }
+
+        .flow-arrow {
+            font-size: 2em;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5em;
+            }
+
+            .content {
+                padding: 30px 25px;
+            }
+
+            .section {
+                padding: 30px;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .action-log {
+            background: #282c34;
+            color: #98c379;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .action-log-item {
+            padding: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .custom-hook-demo {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🪝 Advanced React Hooks</h1>
+            <p>Master Complex State Management & Side Effects</p>
+            <p style="font-size: 0.9em; margin-top: 15px; opacity: 0.9;">Deep Dive into useReducer, useRef, useImperativeHandle & Custom Hooks</p>
+        </header>
+
+        <div class="content">
+            <!-- Introduction -->
+            <div class="section">
+                <h2>📚 Advanced Hooks Kya Hain?</h2>
+                <div class="hinglish">
+                    <strong>Advanced Hooks</strong> React ke powerful features hain jo complex state management, DOM manipulation, aur reusable logic create karne mein help karte hain. Basic hooks (useState, useEffect) ke baad, yeh hooks aapko production-level applications banane ki capability dete hain.
+                    <br><br>
+                    Jab aapka application bada ho jata hai, tab simple useState kaafi nahi hota. Tab aapko <strong>useReducer</strong> chahiye complex state logic ke liye, <strong>useRef</strong> chahiye DOM elements ko directly access karne ke liye, aur <strong>custom hooks</strong> chahiye reusable logic banane ke liye.
+                </div>
+
+                <h3>🎯 Kyun Seekhna Zaroori Hai?</h3>
+                <ul>
+                    <li><strong>Complex State Management:</strong> Multiple related states ko efficiently manage karo</li>
+                    <li><strong>Performance Optimization:</strong> Unnecessary re-renders avoid karo</li>
+                    <li><strong>DOM Access:</strong> Direct DOM manipulation jab zaroori ho</li>
+                    <li><strong>Reusable Logic:</strong> Custom hooks se code duplication reduce karo</li>
+                    <li><strong>Production Ready:</strong> Real-world applications mein use hone wale patterns</li>
+                </ul>
+
+                <div class="hook-flow">
+                    <div class="flow-box">useState</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">useReducer</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">useRef</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Custom Hooks</div>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Learning Path:</strong> Pehle basic hooks (useState, useEffect) master karo, phir advanced hooks seekho. Har hook ka apna specific use case hai - sab jagah har hook use karne ki zaroorat nahi hai!
+                </div>
+            </div>
+
+            <!-- useReducer -->
+            <div class="section">
+                <h2>1️⃣ useReducer - Complex State Management</h2>
+                <div class="hinglish">
+                    <strong>useReducer</strong> ek hook hai jo complex state logic ko manage karne ke liye use hota hai. Jab aapke paas multiple sub-values hain ya next state previous state pe depend karta hai, tab useReducer useState se better hai. Yeh Redux pattern follow karta hai - actions dispatch karo aur reducer function state update karta hai.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Basic useReducer Syntax</span>
+<span class="keyword">const</span> [state, dispatch] = <span class="function">useReducer</span>(reducer, initialState);
+
+<span class="comment">// Reducer Function - Pure function jo state aur action leta hai</span>
+<span class="keyword">function</span> <span class="function">reducer</span>(state, action) {
+  <span class="keyword">switch</span> (action.type) {
+    <span class="keyword">case</span> <span class="string">'INCREMENT'</span>:
+      <span class="keyword">return</span> { count: state.count + <span class="number">1</span> };
+    <span class="keyword">case</span> <span class="string">'DECREMENT'</span>:
+      <span class="keyword">return</span> { count: state.count - <span class="number">1</span> };
+    <span class="keyword">case</span> <span class="string">'RESET'</span>:
+      <span class="keyword">return</span> { count: <span class="number">0</span> };
+    <span class="keyword">default</span>:
+      <span class="keyword">return</span> state;
+  }
+}
+
+<span class="comment">// Component mein use</span>
+<span class="keyword">function</span> <span class="function">Counter</span>() {
+  <span class="keyword">const</span> [state, dispatch] = <span class="function">useReducer</span>(reducer, { count: <span class="number">0</span> });
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="tag">div</span>&gt;
+      &lt;<span class="tag">p</span>&gt;Count: {state.count}&lt;/<span class="tag">p</span>&gt;
+      &lt;<span class="tag">button</span> onClick={() => <span class="function">dispatch</span>({ type: <span class="string">'INCREMENT'</span> })}&gt;+&lt;/<span class="tag">button</span>&gt;
+      &lt;<span class="tag">button</span> onClick={() => <span class="function">dispatch</span>({ type: <span class="string">'DECREMENT'</span> })}&gt;-&lt;/<span class="tag">button</span>&gt;
+      &lt;<span class="tag">button</span> onClick={() => <span class="function">dispatch</span>({ type: <span class="string">'RESET'</span> })}&gt;Reset&lt;/<span class="tag">button</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="comment">// Complex Example - Form State Management</span>
+<span class="keyword">const</span> initialFormState = {
+  username: <span class="string">''</span>,
+  email: <span class="string">''</span>,
+  password: <span class="string">''</span>,
+  errors: {},
+  isSubmitting: <span class="keyword">false</span>
+};
+
+<span class="keyword">function</span> <span class="function">formReducer</span>(state, action) {
+  <span class="keyword">switch</span> (action.type) {
+    <span class="keyword">case</span> <span class="string">'UPDATE_FIELD'</span>:
+      <span class="keyword">return</span> {
+        ...state,
+        [action.field]: action.value,
+        errors: { ...state.errors, [action.field]: <span class="keyword">null</span> }
+      };
+    <span class="keyword">case</span> <span class="string">'SET_ERRORS'</span>:
+      <span class="keyword">return</span> { ...state, errors: action.errors };
+    <span class="keyword">case</span> <span class="string">'SUBMIT_START'</span>:
+      <span class="keyword">return</span> { ...state, isSubmitting: <span class="keyword">true</span> };
+    <span class="keyword">case</span> <span class="string">'SUBMIT_SUCCESS'</span>:
+      <span class="keyword">return</span> initialFormState;
+    <span class="keyword">case</span> <span class="string">'SUBMIT_ERROR'</span>:
+      <span class="keyword">return</span> { ...state, isSubmitting: <span class="keyword">false</span>, errors: action.errors };
+    <span class="keyword">default</span>:
+      <span class="keyword">return</span> state;
+  }
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: useReducer Counter</div>
+                    
+                    <div class="counter-display" id="reducer-count">0</div>
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                        <button class="btn btn-success" onclick="dispatchAction('INCREMENT')">Increment (+1)</button>
+                        <button class="btn btn-danger" onclick="dispatchAction('DECREMENT')">Decrement (-1)</button>
+                        <button class="btn btn-warning" onclick="dispatchAction('ADD_5')">Add 5</button>
+                        <button class="btn btn-info" onclick="dispatchAction('RESET')">Reset</button>
+                    </div>
+
+                    <div class="state-display">
+                        <strong>Current State:</strong><br>
+                        <span id="reducer-state">{ count: 0 }</span>
+                    </div>
+
+                    <div class="action-log" id="action-log">
+                        <div style="color: #61afef; font-weight: bold; margin-bottom: 10px;">📋 Action Log:</div>
+                    </div>
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card bad">
+                        <h4>❌ useState - Complex State</h4>
+                        <div class="code-block" style="font-size: 0.85em; padding: 20px;">
+<span class="keyword">const</span> [count, setCount] = <span class="function">useState</span>(<span class="number">0</span>);
+<span class="keyword">const</span> [step, setStep] = <span class="function">useState</span>(<span class="number">1</span>);
+<span class="keyword">const</span> [history, setHistory] = <span class="function">useState</span>([]);
+
+<span class="comment">// Multiple setState calls</span>
+<span class="keyword">const</span> <span class="function">increment</span> = () => {
+  <span class="function">setCount</span>(count + step);
+  <span class="function">setHistory</span>([...history, count + step]);
+};
+                        </div>
+                        <p style="margin-top: 15px; color: #dc3545; font-weight: 600;">Multiple related states, hard to maintain!</p>
+                    </div>
+
+                    <div class="comparison-card good">
+                        <h4>✅ useReducer - Clean & Organized</h4>
+                        <div class="code-block" style="font-size: 0.85em; padding: 20px;">
+<span class="keyword">const</span> [state, dispatch] = <span class="function">useReducer</span>(
+  reducer, 
+  { count: <span class="number">0</span>, step: <span class="number">1</span>, history: [] }
+);
+
+<span class="comment">// Single dispatch</span>
+<span class="keyword">const</span> <span class="function">increment</span> = () => {
+  <span class="function">dispatch</span>({ type: <span class="string">'INCREMENT'</span> });
+};
+                        </div>
+                        <p style="margin-top: 15px; color: #28a745; font-weight: 600;">Single source of truth, predictable updates!</p>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ useReducer vs useState - Kab Kaunsa Use Karein:</strong><br><br>
+                    <strong>useState use karo jab:</strong><br>
+                    • Simple, independent state values<br>
+                    • State updates simple hain<br>
+                    • Ek ya do state variables<br><br>
+                    
+                    <strong>useReducer use karo jab:</strong><br>
+                    • Complex state logic with multiple sub-values<br>
+                    • Next state depends on previous state<br>
+                    • State transitions need to be predictable<br>
+                    • Multiple related state updates<br>
+                    • Testing aur debugging easy banana hai
+                </div>
+            </div>
+
+            <!-- useRef -->
+            <div class="section">
+                <h2>2️⃣ useRef - Mutable Values & DOM Access</h2>
+                <div class="hinglish">
+                    <strong>useRef</strong> ek hook hai jo do main purposes ke liye use hota hai:
+                    <br><br>
+                    1. <strong>DOM Elements ko Access karna:</strong> Direct DOM manipulation ke liye (focus, scroll, animations)<br>
+                    2. <strong>Mutable Values Store karna:</strong> Values jo re-render trigger nahi karti (timers, previous values, etc.)
+                    <br><br>
+                    useRef ek object return karta hai jiska <code>.current</code> property mutable hai. Yeh value change hone pe component re-render nahi hota, jo useState se different hai.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Basic useRef Syntax</span>
+<span class="keyword">const</span> refContainer = <span class="function">useRef</span>(initialValue);
+
+<span class="comment">// DOM Reference Example</span>
+<span class="keyword">function</span> <span class="function">TextInputWithFocusButton</span>() {
+  <span class="keyword">const</span> inputRef = <span class="function">useRef</span>(<span class="keyword">null</span>);
+  
+  <span class="keyword">const</span> <span class="function">focusInput</span> = () => {
+    <span class="comment">// Direct DOM access</span>
+    inputRef.current.<span class="function">focus</span>();
+  };
+  
+  <span class="keyword">return</span> (
+    &lt;&gt;
+      &lt;<span class="tag">input</span> ref={inputRef} type=<span class="string">"text"</span> /&gt;
+      &lt;<span class="tag">button</span> onClick={focusInput}&gt;Focus Input&lt;/<span class="tag">button</span>&gt;
+    &lt;/&gt;
+  );
+}
+
+<span class="comment">// Mutable Value Example - Previous State</span>
+<span class="keyword">function</span> <span class="function">Counter</span>() {
+  <span class="keyword">const</span> [count, setCount] = <span class="function">useState</span>(<span class="number">0</span>);
+  <span class="keyword">const</span> prevCountRef = <span class="function">useRef</span>();
+  
+  <span class="function">useEffect</span>(() => {
+    prevCountRef.current = count;
+  });
+  
+  <span class="keyword">const</span> prevCount = prevCountRef.current;
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="tag">div</span>&gt;
+      &lt;<span class="tag">p</span>&gt;Current: {count}, Previous: {prevCount}&lt;/<span class="tag">p</span>&gt;
+      &lt;<span class="tag">button</span> onClick={() => <span class="function">setCount</span>(count + <span class="number">1</span>)}&gt;Increment&lt;/<span class="tag">button</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="comment">// Timer Example - Storing Interval ID</span>
+<span class="keyword">function</span> <span class="function">Timer</span>() {
+  <span class="keyword">const</span> [seconds, setSeconds] = <span class="function">useState</span>(<span class="number">0</span>);
+  <span class="keyword">const</span> intervalRef = <span class="function">useRef</span>();
+  
+  <span class="keyword">const</span> <span class="function">startTimer</span> = () => {
+    intervalRef.current = <span class="function">setInterval</span>(() => {
+      <span class="function">setSeconds</span>(s => s + <span class="number">1</span>);
+    }, <span class="number">1000</span>);
+  };
+  
+  <span class="keyword">const</span> <span class="function">stopTimer</span> = () => {
+    <span class="function">clearInterval</span>(intervalRef.current);
+  };
+  
+  <span class="function">useEffect</span>(() => {
+    <span class="keyword">return</span> () => <span class="function">clearInterval</span>(intervalRef.current);
+  }, []);
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="tag">div</span>&gt;
+      &lt;<span class="tag">p</span>&gt;Seconds: {seconds}&lt;/<span class="tag">p</span>&gt;
+      &lt;<span class="tag">button</span> onClick={startTimer}&gt;Start&lt;/<span class="tag">button</span>&gt;
+      &lt;<span class="tag">button</span> onClick={stopTimer}&gt;Stop&lt;/<span class="tag">button</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="comment">// Scroll to Element Example</span>
+<span class="keyword">function</span> <span class="function">ScrollToSection</span>() {
+  <span class="keyword">const</span> sectionRef = <span class="function">useRef</span>(<span class="keyword">null</span>);
+  
+  <span class="keyword">const</span> <span class="function">scrollToSection</span> = () => {
+    sectionRef.current.<span class="function">scrollIntoView</span>({ behavior: <span class="string">'smooth'</span> });
+  };
+  
+  <span class="keyword">return</span> (
+    &lt;&gt;
+      &lt;<span class="tag">button</span> onClick={scrollToSection}&gt;Scroll Down&lt;/<span class="tag">button</span>&gt;
+      &lt;<span class="tag">div</span> style={{ height: <span class="string">'1000px'</span> }}&gt;Content...&lt;/<span class="tag">div</span>&gt;
+      &lt;<span class="tag">div</span> ref={sectionRef}&gt;Target Section&lt;/<span class="tag">div</span>&gt;
+    &lt;/&gt;
+  );
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: useRef Examples</div>
+                    
+                    <div class="input-group">
+                        <label>Input Field (Focus Demo):</label>
+                        <input type="text" id="ref-input" placeholder="Click 'Focus Input' button">
+                    </div>
+                    
+                    <div style="margin: 25px 0;">
+                        <button class="btn btn-primary" onclick="focusInput()">Focus Input</button>
+                        <button class="btn btn-success" onclick="selectText()">Select Text</button>
+                        <button class="btn btn-warning" onclick="clearInput()">Clear Input</button>
+                    </div>
+
+                    <div class="ref-demo">
+                        <div class="ref-box" id="ref-box-1" onclick="animateBox(1)">
+                            Click Me!<br>Box 1
+                        </div>
+                        <div class="ref-box" id="ref-box-2" onclick="animateBox(2)">
+                            Click Me!<br>Box 2
+                        </div>
+                    </div>
+
+                    <div class="state-display">
+                        <strong>Click Count (without re-render):</strong><br>
+                        Box 1: <span id="box1-clicks">0</span> clicks<br>
+                        Box 2: <span id="box2-clicks">0</span> clicks
+                    </div>
+
+                    <div class="info-box">
+                        <strong>💡 Notice:</strong> Click counts update hote hain lekin component re-render nahi hota! Yeh useRef ki power hai - mutable values without re-renders.
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>useState</th>
+                            <th>useRef</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Re-render</strong></td>
+                            <td>✅ Triggers re-render</td>
+                            <td>❌ No re-render</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Value Access</strong></td>
+                            <td>Direct value</td>
+                            <td>.current property</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Update</strong></td>
+                            <td>setState function</td>
+                            <td>Direct assignment</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Use Case</strong></td>
+                            <td>UI state</td>
+                            <td>DOM refs, timers, previous values</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Persistence</strong></td>
+                            <td>Across re-renders</td>
+                            <td>Across re-renders</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="success-box">
+                    <strong>✅ useRef Best Practices:</strong><br><br>
+                    • DOM manipulation ke liye use karo (focus, scroll, animations)<br>
+                    • Timers aur intervals store karne ke liye<br>
+                    • Previous values track karne ke liye<br>
+                    • Instance variables (class components ke this.variable jaisa)<br>
+                    • Third-party library instances store karne ke liye<br><br>
+                    
+                    <strong>❌ Avoid:</strong><br>
+                    • UI state ke liye (use useState instead)<br>
+                    • Ref values ko render mein directly use karna<br>
+                    • Ref values pe conditional rendering
+                </div>
+            </div>
+
+            <!-- useImperativeHandle -->
+            <div class="section">
+                <h2>3️⃣ useImperativeHandle - Parent-Child Communication</h2>
+                <div class="hinglish">
+                    <strong>useImperativeHandle</strong> ek advanced hook hai jo parent component ko child component ke internal methods expose karne deta hai. Yeh <code>forwardRef</code> ke saath use hota hai aur parent ko child ke specific functions call karne ki permission deta hai.
+                    <br><br>
+                    Normally React mein data flow top-down hota hai (props through), lekin kabhi-kabhi parent ko child ke methods directly call karne padte hain. Tab useImperativeHandle use hota hai.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Basic useImperativeHandle Example</span>
+<span class="keyword">import</span> { forwardRef, useImperativeHandle, useRef } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="comment">// Child Component</span>
+<span class="keyword">const</span> <span class="function">FancyInput</span> = <span class="function">forwardRef</span>((props, ref) => {
+  <span class="keyword">const</span> inputRef = <span class="function">useRef</span>();
+  
+  <span class="comment">// Expose specific methods to parent</span>
+  <span class="function">useImperativeHandle</span>(ref, () => ({
+    <span class="function">focus</span>: () => {
+      inputRef.current.<span class="function">focus</span>();
+    },
+    <span class="function">clear</span>: () => {
+      inputRef.current.value = <span class="string">''</span>;
+    },
+    <span class="function">setValue</span>: (value) => {
+      inputRef.current.value = value;
+    }
+  }));
+  
+  <span class="keyword">return</span> &lt;<span class="tag">input</span> ref={inputRef} {...props} /&gt;;
+});
+
+<span class="comment">// Parent Component</span>
+<span class="keyword">function</span> <span class="function">Parent</span>() {
+  <span class="keyword">const</span> inputRef = <span class="function">useRef</span>();
+  
+  <span class="keyword">const</span> <span class="function">handleFocus</span> = () => {
+    inputRef.current.<span class="function">focus</span>();
+  };
+  
+  <span class="keyword">const</span> <span class="function">handleClear</span> = () => {
+    inputRef.current.<span class="function">clear</span>();
+  };
+  
+  <span class="keyword">return</span> (
+    &lt;&gt;
+      &lt;<span class="function">FancyInput</span> ref={inputRef} /&gt;
+      &lt;<span class="tag">button</span> onClick={handleFocus}&gt;Focus&lt;/<span class="tag">button</span>&gt;
+      &lt;<span class="tag">button</span> onClick={handleClear}&gt;Clear&lt;/<span class="tag">button</span>&gt;
+    &lt;/&gt;
+  );
+}
+
+<span class="comment">// Advanced Example - Video Player Control</span>
+<span class="keyword">const</span> <span class="function">VideoPlayer</span> = <span class="function">forwardRef</span>((props, ref) => {
+  <span class="keyword">const</span> videoRef = <span class="function">useRef</span>();
+  <span class="keyword">const</span> [isPlaying, setIsPlaying] = <span class="function">useState</span>(<span class="keyword">false</span>);
+  
+  <span class="function">useImperativeHandle</span>(ref, () => ({
+    <span class="function">play</span>: () => {
+      videoRef.current.<span class="function">play</span>();
+      <span class="function">setIsPlaying</span>(<span class="keyword">true</span>);
+    },
+    <span class="function">pause</span>: () => {
+      videoRef.current.<span class="function">pause</span>();
+      <span class="function">setIsPlaying</span>(<span class="keyword">false</span>);
+    },
+    <span class="function">seek</span>: (time) => {
+      videoRef.current.currentTime = time;
+    },
+    <span class="function">getStatus</span>: () => ({
+      isPlaying,
+      currentTime: videoRef.current.currentTime,
+      duration: videoRef.current.duration
+    })
+  }));
+  
+  <span class="keyword">return</span> &lt;<span class="tag">video</span> ref={videoRef} src={props.src} /&gt;;
+});
+
+<span class="comment">// Modal Example</span>
+<span class="keyword">const</span> <span class="function">Modal</span> = <span class="function">forwardRef</span>((props, ref) => {
+  <span class="keyword">const</span> [isOpen, setIsOpen] = <span class="function">useState</span>(<span class="keyword">false</span>);
+  
+  <span class="function">useImperativeHandle</span>(ref, () => ({
+    <span class="function">open</span>: () => <span class="function">setIsOpen</span>(<span class="keyword">true</span>),
+    <span class="function">close</span>: () => <span class="function">setIsOpen</span>(<span class="keyword">false</span>),
+    <span class="function">toggle</span>: () => <span class="function">setIsOpen</span>(prev => !prev)
+  }));
+  
+  <span class="keyword">if</span> (!isOpen) <span class="keyword">return</span> <span class="keyword">null</span>;
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="tag">div</span> className=<span class="string">"modal"</span>&gt;
+      {props.children}
+    &lt;/<span class="tag">div</span>&gt;
+  );
+});
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: useImperativeHandle</div>
+                    
+                    <div class="custom-hook-demo">
+                        <h4 style="color: #667eea; margin-bottom: 20px;">Custom Input Component</h4>
+                        
+                        <div class="input-group">
+                            <label>Controlled Input:</label>
+                            <input type="text" id="imperative-input" placeholder="Type something...">
+                        </div>
+                        
+                        <div style="margin: 25px 0;">
+                            <button class="btn btn-primary" onclick="imperativeFocus()">Focus</button>
+                            <button class="btn btn-success" onclick="imperativeSetValue()">Set Value</button>
+                            <button class="btn btn-warning" onclick="imperativeClear()">Clear</button>
+                            <button class="btn btn-info" onclick="imperativeGetValue()">Get Value</button>
+                        </div>
+
+                        <div class="state-display" id="imperative-output">
+                            Output will appear here...
+                        </div>
+                    </div>
+
+                    <div class="custom-hook-demo" style="margin-top: 30px;">
+                        <h4 style="color: #667eea; margin-bottom: 20px;">Modal Control</h4>
+                        
+                        <div style="margin: 25px 0;">
+                            <button class="btn btn-success" onclick="openModal()">Open Modal</button>
+                            <button class="btn btn-danger" onclick="closeModal()">Close Modal</button>
+                            <button class="btn btn-warning" onclick="toggleModal()">Toggle Modal</button>
+                        </div>
+
+                        <div id="modal-container" style="display: none; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px; margin-top: 20px;">
+                            <h3>🎉 Modal Content</h3>
+                            <p style="margin: 15px 0;">This modal is controlled by parent component using useImperativeHandle!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Important Notes:</strong><br><br>
+                    • useImperativeHandle ko sparingly use karo - yeh React ke declarative nature ke against hai<br>
+                    • Sirf jab imperative actions zaroori ho tab use karo (focus, scroll, play/pause)<br>
+                    • Hamesha forwardRef ke saath use hota hai<br>
+                    • Parent-child coupling increase hota hai, so carefully use karo<br>
+                    • Better alternative: Controlled components with props and callbacks
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card bad">
+                        <h4>❌ Without useImperativeHandle</h4>
+                        <p style="margin: 15px 0;">Parent ko child ke internal state/methods access nahi hote. Har cheez props through pass karni padti hai, jo complex ho sakta hai.</p>
+                    </div>
+
+                    <div class="comparison-card good">
+                        <h4>✅ With useImperativeHandle</h4>
+                        <p style="margin: 15px 0;">Parent directly child ke exposed methods call kar sakta hai. Clean API for imperative actions like focus, play, pause.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- useLayoutEffect -->
+            <div class="section">
+                <h2>4️⃣ useLayoutEffect - Synchronous Side Effects</h2>
+                <div class="hinglish">
+                    <strong>useLayoutEffect</strong> useEffect jaisa hi hai, lekin yeh synchronously fire hota hai DOM mutations ke baad aur browser ke paint karne se pehle. Iska matlab hai ki agar aapko DOM measurements leni hain ya visual changes karne hain before browser paints, toh useLayoutEffect use karo.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// useEffect vs useLayoutEffect</span>
+
+<span class="comment">// useEffect - Asynchronous, after paint</span>
+<span class="function">useEffect</span>(() => {
+  <span class="comment">// Runs AFTER browser has painted</span>
+  <span class="comment">// User might see flicker if you update DOM here</span>
+}, []);
+
+<span class="comment">// useLayoutEffect - Synchronous, before paint</span>
+<span class="function">useLayoutEffect</span>(() => {
+  <span class="comment">// Runs BEFORE browser paints</span>
+  <span class="comment">// Blocks visual updates until complete</span>
+}, []);
+
+<span class="comment">// Example: Measuring DOM Elements</span>
+<span class="keyword">function</span> <span class="function">MeasureElement</span>() {
+  <span class="keyword">const</span> [height, setHeight] = <span class="function">useState</span>(<span class="number">0</span>);
+  <span class="keyword">const</span> elementRef = <span class="function">useRef</span>();
+  
+  <span class="function">useLayoutEffect</span>(() => {
+    <span class="comment">// Measure before paint - no flicker</span>
+    <span class="keyword">const</span> rect = elementRef.current.<span class="function">getBoundingClientRect</span>();
+    <span class="function">setHeight</span>(rect.height);
+  }, []);
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="tag">div</span>&gt;
+      &lt;<span class="tag">div</span> ref={elementRef}&gt;Content&lt;/<span class="tag">div</span>&gt;
+      &lt;<span class="tag">p</span>&gt;Height: {height}px&lt;/<span class="tag">p</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="comment">// Example: Tooltip Positioning</span>
+<span class="keyword">function</span> <span class="function">Tooltip</span>({ targetRef, children }) {
+  <span class="keyword">const</span> [position, setPosition] = <span class="function">useState</span>({ top: <span class="number">0</span>, left: <span class="number">0</span> });
+  <span class="keyword">const</span> tooltipRef = <span class="function">useRef</span>();
+  
+  <span class="function">useLayoutEffect</span>(() => {
+    <span class="keyword">const</span> targetRect = targetRef.current.<span class="function">getBoundingClientRect</span>();
+    <span class="keyword">const</span> tooltipRect = tooltipRef.current.<span class="function">getBoundingClientRect</span>();
+    
+    <span class="comment">// Calculate position before paint</span>
+    <span class="function">setPosition</span>({
+      top: targetRect.bottom + <span class="number">10</span>,
+      left: targetRect.left + (targetRect.width - tooltipRect.width) / <span class="number">2</span>
+    });
+  }, [targetRef]);
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="tag">div</span> 
+      ref={tooltipRef}
+      style={{ position: <span class="string">'absolute'</span>, ...position }}
+    &gt;
+      {children}
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="comment">// Example: Scroll Position Restoration</span>
+<span class="keyword">function</span> <span class="function">ScrollRestoration</span>() {
+  <span class="keyword">const</span> scrollRef = <span class="function">useRef</span>();
+  
+  <span class="function">useLayoutEffect</span>(() => {
+    <span class="comment">// Restore scroll position before paint</span>
+    <span class="keyword">const</span> savedPosition = localStorage.<span class="function">getItem</span>(<span class="string">'scrollPosition'</span>);
+    <span class="keyword">if</span> (savedPosition) {
+      scrollRef.current.scrollTop = <span class="function">parseInt</span>(savedPosition);
+    }
+  }, []);
+  
+  <span class="keyword">return</span> &lt;<span class="tag">div</span> ref={scrollRef}&gt;Long content...&lt;/<span class="tag">div</span>&gt;;
+}
+                </div>
+
+                <div class="hook-flow">
+                    <div class="flow-box">Render</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">useLayoutEffect</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Browser Paint</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">useEffect</div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>useEffect</th>
+                            <th>useLayoutEffect</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Timing</strong></td>
+                            <td>After paint (async)</td>
+                            <td>Before paint (sync)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Blocks Painting</strong></td>
+                            <td>❌ No</td>
+                            <td>✅ Yes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Use Case</strong></td>
+                            <td>Data fetching, subscriptions</td>
+                            <td>DOM measurements, animations</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Performance</strong></td>
+                            <td>Better (non-blocking)</td>
+                            <td>Can block if slow</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Visual Flicker</strong></td>
+                            <td>Possible</td>
+                            <td>Prevented</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="danger-box">
+                    <strong>🚨 When to Use useLayoutEffect:</strong><br><br>
+                    <strong>✅ Use karo jab:</strong><br>
+                    • DOM measurements leni hain (getBoundingClientRect)<br>
+                    • Visual changes before paint (positioning, animations)<br>
+                    • Scroll position restoration<br>
+                    • Preventing visual flicker is critical<br><br>
+                    
+                    <strong>❌ Use mat karo jab:</strong><br>
+                    • Data fetching<br>
+                    • Event listeners<br>
+                    • Subscriptions<br>
+                    • Most side effects (use useEffect instead)<br><br>
+                    
+                    <strong>⚠️ Warning:</strong> useLayoutEffect blocks browser painting, so heavy operations can make UI feel sluggish. Use sparingly!
+                </div>
+            </div>
+
+            <!-- Custom Hooks -->
+            <div class="section">
+                <h2>5️⃣ Custom Hooks - Reusable Logic</h2>
+                <div class="hinglish">
+                    <strong>Custom Hooks</strong> aapke khud ke hooks hain jo reusable logic encapsulate karte hain. Yeh functions hain jo React hooks use karte hain aur "use" prefix se start hote hain. Custom hooks se aap complex logic ko extract kar sakte ho aur multiple components mein reuse kar sakte ho.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Custom Hook Example 1: useLocalStorage</span>
+<span class="keyword">function</span> <span class="function">useLocalStorage</span>(key, initialValue) {
+  <span class="comment">// State to store value</span>
+  <span class="keyword">const</span> [storedValue, setStoredValue] = <span class="function">useState</span>(() => {
+    <span class="keyword">try</span> {
+      <span class="keyword">const</span> item = window.localStorage.<span class="function">getItem</span>(key);
+      <span class="keyword">return</span> item ? <span class="function">JSON.parse</span>(item) : initialValue;
+    } <span class="keyword">catch</span> (error) {
+      console.<span class="function">log</span>(error);
+      <span class="keyword">return</span> initialValue;
+    }
+  });
+  
+  <span class="comment">// Return wrapped version of useState's setter</span>
+  <span class="keyword">const</span> <span class="function">setValue</span> = (value) => {
+    <span class="keyword">try</span> {
+      <span class="keyword">const</span> valueToStore = value <span class="keyword">instanceof</span> Function 
+        ? <span class="function">value</span>(storedValue) 
+        : value;
+      <span class="function">setStoredValue</span>(valueToStore);
+      window.localStorage.<span class="function">setItem</span>(key, <span class="function">JSON.stringify</span>(valueToStore));
+    } <span class="keyword">catch</span> (error) {
+      console.<span class="function">log</span>(error);
+    }
+  };
+  
+  <span class="keyword">return</span> [storedValue, setValue];
+}
+
+<span class="comment">// Usage</span>
+<span class="keyword">function</span> <span class="function">App</span>() {
+  <span class="keyword">const</span> [name, setName] = <span class="function">useLocalStorage</span>(<span class="string">'name'</span>, <span class="string">'Guest'</span>);
+  <span class="keyword">return</span> &lt;<span class="tag">input</span> value={name} onChange={(e) => <span class="function">setName</span>(e.target.value)} /&gt;;
+}
+
+<span class="comment">// Custom Hook Example 2: useFetch</span>
+<span class="keyword">function</span> <span class="function">useFetch</span>(url) {
+  <span class="keyword">const</span> [data, setData] = <span class="function">useState</span>(<span class="keyword">null</span>);
+  <span class="keyword">const</span> [loading, setLoading] = <span class="function">useState</span>(<span class="keyword">true</span>);
+  <span class="keyword">const</span> [error, setError] = <span class="function">useState</span>(<span class="keyword">null</span>);
+  
+  <span class="function">useEffect</span>(() => {
+    <span class="keyword">let</span> cancelled = <span class="keyword">false</span>;
+    
+    <span class="function">setLoading</span>(<span class="keyword">true</span>);
+    
+    <span class="function">fetch</span>(url)
+      .<span class="function">then</span>(response => response.<span class="function">json</span>())
+      .<span class="function">then</span>(data => {
+        <span class="keyword">if</span> (!cancelled) {
+          <span class="function">setData</span>(data);
+          <span class="function">setLoading</span>(<span class="keyword">false</span>);
+        }
+      })
+      .<span class="function">catch</span>(error => {
+        <span class="keyword">if</span> (!cancelled) {
+          <span class="function">setError</span>(error);
+          <span class="function">setLoading</span>(<span class="keyword">false</span>);
+        }
+      });
+    
+    <span class="keyword">return</span> () => {
+      cancelled = <span class="keyword">true</span>;
+    };
+  }, [url]);
+  
+  <span class="keyword">return</span> { data, loading, error };
+}
+
+<span class="comment">// Custom Hook Example 3: useDebounce</span>
+<span class="keyword">function</span> <span class="function">useDebounce</span>(value, delay) {
+  <span class="keyword">const</span> [debouncedValue, setDebouncedValue] = <span class="function">useState</span>(value);
+  
+  <span class="function">useEffect</span>(() => {
+    <span class="keyword">const</span> handler = <span class="function">setTimeout</span>(() => {
+      <span class="function">setDebouncedValue</span>(value);
+    }, delay);
+    
+    <span class="keyword">return</span> () => {
+      <span class="function">clearTimeout</span>(handler);
+    };
+  }, [value, delay]);
+  
+  <span class="keyword">return</span> debouncedValue;
+}
+
+<span class="comment">// Custom Hook Example 4: useWindowSize</span>
+<span class="keyword">function</span> <span class="function">useWindowSize</span>() {
+  <span class="keyword">const</span> [windowSize, setWindowSize] = <span class="function">useState</span>({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
+  
+  <span class="function">useEffect</span>(() => {
+    <span class="keyword">const</span> <span class="function">handleResize</span> = () => {
+      <span class="function">setWindowSize</span>({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+    
+    window.<span class="function">addEventListener</span>(<span class="string">'resize'</span>, handleResize);
+    <span class="keyword">return</span> () => window.<span class="function">removeEventListener</span>(<span class="string">'resize'</span>, handleResize);
+  }, []);
+  
+  <span class="keyword">return</span> windowSize;
+}
+
+<span class="comment">// Custom Hook Example 5: useToggle</span>
+<span class="keyword">function</span> <span class="function">useToggle</span>(initialValue = <span class="keyword">false</span>) {
+  <span class="keyword">const</span> [value, setValue] = <span class="function">useState</span>(initialValue);
+  
+  <span class="keyword">const</span> <span class="function">toggle</span> = <span class="function">useCallback</span>(() => {
+    <span class="function">setValue</span>(v => !v);
+  }, []);
+  
+  <span class="keyword">return</span> [value, toggle];
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: Custom Hooks</div>
+                    
+                    <div class="custom-hook-demo">
+                        <h4 style="color: #667eea; margin-bottom: 20px;">useLocalStorage Hook</h4>
+                        <div class="input-group">
+                            <label>Your Name (Saved in LocalStorage):</label>
+                            <input type="text" id="local-storage-input" placeholder="Enter your name">
+                        </div>
+                        <button class="btn btn-primary" onclick="saveToLocalStorage()">Save</button>
+                        <button class="btn btn-warning" onclick="clearLocalStorage()">Clear</button>
+                        <div class="state-display" id="local-storage-display">
+                            Stored Value: <span id="stored-value">None</span>
+                        </div>
+                    </div>
+
+                    <div class="custom-hook-demo" style="margin-top: 30px;">
+                        <h4 style="color: #667eea; margin-bottom: 20px;">useDebounce Hook</h4>
+                        <div class="input-group">
+                            <label>Search (Debounced - 500ms delay):</label>
+                            <input type="text" id="debounce-input" placeholder="Type to search..." oninput="handleDebounceInput()">
+                        </div>
+                        <div class="state-display">
+                            <strong>Immediate Value:</strong> <span id="immediate-value">-</span><br>
+                            <strong>Debounced Value:</strong> <span id="debounced-value">-</span>
+                        </div>
+                    </div>
+
+                    <div class="custom-hook-demo" style="margin-top: 30px;">
+                        <h4 style="color: #667eea; margin-bottom: 20px;">useToggle Hook</h4>
+                        <button class="btn btn-success" onclick="toggleDemo()">Toggle State</button>
+                        <div class="counter-display" id="toggle-display" style="font-size: 2em; padding: 20px;">
+                            OFF
+                        </div>
+                    </div>
+
+                    <div class="custom-hook-demo" style="margin-top: 30px;">
+                        <h4 style="color: #667eea; margin-bottom: 20px;">useWindowSize Hook</h4>
+                        <div class="state-display" id="window-size-display">
+                            Width: <span id="window-width">-</span>px<br>
+                            Height: <span id="window-height">-</span>px
+                        </div>
+                        <p style="margin-top: 15px; color: #6c757d;">Resize your browser window to see live updates!</p>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <strong>✅ Custom Hooks Best Practices:</strong><br><br>
+                    • Always start with "use" prefix (useMyHook)<br>
+                    • Extract reusable logic from components<br>
+                    • Keep hooks focused on single responsibility<br>
+                    • Return values in array or object format<br>
+                    • Document parameters and return values<br>
+                    • Handle cleanup in useEffect<br>
+                    • Make hooks composable (hooks can use other hooks)<br>
+                    • Test hooks independently
+                </div>
+
+                <h3>Popular Custom Hooks Examples</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Hook Name</th>
+                            <th>Purpose</th>
+                            <th>Returns</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>useLocalStorage</strong></td>
+                            <td>Sync state with localStorage</td>
+                            <td>[value, setValue]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>useFetch</strong></td>
+                            <td>Data fetching with loading/error states</td>
+                            <td>{ data, loading, error }</td>
+                        </tr>
+                        <tr>
+                            <td><strong>useDebounce</strong></td>
+                            <td>Delay value updates</td>
+                            <td>debouncedValue</td>
+                        </tr>
+                        <tr>
+                            <td><strong>useWindowSize</strong></td>
+                            <td>Track window dimensions</td>
+                            <td>{ width, height }</td>
+                        </tr>
+                        <tr>
+                            <td><strong>useToggle</strong></td>
+                            <td>Boolean state toggle</td>
+                            <td>[value, toggle]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>useOnClickOutside</strong></td>
+                            <td>Detect clicks outside element</td>
+                            <td>ref</td>
+                        </tr>
+                        <tr>
+                            <td><strong>useInterval</strong></td>
+                            <td>Declarative setInterval</td>
+                            <td>void</td>
+                        </tr>
+                        <tr>
+                            <td><strong>usePrevious</strong></td>
+                            <td>Track previous value</td>
+                            <td>previousValue</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="quiz-section">
+                <h2>🎯 Interview Questions</h2>
+                <p style="margin-bottom: 40px; font-size: 1.2em;">Master these questions to ace your Advanced Hooks interviews!</p>
+
+                <div class="question-card">
+                    <span class="difficulty easy">Easy</span>
+                    <h3>Q1: useReducer kya hai aur useState se kab better hai? Example ke saath explain karo.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(1)">Show Answer</button>
+                    <div class="answer" id="answer-1">
+                        <strong>Answer:</strong><br><br>
+                        <strong>useReducer kya hai:</strong><br>
+                        useReducer ek hook hai jo complex state logic manage karne ke liye use hota hai. Yeh Redux pattern follow karta hai - actions dispatch karo aur reducer function state update karta hai.<br><br>
+                        
+                        <strong>Syntax:</strong><br>
+                        <code>const [state, dispatch] = useReducer(reducer, initialState);</code><br><br>
+                        
+                        <strong>useState se kab better hai:</strong><br><br>
+                        
+                        <strong>useState use karo jab:</strong><br>
+                        • Simple, independent state values<br>
+                        • Ek ya do state variables<br>
+                        • State updates simple hain<br><br>
+                        
+                        <strong>useReducer use karo jab:</strong><br>
+                        • Complex state logic with multiple sub-values<br>
+                        • Next state depends on previous state<br>
+                        • Multiple related state updates<br>
+                        • State transitions predictable banana hai<br><br>
+                        
+                        <strong>Example:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// useState - Multiple states
+const [count, setCount] = useState(0);
+const [step, setStep] = useState(1);
+const [history, setHistory] = useState([]);
+
+// useReducer - Single state object
+const [state, dispatch] = useReducer(reducer, {
+  count: 0,
+  step: 1,
+  history: []
+});
+
+// Reducer function
+function reducer(state, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return {
+        ...state,
+        count: state.count + state.step,
+        history: [...state.history, state.count + state.step]
+      };
+    case 'SET_STEP':
+      return { ...state, step: action.payload };
+    default:
+      return state;
+  }
+}</pre><br>
+                        
+                        <strong>Benefits:</strong><br>
+                        • Single source of truth<br>
+                        • Predictable state updates<br>
+                        • Easy to test (pure functions)<br>
+                        • Better for complex state logic<br>
+                        • Easier to debug with action logs
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty easy">Easy</span>
+                    <h3>Q2: useRef kya hai aur useState se kya difference hai? Kab useRef use karna chahiye?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(2)">Show Answer</button>
+                    <div class="answer" id="answer-2">
+                        <strong>Answer:</strong><br><br>
+                        <strong>useRef kya hai:</strong><br>
+                        useRef ek hook hai jo mutable value store karta hai jo re-render trigger nahi karta. Yeh ek object return karta hai jiska .current property mutable hai.<br><br>
+                        
+                        <strong>Two Main Uses:</strong><br>
+                        1. <strong>DOM References:</strong> DOM elements ko directly access karna<br>
+                        2. <strong>Mutable Values:</strong> Values jo re-render nahi karti (timers, previous values)<br><br>
+                        
+                        <strong>useState vs useRef:</strong><br>
+                        <table style="width: 100%; margin: 15px 0;">
+                            <tr style="background: #f8f9fa;">
+                                <th style="padding: 10px;">Feature</th>
+                                <th style="padding: 10px;">useState</th>
+                                <th style="padding: 10px;">useRef</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Re-render</td>
+                                <td style="padding: 10px;">✅ Triggers</td>
+                                <td style="padding: 10px;">❌ No re-render</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Value Access</td>
+                                <td style="padding: 10px;">Direct</td>
+                                <td style="padding: 10px;">.current property</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Update</td>
+                                <td style="padding: 10px;">setState function</td>
+                                <td style="padding: 10px;">Direct assignment</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Use Case</td>
+                                <td style="padding: 10px;">UI state</td>
+                                <td style="padding: 10px;">DOM refs, timers</td>
+                            </tr>
+                        </table><br>
+                        
+                        <strong>Kab useRef use karein:</strong><br><br>
+                        
+                        <strong>✅ Use karo jab:</strong><br>
+                        • DOM elements ko access karna hai (focus, scroll)<br>
+                        • Timers/intervals store karne hain<br>
+                        • Previous values track karne hain<br>
+                        • Instance variables chahiye (class component ke this.variable jaisa)<br>
+                        • Third-party library instances store karne hain<br><br>
+                        
+                        <strong>Examples:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// DOM Reference
+const inputRef = useRef(null);
+const focusInput = () => inputRef.current.focus();
+
+// Mutable Value (no re-render)
+const countRef = useRef(0);
+countRef.current++; // No re-render!
+
+// Timer
+const intervalRef = useRef();
+intervalRef.current = setInterval(() => {...}, 1000);
+
+// Previous Value
+const prevValueRef = useRef();
+useEffect(() => {
+  prevValueRef.current = value;
+});</pre>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Q3: useImperativeHandle kya hai? Kab aur kyun use karte hain? forwardRef ke saath kaise kaam karta hai?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(3)">Show Answer</button>
+                    <div class="answer" id="answer-3">
+                        <strong>Answer:</strong><br><br>
+                        <strong>useImperativeHandle kya hai:</strong><br>
+                        useImperativeHandle ek hook hai jo parent component ko child component ke specific methods expose karne deta hai. Yeh forwardRef ke saath use hota hai aur parent ko child ke internal functions call karne ki permission deta hai.<br><br>
+                        
+                        <strong>Kab use karte hain:</strong><br>
+                        • Jab parent ko child ke imperative methods call karne hain<br>
+                        • DOM operations (focus, scroll, play/pause)<br>
+                        • Child component ka internal API expose karna hai<br>
+                        • Controlled components with imperative actions<br><br>
+                        
+                        <strong>forwardRef ke saath kaise kaam karta hai:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// Step 1: forwardRef se child component wrap karo
+const FancyInput = forwardRef((props, ref) => {
+  const inputRef = useRef();
+  
+  // Step 2: useImperativeHandle se methods expose karo
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputRef.current.focus();
+    },
+    clear: () => {
+      inputRef.current.value = '';
+    },
+    setValue: (value) => {
+      inputRef.current.value = value;
+    }
+  }));
+  
+  return &lt;input ref={inputRef} {...props} /&gt;;
+});
+
+// Step 3: Parent mein use karo
+function Parent() {
+  const inputRef = useRef();
+  
+  const handleFocus = () => {
+    inputRef.current.focus(); // Call child method
+  };
+  
+  return (
+    &lt;&gt;
+      &lt;FancyInput ref={inputRef} /&gt;
+      &lt;button onClick={handleFocus}&gt;Focus&lt;/button&gt;
+    &lt;/&gt;
+  );
+}</pre><br>
+                        
+                        <strong>Real-World Example - Video Player:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+const VideoPlayer = forwardRef((props, ref) => {
+  const videoRef = useRef();
+  
+  useImperativeHandle(ref, () => ({
+    play: () => videoRef.current.play(),
+    pause: () => videoRef.current.pause(),
+    seek: (time) => videoRef.current.currentTime = time,
+    getStatus: () => ({
+      currentTime: videoRef.current.currentTime,
+      duration: videoRef.current.duration
+    })
+  }));
+  
+  return &lt;video ref={videoRef} src={props.src} /&gt;;
+});</pre><br>
+                        
+                        <strong>⚠️ Important Notes:</strong><br>
+                        • Sparingly use karo - React ke declarative nature ke against hai<br>
+                        • Sirf imperative actions ke liye (focus, play, pause)<br>
+                        • Parent-child coupling increase hota hai<br>
+                        • Better alternative: Controlled components with props
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Q4: useLayoutEffect aur useEffect mein kya difference hai? Kab useLayoutEffect use karna chahiye?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(4)">Show Answer</button>
+                    <div class="answer" id="answer-4">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Main Difference:</strong><br>
+                        • <strong>useEffect:</strong> Asynchronously runs AFTER browser paint<br>
+                        • <strong>useLayoutEffect:</strong> Synchronously runs BEFORE browser paint<br><br>
+                        
+                        <strong>Execution Order:</strong><br>
+                        1. Component renders<br>
+                        2. useLayoutEffect runs (blocks painting)<br>
+                        3. Browser paints screen<br>
+                        4. useEffect runs (non-blocking)<br><br>
+                        
+                        <strong>Detailed Comparison:</strong><br>
+                        <table style="width: 100%; margin: 15px 0;">
+                            <tr style="background: #f8f9fa;">
+                                <th style="padding: 10px;">Feature</th>
+                                <th style="padding: 10px;">useEffect</th>
+                                <th style="padding: 10px;">useLayoutEffect</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Timing</td>
+                                <td style="padding: 10px;">After paint</td>
+                                <td style="padding: 10px;">Before paint</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Blocks Paint</td>
+                                <td style="padding: 10px;">❌ No</td>
+                                <td style="padding: 10px;">✅ Yes</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Execution</td>
+                                <td style="padding: 10px;">Async</td>
+                                <td style="padding: 10px;">Sync</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Performance</td>
+                                <td style="padding: 10px;">Better</td>
+                                <td style="padding: 10px;">Can block</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Visual Flicker</td>
+                                <td style="padding: 10px;">Possible</td>
+                                <td style="padding: 10px;">Prevented</td>
+                            </tr>
+                        </table><br>
+                        
+                        <strong>Kab useLayoutEffect use karein:</strong><br><br>
+                        
+                        <strong>✅ Use karo jab:</strong><br>
+                        • DOM measurements leni hain (getBoundingClientRect)<br>
+                        • Visual changes before paint (positioning, animations)<br>
+                        • Scroll position restoration<br>
+                        • Tooltip/popover positioning<br>
+                        • Preventing visual flicker is critical<br><br>
+                        
+                        <strong>❌ Use mat karo jab:</strong><br>
+                        • Data fetching<br>
+                        • Event listeners<br>
+                        • Subscriptions<br>
+                        • Most side effects (use useEffect)<br><br>
+                        
+                        <strong>Examples:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// ❌ useEffect - Might see flicker
+useEffect(() => {
+  const rect = elementRef.current.getBoundingClientRect();
+  setHeight(rect.height); // User might see jump
+}, []);
+
+// ✅ useLayoutEffect - No flicker
+useLayoutEffect(() => {
+  const rect = elementRef.current.getBoundingClientRect();
+  setHeight(rect.height); // Smooth, no jump
+}, []);
+
+// Tooltip positioning
+useLayoutEffect(() => {
+  const targetRect = targetRef.current.getBoundingClientRect();
+  const tooltipRect = tooltipRef.current.getBoundingClientRect();
+  
+  // Calculate position before paint
+  setPosition({
+    top: targetRect.bottom + 10,
+    left: targetRect.left
+  });
+}, []);</pre><br>
+                        
+                        <strong>⚠️ Warning:</strong><br>
+                        useLayoutEffect blocks browser painting, so heavy operations can make UI sluggish. Use sparingly and only when necessary!
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty hard">Hard</span>
+                    <h3>Q5: Custom hooks kaise banate hain? Best practices kya hain? Real-world example ke saath explain karo.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(5)">Show Answer</button>
+                    <div class="answer" id="answer-5">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Custom Hooks kaise banate hain:</strong><br>
+                        Custom hooks simple JavaScript functions hain jo React hooks use karte hain aur "use" prefix se start hote hain. Yeh reusable logic encapsulate karte hain.<br><br>
+                        
+                        <strong>Basic Structure:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+function useCustomHook(params) {
+  // 1. Use React hooks
+  const [state, setState] = useState(initialValue);
+  
+  // 2. Add logic
+  useEffect(() => {
+    // Side effects
+  }, [dependencies]);
+  
+  // 3. Return values
+  return [state, setState];
+}</pre><br>
+                        
+                        <strong>Real-World Example - useFetch:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+function useFetch(url, options = {}) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    let cancelled = false;
+    
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(url, options);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const json = await response.json();
+        
+        if (!cancelled) {
+          setData(json);
+          setError(null);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err.message);
+          setData(null);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+    
+    fetchData();
+    
+    return () => {
+      cancelled = true;
+    };
+  }, [url, JSON.stringify(options)]);
+  
+  return { data, loading, error };
+}
+
+// Usage
+function UserProfile({ userId }) {
+  const { data, loading, error } = useFetch(`/api/users/${userId}`);
+  
+  if (loading) return &lt;div&gt;Loading...&lt;/div&gt;;
+  if (error) return &lt;div&gt;Error: {error}&lt;/div&gt;;
+  
+  return &lt;div&gt;{data.name}&lt;/div&gt;;
+}</pre><br>
+                        
+                        <strong>Advanced Example - useForm:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+function useForm(initialValues, validate) {
+  const [values, setValues] = useState(initialValues);
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues(prev => ({ ...prev, [name]: value }));
+    
+    // Clear error when user types
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: null }));
+    }
+  };
+  
+  const handleBlur = (e) => {
+    const { name } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+    
+    // Validate on blur
+    if (validate) {
+      const fieldError = validate(name, values[name]);
+      if (fieldError) {
+        setErrors(prev => ({ ...prev, [name]: fieldError }));
+      }
+    }
+  };
+  
+  const handleSubmit = async (onSubmit) => {
+    return async (e) => {
+      e.preventDefault();
+      setIsSubmitting(true);
+      
+      // Validate all fields
+      if (validate) {
+        const validationErrors = {};
+        Object.keys(values).forEach(key => {
+          const error = validate(key, values[key]);
+          if (error) validationErrors[key] = error;
+        });
+        
+        if (Object.keys(validationErrors).length > 0) {
+          setErrors(validationErrors);
+          setIsSubmitting(false);
+          return;
+        }
+      }
+      
+      try {
+        await onSubmit(values);
+      } catch (error) {
+        setErrors({ submit: error.message });
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
+  };
+  
+  const reset = () => {
+    setValues(initialValues);
+    setErrors({});
+    setTouched({});
+    setIsSubmitting(false);
+  };
+  
+  return {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    reset
+  };
+}</pre><br>
+                        
+                        <strong>Best Practices:</strong><br><br>
+                        
+                        <strong>1. Naming:</strong><br>
+                        • Always start with "use" prefix<br>
+                        • Descriptive names (useAuth, useFetch, useForm)<br><br>
+                        
+                        <strong>2. Return Values:</strong><br>
+                        • Array for 2 values: [value, setValue]<br>
+                        • Object for multiple values: { data, loading, error }<br><br>
+                        
+                        <strong>3. Dependencies:</strong><br>
+                        • Properly manage useEffect dependencies<br>
+                        • Cleanup functions for subscriptions/timers<br><br>
+                        
+                        <strong>4. Composition:</strong><br>
+                        • Hooks can use other hooks<br>
+                        • Keep hooks focused (single responsibility)<br><br>
+                        
+                        <strong>5. Error Handling:</strong><br>
+                        • Handle errors gracefully<br>
+                        • Provide error states<br><br>
+                        
+                        <strong>6. Testing:</strong><br>
+                        • Test hooks independently<br>
+                        • Use @testing-library/react-hooks<br><br>
+                        
+                        <strong>Common Custom Hooks:</strong><br>
+                        • useLocalStorage - Sync with localStorage<br>
+                        • useDebounce - Delay value updates<br>
+                        • useWindowSize - Track window dimensions<br>
+                        • useOnClickOutside - Detect outside clicks<br>
+                        • useInterval - Declarative setInterval<br>
+                        • usePrevious - Track previous value<br>
+                        • useToggle - Boolean state toggle<br>
+                        • useAsync - Async operation handling
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty hard">Hard</span>
+                    <h3>Q6: useReducer aur Redux mein kya difference hai? Production app mein kab kaunsa use karein?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(6)">Show Answer</button>
+                    <div class="answer" id="answer-6">
+                        <strong>Answer:</strong><br><br>
+                        <strong>useReducer vs Redux:</strong><br><br>
+                        
+                        <table style="width: 100%; margin: 15px 0;">
+                            <tr style="background: #f8f9fa;">
+                                <th style="padding: 10px;">Feature</th>
+                                <th style="padding: 10px;">useReducer</th>
+                                <th style="padding: 10px;">Redux</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;"><strong>Scope</strong></td>
+                                <td style="padding: 10px;">Component level</td>
+                                <td style="padding: 10px;">Application level</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;"><strong>Setup</strong></td>
+                                <td style="padding: 10px;">Built-in, no installation</td>
+                                <td style="padding: 10px;">External library</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;"><strong>DevTools</strong></td>
+                                <td style="padding: 10px;">❌ No</td>
+                                <td style="padding: 10px;">✅ Redux DevTools</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;"><strong>Middleware</strong></td>
+                                <td style="padding: 10px;">❌ No</td>
+                                <td style="padding: 10px;">✅ Yes (thunk, saga)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;"><strong>Time Travel</strong></td>
+                                <td style="padding: 10px;">❌ No</td>
+                                <td style="padding: 10px;">✅ Yes</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;"><strong>Bundle Size</strong></td>
+                                <td style="padding: 10px;">0 KB (built-in)</td>
+                                <td style="padding: 10px;">~10 KB</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;"><strong>Learning Curve</strong></td>
+                                <td style="padding: 10px;">Easy</td>
+                                <td style="padding: 10px;">Moderate</td>
+                            </tr>
+                        </table><br>
+                        
+                        <strong>useReducer Example:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// Component-level state
+function TodoList() {
+  const [state, dispatch] = useReducer(todoReducer, initialState);
+  
+  // State is local to this component
+  return (
+    &lt;div&gt;
+      {state.todos.map(todo => 
+        &lt;Todo key={todo.id} {...todo} /&gt;
+      )}
+    &lt;/div&gt;
+  );
+}</pre><br>
+                        
+                        <strong>Redux Example:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// Global state accessible anywhere
+import { useSelector, useDispatch } from 'react-redux';
+
+function TodoList() {
+  const todos = useSelector(state => state.todos);
+  const dispatch = useDispatch();
+  
+  // State is global, accessible from any component
+  return (
+    &lt;div&gt;
+      {todos.map(todo => 
+        &lt;Todo key={todo.id} {...todo} /&gt;
+      )}
+    &lt;/div&gt;
+  );
+}</pre><br>
+                        
+                        <strong>Kab kaunsa use karein:</strong><br><br>
+                        
+                        <strong>useReducer use karo jab:</strong><br>
+                        ✅ Component-level complex state<br>
+                        ✅ State sirf ek component tree mein chahiye<br>
+                        ✅ Small to medium applications<br>
+                        ✅ No need for middleware<br>
+                        ✅ Want to keep bundle size small<br>
+                        ✅ Simple state management<br><br>
+                        
+                        <strong>Redux use karo jab:</strong><br>
+                        ✅ Global state across entire app<br>
+                        ✅ Multiple components need same state<br>
+                        ✅ Large, complex applications<br>
+                        ✅ Need middleware (async actions, logging)<br>
+                        ✅ Want Redux DevTools for debugging<br>
+                        ✅ Time-travel debugging needed<br>
+                        ✅ Team familiar with Redux patterns<br><br>
+                        
+                        <strong>Hybrid Approach:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// Use both together!
+// Redux for global state (user, auth, theme)
+// useReducer for local complex state (forms, modals)
+
+function ComplexForm() {
+  // Local form state with useReducer
+  const [formState, dispatch] = useReducer(formReducer, initialState);
+  
+  // Global user state from Redux
+  const user = useSelector(state => state.user);
+  
+  return &lt;form&gt;...&lt;/form&gt;;
+}</pre><br>
+                        
+                        <strong>Modern Alternative - Context + useReducer:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// Create global state without Redux
+const StateContext = createContext();
+const DispatchContext = createContext();
+
+function StateProvider({ children }) {
+  const [state, dispatch] = useReducer(rootReducer, initialState);
+  
+  return (
+    &lt;StateContext.Provider value={state}&gt;
+      &lt;DispatchContext.Provider value={dispatch}&gt;
+        {children}
+      &lt;/DispatchContext.Provider&gt;
+    &lt;/StateContext.Provider&gt;
+  );
+}
+
+// Custom hooks for easy access
+function useState() {
+  return useContext(StateContext);
+}
+
+function useDispatch() {
+  return useContext(DispatchContext);
+}</pre><br>
+                        
+                        <strong>Decision Tree:</strong><br>
+                        1. Need global state? → Yes → Redux or Context+useReducer<br>
+                        2. Need middleware? → Yes → Redux<br>
+                        3. Need DevTools? → Yes → Redux<br>
+                        4. Component-level only? → Yes → useReducer<br>
+                        5. Simple state? → Yes → useState<br><br>
+                        
+                        <strong>Recommendation:</strong><br>
+                        • Small apps: useState + useReducer<br>
+                        • Medium apps: Context + useReducer<br>
+                        • Large apps: Redux or Zustand<br>
+                        • Enterprise: Redux with Redux Toolkit
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty hard">Hard</span>
+                    <h3>Q7: Production-ready custom hook kaise banayein? Error handling, cleanup, aur optimization ke saath complete example do.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(7)">Show Answer</button>
+                    <div class="answer" id="answer-7">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Production-Ready Custom Hook - useAsync:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+import { useState, useEffect, useCallback, useRef } from 'react';
+
+function useAsync(asyncFunction, immediate = true) {
+  // State management
+  const [status, setStatus] = useState('idle');
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  
+  // Refs for cleanup and preventing memory leaks
+  const mountedRef = useRef(true);
+  const pendingPromiseRef = useRef(null);
+  
+  // Execute async function
+  const execute = useCallback((...params) => {
+    setStatus('pending');
+    setData(null);
+    setError(null);
+    
+    // Store promise for potential cancellation
+    const promise = asyncFunction(...params);
+    pendingPromiseRef.current = promise;
+    
+    return promise
+      .then(response => {
+        // Only update if component is still mounted
+        if (mountedRef.current) {
+          setData(response);
+          setStatus('success');
+        }
+        return response;
+      })
+      .catch(error => {
+        if (mountedRef.current) {
+          setError(error);
+          setStatus('error');
+        }
+        throw error;
+      })
+      .finally(() => {
+        if (mountedRef.current) {
+          pendingPromiseRef.current = null;
+        }
+      });
+  }, [asyncFunction]);
+  
+  // Reset function
+  const reset = useCallback(() => {
+    if (mountedRef.current) {
+      setStatus('idle');
+      setData(null);
+      setError(null);
+    }
+  }, []);
+  
+  // Execute immediately if requested
+  useEffect(() => {
+    if (immediate) {
+      execute();
+    }
+  }, [execute, immediate]);
+  
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+  
+  // Return values and functions
+  return {
+    execute,
+    reset,
+    status,
+    data,
+    error,
+    isIdle: status === 'idle',
+    isPending: status === 'pending',
+    isSuccess: status === 'success',
+    isError: status === 'error'
+  };
+}
+
+// Usage Example
+function UserProfile({ userId }) {
+  const fetchUser = useCallback(
+    () => fetch(`/api/users/${userId}`).then(r => r.json()),
+    [userId]
+  );
+  
+  const {
+    data: user,
+    error,
+    isPending,
+    isError,
+    execute: refetch
+  } = useAsync(fetchUser);
+  
+  if (isPending) return &lt;Spinner /&gt;;
+  if (isError) return &lt;Error error={error} onRetry={refetch} /&gt;;
+  
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;{user.name}&lt;/h1&gt;
+      &lt;button onClick={refetch}&gt;Refresh&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre><br>
+                        
+                        <strong>Advanced Example - useWebSocket:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+function useWebSocket(url, options = {}) {
+  const [data, setData] = useState(null);
+  const [status, setStatus] = useState('connecting');
+  const [error, setError] = useState(null);
+  
+  const wsRef = useRef(null);
+  const reconnectTimeoutRef = useRef(null);
+  const reconnectAttemptsRef = useRef(0);
+  
+  const {
+    reconnect = true,
+    reconnectInterval = 3000,
+    maxReconnectAttempts = 5,
+    onOpen,
+    onClose,
+    onError,
+    onMessage
+  } = options;
+  
+  // Send message function
+  const sendMessage = useCallback((message) => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(
+        typeof message === 'string' ? message : JSON.stringify(message)
+      );
+      return true;
+    }
+    return false;
+  }, []);
+  
+  // Connect function
+  const connect = useCallback(() => {
+    try {
+      setStatus('connecting');
+      const ws = new WebSocket(url);
+      
+      ws.onopen = (event) => {
+        setStatus('connected');
+        setError(null);
+        reconnectAttemptsRef.current = 0;
+        onOpen?.(event);
+      };
+      
+      ws.onmessage = (event) => {
+        try {
+          const parsedData = JSON.parse(event.data);
+          setData(parsedData);
+          onMessage?.(parsedData);
+        } catch {
+          setData(event.data);
+          onMessage?.(event.data);
+        }
+      };
+      
+      ws.onerror = (event) => {
+        setError(new Error('WebSocket error'));
+        setStatus('error');
+        onError?.(event);
+      };
+      
+      ws.onclose = (event) => {
+        setStatus('disconnected');
+        onClose?.(event);
+        
+        // Attempt reconnection
+        if (
+          reconnect &&
+          reconnectAttemptsRef.current < maxReconnectAttempts
+        ) {
+          reconnectAttemptsRef.current++;
+          reconnectTimeoutRef.current = setTimeout(() => {
+            connect();
+          }, reconnectInterval);
+        }
+      };
+      
+      wsRef.current = ws;
+    } catch (err) {
+      setError(err);
+      setStatus('error');
+    }
+  }, [url, reconnect, reconnectInterval, maxReconnectAttempts, onOpen, onClose, onError, onMessage]);
+  
+  // Disconnect function
+  const disconnect = useCallback(() => {
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+    }
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
+    }
+  }, []);
+  
+  // Connect on mount
+  useEffect(() => {
+    connect();
+    return () => {
+      disconnect();
+    };
+  }, [connect, disconnect]);
+  
+  return {
+    data,
+    status,
+    error,
+    sendMessage,
+    connect,
+    disconnect,
+    isConnecting: status === 'connecting',
+    isConnected: status === 'connected',
+    isDisconnected: status === 'disconnected',
+    isError: status === 'error'
+  };
+}</pre><br>
+                        
+                        <strong>Production Best Practices:</strong><br><br>
+                        
+                        <strong>1. Error Handling:</strong><br>
+                        • Try-catch blocks for all async operations<br>
+                        • Provide error states and messages<br>
+                        • Handle edge cases (network errors, timeouts)<br><br>
+                        
+                        <strong>2. Cleanup:</strong><br>
+                        • Always cleanup in useEffect return<br>
+                        • Cancel pending requests on unmount<br>
+                        • Clear timers and intervals<br>
+                        • Close connections (WebSocket, SSE)<br><br>
+                        
+                        <strong>3. Memory Leaks Prevention:</strong><br>
+                        • Use mounted ref to prevent setState on unmounted component<br>
+                        • Cancel async operations on unmount<br>
+                        • Remove event listeners<br><br>
+                        
+                        <strong>4. Optimization:</strong><br>
+                        • Use useCallback for functions<br>
+                        • Use useMemo for expensive computations<br>
+                        • Proper dependency arrays<br>
+                        • Debounce/throttle when needed<br><br>
+                        
+                        <strong>5. TypeScript Support:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+function useAsync&lt;T&gt;(
+  asyncFunction: (...args: any[]) => Promise&lt;T&gt;,
+  immediate = true
+): {
+  execute: (...args: any[]) => Promise&lt;T&gt;;
+  reset: () => void;
+  status: 'idle' | 'pending' | 'success' | 'error';
+  data: T | null;
+  error: Error | null;
+  isIdle: boolean;
+  isPending: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+} {
+  // Implementation...
+}</pre><br>
+                        
+                        <strong>6. Testing:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+import { renderHook, act } from '@testing-library/react-hooks';
+
+describe('useAsync', () => {
+  it('should handle successful async operation', async () => {
+    const asyncFn = jest.fn().mockResolvedValue('data');
+    const { result, waitForNextUpdate } = renderHook(() => 
+      useAsync(asyncFn)
+    );
+    
+    expect(result.current.isPending).toBe(true);
+    
+    await waitForNextUpdate();
+    
+    expect(result.current.isSuccess).toBe(true);
+    expect(result.current.data).toBe('data');
+  });
+  
+  it('should handle errors', async () => {
+    const error = new Error('Failed');
+    const asyncFn = jest.fn().mockRejectedValue(error);
+    const { result, waitForNextUpdate } = renderHook(() => 
+      useAsync(asyncFn)
+    );
+    
+    await waitForNextUpdate();
+    
+    expect(result.current.isError).toBe(true);
+    expect(result.current.error).toBe(error);
+  });
+});</pre><br>
+                        
+                        <strong>7. Documentation:</strong><br>
+                        • JSDoc comments<br>
+                        • Usage examples<br>
+                        • Parameter descriptions<br>
+                        • Return value documentation<br><br>
+                        
+                        <strong>Checklist:</strong><br>
+                        ☑️ Error handling implemented<br>
+                        ☑️ Cleanup functions added<br>
+                        ☑️ Memory leak prevention<br>
+                        ☑️ TypeScript types defined<br>
+                        ☑️ Tests written<br>
+                        ☑️ Documentation added<br>
+                        ☑️ Performance optimized<br>
+                        ☑️ Edge cases handled
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // useReducer Demo
+        let reducerState = { count: 0 };
+        const actionLog = [];
+
+        function reducer(state, action) {
+            switch(action.type) {
+                case 'INCREMENT':
+                    return { count: state.count + 1 };
+                case 'DECREMENT':
+                    return { count: state.count - 1 };
+                case 'ADD_5':
+                    return { count: state.count + 5 };
+                case 'RESET':
+                    return { count: 0 };
+                default:
+                    return state;
+            }
+        }
+
+        function dispatchAction(type) {
+            const action = { type, timestamp: new Date().toLocaleTimeString() };
+            reducerState = reducer(reducerState, action);
+            actionLog.push(action);
+            
+            document.getElementById('reducer-count').textContent = reducerState.count;
+            document.getElementById('reducer-state').textContent = JSON.stringify(reducerState, null, 2);
+            
+            const logContainer = document.getElementById('action-log');
+            const logItem = document.createElement('div');
+            logItem.className = 'action-log-item';
+            logItem.textContent = `[${action.timestamp}] Action: ${action.type} → State: ${JSON.stringify(reducerState)}`;
+            logContainer.appendChild(logItem);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // useRef Demo
+        let box1Clicks = 0;
+        let box2Clicks = 0;
+
+        function focusInput() {
+            document.getElementById('ref-input').focus();
+        }
+
+        function selectText() {
+            const input = document.getElementById('ref-input');
+            input.select();
+        }
+
+        function clearInput() {
+            document.getElementById('ref-input').value = '';
+        }
+
+        function animateBox(boxNum) {
+            const box = document.getElementById(`ref-box-${boxNum}`);
+            box.style.transform = 'scale(1.2) rotate(360deg)';
+            
+            setTimeout(() => {
+                box.style.transform = 'scale(1) rotate(0deg)';
+            }, 500);
+            
+            if (boxNum === 1) {
+                box1Clicks++;
+                document.getElementById('box1-clicks').textContent = box1Clicks;
+            } else {
+                box2Clicks++;
+                document.getElementById('box2-clicks').textContent = box2Clicks;
+            }
+        }
+
+        // useImperativeHandle Demo
+        function imperativeFocus() {
+            document.getElementById('imperative-input').focus();
+        }
+
+        function imperativeSetValue() {
+            document.getElementById('imperative-input').value = 'Hello from parent!';
+            document.getElementById('imperative-output').textContent = 'Value set to: "Hello from parent!"';
+        }
+
+        function imperativeClear() {
+            document.getElementById('imperative-input').value = '';
+            document.getElementById('imperative-output').textContent = 'Input cleared!';
+        }
+
+        function imperativeGetValue() {
+            const value = document.getElementById('imperative-input').value;
+            document.getElementById('imperative-output').textContent = `Current value: "${value}"`;
+        }
+
+        let modalOpen = false;
+
+        function openModal() {
+            modalOpen = true;
+            document.getElementById('modal-container').style.display = 'block';
+        }
+
+        function closeModal() {
+            modalOpen = false;
+            document.getElementById('modal-container').style.display = 'none';
+        }
+
+        function toggleModal() {
+            modalOpen = !modalOpen;
+            document.getElementById('modal-container').style.display = modalOpen ? 'block' : 'none';
+        }
+
+        // Custom Hooks Demo
+        function saveToLocalStorage() {
+            const value = document.getElementById('local-storage-input').value;
+            localStorage.setItem('demo-name', value);
+            document.getElementById('stored-value').textContent = value;
+        }
+
+        function clearLocalStorage() {
+            localStorage.removeItem('demo-name');
+            document.getElementById('local-storage-input').value = '';
+            document.getElementById('stored-value').textContent = 'None';
+        }
+
+        // Load from localStorage on page load
+        window.addEventListener('load', () => {
+            const stored = localStorage.getItem('demo-name');
+            if (stored) {
+                document.getElementById('local-storage-input').value = stored;
+                document.getElementById('stored-value').textContent = stored;
+            }
+        });
+
+        // Debounce Demo
+        let debounceTimeout;
+
+        function handleDebounceInput() {
+            const value = document.getElementById('debounce-input').value;
+            document.getElementById('immediate-value').textContent = value;
+            
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                document.getElementById('debounced-value').textContent = value;
+            }, 500);
+        }
+
+        // Toggle Demo
+        let toggleState = false;
+
+        function toggleDemo() {
+            toggleState = !toggleState;
+            const display = document.getElementById('toggle-display');
+            display.textContent = toggleState ? 'ON' : 'OFF';
+            display.style.background = toggleState 
+                ? 'linear-gradient(135deg, #28a745 0%, #20c997 100%)'
+                : 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
+        }
+
+        // Window Size Demo
+        function updateWindowSize() {
+            document.getElementById('window-width').textContent = window.innerWidth;
+            document.getElementById('window-height').textContent = window.innerHeight;
+        }
+
+        window.addEventListener('resize', updateWindowSize);
+        window.addEventListener('load', updateWindowSize);
+
+        // Toggle Answer Function
+        function toggleAnswer(num) {
+            const answer = document.getElementById('answer-' + num);
+            const button = answer.previousElementSibling;
+            
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                button.textContent = 'Show Answer';
+            } else {
+                answer.classList.add('show');
+                button.textContent = 'Hide Answer';
+            }
+        }
+    </script>
+</body>
+</html>

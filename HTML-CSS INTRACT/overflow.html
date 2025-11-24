@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Overflow Examples</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .demo-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 3px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .demo-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .demo-box h3 {
+            margin-top: 0;
+            color: #495057;
+            font-size: 1.3em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .overflow-container {
+            width: 200px;
+            height: 120px;
+            border: 3px solid #007bff;
+            border-radius: 8px;
+            background: #e3f2fd;
+            margin: 15px auto;
+            padding: 10px;
+            position: relative;
+        }
+
+        .overflow-content {
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            line-height: 1.4;
+        }
+
+        .visible {
+            overflow: visible;
+        }
+
+        .hidden {
+            overflow: hidden;
+        }
+
+        .scroll {
+            overflow: scroll;
+        }
+
+        .auto {
+            overflow: auto;
+        }
+
+        .code-example {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-top: 15px;
+            border-left: 4px solid #007bff;
+        }
+
+        .property {
+            color: #63b3ed;
+        }
+
+        .value {
+            color: #68d391;
+        }
+
+        .explanation {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #856404;
+        }
+
+        .intro {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .intro h2 {
+            margin: 0 0 15px 0;
+            font-size: 1.8em;
+        }
+
+        .intro p {
+            margin: 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .highlight {
+            background: #ff6b6b;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 CSS Overflow Examples</h1>
+        
+        <div class="intro">
+            <h2>What is CSS Overflow?</h2>
+            <p>Overflow controls what happens when content is <span class="highlight">too big</span> to fit inside its container!</p>
+        </div>
+
+        <div class="demo-grid">
+            <!-- Visible Example -->
+            <div class="demo-box">
+                <h3>🌊 overflow: visible</h3>
+                <div class="overflow-container visible">
+                    <div class="overflow-content">
+                        This is way too much text for this small container! It will spill out and be visible outside the borders. This is the default behavior.
+                    </div>
+                </div>
+                <div class="code-example">
+                    <span class="property">overflow</span>: <span class="value">visible</span>;
+                </div>
+                <div class="explanation">
+                    <strong>Default behavior:</strong> Content spills outside the container and remains visible.
+                </div>
+            </div>
+
+            <!-- Hidden Example -->
+            <div class="demo-box">
+                <h3>✂️ overflow: hidden</h3>
+                <div class="overflow-container hidden">
+                    <div class="overflow-content">
+                        This is way too much text for this small container! But now it gets cut off and hidden. You can't see the rest of this text because it's clipped.
+                    </div>
+                </div>
+                <div class="code-example">
+                    <span class="property">overflow</span>: <span class="value">hidden</span>;
+                </div>
+                <div class="explanation">
+                    <strong>Clips content:</strong> Extra content is cut off and completely hidden from view.
+                </div>
+            </div>
+
+            <!-- Scroll Example -->
+            <div class="demo-box">
+                <h3>📜 overflow: scroll</h3>
+                <div class="overflow-container scroll">
+                    <div class="overflow-content">
+                        This is way too much text for this small container! But now you can scroll to see all the content. Scrollbars are always visible, even when not needed.
+                    </div>
+                </div>
+                <div class="code-example">
+                    <span class="property">overflow</span>: <span class="value">scroll</span>;
+                </div>
+                <div class="explanation">
+                    <strong>Always scrollable:</strong> Scrollbars are always present, regardless of content size.
+                </div>
+            </div>
+
+            <!-- Auto Example -->
+            <div class="demo-box">
+                <h3>🤖 overflow: auto</h3>
+                <div class="overflow-container auto">
+                    <div class="overflow-content">
+                        This is way too much text for this small container! Scrollbars appear automatically only when needed. This is usually the best choice for most situations.
+                    </div>
+                </div>
+                <div class="code-example">
+                    <span class="property">overflow</span>: <span class="value">auto</span>;
+                </div>
+                <div class="explanation">
+                    <strong>Smart scrolling:</strong> Scrollbars only appear when content actually overflows.
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; text-align: center; background: #f8f9fa; padding: 20px; border-radius: 12px;">
+            <h2 style="color: #495057; margin-bottom: 15px;">💡 Quick Tips</h2>
+            <p style="margin: 10px 0; color: #6c757d;"><strong>overflow: auto</strong> is usually the best choice for most situations</p>
+            <p style="margin: 10px 0; color: #6c757d;"><strong>overflow: hidden</strong> is great for creating clean layouts</p>
+            <p style="margin: 10px 0; color: #6c757d;"><strong>overflow: scroll</strong> when you always want scrollbars visible</p>
+            <p style="margin: 10px 0; color: #6c757d;"><strong>overflow: visible</strong> is the default - content spills out</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Events & Forms - Interactive Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .explanation {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .demo-box {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .demo-title {
+            font-weight: 600;
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            margin: 8px 0;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .success {
+            color: #28a745;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .checkbox-group,
+        .radio-group {
+            margin: 15px 0;
+        }
+
+        .checkbox-group label,
+        .radio-group label {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 20px;
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+
+        .checkbox-group input,
+        .radio-group input {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .output-box {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .interview-section {
+            background: #fff8e1;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 40px;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .question:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .question h4 {
+            color: #f57c00;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #ffe0b2;
+            color: #555;
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .badge-easy {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-hard {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin: 10px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            .content {
+                padding: 20px;
+            }
+            .section h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 React Events & Forms</h1>
+            <p>Day 12-13: Complete Interactive Guide</p>
+        </header>
+
+        <div class="content">
+            <!-- Section 1: Synthetic Events -->
+            <div class="section">
+                <h2>1. Synthetic Events</h2>
+                <div class="explanation">
+                    <p><strong>Synthetic Events kya hain?</strong> React apne khud ke event system use karta hai jo browser ke native events ko wrap karta hai. Isko <span class="highlight">SyntheticEvent</span> kehte hain.</p>
+                    <p><strong>Kyun use karte hain?</strong> Cross-browser compatibility ke liye. Sabhi browsers mein same behavior milta hai.</p>
+                </div>
+
+                <div class="demo-box">
+                    <div class="demo-title">Interactive Demo: Event Properties</div>
+                    <button id="syntheticBtn">Click Me!</button>
+                    <div id="eventInfo" class="output-box" style="display:none; margin-top:15px;"></div>
+                </div>
+
+                <div class="code-block">
+// Synthetic Event Example
+function handleClick(e) {
+    e.preventDefault(); // Works across all browsers
+    console.log(e.type); // 'click'
+    console.log(e.target); // Button element
+    console.log(e.currentTarget); // Current element
+}</div>
+
+                <h3>Important Properties</h3>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Property</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><code>e.target</code></td>
+                        <td>Jis element pe click hua woh (actual element)</td>
+                    </tr>
+                    <tr>
+                        <td><code>e.currentTarget</code></td>
+                        <td>Jis element pe event listener laga hai woh</td>
+                    </tr>
+                    <tr>
+                        <td><code>e.preventDefault()</code></td>
+                        <td>Default behavior ko rok deta hai</td>
+                    </tr>
+                    <tr>
+                        <td><code>e.stopPropagation()</code></td>
+                        <td>Event bubbling ko rok deta hai</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Section 2: Event Binding -->
+            <div class="section">
+                <h2>2. Event Binding</h2>
+                <div class="explanation">
+                    <p><strong>Event Binding</strong> matlab event handlers ko component ke saath connect karna. React mein events ko camelCase mein likhte hain jaise <span class="highlight">onClick</span>, <span class="highlight">onChange</span>, etc.</p>
+                </div>
+
+                <div class="demo-box">
+                    <div class="demo-title">Interactive Demo: Different Binding Methods</div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button id="method1">Method 1: Inline</button>
+                        <button id="method2">Method 2: Arrow</button>
+                        <button id="method3">Method 3: Bind</button>
+                    </div>
+                    <div id="bindingOutput" class="output-box" style="margin-top:15px;"></div>
+                </div>
+
+                <div class="code-block">
+// Method 1: Inline Arrow Function
+&lt;button onClick={(e) => handleClick(e)}&gt;Click&lt;/button&gt;
+
+// Method 2: Arrow Function Property
+handleClick = (e) => {
+    console.log(this); // 'this' automatically bound
+}
+
+// Method 3: Bind in Constructor
+constructor() {
+    this.handleClick = this.handleClick.bind(this);
+}</div>
+            </div>
+
+            <!-- Section 3: Controlled vs Uncontrolled -->
+            <div class="section">
+                <h2>3. Controlled vs Uncontrolled Components</h2>
+                
+                <table class="comparison-table">
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Controlled Components</th>
+                        <th>Uncontrolled Components</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Source</strong></td>
+                        <td>React state se control hota hai</td>
+                        <td>DOM khud manage karta hai</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Value Access</strong></td>
+                        <td>State se directly milta hai</td>
+                        <td>Ref use karke DOM se lena padta hai</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Validation</strong></td>
+                        <td>Real-time validation easy hai</td>
+                        <td>Submit time pe hi validate kar sakte hain</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Usage</strong></td>
+                        <td>Most cases mein recommended</td>
+                        <td>Simple forms ya file inputs ke liye</td>
+                    </tr>
+                </table>
+
+                <h3>Controlled Component Demo</h3>
+                <div class="demo-box">
+                    <div class="demo-title">Live Example: Controlled Input</div>
+                    <input type="text" id="controlledInput" placeholder="Type something...">
+                    <div id="controlledOutput" class="output-box">
+                        <strong>Current Value:</strong> <span id="controlledValue">""</span><br>
+                        <strong>Character Count:</strong> <span id="charCount">0</span>
+                    </div>
+                </div>
+
+                <div class="code-block">
+// Controlled Component
+const [value, setValue] = useState('');
+
+&lt;input 
+    value={value}
+    onChange={(e) => setValue(e.target.value)}
+/&gt;</div>
+
+                <h3>Uncontrolled Component Demo</h3>
+                <div class="demo-box">
+                    <div class="demo-title">Live Example: Uncontrolled Input</div>
+                    <input type="text" id="uncontrolledInput" placeholder="Type something...">
+                    <button id="getUncontrolledValue">Get Value</button>
+                    <div id="uncontrolledOutput" class="output-box" style="display:none;">
+                        <strong>Retrieved Value:</strong> <span id="uncontrolledValue"></span>
+                    </div>
+                </div>
+
+                <div class="code-block">
+// Uncontrolled Component
+const inputRef = useRef(null);
+
+&lt;input ref={inputRef} /&gt;
+
+// Get value when needed
+const value = inputRef.current.value;</div>
+            </div>
+
+            <!-- Section 4: Form Validation -->
+            <div class="section">
+                <h2>4. Form Validation Patterns</h2>
+                <div class="explanation">
+                    <p><strong>Form Validation</strong> zaroori hai taaki user correct data enter kare. Validation teen types ka hota hai:</p>
+                    <ul style="margin-left: 30px; margin-top: 10px;">
+                        <li><strong>Client-side validation:</strong> Browser mein hi check karo</li>
+                        <li><strong>Real-time validation:</strong> Har keystroke pe validate karo</li>
+                        <li><strong>Submit-time validation:</strong> Form submit hone pe check karo</li>
+                    </ul>
+                </div>
+
+                <div class="demo-box">
+                    <div class="demo-title">Interactive Form with Validation</div>
+                    <form id="validationForm">
+                        <div class="form-group">
+                            <label>Name (Required, min 3 characters)</label>
+                            <input type="text" id="userName" name="name">
+                            <div id="nameError" class="error"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email (Valid email required)</label>
+                            <input type="email" id="userEmail" name="email">
+                            <div id="emailError" class="error"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password (Min 6 characters, 1 number required)</label>
+                            <input type="password" id="userPassword" name="password">
+                            <div id="passwordError" class="error"></div>
+                        </div>
+
+                        <button type="submit">Submit Form</button>
+                    </form>
+                    <div id="formSuccess" class="success" style="display:none; margin-top:15px;"></div>
+                </div>
+
+                <div class="code-block">
+// Validation Function Example
+const validateForm = (values) => {
+    const errors = {};
+    
+    if (!values.name || values.name.length < 3) {
+        errors.name = 'Name must be at least 3 characters';
+    }
+    
+    if (!values.email || !/\S+@\S+\.\S+/.test(values.email)) {
+        errors.email = 'Valid email required';
+    }
+    
+    return errors;
+}</div>
+            </div>
+
+            <!-- Section 5: Input Management -->
+            <div class="section">
+                <h2>5. Input Management for Large Forms</h2>
+                <div class="explanation">
+                    <p><strong>Large forms</strong> manage karna challenging ho sakta hai. Har input ke liye alag state banana efficient nahi hai. Solution: Ek single object mein saare values rakhna.</p>
+                </div>
+
+                <div class="demo-box">
+                    <div class="demo-title">Large Form Example</div>
+                    <form id="largeForm">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" name="firstName" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" name="lastName" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" name="phone" class="form-input">
+                        </div>
+
+                        <button type="button" id="showFormData">Show Form Data</button>
+                    </form>
+                    <div id="formDataOutput" class="output-box" style="display:none; margin-top:15px;"></div>
+                </div>
+
+                <div class="code-block">
+// Single Object State Pattern
+const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: ''
+});
+
+// Generic onChange Handler
+const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+        ...prev,
+        [name]: value
+    }));
+};</div>
+            </div>
+
+            <!-- Section 6: Checkboxes, Radios, Selects -->
+            <div class="section">
+                <h2>6. Handling Checkboxes, Radios & Selects</h2>
+
+                <h3>Checkboxes</h3>
+                <div class="demo-box">
+                    <div class="demo-title">Multiple Selection with Checkboxes</div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="skills" value="React"> React</label>
+                        <label><input type="checkbox" name="skills" value="Vue"> Vue</label>
+                        <label><input type="checkbox" name="skills" value="Angular"> Angular</label>
+                        <label><input type="checkbox" name="skills" value="Node"> Node.js</label>
+                    </div>
+                    <div id="checkboxOutput" class="output-box">
+                        <strong>Selected Skills:</strong> <span id="selectedSkills">None</span>
+                    </div>
+                </div>
+
+                <div class="code-block">
+// Checkbox Handler
+const [skills, setSkills] = useState([]);
+
+const handleCheckbox = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+        setSkills([...skills, value]);
+    } else {
+        setSkills(skills.filter(s => s !== value));
+    }
+};</div>
+
+                <h3>Radio Buttons</h3>
+                <div class="demo-box">
+                    <div class="demo-title">Single Selection with Radio Buttons</div>
+                    <div class="radio-group">
+                        <label><input type="radio" name="experience" value="beginner"> Beginner</label>
+                        <label><input type="radio" name="experience" value="intermediate"> Intermediate</label>
+                        <label><input type="radio" name="experience" value="advanced"> Advanced</label>
+                    </div>
+                    <div id="radioOutput" class="output-box">
+                        <strong>Selected Level:</strong> <span id="selectedLevel">None</span>
+                    </div>
+                </div>
+
+                <h3>Select Dropdown</h3>
+                <div class="demo-box">
+                    <div class="demo-title">Dropdown Selection</div>
+                    <select id="countrySelect">
+                        <option value="">Select Country</option>
+                        <option value="india">India</option>
+                        <option value="usa">USA</option>
+                        <option value="uk">UK</option>
+                        <option value="canada">Canada</option>
+                    </select>
+                    <div id="selectOutput" class="output-box">
+                        <strong>Selected Country:</strong> <span id="selectedCountry">None</span>
+                    </div>
+                </div>
+
+                <div class="code-block">
+// Radio Handler
+const [level, setLevel] = useState('');
+&lt;input 
+    type="radio" 
+    checked={level === 'beginner'}
+    onChange={(e) => setLevel(e.target.value)}
+/&gt;
+
+// Select Handler
+const [country, setCountry] = useState('');
+&lt;select value={country} onChange={(e) => setCountry(e.target.value)}&gt;
+    &lt;option value="india"&gt;India&lt;/option&gt;
+&lt;/select&gt;</div>
+            </div>
+
+            <!-- Section 7: Reusable Input Components -->
+            <div class="section">
+                <h2>7. Reusable Input Components</h2>
+                <div class="explanation">
+                    <p><strong>Reusable components</strong> banane se code DRY (Don't Repeat Yourself) rehta hai. Ek baar component banao aur kahin bhi use karo!</p>
+                </div>
+
+                <div class="demo-box">
+                    <div class="demo-title">Custom Input Component Demo</div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="reusableInput1" placeholder="Enter username">
+                        <div id="reusableError1" class="error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="reusableInput2" placeholder="Enter password">
+                        <div id="reusableError2" class="error"></div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+// Reusable Input Component
+function CustomInput({ label, type, value, onChange, error }) {
+    return (
+        &lt;div className="form-group"&gt;
+            &lt;label&gt;{label}&lt;/label&gt;
+            &lt;input 
+                type={type}
+                value={value}
+                onChange={onChange}
+            /&gt;
+            {error && &lt;div className="error"&gt;{error}&lt;/div&gt;}
+        &lt;/div&gt;
+    );
+}
+
+// Usage
+&lt;CustomInput 
+    label="Username"
+    type="text"
+    value={username}
+    onChange={(e) => setUsername(e.target.value)}
+    error={errors.username}
+/&gt;</div>
+            </div>
+
+            <!-- Section 8: Formik & Yup -->
+            <div class="section">
+                <h2>8. Formik + Yup Introduction</h2>
+                <div class="explanation">
+                    <p><strong>Formik</strong> ek popular library hai jo forms ko manage karne mein madad karti hai. Yeh boilerplate code ko kam kar deti hai.</p>
+                    <p><strong>Yup</strong> ek schema validation library hai jo Formik ke saath bahut achhe se kaam karti hai.</p>
+                </div>
+
+                <h3>Why Use Formik?</h3>
+                <div style="background: #e8f5e9; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <ul style="margin-left: 30px;">
+                        <li>✅ Form state management automatic</li>
+                        <li>✅ Validation ko simple bana deta hai</li>
+                        <li>✅ Error handling built-in hai</li>
+                        <li>✅ Less code likhna padta hai</li>
+                        <li>✅ Form submission ko handle karna easy hai</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+// Without Formik (More Code)
+const [values, setValues] = useState({});
+const [errors, setErrors] = useState({});
+const [touched, setTouched] = useState({});
+
+const handleChange = (e) => { /* ... */ };
+const handleBlur = (e) => { /* ... */ };
+const handleSubmit = (e) => { /* ... */ };
+const validate = () => { /* ... */ };
+
+// With Formik (Less Code)
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
+const formik = useFormik({
+    initialValues: { email: '', password: '' },
+    validationSchema: Yup.object({
+        email: Yup.string()
+            .email('Invalid email')
+            .required('Required'),
+        password: Yup.string()
+            .min(6, 'Must be 6 characters')
+            .required('Required')
+    }),
+    onSubmit: values => {
+        console.log(values);
+    }
+});</div>
+
+                <h3>Yup Validation Schema</h3>
+                <div class="code-block">
+// Common Yup Validations
+const schema = Yup.object({
+    // String validations
+    name: Yup.string()
+        .required('Name required hai')
+        .min(3, 'Minimum 3 characters chahiye')
+        .max(50, 'Maximum 50 characters tak'),
+    
+    // Email validation
+    email: Yup.string()
+        .email('Valid email daalo')
+        .required('Email required hai'),
+    
+    // Number validation
+    age: Yup.number()
+        .positive('Positive number hona chahiye')
+        .integer('Integer hona chahiye')
+        .min(18, '18 se kam nahi')
+        .required('Age required hai'),
+    
+    // Array validation
+    skills: Yup.array()
+        .min(1, 'Kam se kam 1 skill select karo')
+        .required('Skills required hain'),
+    
+    // Custom validation
+    password: Yup.string()
+        .matches(/[0-9]/, 'Password mein number hona chahiye')
+        .required('Password required hai')
+});</div>
+
+                <div class="demo-box">
+                    <div class="demo-title">Formik-Style Form Demo</div>
+                    <form id="formikStyleForm">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="formikEmail" name="email">
+                            <div id="formikEmailError" class="error"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="formikPassword" name="password">
+                            <div id="formikPasswordError" class="error"></div>
+                        </div>
+
+                        <button type="submit">Submit with Validation</button>
+                    </form>
+                    <div id="formikSuccess" class="success" style="display:none; margin-top:15px;"></div>
+                </div>
+            </div>
+
+            <!-- Interview Questions -->
+            <div class="interview-section">
+                <h2 style="color: #f57c00; text-align: center; margin-bottom: 30px;">🎯 Interview Questions</h2>
+                
+                <div class="question" onclick="toggleAnswer(this)">
+                    <h4>Q1: What are Synthetic Events in React? Why are they used? <span class="badge badge-easy">Easy</span></h4>
+                    <div class="answer">
+                        <strong>Answer:</strong> Synthetic Events React ke cross-browser wrapper hain native browser events ke around. React apna khud ka event system use karta hai jo consistent behavior provide karta hai sabhi browsers mein. <br><br>
+                        <strong>Key Points:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>Cross-browser compatibility ensure karta hai</li>
+                            <li>Event pooling ke through performance optimize karta hai</li>
+                            <li>Same API milta hai har browser mein</li>
+                            <li>Native event ko wrap karke consistent interface deta hai</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(this)">
+                    <h4>Q2: Controlled vs Uncontrolled Components mein kya difference hai? <span class="badge badge-medium">Medium</span></h4>
+                    <div class="answer">
+                        <strong>Answer:</strong> <br><br>
+                        <strong>Controlled Components:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>React state input ki value ko control karta hai</li>
+                            <li>Har change pe state update hota hai</li>
+                            <li>Real-time validation easy hai</li>
+                            <li>Example: <code>&lt;input value={state} onChange={handler} /&gt;</code></li>
+                        </ul>
+                        <strong>Uncontrolled Components:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>DOM khud data manage karta hai</li>
+                            <li>Ref use karke value access karte hain</li>
+                            <li>Simple forms ke liye suitable</li>
+                            <li>Example: <code>&lt;input ref={inputRef} /&gt;</code></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(this)">
+                    <h4>Q3: How do you handle multiple inputs in a single onChange handler? <span class="badge badge-medium">Medium</span></h4>
+                    <div class="answer">
+                        <strong>Answer:</strong> Ek single object state use karte hain aur computed property name use karke dynamic key update karte hain:<br><br>
+                        <code style="background: #f5f5f5; padding: 10px; display: block; border-radius: 5px;">
+const [formData, setFormData] = useState({name: '', email: ''});<br><br>
+const handleChange = (e) => {<br>
+&nbsp;&nbsp;const {name, value} = e.target;<br>
+&nbsp;&nbsp;setFormData(prev => ({...prev, [name]: value}));<br>
+};<br><br>
+&lt;input name="name" onChange={handleChange} /&gt;<br>
+&lt;input name="email" onChange={handleChange} /&gt;
+                        </code>
+                        <br>
+                        <strong>Benefits:</strong> Less code, scalable, aur easy to maintain.
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(this)">
+                    <h4>Q4: What is event bubbling and how do you stop it in React? <span class="badge badge-medium">Medium</span></h4>
+                    <div class="answer">
+                        <strong>Answer:</strong> Event bubbling ek mechanism hai jismein events child element se parent element tak propagate hote hain. Jab aap child pe click karte ho, pehle child ka handler chalega, phir parent ka.<br><br>
+                        <strong>Stop karne ke tarike:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li><code>e.stopPropagation()</code> - Event ko parent tak jane se rokta hai</li>
+                            <li><code>e.preventDefault()</code> - Default browser behavior rokta hai</li>
+                        </ul>
+                        <code style="background: #f5f5f5; padding: 10px; display: block; border-radius: 5px;">
+const handleClick = (e) => {<br>
+&nbsp;&nbsp;e.stopPropagation(); // Parent handler nahi chalega<br>
+&nbsp;&nbsp;console.log('Only child handler runs');<br>
+};
+                        </code>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(this)">
+                    <h4>Q5: Why is Formik used and what problems does it solve? <span class="badge badge-easy">Easy</span></h4>
+                    <div class="answer">
+                        <strong>Answer:</strong> Formik ek React form library hai jo form management ko simple banati hai.<br><br>
+                        <strong>Problems it solves:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>State Management:</strong> Form values, errors, touched fields automatically manage karta hai</li>
+                            <li><strong>Validation:</strong> Built-in validation support with Yup integration</li>
+                            <li><strong>Boilerplate:</strong> Repetitive code ko reduce karta hai</li>
+                            <li><strong>Submission:</strong> Form submission ko handle karna easy ho jata hai</li>
+                            <li><strong>Error Handling:</strong> Error display aur management built-in hai</li>
+                        </ul>
+                        <strong>Without Formik:</strong> 50-60 lines code<br>
+                        <strong>With Formik:</strong> 15-20 lines code
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(this)">
+                    <h4>Q6: How do you validate forms in React? Explain different approaches. <span class="badge badge-hard">Hard</span></h4>
+                    <div class="answer">
+                        <strong>Answer:</strong> React mein form validation ke multiple approaches hain:<br><br>
+                        
+                        <strong>1. Manual Validation:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>Custom validation functions likhna</li>
+                            <li>onChange ya onSubmit pe validate karna</li>
+                            <li>Full control milta hai but boilerplate code zyada</li>
+                        </ul>
+                        
+                        <strong>2. HTML5 Validation:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>Built-in attributes: required, pattern, min, max</li>
+                            <li>Quick implementation but limited customization</li>
+                        </ul>
+                        
+                        <strong>3. Schema-based Validation (Yup):</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>Declarative validation rules</li>
+                            <li>Reusable schemas</li>
+                            <li>Complex validations easily possible</li>
+                        </ul>
+                        
+                        <strong>4. Real-time vs Submit-time:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>Real-time:</strong> Har keystroke pe validate (better UX)</li>
+                            <li><strong>Submit-time:</strong> Form submit pe validate (better performance)</li>
+                            <li><strong>On Blur:</strong> Field leave karne pe validate (balanced approach)</li>
+                        </ul>
+                        
+                        <strong>Best Practice:</strong> Formik + Yup combination sabse popular hai kyunki yeh clean, maintainable aur powerful hai.
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(this)">
+                    <h4>Q7: What are the best practices for handling large forms with many inputs? <span class="badge badge-hard">Hard</span></h4>
+                    <div class="answer">
+                        <strong>Answer:</strong> Large forms ke liye efficient strategies:<br><br>
+                        
+                        <strong>1. Single State Object:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>Saare form values ek object mein store karo</li>
+                            <li>Generic onChange handler use karo with computed property names</li>
+                        </ul>
+                        
+                        <strong>2. Form Breakdown:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>Large form ko smaller sections mein divide karo</li>
+                            <li>Multi-step forms banao with progress indicator</li>
+                            <li>Lazy loading for better initial load time</li>
+                        </ul>
+                        
+                        <strong>3. Reusable Components:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>Custom input components banao (FormInput, FormSelect, etc.)</li>
+                            <li>Validation logic ko centralize karo</li>
+                        </ul>
+                        
+                        <strong>4. Performance Optimization:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>Debouncing for expensive validations</li>
+                            <li>React.memo() for input components</li>
+                            <li>useCallback for event handlers</li>
+                            <li>Field-level validation instead of form-level</li>
+                        </ul>
+                        
+                        <strong>5. State Management:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>Complex forms ke liye Context API ya Redux use karo</li>
+                            <li>Form state ko global banana for persistence</li>
+                        </ul>
+                        
+                        <strong>6. Libraries:</strong>
+                        <ul style="margin-left: 20px;">
+                            <li>Formik ya React Hook Form for complex scenarios</li>
+                            <li>Yup for schema validation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px; margin-top: 40px;">
+                <h3>🎉 Congratulations!</h3>
+                <p style="font-size: 1.1em;">Aapne React Events aur Forms ki complete understanding gain kar li hai!</p>
+                <p>Practice karte raho aur real projects mein implement karo! 🚀</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Synthetic Events Demo
+        document.getElementById('syntheticBtn').addEventListener('click', function(e) {
+            const info = document.getElementById('eventInfo');
+            info.style.display = 'block';
+            info.innerHTML = `
+                <strong>Event Details:</strong><br>
+                • Type: ${e.type}<br>
+                • Target: ${e.target.tagName}<br>
+                • TimeStamp: ${e.timeStamp}<br>
+                • Button Clicked: ${e.button === 0 ? 'Left' : 'Other'}<br>
+                • Coordinates: (${e.clientX}, ${e.clientY})
+            `;
+        });
+
+        // Event Binding Demo
+        let bindingCounter = 0;
+        const methods = {
+            method1: () => {
+                bindingCounter++;
+                document.getElementById('bindingOutput').innerHTML = 
+                    `<strong>Method 1 (Inline Arrow):</strong> Called ${bindingCounter} times<br>
+                     ✅ Simple aur quick<br>
+                     ❌ Har render pe new function create hota hai`;
+            },
+            method2: () => {
+                bindingCounter++;
+                document.getElementById('bindingOutput').innerHTML = 
+                    `<strong>Method 2 (Arrow Property):</strong> Called ${bindingCounter} times<br>
+                     ✅ 'this' automatically bound<br>
+                     ✅ Performance better than inline`;
+            },
+            method3: () => {
+                bindingCounter++;
+                document.getElementById('bindingOutput').innerHTML = 
+                    `<strong>Method 3 (Bind in Constructor):</strong> Called ${bindingCounter} times<br>
+                     ✅ Traditional approach<br>
+                     ✅ Function ek baar hi create hota hai`;
+            }
+        };
+
+        document.getElementById('method1').addEventListener('click', methods.method1);
+        document.getElementById('method2').addEventListener('click', methods.method2);
+        document.getElementById('method3').addEventListener('click', methods.method3);
+
+        // Controlled Input Demo
+        document.getElementById('controlledInput').addEventListener('input', function(e) {
+            const value = e.target.value;
+            document.getElementById('controlledValue').textContent = `"${value}"`;
+            document.getElementById('charCount').textContent = value.length;
+        });
+
+        // Uncontrolled Input Demo
+        document.getElementById('getUncontrolledValue').addEventListener('click', function() {
+            const value = document.getElementById('uncontrolledInput').value;
+            const output = document.getElementById('uncontrolledOutput');
+            output.style.display = 'block';
+            document.getElementById('uncontrolledValue').textContent = `"${value}"`;
+        });
+
+        // Form Validation Demo
+        document.getElementById('validationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('userName').value;
+            const email = document.getElementById('userEmail').value;
+            const password = document.getElementById('userPassword').value;
+            
+            let isValid = true;
+            
+            // Name validation
+            if (!name || name.length < 3) {
+                document.getElementById('nameError').textContent = 'Name must be at least 3 characters';
+                isValid = false;
+            } else {
+                document.getElementById('nameError').textContent = '';
+            }
+            
+            // Email validation
+            const emailRegex = /\S+@\S+\.\S+/;
+            if (!email || !emailRegex.test(email)) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email';
+                isValid = false;
+            } else {
+                document.getElementById('emailError').textContent = '';
+            }
+            
+            // Password validation
+            const passwordRegex = /^(?=.*\d).{6,}$/;
+            if (!password || !passwordRegex.test(password)) {
+                document.getElementById('passwordError').textContent = 'Password must be at least 6 characters with 1 number';
+                isValid = false;
+            } else {
+                document.getElementById('passwordError').textContent = '';
+            }
+            
+            if (isValid) {
+                document.getElementById('formSuccess').style.display = 'block';
+                document.getElementById('formSuccess').textContent = '✅ Form submitted successfully!';
+                setTimeout(() => {
+                    document.getElementById('validationForm').reset();
+                    document.getElementById('formSuccess').style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        // Large Form Demo
+        const formDataState = {};
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('input', function(e) {
+                formDataState[e.target.name] = e.target.value;
+            });
+        });
+
+        document.getElementById('showFormData').addEventListener('click', function() {
+            const output = document.getElementById('formDataOutput');
+            output.style.display = 'block';
+            output.innerHTML = '<strong>Form Data Object:</strong><br>' + 
+                JSON.stringify(formDataState, null, 2).replace(/\n/g, '<br>').replace(/ /g, '&nbsp;');
+        });
+
+        // Checkbox Demo
+        const selectedSkills = [];
+        document.querySelectorAll('input[name="skills"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function(e) {
+                if (e.target.checked) {
+                    selectedSkills.push(e.target.value);
+                } else {
+                    const index = selectedSkills.indexOf(e.target.value);
+                    if (index > -1) selectedSkills.splice(index, 1);
+                }
+                document.getElementById('selectedSkills').textContent = 
+                    selectedSkills.length > 0 ? selectedSkills.join(', ') : 'None';
+            });
+        });
+
+        // Radio Demo
+        document.querySelectorAll('input[name="experience"]').forEach(radio => {
+            radio.addEventListener('change', function(e) {
+                document.getElementById('selectedLevel').textContent = e.target.value;
+            });
+        });
+
+        // Select Demo
+        document.getElementById('countrySelect').addEventListener('change', function(e) {
+            document.getElementById('selectedCountry').textContent = 
+                e.target.value || 'None';
+        });
+
+        // Reusable Input Demo with validation
+        document.getElementById('reusableInput1').addEventListener('input', function(e) {
+            const error = document.getElementById('reusableError1');
+            if (e.target.value.length < 3 && e.target.value.length > 0) {
+                error.textContent = 'Username must be at least 3 characters';
+            } else {
+                error.textContent = '';
+            }
+        });
+
+        document.getElementById('reusableInput2').addEventListener('input', function(e) {
+            const error = document.getElementById('reusableError2');
+            if (e.target.value.length < 6 && e.target.value.length > 0) {
+                error.textContent = 'Password must be at least 6 characters';
+            } else {
+                error.textContent = '';
+            }
+        });
+
+        // Formik Style Form Demo
+        document.getElementById('formikStyleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('formikEmail').value;
+            const password = document.getElementById('formikPassword').value;
+            
+            let isValid = true;
+            
+            // Email validation
+            if (!email || !/\S+@\S+\.\S+/.test(email)) {
+                document.getElementById('formikEmailError').textContent = 'Valid email required';
+                isValid = false;
+            } else {
+                document.getElementById('formikEmailError').textContent = '';
+            }
+            
+            // Password validation
+            if (!password || password.length < 6 || !/\d/.test(password)) {
+                document.getElementById('formikPasswordError').textContent = 'Password must be 6+ chars with 1 number';
+                isValid = false;
+            } else {
+                document.getElementById('formikPasswordError').textContent = '';
+            }
+            
+            if (isValid) {
+                document.getElementById('formikSuccess').style.display = 'block';
+                document.getElementById('formikSuccess').textContent = '✅ Form validated successfully! Data: ' + 
+                    JSON.stringify({email, password: '***'});
+            }
+        });
+
+        // Toggle Answer Function
+        function toggleAnswer(element) {
+            const answer = element.querySelector('.answer');
+            answer.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z-Index Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        
+        .container {
+            position: relative;
+            height: 400px;
+            background: white;
+            border: 2px solid #333;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .box {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .box:hover {
+            transform: scale(1.1);
+        }
+        
+        .red-box {
+            background: #ff6b6b;
+            top: 50px;
+            left: 50px;
+            z-index: 1;
+        }
+        
+        .blue-box {
+            background: #4ecdc4;
+            top: 100px;
+            left: 100px;
+            z-index: 2;
+        }
+        
+        .green-box {
+            background: #45b7d1;
+            top: 150px;
+            left: 150px;
+            z-index: 3;
+        }
+        
+        .yellow-box {
+            background: #f9ca24;
+            top: 200px;
+            left: 200px;
+            z-index: 4;
+        }
+        
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+        }
+        
+        .control-group {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .control-group label {
+            font-weight: bold;
+            min-width: 80px;
+        }
+        
+        input[type="range"] {
+            width: 200px;
+        }
+        
+        .z-value {
+            font-weight: bold;
+            color: #333;
+            min-width: 30px;
+        }
+        
+        .info {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .example-section {
+            margin: 30px 0;
+        }
+        
+        .example-section h3 {
+            color: #333;
+            border-bottom: 2px solid #4caf50;
+            padding-bottom: 5px;
+        }
+        
+        /* Negative z-index example */
+        .negative-container {
+            position: relative;
+            background: #fff;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .background-box {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: #ff9999;
+            top: 10px;
+            left: 10px;
+            z-index: -1;
+            border-radius: 5px;
+        }
+        
+        .content-text {
+            position: relative;
+            z-index: 1;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 CSS Z-Index Interactive Demo</h1>
+    
+    <div class="info">
+        <strong>💡 How it works:</strong> Z-index controls which elements appear on top of others. Higher numbers = closer to you!
+    </div>
+    
+    <div class="example-section">
+        <h3>📚 Interactive Stacking Example</h3>
+        <p>Use the sliders below to change each box's z-index and see how they stack!</p>
+        
+        <div class="container">
+            <div class="box red-box" id="redBox">
+                Red Box<br>z-index: <span id="redValue">1</span>
+            </div>
+            <div class="box blue-box" id="blueBox">
+                Blue Box<br>z-index: <span id="blueValue">2</span>
+            </div>
+            <div class="box green-box" id="greenBox">
+                Green Box<br>z-index: <span id="greenValue">3</span>
+            </div>
+            <div class="box yellow-box" id="yellowBox">
+                Yellow Box<br>z-index: <span id="yellowValue">4</span>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label>Red Box:</label>
+                <input type="range" id="redSlider" min="-5" max="10" value="1">
+                <span class="z-value" id="redDisplay">1</span>
+            </div>
+            <div class="control-group">
+                <label>Blue Box:</label>
+                <input type="range" id="blueSlider" min="-5" max="10" value="2">
+                <span class="z-value" id="blueDisplay">2</span>
+            </div>
+            <div class="control-group">
+                <label>Green Box:</label>
+                <input type="range" id="greenSlider" min="-5" max="10" value="3">
+                <span class="z-value" id="greenDisplay">3</span>
+            </div>
+            <div class="control-group">
+                <label>Yellow Box:</label>
+                <input type="range" id="yellowSlider" min="-5" max="10" value="4">
+                <span class="z-value" id="yellowDisplay">4</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="example-section">
+        <h3>📖 Negative Z-Index Example</h3>
+        <p>Elements with negative z-index go <strong>behind</strong> their parent container:</p>
+        
+        <div class="negative-container">
+            <div class="background-box"></div>
+            <div class="content-text">
+                This text has z-index: 1<br>
+                The red box behind has z-index: -1
+            </div>
+        </div>
+    </div>
+    
+    <div class="info">
+        <strong>🔍 Key Rules:</strong>
+        <ul style="margin: 10px 0; padding-left: 20px;">
+            <li>Only works on positioned elements (position: relative, absolute, fixed, sticky)</li>
+            <li>Higher z-index = appears on top</li>
+            <li>Default z-index is usually 0</li>
+            <li>Negative z-index sends elements behind their parent</li>
+            <li>Elements with the same z-index stack based on HTML order (last one on top)</li>
+        </ul>
+    </div>
+
+    <script>
+        // Get all sliders and elements
+        const redSlider = document.getElementById('redSlider');
+        const blueSlider = document.getElementById('blueSlider');
+        const greenSlider = document.getElementById('greenSlider');
+        const yellowSlider = document.getElementById('yellowSlider');
+        
+        const redBox = document.getElementById('redBox');
+        const blueBox = document.getElementById('blueBox');
+        const greenBox = document.getElementById('greenBox');
+        const yellowBox = document.getElementById('yellowBox');
+        
+        const redDisplay = document.getElementById('redDisplay');
+        const blueDisplay = document.getElementById('blueDisplay');
+        const greenDisplay = document.getElementById('greenDisplay');
+        const yellowDisplay = document.getElementById('yellowDisplay');
+        
+        const redValue = document.getElementById('redValue');
+        const blueValue = document.getElementById('blueValue');
+        const greenValue = document.getElementById('greenValue');
+        const yellowValue = document.getElementById('yellowValue');
+        
+        // Update functions
+        function updateRed() {
+            const value = redSlider.value;
+            redBox.style.zIndex = value;
+            redDisplay.textContent = value;
+            redValue.textContent = value;
+        }
+        
+        function updateBlue() {
+            const value = blueSlider.value;
+            blueBox.style.zIndex = value;
+            blueDisplay.textContent = value;
+            blueValue.textContent = value;
+        }
+        
+        function updateGreen() {
+            const value = greenSlider.value;
+            greenBox.style.zIndex = value;
+            greenDisplay.textContent = value;
+            greenValue.textContent = value;
+        }
+        
+        function updateYellow() {
+            const value = yellowSlider.value;
+            yellowBox.style.zIndex = value;
+            yellowDisplay.textContent = value;
+            yellowValue.textContent = value;
+        }
+        
+        // Add event listeners
+        redSlider.addEventListener('input', updateRed);
+        blueSlider.addEventListener('input', updateBlue);
+        greenSlider.addEventListener('input', updateGreen);
+        yellowSlider.addEventListener('input', updateYellow);
+        
+        // Add click handlers for boxes to bring them to front
+        redBox.addEventListener('click', () => {
+            redSlider.value = 10;
+            updateRed();
+        });
+        
+        blueBox.addEventListener('click', () => {
+            blueSlider.value = 10;
+            updateBlue();
+        });
+        
+        greenBox.addEventListener('click', () => {
+            greenSlider.value = 10;
+            updateGreen();
+        });
+        
+        yellowBox.addEventListener('click', () => {
+            yellowSlider.value = 10;
+            updateYellow();
+        });
+    </script>
+</body>
+</html>

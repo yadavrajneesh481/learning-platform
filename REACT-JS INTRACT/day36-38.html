@@ -1,0 +1,3455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Performance Optimization - Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '⚡';
+            position: absolute;
+            font-size: 300px;
+            opacity: 0.1;
+            top: -50px;
+            right: -50px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        header h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.4em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 20px;
+            border-left: 8px solid #667eea;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin: 30px 0 20px 0;
+            font-size: 1.6em;
+        }
+
+        .hinglish {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 6px solid #ffc107;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
+            font-size: 1.05em;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 30px;
+            border-radius: 15px;
+            overflow-x: auto;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            position: relative;
+            border: 2px solid #667eea;
+        }
+
+        .code-block::before {
+            content: 'CODE';
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .keyword { color: #c678dd; font-weight: bold; }
+        .string { color: #98c379; }
+        .function { color: #61afef; }
+        .comment { color: #5c6370; font-style: italic; }
+        .number { color: #d19a66; }
+        .operator { color: #56b6c2; }
+
+        .interactive-demo {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            margin: 30px 0;
+            border: 4px solid #667eea;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .demo-title {
+            font-size: 1.4em;
+            color: #667eea;
+            margin-bottom: 25px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.05em;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: #333;
+        }
+
+        .render-counter {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 15px;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .comparison-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .comparison-card.good {
+            border-color: #28a745;
+        }
+
+        .comparison-card.bad {
+            border-color: #dc3545;
+        }
+
+        .comparison-card h4 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .comparison-card.good h4 {
+            color: #28a745;
+        }
+
+        .comparison-card.bad h4 {
+            color: #dc3545;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 5px solid #667eea;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .stat-value {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 15px 0;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 1em;
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            border-left: 6px solid #0c5460;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(12, 84, 96, 0.1);
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            border-left: 6px solid #856404;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(133, 100, 4, 0.1);
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 6px solid #155724;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(21, 87, 36, 0.1);
+        }
+
+        .danger-box {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border-left: 6px solid #721c24;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(114, 28, 36, 0.1);
+        }
+
+        .profiler-display {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .profiler-metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .list-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            padding: 20px;
+            background: white;
+            margin: 20px 0;
+        }
+
+        .list-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .list-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .quiz-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 50px;
+            border-radius: 20px;
+            margin-top: 60px;
+        }
+
+        .quiz-section h2 {
+            color: white;
+            margin-bottom: 40px;
+            font-size: 2.8em;
+            text-align: center;
+        }
+
+        .question-card {
+            background: white;
+            color: #333;
+            padding: 35px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        .question-card h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .difficulty.easy { 
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724; 
+        }
+        .difficulty.medium { 
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            color: #856404; 
+        }
+        .difficulty.hard { 
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24; 
+        }
+
+        .toggle-answer {
+            margin-top: 20px;
+            padding: 14px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .toggle-answer:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .answer {
+            display: none;
+            margin-top: 25px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 6px solid #28a745;
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        .performance-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 300px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .chart-bar {
+            flex: 1;
+            margin: 0 10px;
+            background: linear-gradient(to top, #667eea 0%, #764ba2 100%);
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.8;
+            transform: translateY(-5px);
+        }
+
+        .chart-bar-label {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9em;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .chart-bar-value {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        code {
+            background: #f8f9fa;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+            font-size: 0.95em;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 15px;
+        }
+
+        li {
+            margin: 12px 0;
+        }
+
+        strong {
+            color: #667eI'll create a comprehensive interactive educational webpage about React Performance Optimization with Hinglish explanations and interactive demos!
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Performance Optimization - Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '⚡';
+            position: absolute;
+            font-size: 300px;
+            opacity: 0.1;
+            top: -50px;
+            right: -50px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        header h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.4em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 20px;
+            border-left: 8px solid #667eea;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin: 30px 0 20px 0;
+            font-size: 1.8em;
+        }
+
+        .hinglish {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 6px solid #ffc107;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
+            font-size: 1.05em;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 30px;
+            border-radius: 15px;
+            overflow-x: auto;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            position: relative;
+            border: 2px solid #667eea;
+        }
+
+        .code-block::before {
+            content: 'CODE';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-size: 0.7em;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .keyword { color: #c678dd; font-weight: bold; }
+        .string { color: #98c379; }
+        .function { color: #61afef; }
+        .comment { color: #5c6370; font-style: italic; }
+        .number { color: #d19a66; }
+        .operator { color: #56b6c2; }
+
+        .interactive-demo {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            margin: 30px 0;
+            border: 4px solid #667eea;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .demo-title {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 25px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.05em;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: #333;
+        }
+
+        .render-counter {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .comparison-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .comparison-card.good {
+            border-color: #28a745;
+        }
+
+        .comparison-card.bad {
+            border-color: #dc3545;
+        }
+
+        .comparison-card h4 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .comparison-card.good h4 {
+            color: #28a745;
+        }
+
+        .comparison-card.bad h4 {
+            color: #dc3545;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 5px solid #667eea;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .stat-value {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 15px 0;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 1.05em;
+            font-weight: 500;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            border-left: 6px solid #0c5460;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(12, 84, 96, 0.1);
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            border-left: 6px solid #856404;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(133, 100, 4, 0.1);
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 6px solid #155724;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(21, 87, 36, 0.1);
+        }
+
+        .danger-box {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border-left: 6px solid #721c24;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(114, 28, 36, 0.1);
+        }
+
+        .profiler-display {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .profiler-metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .virtual-list {
+            height: 400px;
+            overflow-y: auto;
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            background: white;
+            padding: 15px;
+        }
+
+        .list-item {
+            padding: 20px;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .list-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .quiz-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 50px;
+            border-radius: 20px;
+            margin-top: 60px;
+        }
+
+        .quiz-section h2 {
+            color: white;
+            margin-bottom: 40px;
+            font-size: 3em;
+            text-align: center;
+        }
+
+        .question-card {
+            background: white;
+            color: #333;
+            padding: 35px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        .question-card h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .difficulty.easy { 
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724; 
+        }
+        .difficulty.medium { 
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            color: #856404; 
+        }
+        .difficulty.hard { 
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24; 
+        }
+
+        .toggle-answer {
+            margin-top: 20px;
+            padding: 14px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1.05em;
+        }
+
+        .toggle-answer:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .answer {
+            display: none;
+            margin-top: 25px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 6px solid #28a745;
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        .performance-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 300px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .chart-bar {
+            flex: 1;
+            margin: 0 10px;
+            background: linear-gradient(to top, #667eea 0%, #764ba2 100%);
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.8;
+            transform: translateY(-5px);
+        }
+
+        .chart-bar-label {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9em;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .chart-bar-value {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5em;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .section {
+                padding: 25px;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        code {
+            background: #f8f9fa;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+            font-size: 0.95em;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 15px;
+        }
+
+        li {
+            margin: 12px 0;
+        }
+
+        strong {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ React Performance Optimization</h1>
+            <p>Production-Ready Performance Patterns</p>
+            <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.9;">Master the Art of Building Lightning-Fast React Apps</p>
+        </header>
+
+        <div class="content">
+            <!-- Introduction -->
+            <div class="section">
+                <h2>📚 Performance Optimization Kya Hai?</h2>
+                <div class="hinglish">
+                    <strong>Performance Optimization</strong> ka matlab hai apne React application ko itna fast banana ki user ko lag hi na pade ki kuch load ho raha hai. Yeh sirf code likhna nahi hai, balki <strong>smart code</strong> likhna hai jo unnecessary re-renders avoid kare, memory efficiently use kare, aur user experience ko smooth rakhe.
+                    <br><br>
+                    React by default bahut fast hai, lekin jab application badi ho jati hai, tab performance issues aa sakte hain. Isliye hume optimization techniques seekhni zaroori hai.
+                </div>
+
+                <h3>🎯 Performance Kyun Important Hai?</h3>
+                <ul>
+                    <li><strong>User Experience:</strong> Fast apps = Happy users = Better retention</li>
+                    <li><strong>SEO Rankings:</strong> Google slow websites ko penalize karta hai</li>
+                    <li><strong>Conversion Rates:</strong> 1 second delay = 7% conversion loss</li>
+                    <li><strong>Mobile Users:</strong> Slow networks pe bhi smooth experience</li>
+                    <li><strong>Resource Efficiency:</strong> Kam CPU aur memory usage</li>
+                </ul>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">53%</div>
+                        <div class="stat-label">Users leave if load > 3s</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">100ms</div>
+                        <div class="stat-label">Delay feels instant</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">1s</div>
+                        <div class="stat-label">User flow interrupted</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">10s</div>
+                        <div class="stat-label">User gives up</div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Real-World Impact:</strong> Amazon found that every 100ms of latency cost them 1% in sales. Pinterest reduced load time by 40% and saw 15% increase in sign-ups. Performance directly impacts business!
+                </div>
+            </div>
+
+            <!-- React.memo -->
+            <div class="section">
+                <h2>1️⃣ React.memo - Component Memoization</h2>
+                <div class="hinglish">
+                    <strong>React.memo</strong> ek Higher Order Component (HOC) hai jo component ko wrap karke uske unnecessary re-renders ko prevent karta hai. Jab parent component re-render hota hai, tab by default saare child components bhi re-render hote hain, chahe unke props change hue ho ya nahi. <code>React.memo</code> props ko compare karta hai aur agar same hain toh re-render skip kar deta hai.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Without React.memo - Har baar re-render hoga</span>
+<span class="keyword">const</span> <span class="function">ExpensiveComponent</span> = ({ data }) => {
+  console.<span class="function">log</span>(<span class="string">'ExpensiveComponent rendered'</span>);
+  
+  <span class="comment">// Heavy computation</span>
+  <span class="keyword">const</span> result = data.<span class="function">map</span>(item => {
+    <span class="comment">// Complex calculations...</span>
+    <span class="keyword">return</span> item * <span class="number">2</span>;
+  });
+  
+  <span class="keyword">return</span> &lt;div&gt;{result.<span class="function">join</span>(<span class="string">', '</span>)}&lt;/div&gt;;
+};
+
+<span class="comment">// With React.memo - Sirf jab props change ho tab re-render</span>
+<span class="keyword">const</span> <span class="function">ExpensiveComponent</span> = <span class="function">React.memo</span>(({ data }) => {
+  console.<span class="function">log</span>(<span class="string">'ExpensiveComponent rendered'</span>);
+  
+  <span class="keyword">const</span> result = data.<span class="function">map</span>(item => item * <span class="number">2</span>);
+  
+  <span class="keyword">return</span> &lt;div&gt;{result.<span class="function">join</span>(<span class="string">', '</span>)}&lt;/div&gt;;
+});
+
+<span class="comment">// Custom comparison function</span>
+<span class="keyword">const</span> <span class="function">ExpensiveComponent</span> = <span class="function">React.memo</span>(
+  ({ data, config }) => {
+    <span class="keyword">return</span> &lt;div&gt;{<span class="comment">/* Component JSX */</span>}&lt;/div&gt;;
+  },
+  (prevProps, nextProps) => {
+    <span class="comment">// Return true if props are equal (skip re-render)</span>
+    <span class="comment">// Return false if props are different (re-render)</span>
+    <span class="keyword">return</span> prevProps.data.<span class="function">length</span> === nextProps.data.<span class="function">length</span> &&
+           prevProps.config.id === nextProps.config.id;
+  }
+);
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: React.memo in Action</div>
+                    <p style="margin-bottom: 20px;">Parent component ko re-render karo aur dekho kaise React.memo unnecessary re-renders prevent karta hai:</p>
+                    
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 30px;">
+                        <button class="btn btn-primary" onclick="triggerParentRender()">Re-render Parent</button>
+                        <button class="btn btn-warning" onclick="changeChildProps()">Change Child Props</button>
+                        <button class="btn btn-danger" onclick="resetMemoDemo()">Reset</button>
+                    </div>
+
+                    <div class="comparison-grid">
+                        <div class="comparison-card bad">
+                            <h4>❌ Without React.memo</h4>
+                            <p style="margin: 15px 0;">Parent Renders: <span id="parent-renders-without" class="render-counter">0</span></p>
+                            <p>Child Renders: <span id="child-renders-without" class="render-counter">0</span></p>
+                            <p style="margin-top: 15px; color: #dc3545; font-weight: 600;">Har parent render pe child bhi render hota hai!</p>
+                        </div>
+
+                        <div class="comparison-card good">
+                            <h4>✅ With React.memo</h4>
+                            <p style="margin: 15px 0;">Parent Renders: <span id="parent-renders-with" class="render-counter">0</span></p>
+                            <p>Child Renders: <span id="child-renders-with" class="render-counter">0</span></p>
+                            <p style="margin-top: 15px; color: #28a745; font-weight: 600;">Sirf jab props change ho tab child render hota hai!</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+                        <strong>📊 Performance Savings:</strong>
+                        <div id="memo-savings" style="font-size: 1.3em; color: #667eea; margin-top: 10px; font-weight: bold;">0% renders saved</div>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ React.memo Kab Use Karein:</strong><br><br>
+                    <strong>✅ Use karo jab:</strong><br>
+                    • Component frequently re-render hota hai<br>
+                    • Component expensive computations karta hai<br>
+                    • Props rarely change hote hain<br>
+                    • Large lists mein items render kar rahe ho<br><br>
+                    
+                    <strong>❌ Use mat karo jab:</strong><br>
+                    • Component already fast hai<br>
+                    • Props har baar change hote hain<br>
+                    • Simple components jo kuch compute nahi karte<br>
+                    • Premature optimization (pehle measure karo!)
+                </div>
+            </div>
+
+            <!-- useCallback & useMemo -->
+            <div class="section">
+                <h2>2️⃣ useCallback & useMemo Deep Dive</h2>
+                <div class="hinglish">
+                    <strong>useCallback</strong> aur <strong>useMemo</strong> dono hooks hain jo values ko memoize karte hain, lekin different purposes ke liye:
+                    <br><br>
+                    • <strong>useCallback:</strong> Functions ko memoize karta hai (function reference same rehta hai)<br>
+                    • <strong>useMemo:</strong> Computed values ko memoize karta hai (expensive calculations cache karta hai)
+                </div>
+
+                <h3>useCallback - Function Memoization</h3>
+                <div class="code-block">
+<span class="comment">// Problem: Har render pe naya function create hota hai</span>
+<span class="keyword">const</span> <span class="function">ParentComponent</span> = () => {
+  <span class="keyword">const</span> [count, setCount] = <span class="function">useState</span>(<span class="number">0</span>);
+  
+  <span class="comment">// Yeh function har render pe naya ban raha hai!</span>
+  <span class="keyword">const</span> <span class="function">handleClick</span> = () => {
+    console.<span class="function">log</span>(<span class="string">'Clicked!'</span>);
+  };
+  
+  <span class="keyword">return</span> (
+    &lt;&gt;
+      &lt;button onClick={() => <span class="function">setCount</span>(count + <span class="number">1</span>)}&gt;Count: {count}&lt;/button&gt;
+      &lt;<span class="function">ChildComponent</span> onClick={handleClick} /&gt;
+    &lt;/&gt;
+  );
+};
+
+<span class="comment">// Solution: useCallback se function reference preserve karo</span>
+<span class="keyword">const</span> <span class="function">ParentComponent</span> = () => {
+  <span class="keyword">const</span> [count, setCount] = <span class="function">useState</span>(<span class="number">0</span>);
+  
+  <span class="comment">// Function sirf jab dependencies change ho tab recreate hoga</span>
+  <span class="keyword">const</span> handleClick = <span class="function">useCallback</span>(() => {
+    console.<span class="function">log</span>(<span class="string">'Clicked!'</span>);
+  }, []); <span class="comment">// Empty deps = function kabhi change nahi hoga</span>
+  
+  <span class="keyword">return</span> (
+    &lt;&gt;
+      &lt;button onClick={() => <span class="function">setCount</span>(count + <span class="number">1</span>)}&gt;Count: {count}&lt;/button&gt;
+      &lt;<span class="function">ChildComponent</span> onClick={handleClick} /&gt;
+    &lt;/&gt;
+  );
+};
+
+<span class="comment">// With dependencies</span>
+<span class="keyword">const</span> <span class="function">SearchComponent</span> = () => {
+  <span class="keyword">const</span> [query, setQuery] = <span class="function">useState</span>(<span class="string">''</span>);
+  <span class="keyword">const</span> [filter, setFilter] = <span class="function">useState</span>(<span class="string">'all'</span>);
+  
+  <span class="keyword">const</span> handleSearch = <span class="function">useCallback</span>(() => {
+    <span class="comment">// Search logic using query and filter</span>
+    <span class="function">fetchResults</span>(query, filter);
+  }, [query, filter]); <span class="comment">// Recreate jab query ya filter change ho</span>
+  
+  <span class="keyword">return</span> &lt;<span class="function">SearchResults</span> onSearch={handleSearch} /&gt;;
+};
+                </div>
+
+                <h3>useMemo - Value Memoization</h3>
+                <div class="code-block">
+<span class="comment">// Problem: Expensive calculation har render pe run hota hai</span>
+<span class="keyword">const</span> <span class="function">DataComponent</span> = ({ items }) => {
+  <span class="keyword">const</span> [filter, setFilter] = <span class="function">useState</span>(<span class="string">''</span>);
+  
+  <span class="comment">// Yeh calculation har render pe run hoga, even if items same hain!</span>
+  <span class="keyword">const</span> expensiveResult = items
+    .<span class="function">filter</span>(item => item.active)
+    .<span class="function">map</span>(item => item.value * <span class="number">2</span>)
+    .<span class="function">reduce</span>((sum, val) => sum + val, <span class="number">0</span>);
+  
+  <span class="keyword">return</span> &lt;div&gt;{expensiveResult}&lt;/div&gt;;
+};
+
+<span class="comment">// Solution: useMemo se result cache karo</span>
+<span class="keyword">const</span> <span class="function">DataComponent</span> = ({ items }) => {
+  <span class="keyword">const</span> [filter, setFilter] = <span class="function">useState</span>(<span class="string">''</span>);
+  
+  <span class="comment">// Calculation sirf jab items change ho tab run hoga</span>
+  <span class="keyword">const</span> expensiveResult = <span class="function">useMemo</span>(() => {
+    console.<span class="function">log</span>(<span class="string">'Calculating...'</span>);
+    <span class="keyword">return</span> items
+      .<span class="function">filter</span>(item => item.active)
+      .<span class="function">map</span>(item => item.value * <span class="number">2</span>)
+      .<span class="function">reduce</span>((sum, val) => sum + val, <span class="number">0</span>);
+  }, [items]); <span class="comment">// Dependency array</span>
+  
+  <span class="keyword">return</span> &lt;div&gt;{expensiveResult}&lt;/div&gt;;
+};
+
+<span class="comment">// Complex example with multiple dependencies</span>
+<span class="keyword">const</span> <span class="function">ChartComponent</span> = ({ data, config }) => {
+  <span class="keyword">const</span> chartData = <span class="function">useMemo</span>(() => {
+    <span class="comment">// Heavy data transformation</span>
+    <span class="keyword">return</span> data
+      .<span class="function">filter</span>(d => d.value > config.threshold)
+      .<span class="function">sort</span>((a, b) => b.value - a.value)
+      .<span class="function">slice</span>(<span class="number">0</span>, config.limit);
+  }, [data, config.threshold, config.limit]);
+  
+  <span class="keyword">return</span> &lt;<span class="function">Chart</span> data={chartData} /&gt;;
+};
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: useCallback vs useMemo</div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <button class="btn btn-primary" onclick="triggerHookDemo('without')">Render Without Hooks</button>
+                        <button class="btn btn-success" onclick="triggerHookDemo('with')">Render With Hooks</button>
+                        <button class="btn btn-danger" onclick="resetHookDemo()">Reset</button>
+                    </div>
+
+                    <div class="comparison-grid">
+                        <div class="comparison-card bad">
+                            <h4>❌ Without Memoization</h4>
+                            <div style="margin: 20px 0;">
+                                <p><strong>Renders:</strong> <span id="renders-without-hooks">0</span></p>
+                                <p><strong>Calculations:</strong> <span id="calcs-without-hooks">0</span></p>
+                                <p><strong>Function Creates:</strong> <span id="funcs-without-hooks">0</span></p>
+                            </div>
+                            <div style="padding: 15px; background: #f8d7da; border-radius: 8px; margin-top: 15px;">
+                                <strong>Time Taken:</strong> <span id="time-without-hooks">0ms</span>
+                            </div>
+                        </div>
+
+                        <div class="comparison-card good">
+                            <h4>✅ With useCallback & useMemo</h4>
+                            <div style="margin: 20px 0;">
+                                <p><strong>Renders:</strong> <span id="renders-with-hooks">0</span></p>
+                                <p><strong>Calculations:</strong> <span id="calcs-with-hooks">0</span></p>
+                                <p><strong>Function Creates:</strong> <span id="funcs-with-hooks">0</span></p>
+                            </div>
+                            <div style="padding: 15px; background: #d4edda; border-radius: 8px; margin-top: 15px;">
+                                <strong>Time Taken:</strong> <span id="time-with-hooks">0ms</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px;">
+                        <div class="performance-chart" id="hooks-chart">
+                            <div class="chart-bar" style="height: 0%;" id="bar-renders">
+                                <div class="chart-bar-value">0</div>
+                                <div class="chart-bar-label">Renders</div>
+                            </div>
+                            <div class="chart-bar" style="height: 0%;" id="bar-calcs">
+                                <div class="chart-bar-value">0</div>
+                                <div class="chart-bar-label">Calculations</div>
+                            </div>
+                            <div class="chart-bar" style="height: 0%;" id="bar-time">
+                                <div class="chart-bar-value">0ms</div>
+                                <div class="chart-bar-label">Time</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <strong>✅ Best Practices:</strong><br><br>
+                    <strong>useCallback use karo jab:</strong><br>
+                    • Function ko child component mein pass kar rahe ho<br>
+                    • Function dependency hai useEffect ya useMemo mein<br>
+                    • Event handlers jo frequently change nahi hote<br><br>
+                    
+                    <strong>useMemo use karo jab:</strong><br>
+                    • Expensive calculations kar rahe ho<br>
+                    • Large data transformations<br>
+                    • Complex filtering/sorting operations<br>
+                    • Object/Array creation jo child props mein jata hai
+                </div>
+            </div>
+
+            <!-- Avoiding Re-renders -->
+            <div class="section">
+                <h2>3️⃣ Avoiding Unnecessary Re-renders</h2>
+                <div class="hinglish">
+                    React mein re-renders performance ka sabse bada issue hai. Har re-render mein React component function ko execute karta hai, virtual DOM create karta hai, aur real DOM se compare karta hai. Agar yeh unnecessarily ho raha hai, toh app slow ho jata hai. Chaliye dekhte hain common causes aur solutions.
+                </div>
+
+                <h3>Common Re-render Causes</h3>
+                <div class="code-block">
+<span class="comment">// 1. State updates in parent cause child re-renders</span>
+<span class="keyword">const</span> <span class="function">Parent</span> = () => {
+  <span class="keyword">const</span> [count, setCount] = <span class="function">useState</span>(<span class="number">0</span>);
+  
+  <span class="keyword">return</span> (
+    &lt;&gt;
+      &lt;button onClick={() => <span class="function">setCount</span>(count + <span class="number">1</span>)}&gt;{count}&lt;/button&gt;
+      &lt;<span class="function">ExpensiveChild</span> /&gt; <span class="comment">{/* Unnecessarily re-renders! */}</span>
+    &lt;/&gt;
+  );
+};
+
+<span class="comment">// Solution: Move state down or use React.memo</span>
+<span class="keyword">const</span> <span class="function">Parent</span> = () => {
+  <span class="keyword">return</span> (
+    &lt;&gt;
+      &lt;<span class="function">CounterButton</span> /&gt; <span class="comment">{/* State isolated */}</span>
+      &lt;<span class="function">ExpensiveChild</span> /&gt; <span class="comment">{/* Won't re-render */}</span>
+    &lt;/&gt;
+  );
+};
+
+<span class="comment">// 2. Creating objects/arrays in render</span>
+<span class="keyword">const</span> <span class="function">BadComponent</span> = () => {
+  <span class="keyword">const</span> config = { theme: <span class="string">'dark'</span> }; <span class="comment">// New object every render!</span>
+  <span class="keyword">const</span> items = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]; <span class="comment">// New array every render!</span>
+  
+  <span class="keyword">return</span> &lt;<span class="function">Child</span> config={config} items={items} /&gt;;
+};
+
+<span class="comment">// Solution: Move outside or use useMemo</span>
+<span class="keyword">const</span> config = { theme: <span class="string">'dark'</span> }; <span class="comment">// Outside component</span>
+
+<span class="keyword">const</span> <span class="function">GoodComponent</span> = () => {
+  <span class="keyword">const</span> items = <span class="function">useMemo</span>(() => [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], []); <span class="comment">// Memoized</span>
+  
+  <span class="keyword">return</span> &lt;<span class="function">Child</span> config={config} items={items} /&gt;;
+};
+
+<span class="comment">// 3. Context updates cause all consumers to re-render</span>
+<span class="keyword">const</span> <span class="function">App</span> = () => {
+  <span class="keyword">const</span> [user, setUser] = <span class="function">useState</span>(<span class="keyword">null</span>);
+  <span class="keyword">const</span> [theme, setTheme] = <span class="function">useState</span>(<span class="string">'light'</span>);
+  
+  <span class="comment">// Problem: Har state change pe sab re-render honge</span>
+  <span class="keyword">const</span> value = { user, setUser, theme, setTheme };
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="function">AppContext.Provider</span> value={value}&gt;
+      &lt;<span class="function">Components</span> /&gt;
+    &lt;/<span class="function">AppContext.Provider</span>&gt;
+  );
+};
+
+<span class="comment">// Solution: Split contexts</span>
+<span class="keyword">const</span> <span class="function">App</span> = () => {
+  <span class="keyword">const</span> [user, setUser] = <span class="function">useState</span>(<span class="keyword">null</span>);
+  <span class="keyword">const</span> [theme, setTheme] = <span class="function">useState</span>(<span class="string">'light'</span>);
+  
+  <span class="keyword">const</span> userValue = <span class="function">useMemo</span>(() => ({ user, setUser }), [user]);
+  <span class="keyword">const</span> themeValue = <span class="function">useMemo</span>(() => ({ theme, setTheme }), [theme]);
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="function">UserContext.Provider</span> value={userValue}&gt;
+      &lt;<span class="function">ThemeContext.Provider</span> value={themeValue}&gt;
+        &lt;<span class="function">Components</span> /&gt;
+      &lt;/<span class="function">ThemeContext.Provider</span>&gt;
+    &lt;/<span class="function">UserContext.Provider</span>&gt;
+  );
+};
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: Re-render Patterns</div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <button class="btn btn-primary" onclick="testRerender('parent')">Update Parent State</button>
+                        <button class="btn btn-warning" onclick="testRerender('context')">Update Context</button>
+                        <button class="btn btn-success" onclick="testRerender('props')">Update Props</button>
+                        <button class="btn btn-danger" onclick="resetRerenderDemo()">Reset</button>
+                    </div>
+
+                    <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 25px;">
+                        <h4 style="color: #667eea; margin-bottom: 20px;">Component Tree Re-renders:</h4>
+                        <div style="font-family: monospace; line-height: 2;">
+                            <div style="padding: 10px; background: #f8f9fa; border-radius: 8px; margin: 5px 0;">
+                                📦 Parent Component - Renders: <span id="parent-renders" style="color: #667eea; font-weight: bold;">0</span>
+                            </div>
+                            <div style="margin-left: 30px;">
+                                <div style="padding: 10px; background: #f8f9fa; border-radius: 8px; margin: 5px 0;">
+                                    📦 Child A (Memoized) - Renders: <span id="child-a-renders" style="color: #28a745; font-weight: bold;">0</span>
+                                </div>
+                                <div style="padding: 10px; background: #f8f9fa; border-radius: 8px; margin: 5px 0;">
+                                    📦 Child B (Not Memoized) - Renders: <span id="child-b-renders" style="color: #dc3545; font-weight: bold;">0</span>
+                                </div>
+                                <div style="margin-left: 30px;">
+                                    <div style="padding: 10px; background: #f8f9fa; border-radius: 8px; margin: 5px 0;">
+                                        📦 Grandchild - Renders: <span id="grandchild-renders" style="color: #ffc107; font-weight: bold;">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profiler-display">
+                        <div style="color: #61afef; font-weight: bold; margin-bottom: 15px;">⚡ Performance Metrics:</div>
+                        <div class="profiler-metric">
+                            <span>Total Re-renders:</span>
+                            <span id="total-rerenders">0</span>
+                        </div>
+                        <div class="profiler-metric">
+                            <span>Prevented Re-renders:</span>
+                            <span id="prevented-rerenders" style="color: #28a745;">0</span>
+                        </div>
+                        <div class="profiler-metric">
+                            <span>Performance Gain:</span>
+                            <span id="performance-gain" style="color: #61afef;">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pattern</th>
+                            <th>Problem</th>
+                            <th>Solution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>State Lifting</strong></td>
+                            <td>Parent state changes cause all children to re-render</td>
+                            <td>Move state down, use composition, React.memo</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inline Objects</strong></td>
+                            <td>New object reference every render</td>
+                            <td>useMemo, move outside component</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inline Functions</strong></td>
+                            <td>New function reference every render</td>
+                            <td>useCallback, move outside component</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Context Updates</strong></td>
+                            <td>All consumers re-render on any context change</td>
+                            <td>Split contexts, memoize values</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Props Drilling</strong></td>
+                            <td>Intermediate components re-render unnecessarily</td>
+                            <td>Context, composition, state management</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Profiler Tool -->
+            <div class="section">
+                <h2>4️⃣ React Profiler Tool</h2>
+                <div class="hinglish">
+                    <strong>React Profiler</strong> ek built-in tool hai jo aapko batata hai ki aapka application kahan slow ho raha hai. Yeh measure karta hai ki har component kitni baar render ho raha hai, kitna time le raha hai, aur kyun render ho raha hai. Production mein performance issues identify karne ke liye yeh bahut powerful tool hai.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// React DevTools Profiler (Browser Extension)</span>
+<span class="comment">// 1. Install React DevTools extension</span>
+<span class="comment">// 2. Open DevTools → Profiler tab</span>
+<span class="comment">// 3. Click record button</span>
+<span class="comment">// 4. Interact with your app</span>
+<span class="comment">// 5. Stop recording and analyze</span>
+
+<span class="comment">// Programmatic Profiler API</span>
+<span class="keyword">import</span> { <span class="function">Profiler</span> } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">const</span> <span class="function">onRenderCallback</span> = (
+  id,                    <span class="comment">// Component ID</span>
+  phase,                 <span class="comment">// "mount" or "update"</span>
+  actualDuration,        <span class="comment">// Time spent rendering</span>
+  baseDuration,          <span class="comment">// Estimated time without memoization</span>
+  startTime,             <span class="comment">// When React began rendering</span>
+  commitTime,            <span class="comment">// When React committed the update</span>
+  interactions           <span class="comment">// Set of interactions</span>
+) => {
+  console.<span class="function">log</span>(<span class="string">`${id} took ${actualDuration}ms to render`</span>);
+  
+  <span class="comment">// Send to analytics</span>
+  analytics.<span class="function">track</span>(<span class="string">'component_render'</span>, {
+    component: id,
+    duration: actualDuration,
+    phase: phase
+  });
+};
+
+<span class="keyword">function</span> <span class="function">App</span>() {
+  <span class="keyword">return</span> (
+    &lt;<span class="function">Profiler</span> id=<span class="string">"App"</span> onRender={onRenderCallback}&gt;
+      &lt;<span class="function">Navigation</span> /&gt;
+      &lt;<span class="function">Profiler</span> id=<span class="string">"Dashboard"</span> onRender={onRenderCallback}&gt;
+        &lt;<span class="function">Dashboard</span> /&gt;
+      &lt;/<span class="function">Profiler</span>&gt;
+      &lt;<span class="function">Footer</span> /&gt;
+    &lt;/<span class="function">Profiler</span>&gt;
+  );
+}
+
+<span class="comment">// Custom Performance Hook</span>
+<span class="keyword">const</span> <span class="function">usePerformanceMonitor</span> = (componentName) => {
+  <span class="keyword">const</span> renderCount = <span class="function">useRef</span>(<span class="number">0</span>);
+  <span class="keyword">const</span> startTime = <span class="function">useRef</span>(<span class="keyword">null</span>);
+  
+  <span class="function">useEffect</span>(() => {
+    renderCount.current += <span class="number">1</span>;
+    <span class="keyword">const</span> renderTime = performance.<span class="function">now</span>() - startTime.current;
+    
+    console.<span class="function">log</span>(<span class="string">`${componentName} render #${renderCount.current}: ${renderTime}ms`</span>);
+  });
+  
+  startTime.current = performance.<span class="function">now</span>();
+};
+
+<span class="comment">// Usage</span>
+<span class="keyword">const</span> <span class="function">MyComponent</span> = () => {
+  <span class="function">usePerformanceMonitor</span>(<span class="string">'MyComponent'</span>);
+  <span class="keyword">return</span> &lt;div&gt;Content&lt;/div&gt;;
+};
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: Profiler Simulation</div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <button class="btn btn-primary" onclick="profileComponent('fast')">Profile Fast Component</button>
+                        <button class="btn btn-warning" onclick="profileComponent('slow')">Profile Slow Component</button>
+                        <button class="btn btn-danger" onclick="profileComponent('heavy')">Profile Heavy Component</button>
+                    </div>
+
+                    <div class="profiler-display">
+                        <div style="color: #61afef; font-weight: bold; margin-bottom: 20px; font-size: 1.2em;">📊 Profiler Results:</div>
+                        
+                        <div class="profiler-metric">
+                            <span>Component ID:</span>
+                            <span id="profiler-id">-</span>
+                        </div>
+                        <div class="profiler-metric">
+                            <span>Phase:</span>
+                            <span id="profiler-phase">-</span>
+                        </div>
+                        <div class="profiler-metric">
+                            <span>Actual Duration:</span>
+                            <span id="profiler-actual" style="color: #e83e8c;">-</span>
+                        </div>
+                        <div class="profiler-metric">
+                            <span>Base Duration:</span>
+                            <span id="profiler-base" style="color: #ffc107;">-</span>
+                        </div>
+                        <div class="profiler-metric">
+                            <span>Render Count:</span>
+                            <span id="profiler-count" style="color: #667eea;">0</span>
+                        </div>
+                        <div class="profiler-metric" style="border-left-color: #28a745;">
+                            <span>Performance Score:</span>
+                            <span id="profiler-score" style="color: #28a745; font-size: 1.2em;">-</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px; padding: 20px; background: white; border-radius: 12px;">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">Performance Breakdown:</h4>
+                        <div class="performance-chart">
+                            <div class="chart-bar" style="height: 0%;" id="prof-bar-render">
+                                <div class="chart-bar-value">0ms</div>
+                                <div class="chart-bar-label">Render</div>
+                            </div>
+                            <div class="chart-bar" style="height: 0%;" id="prof-bar-commit">
+                                <div class="chart-bar-value">0ms</div>
+                                <div class="chart-bar-label">Commit</div>
+                            </div>
+                            <div class="chart-bar" style="height: 0%;" id="prof-bar-effects">
+                                <div class="chart-bar-value">0ms</div>
+                                <div class="chart-bar-label">Effects</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Profiler Insights:</strong><br><br>
+                    <strong>Flame Graph:</strong> Shows component hierarchy and render times<br>
+                    <strong>Ranked Chart:</strong> Lists components by render duration<br>
+                    <strong>Component Chart:</strong> Shows individual component render history<br>
+                    <strong>Interactions:</strong> Tracks user interactions and their performance impact<br><br>
+                    
+                    <strong>What to Look For:</strong><br>
+                    • Components with high render counts<br>
+                    • Long render durations (>16ms for 60fps)<br>
+                    • Unexpected re-renders<br>
+                    • Components that render but don't change
+                </div>
+            </div>
+
+            <!-- Windowing Large Lists -->
+            <div class="section">
+                <h2>5️⃣ Windowing Large Lists (Virtualization)</h2>
+                <div class="hinglish">
+                    <strong>Windowing</strong> ya <strong>Virtualization</strong> ek technique hai jisme aap sirf visible items ko DOM mein render karte ho, baaki items ko skip kar dete ho. Jab user scroll karta hai, tab dynamically items add/remove hote hain. Isse 10,000+ items wali list bhi smooth scroll hoti hai.
+                    <br><br>
+                    Popular libraries: <strong>react-window</strong> (lightweight) aur <strong>react-virtualized</strong> (feature-rich)
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Without Virtualization - Slow for large lists</span>
+<span class="keyword">const</span> <span class="function">SlowList</span> = ({ items }) => {
+  <span class="keyword">return</span> (
+    &lt;div&gt;
+      {items.<span class="function">map</span>(item => (
+        &lt;<span class="function">ListItem</span> key={item.id} data={item} /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+};
+
+<span class="comment">// With react-window - Fast for any list size</span>
+<span class="keyword">import</span> { <span class="function">FixedSizeList</span> } <span class="keyword">from</span> <span class="string">'react-window'</span>;
+
+<span class="keyword">const</span> <span class="function">FastList</span> = ({ items }) => {
+  <span class="keyword">const</span> <span class="function">Row</span> = ({ index, style }) => (
+    &lt;div style={style}&gt;
+      &lt;<span class="function">ListItem</span> data={items[index]} /&gt;
+    &lt;/div&gt;
+  );
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="function">FixedSizeList</span>
+      height={<span class="number">600</span>}
+      itemCount={items.<span class="function">length</span>}
+      itemSize={<span class="number">50</span>}
+      width={<span class="string">'100%'</span>}
+    &gt;
+      {Row}
+    &lt;/<span class="function">FixedSizeList</span>&gt;
+  );
+};
+
+<span class="comment">// Variable size items</span>
+<span class="keyword">import</span> { <span class="function">VariableSizeList</span> } <span class="keyword">from</span> <span class="string">'react-window'</span>;
+
+<span class="keyword">const</span> <span class="function">DynamicList</span> = ({ items }) => {
+  <span class="keyword">const</span> listRef = <span class="function">useRef</span>();
+  
+  <span class="keyword">const</span> <span class="function">getItemSize</span> = (index) => {
+    <span class="comment">// Calculate height based on content</span>
+    <span class="keyword">return</span> items[index].expanded ? <span class="number">200</span> : <span class="number">50</span>;
+  };
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="function">VariableSizeList</span>
+      ref={listRef}
+      height={<span class="number">600</span>}
+      itemCount={items.<span class="function">length</span>}
+      itemSize={getItemSize}
+      width={<span class="string">'100%'</span>}
+    &gt;
+      {Row}
+    &lt;/<span class="function">VariableSizeList</span>&gt;
+  );
+};
+
+<span class="comment">// Grid virtualization</span>
+<span class="keyword">import</span> { <span class="function">FixedSizeGrid</span> } <span class="keyword">from</span> <span class="string">'react-window'</span>;
+
+<span class="keyword">const</span> <span class="function">ImageGrid</span> = ({ images }) => {
+  <span class="keyword">const</span> <span class="function">Cell</span> = ({ columnIndex, rowIndex, style }) => {
+    <span class="keyword">const</span> index = rowIndex * <span class="number">5</span> + columnIndex;
+    <span class="keyword">return</span> (
+      &lt;div style={style}&gt;
+        &lt;img src={images[index]} alt=<span class="string">""</span> /&gt;
+      &lt;/div&gt;
+    );
+  };
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="function">FixedSizeGrid</span>
+      columnCount={<span class="number">5</span>}
+      columnWidth={<span class="number">200</span>}
+      height={<span class="number">600</span>}
+      rowCount={<span class="function">Math.ceil</span>(images.<span class="function">length</span> / <span class="number">5</span>)}
+      rowHeight={<span class="number">200</span>}
+      width={<span class="number">1000</span>}
+    &gt;
+      {Cell}
+    &lt;/<span class="function">FixedSizeGrid</span>&gt;
+  );
+};
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: Virtualized vs Normal List</div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <label style="margin-right: 15px;">
+                            <strong>List Size:</strong>
+                            <select id="list-size" style="margin-left: 10px; padding: 8px; border-radius: 5px; border: 2px solid #667eea;">
+                                <option value="100">100 items</option>
+                                <option value="1000">1,000 items</option>
+                                <option value="5000" selected>5,000 items</option>
+                                <option value="10000">10,000 items</option>
+                            </select>
+                        </label>
+                        <button class="btn btn-primary" onclick="generateList()">Generate List</button>
+                    </div>
+
+                    <div class="comparison-grid">
+                        <div class="comparison-card bad">
+                            <h4>❌ Normal List (All Rendered)</h4>
+                            <div class="virtual-list" id="normal-list" style="height: 300px;">
+                                <p style="text-align: center; color: #6c757d; padding: 20px;">Click "Generate List" to start</p>
+                            </div>
+                            <div style="margin-top: 15px; padding: 15px; background: #f8d7da; border-radius: 8px;">
+                                <strong>DOM Nodes:</strong> <span id="normal-nodes">0</span><br>
+                                <strong>Render Time:</strong> <span id="normal-time">0ms</span><br>
+                                <strong>Memory:</strong> <span id="normal-memory">0 MB</span>
+                            </div>
+                        </div>
+
+                        <div class="comparison-card good">
+                            <h4>✅ Virtualized List (Only Visible)</h4>
+                            <div class="virtual-list" id="virtual-list" style="height: 300px;">
+                                <p style="text-align: center; color: #6c757d; padding: 20px;">Click "Generate List" to start</p>
+                            </div>
+                            <div style="margin-top: 15px; padding: 15px; background: #d4edda; border-radius: 8px;">
+                                <strong>DOM Nodes:</strong> <span id="virtual-nodes">0</span><br>
+                                <strong>Render Time:</strong> <span id="virtual-time">0ms</span><br>
+                                <strong>Memory:</strong> <span id="virtual-memory">0 MB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px; padding: 25px; background: white; border-radius: 12px;">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">📊 Performance Comparison:</h4>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-label">Speed Improvement</div>
+                                <div class="stat-value" id="speed-improvement">0x</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Memory Saved</div>
+                                <div class="stat-value" id="memory-saved">0%</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">DOM Nodes Saved</div>
+                                <div class="stat-value" id="nodes-saved">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <strong>✅ When to Use Virtualization:</strong><br><br>
+                    • Lists with 100+ items<br>
+                    • Infinite scroll implementations<br>
+                    • Large data tables<br>
+                    • Image galleries with many images<br>
+                    • Chat applications with long message history<br>
+                    • Any scrollable content with performance issues<br><br>
+                    
+                    <strong>Benefits:</strong><br>
+                    • Constant render time regardless of list size<br>
+                    • Minimal DOM nodes (only visible items)<br>
+                    • Smooth scrolling even with 100,000+ items<br>
+                    • Lower memory usage
+                </div>
+            </div>
+
+            <!-- Heavy Computation Offloading -->
+            <div class="section">
+                <h2>6️⃣ Heavy Computation Offloading</h2>
+                <div class="hinglish">
+                    Heavy computations main thread ko block kar dete hain, jisse UI freeze ho jata hai. Isko solve karne ke liye hum computations ko background mein move kar sakte hain using <strong>Web Workers</strong>, ya phir <strong>requestIdleCallback</strong> use karke idle time mein execute kar sakte hain.
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Problem: Heavy computation blocks UI</span>
+<span class="keyword">const</span> <span class="function">SlowComponent</span> = ({ data }) => {
+  <span class="keyword">const</span> [result, setResult] = <span class="function">useState</span>(<span class="keyword">null</span>);
+  
+  <span class="keyword">const</span> <span class="function">processData</span> = () => {
+    <span class="comment">// This blocks the UI thread!</span>
+    <span class="keyword">let</span> sum = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < <span class="number">1000000000</span>; i++) {
+      sum += <span class="function">Math.sqrt</span>(i);
+    }
+    <span class="function">setResult</span>(sum);
+  };
+  
+  <span class="keyword">return</span> &lt;button onClick={processData}&gt;Process&lt;/button&gt;;
+};
+
+<span class="comment">// Solution 1: Web Workers</span>
+<span class="comment">// worker.js</span>
+self.<span class="function">addEventListener</span>(<span class="string">'message'</span>, (e) => {
+  <span class="keyword">const</span> data = e.data;
+  <span class="keyword">let</span> sum = <span class="number">0</span>;
+  
+  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < data.<span class="function">length</span>; i++) {
+    sum += <span class="function">Math.sqrt</span>(data[i]);
+  }
+  
+  self.<span class="function">postMessage</span>(sum);
+});
+
+<span class="comment">// Component using Web Worker</span>
+<span class="keyword">const</span> <span class="function">FastComponent</span> = ({ data }) => {
+  <span class="keyword">const</span> [result, setResult] = <span class="function">useState</span>(<span class="keyword">null</span>);
+  <span class="keyword">const</span> workerRef = <span class="function">useRef</span>(<span class="keyword">null</span>);
+  
+  <span class="function">useEffect</span>(() => {
+    workerRef.current = <span class="keyword">new</span> <span class="function">Worker</span>(<span class="string">'worker.js'</span>);
+    
+    workerRef.current.<span class="function">addEventListener</span>(<span class="string">'message'</span>, (e) => {
+      <span class="function">setResult</span>(e.data);
+    });
+    
+    <span class="keyword">return</span> () => workerRef.current.<span class="function">terminate</span>();
+  }, []);
+  
+  <span class="keyword">const</span> <span class="function">processData</span> = () => {
+    workerRef.current.<span class="function">postMessage</span>(data);
+  };
+  
+  <span class="keyword">return</span> &lt;button onClick={processData}&gt;Process&lt;/button&gt;;
+};
+
+<span class="comment">// Solution 2: requestIdleCallback</span>
+<span class="keyword">const</span> <span class="function">IdleComponent</span> = ({ data }) => {
+  <span class="keyword">const</span> [result, setResult] = <span class="function">useState</span>(<span class="keyword">null</span>);
+  
+  <span class="keyword">const</span> <span class="function">processData</span> = () => {
+    <span class="keyword">let</span> index = <span class="number">0</span>;
+    <span class="keyword">let</span> sum = <span class="number">0</span>;
+    
+    <span class="keyword">const</span> <span class="function">processChunk</span> = (deadline) => {
+      <span class="keyword">while</span> (deadline.<span class="function">timeRemaining</span>() > <span class="number">0</span> && index < data.<span class="function">length</span>) {
+        sum += <span class="function">Math.sqrt</span>(data[index]);
+        index++;
+      }
+      
+      <span class="keyword">if</span> (index < data.<span class="function">length</span>) {
+        <span class="function">requestIdleCallback</span>(processChunk);
+      } <span class="keyword">else</span> {
+        <span class="function">setResult</span>(sum);
+      }
+    };
+    
+    <span class="function">requestIdleCallback</span>(processChunk);
+  };
+  
+  <span class="keyword">return</span> &lt;button onClick={processData}&gt;Process&lt;/button&gt;;
+};
+
+<span class="comment">// Solution 3: Time Slicing with setTimeout</span>
+<span class="keyword">const</span> <span class="function">useTimeSlicing</span> = (heavyTask, chunkSize = <span class="number">1000</span>) => {
+  <span class="keyword">const</span> [result, setResult] = <span class="function">useState</span>(<span class="keyword">null</span>);
+  <span class="keyword">const</span> [isProcessing, setIsProcessing] = <span class="function">useState</span>(<span class="keyword">false</span>);
+  
+  <span class="keyword">const</span> <span class="function">process</span> = <span class="keyword">async</span> (data) => {
+    <span class="function">setIsProcessing</span>(<span class="keyword">true</span>);
+    <span class="keyword">let</span> index = <span class="number">0</span>;
+    <span class="keyword">let</span> accumulated = [];
+    
+    <span class="keyword">while</span> (index < data.<span class="function">length</span>) {
+      <span class="keyword">const</span> chunk = data.<span class="function">slice</span>(index, index + chunkSize);
+      <span class="keyword">const</span> chunkResult = <span class="keyword">await</span> <span class="keyword">new</span> <span class="function">Promise</span>(resolve => {
+        <span class="function">setTimeout</span>(() => {
+          resolve(<span class="function">heavyTask</span>(chunk));
+        }, <span class="number">0</span>);
+      });
+      
+      accumulated.<span class="function">push</span>(chunkResult);
+      index += chunkSize;
+    }
+    
+    <span class="function">setResult</span>(accumulated);
+    <span class="function">setIsProcessing</span>(<span class="keyword">false</span>);
+  };
+  
+  <span class="keyword">return</span> { result, isProcessing, process };
+};
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Demo: Computation Offloading</div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <button class="btn btn-danger" onclick="runHeavyTask('blocking')">Run Blocking Task</button>
+                        <button class="btn btn-success" onclick="runHeavyTask('worker')">Run in Web Worker</button>
+                        <button class="btn btn-warning" onclick="runHeavyTask('sliced')">Run Time-Sliced</button>
+                    </div>
+
+                    <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 25px;">
+                        <h4 style="color: #667eea; margin-bottom: 20px;">UI Responsiveness Test:</h4>
+                        <p style="margin-bottom: 15px;">Try clicking this button while computation is running:</p>
+                        <button class="btn btn-primary" onclick="testResponsiveness()">Test UI Response</button>
+                        <div id="responsiveness-result" style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; min-height: 50px;">
+                            Click the button to test UI responsiveness
+                        </div>
+                    </div>
+
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4 style="color: #667eea;">Blocking Task</h4>
+                            <div style="margin: 15px 0;">
+                                <p><strong>Status:</strong> <span id="blocking-status">Ready</span></p>
+                                <p><strong>Time:</strong> <span id="blocking-time">0ms</span></p>
+                                <p><strong>UI Blocked:</strong> <span id="blocking-blocked" style="color: #dc3545;">Yes</span></p>
+                            </div>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4 style="color: #667eea;">Web Worker</h4>
+                            <div style="margin: 15px 0;">
+                                <p><strong>Status:</strong> <span id="worker-status">Ready</span></p>
+                                <p><strong>Time:</strong> <span id="worker-time">0ms</span></p>
+                                <p><strong>UI Blocked:</strong> <span id="worker-blocked" style="color: #28a745;">No</span></p>
+                            </div>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4 style="color: #667eea;">Time-Sliced</h4>
+                            <div style="margin: 15px 0;">
+                                <p><strong>Status:</strong> <span id="sliced-status">Ready</span></p>
+                                <p><strong>Time:</strong> <span id="sliced-time">0ms</span></p>
+                                <p><strong>UI Blocked:</strong> <span id="sliced-blocked" style="color: #28a745;">No</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+                        <strong>Progress:</strong>
+                        <div class="progress-bar" style="margin-top: 10px; height: 40px;">
+                            <div class="progress-fill" id="computation-progress" style="width: 0%; font-size: 1.1em;">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Technique</th>
+                            <th>Use Case</th>
+                            <th>Pros</th>
+                            <th>Cons</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Web Workers</strong></td>
+                            <td>Heavy CPU computations, data processing</td>
+                            <td>True parallelism, UI never blocks</td>
+                            <td>No DOM access, communication overhead</td>
+                        </tr>
+                        <tr>
+                            <td><strong>requestIdleCallback</strong></td>
+                            <td>Non-urgent background tasks</td>
+                            <td>Runs during idle time, no blocking</td>
+                            <td>Not guaranteed to run, browser support</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Time Slicing</strong></td>
+                            <td>Long-running tasks that need DOM access</td>
+                            <td>Simple implementation, DOM access</td>
+                            <td>Slower overall, requires chunking logic</td>
+                        </tr>
+                        <tr>
+                            <td><strong>useMemo</strong></td>
+                            <td>Expensive calculations in render</td>
+                            <td>Easy to use, caches results</td>
+                            <td>Still blocks on first calculation</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Production Patterns -->
+            <div class="section">
+                <h2>7️⃣ Production Performance Patterns</h2>
+                <div class="hinglish">
+                    Real-world production applications mein performance optimization ek continuous process hai. Yahan kuch proven patterns hain jo large-scale applications mein use hote hain.
+                </div>
+
+                <h3>Pattern 1: Component Composition over Props</h3>
+                <div class="code-block">
+<span class="comment">// ❌ Bad: Props drilling causes unnecessary re-renders</span>
+<span class="keyword">const</span> <span class="function">App</span> = () => {
+  <span class="keyword">const</span> [user, setUser] = <span class="function">useState</span>(<span class="keyword">null</span>);
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="function">Layout</span> user={user}&gt;
+      &lt;<span class="function">Sidebar</span> user={user} /&gt;
+      &lt;<span class="function">Content</span> user={user} /&gt;
+    &lt;/<span class="function">Layout</span>&gt;
+  );
+};
+
+<span class="comment">// ✅ Good: Composition prevents unnecessary re-renders</span>
+<span class="keyword">const</span> <span class="function">App</span> = () => {
+  <span class="keyword">const</span> [user, setUser] = <span class="function">useState</span>(<span class="keyword">null</span>);
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="function">Layout</span>&gt;
+      &lt;<span class="function">Sidebar</span>&gt;
+        &lt;<span class="function">UserProfile</span> user={user} /&gt;
+      &lt;/<span class="function">Sidebar</span>&gt;
+      &lt;<span class="function">Content</span> /&gt;
+    &lt;/<span class="function">Layout</span>&gt;
+  );
+};
+                </div>
+
+                <h3>Pattern 2: Debouncing & Throttling</h3>
+                <div class="code-block">
+<span class="comment">// Custom debounce hook</span>
+<span class="keyword">const</span> <span class="function">useDebounce</span> = (value, delay) => {
+  <span class="keyword">const</span> [debouncedValue, setDebouncedValue] = <span class="function">useState</span>(value);
+  
+  <span class="function">useEffect</span>(() => {
+    <span class="keyword">const</span> handler = <span class="function">setTimeout</span>(() => {
+      <span class="function">setDebouncedValue</span>(value);
+    }, delay);
+    
+    <span class="keyword">return</span> () => <span class="function">clearTimeout</span>(handler);
+  }, [value, delay]);
+  
+  <span class="keyword">return</span> debouncedValue;
+};
+
+<span class="comment">// Usage in search</span>
+<span class="keyword">const</span> <span class="function">SearchComponent</span> = () => {
+  <span class="keyword">const</span> [query, setQuery] = <span class="function">useState</span>(<span class="string">''</span>);
+  <span class="keyword">const</span> debouncedQuery = <span class="function">useDebounce</span>(query, <span class="number">500</span>);
+  
+  <span class="function">useEffect</span>(() => {
+    <span class="keyword">if</span> (debouncedQuery) {
+      <span class="function">fetchResults</span>(debouncedQuery);
+    }
+  }, [debouncedQuery]);
+  
+  <span class="keyword">return</span> &lt;input onChange={(e) => <span class="function">setQuery</span>(e.target.value)} /&gt;;
+};
+
+<span class="comment">// Throttle for scroll events</span>
+<span class="keyword">const</span> <span class="function">useThrottle</span> = (callback, delay) => {
+  <span class="keyword">const</span> lastRun = <span class="function">useRef</span>(Date.<span class="function">now</span>());
+  
+  <span class="keyword">return</span> <span class="function">useCallback</span>((...args) => {
+    <span class="keyword">const</span> now = Date.<span class="function">now</span>();
+    
+    <span class="keyword">if</span> (now - lastRun.current >= delay) {
+      <span class="function">callback</span>(...args);
+      lastRun.current = now;
+    }
+  }, [callback, delay]);
+};
+                </div>
+
+                <h3>Pattern 3: Lazy State Initialization</h3>
+                <div class="code-block">
+<span class="comment">// ❌ Bad: Expensive calculation runs every render</span>
+<span class="keyword">const</span> <span class="function">Component</span> = () => {
+  <span class="keyword">const</span> [data, setData] = <span class="function">useState</span>(<span class="function">expensiveCalculation</span>());
+  <span class="comment">// expensiveCalculation() runs on every render!</span>
+};
+
+<span class="comment">// ✅ Good: Calculation runs only once</span>
+<span class="keyword">const</span> <span class="function">Component</span> = () => {
+  <span class="keyword">const</span> [data, setData] = <span class="function">useState</span>(() => <span class="function">expensiveCalculation</span>());
+  <span class="comment">// Function runs only on initial render</span>
+};
+                </div>
+
+                <h3>Pattern 4: Optimistic Updates</h3>
+                <div class="code-block">
+<span class="comment">// Optimistic UI updates for better perceived performance</span>
+<span class="keyword">const</span> <span class="function">TodoList</span> = () => {
+  <span class="keyword">const</span> [todos, setTodos] = <span class="function">useState</span>([]);
+  
+  <span class="keyword">const</span> addTodo = <span class="keyword">async</span> (text) => {
+    <span class="keyword">const</span> tempId = Date.<span class="function">now</span>();
+    <span class="keyword">const</span> newTodo = { id: tempId, text, pending: <span class="keyword">true</span> };
+    
+    <span class="comment">// Optimistically add to UI</span>
+    <span class="function">setTodos</span>(prev => [...prev, newTodo]);
+    
+    <span class="keyword">try</span> {
+      <span class="keyword">const</span> savedTodo = <span class="keyword">await</span> <span class="function">api.createTodo</span>(text);
+      <span class="comment">// Replace temp with real data</span>
+      <span class="function">setTodos</span>(prev => 
+        prev.<span class="function">map</span>(t => t.id === tempId ? savedTodo : t)
+      );
+    } <span class="keyword">catch</span> (error) {
+      <span class="comment">// Rollback on error</span>
+      <span class="function">setTodos</span>(prev => prev.<span class="function">filter</span>(t => t.id !== tempId));
+    }
+  };
+};
+                </div>
+
+                <div class="success-box">
+                    <strong>✅ Production Checklist:</strong><br><br>
+                    
+                    <strong>Before Deployment:</strong><br>
+                    ☑️ Run React DevTools Profiler<br>
+                    ☑️ Check bundle size with webpack-bundle-analyzer<br>
+                    ☑️ Test on slow 3G network<br>
+                    ☑️ Measure Core Web Vitals (LCP, FID, CLS)<br>
+                    ☑️ Enable production build optimizations<br>
+                    ☑️ Implement code splitting for routes<br>
+                    ☑️ Add error boundaries<br>
+                    ☑️ Set up performance monitoring (Sentry, LogRocket)<br><br>
+                    
+                    <strong>Ongoing Monitoring:</strong><br>
+                    📊 Track render counts and durations<br>
+                    📊 Monitor bundle size growth<br>
+                    📊 Watch for memory leaks<br>
+                    📊 Analyze user interaction metrics<br>
+                    📊 Set performance budgets
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="quiz-section">
+                <h2>🎯 Interview Questions</h2>
+                <p style="margin-bottom: 35px; font-size: 1.15em;">Master these questions to ace your React performance interviews!</p>
+
+                <div class="question-card">
+                    <span class="difficulty easy">Easy</span>
+                    <h3>Q1: React.memo kya hai aur yeh kaise kaam karta hai? Kab use karna chahiye?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(1)">Show Answer</button>
+                    <div class="answer" id="answer-1">
+                        <strong>Answer:</strong><br><br>
+                        <strong>React.memo kya hai:</strong><br>
+                        React.memo ek Higher Order Component (HOC) hai jo component ko memoize karta hai. Yeh shallow comparison karta hai props ka, aur agar props same hain toh component ko re-render nahi karta.<br><br>
+                        
+                        <strong>Kaise kaam karta hai:</strong><br>
+                        1. Component ko React.memo se wrap karo<br>
+                        2. Jab parent re-render hota hai, React props compare karta hai<br>
+                        3. Agar props same hain (shallow equality), previous render result reuse hota hai<br>
+                        4. Agar props different hain, component re-render hota hai<br><br>
+                        
+                        <strong>Example:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+const ExpensiveComponent = React.memo(({ data }) => {
+  // Heavy rendering logic
+  return &lt;div&gt;{data}&lt;/div&gt;;
+});</pre><br>
+                        
+                        <strong>Kab use karein:</strong><br>
+                        ✅ Component frequently re-render hota hai<br>
+                        ✅ Props rarely change hote hain<br>
+                        ✅ Component expensive computations karta hai<br>
+                        ✅ Pure functional component hai (same props = same output)<br><br>
+                        
+                        <strong>Kab use na karein:</strong><br>
+                        ❌ Props har baar change hote hain<br>
+                        ❌ Component already fast hai<br>
+                        ❌ Simple components jo kuch compute nahi karte<br>
+                        ❌ Premature optimization<br><br>
+                        
+                        <strong>Custom Comparison:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+const Component = React.memo(
+  ({ data }) => &lt;div&gt;{data}&lt;/div&gt;,
+  (prevProps, nextProps) => {
+    // Return true to skip re-render
+    return prevProps.data.id === nextProps.data.id;
+  }
+);</pre>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty easy">Easy</span>
+                    <h3>Q2: useCallback aur useMemo mein kya difference hai? Examples ke saath explain karo.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(2)">Show Answer</button>
+                    <div class="answer" id="answer-2">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Main Difference:</strong><br>
+                        • <strong>useCallback:</strong> Function ko memoize karta hai (function reference preserve karta hai)<br>
+                        • <strong>useMemo:</strong> Function ke result ko memoize karta hai (computed value cache karta hai)<br><br>
+                        
+                        <strong>useCallback Example:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// Without useCallback - New function every render
+const Parent = () => {
+  const [count, setCount] = useState(0);
+  
+  const handleClick = () => {
+    console.log('Clicked');
+  };
+  
+  return &lt;Child onClick={handleClick} /&gt;;
+};
+
+// With useCallback - Same function reference
+const Parent = () => {
+  const [count, setCount] = useState(0);
+  
+  const handleClick = useCallback(() => {
+    console.log('Clicked');
+  }, []); // Dependencies
+  
+  return &lt;Child onClick={handleClick} /&gt;;
+};</pre><br>
+                        
+                        <strong>useMemo Example:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// Without useMemo - Calculation every render
+const Component = ({ items }) => {
+  const total = items.reduce((sum, item) => sum + item.price, 0);
+  return &lt;div&gt;{total}&lt;/div&gt;;
+};
+
+// With useMemo - Cached result
+const Component = ({ items }) => {
+  const total = useMemo(() => {
+    return items.reduce((sum, item) => sum + item.price, 0);
+  }, [items]); // Recalculate only when items change
+  
+  return &lt;div&gt;{total}&lt;/div&gt;;
+};</pre><br>
+                        
+                        <strong>Kab kaunsa use karein:</strong><br><br>
+                        <strong>useCallback:</strong><br>
+                        • Function ko child component mein pass kar rahe ho<br>
+                        • Function dependency hai useEffect/useMemo mein<br>
+                        • Event handlers jo frequently change nahi hote<br><br>
+                        
+                        <strong>useMemo:</strong><br>
+                        • Expensive calculations<br>
+                        • Large data transformations<br>
+                        • Complex filtering/sorting<br>
+                        • Object/Array creation jo props mein jata hai<br><br>
+                        
+                        <strong>Memory Trick:</strong><br>
+                        • useCallback = Callback function ko yaad rakho<br>
+                        • useMemo = Memo (memory) mein value store karo
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Q3: React mein unnecessary re-renders kaise avoid karein? Common causes aur solutions explain karo.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(3)">Show Answer</button>
+                    <div class="answer" id="answer-3">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Common Causes aur Solutions:</strong><br><br>
+                        
+                        <strong>1. Parent State Changes:</strong><br>
+                        <strong>Problem:</strong> Parent ka state change hone pe saare children re-render hote hain<br>
+                        <strong>Solution:</strong><br>
+                        • State ko neeche move karo (state colocation)<br>
+                        • React.memo use karo children pe<br>
+                        • Component composition use karo<br><br>
+                        
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// ❌ Bad
+const Parent = () => {
+  const [count, setCount] = useState(0);
+  return (
+    &lt;&gt;
+      &lt;button onClick={() => setCount(count + 1)}&gt;{count}&lt;/button&gt;
+      &lt;ExpensiveChild /&gt; {/* Unnecessarily re-renders */}
+    &lt;/&gt;
+  );
+};
+
+// ✅ Good - State moved down
+const Parent = () => {
+  return (
+    &lt;&gt;
+      &lt;Counter /&gt;
+      &lt;ExpensiveChild /&gt; {/* Won't re-render */}
+    &lt;/&gt;
+  );
+};</pre><br>
+                        
+                        <strong>2. Inline Objects/Arrays:</strong><br>
+                        <strong>Problem:</strong> Har render pe naya reference create hota hai<br>
+                        <strong>Solution:</strong> useMemo ya component ke bahar move karo<br><br>
+                        
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// ❌ Bad
+const Component = () => {
+  const config = { theme: 'dark' }; // New object every render
+  return &lt;Child config={config} /&gt;;
+};
+
+// ✅ Good
+const config = { theme: 'dark' }; // Outside component
+const Component = () => {
+  return &lt;Child config={config} /&gt;;
+};</pre><br>
+                        
+                        <strong>3. Context Updates:</strong><br>
+                        <strong>Problem:</strong> Context value change hone pe saare consumers re-render<br>
+                        <strong>Solution:</strong> Context split karo, value memoize karo<br><br>
+                        
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// ❌ Bad
+const App = () => {
+  const [user, setUser] = useState(null);
+  const [theme, setTheme] = useState('light');
+  const value = { user, setUser, theme, setTheme };
+  return &lt;Context.Provider value={value}&gt;...&lt;/Context.Provider&gt;;
+};
+
+// ✅ Good - Split contexts
+const App = () => {
+  const userValue = useMemo(() => ({ user, setUser }), [user]);
+  const themeValue = useMemo(() => ({ theme, setTheme }), [theme]);
+  return (
+    &lt;UserContext.Provider value={userValue}&gt;
+      &lt;ThemeContext.Provider value={themeValue}&gt;...&lt;/ThemeContext.Provider&gt;
+    &lt;/UserContext.Provider&gt;
+  );
+};</pre><br>
+                        
+                        <strong>4. Inline Functions:</strong><br>
+                        <strong>Problem:</strong> Har render pe naya function<br>
+                        <strong>Solution:</strong> useCallback use karo<br><br>
+                        
+                        <strong>Best Practices:</strong><br>
+                        ✅ React DevTools Profiler use karo to identify issues<br>
+                        ✅ Measure before optimizing<br>
+                        ✅ State ko jitna possible neeche rakho<br>
+                        ✅ Composition over props drilling<br>
+                        ✅ Memoization judiciously use karo
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Q4: React Profiler tool kaise use karte hain? Production mein performance issues kaise identify karein?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(4)">Show Answer</button>
+                    <div class="answer" id="answer-4">
+                        <strong>Answer:</strong><br><br>
+                        <strong>React Profiler Tool:</strong><br>
+                        React DevTools ka ek part hai jo component render performance measure karta hai.<br><br>
+                        
+                        <strong>Kaise Use Karein:</strong><br>
+                        1. <strong>Install:</strong> React DevTools browser extension<br>
+                        2. <strong>Open:</strong> DevTools → Profiler tab<br>
+                        3. <strong>Record:</strong> Record button click karo<br>
+                        4. <strong>Interact:</strong> App ke saath interact karo<br>
+                        5. <strong>Stop:</strong> Recording stop karo<br>
+                        6. <strong>Analyze:</strong> Results dekho<br><br>
+                        
+                        <strong>Profiler Views:</strong><br><br>
+                        
+                        <strong>1. Flame Graph:</strong><br>
+                        • Component hierarchy dikhata hai<br>
+                        • Render time by color (green = fast, yellow = slow, red = very slow)<br>
+                        • Width = time spent rendering<br>
+                        • Click karke details dekho<br><br>
+                        
+                        <strong>2. Ranked Chart:</strong><br>
+                        • Components sorted by render duration<br>
+                        • Slowest components pehle<br>
+                        • Optimization priorities identify karo<br><br>
+                        
+                        <strong>3. Component Chart:</strong><br>
+                        • Individual component ka render history<br>
+                        • Har render ka duration<br>
+                        • Why did this render? information<br><br>
+                        
+                        <strong>Programmatic Profiler:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+import { Profiler } from 'react';
+
+const onRenderCallback = (
+  id,              // Component ID
+  phase,           // "mount" or "update"
+  actualDuration,  // Time spent rendering
+  baseDuration,    // Estimated time without memoization
+  startTime,       // When React began rendering
+  commitTime       // When React committed
+) => {
+  console.log(`${id} took ${actualDuration}ms`);
+  
+  // Send to analytics
+  analytics.track('render', {
+    component: id,
+    duration: actualDuration,
+    phase: phase
+  });
+};
+
+function App() {
+  return (
+    &lt;Profiler id="App" onRender={onRenderCallback}&gt;
+      &lt;Dashboard /&gt;
+    &lt;/Profiler&gt;
+  );
+}</pre><br>
+                        
+                        <strong>Performance Issues Identify Karna:</strong><br><br>
+                        
+                        <strong>Red Flags:</strong><br>
+                        🚩 Components with high render counts<br>
+                        🚩 Render duration > 16ms (60fps ke liye)<br>
+                        🚩 Unexpected re-renders<br>
+                        🚩 Components that render but don't change<br>
+                        🚩 Large component trees rendering together<br><br>
+                        
+                        <strong>Analysis Steps:</strong><br>
+                        1. Identify slowest components (Ranked view)<br>
+                        2. Check why they're rendering (Component view)<br>
+                        3. Look for unnecessary re-renders<br>
+                        4. Check parent-child render patterns<br>
+                        5. Measure before and after optimization<br><br>
+                        
+                        <strong>Production Monitoring:</strong><br>
+                        • Use Profiler API to send metrics to analytics<br>
+                        • Track Core Web Vitals (LCP, FID, CLS)<br>
+                        • Set up performance budgets<br>
+                        • Use tools like Lighthouse, WebPageTest<br>
+                        • Monitor with Sentry, LogRocket, etc.
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty hard">Hard</span>
+                    <h3>Q5: List virtualization kya hai? React Window aur React Virtualized mein difference kya hai? Implementation explain karo.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(5)">Show Answer</button>
+                    <div class="answer" id="answer-5">
+                        <strong>Answer:</strong><br><br>
+                        <strong>List Virtualization Kya Hai:</strong><br>
+                        Virtualization ek technique hai jisme sirf visible items ko DOM mein render karte hain. Jab user scroll karta hai, items dynamically add/remove hote hain. Isse 10,000+ items wali list bhi smooth scroll hoti hai.<br><br>
+                        
+                        <strong>Kaise Kaam Karta Hai:</strong><br>
+                        1. Calculate visible area (viewport)<br>
+                        2. Determine which items are visible<br>
+                        3. Render only those items<br>
+                        4. Add padding to maintain scroll height<br>
+                        5. On scroll, recalculate and update<br><br>
+                        
+                        <strong>React Window vs React Virtualized:</strong><br><br>
+                        
+                        <table style="width: 100%; margin: 15px 0;">
+                            <tr style="background: #f8f9fa;">
+                                <th style="padding: 10px;">Feature</th>
+                                <th style="padding: 10px;">React Window</th>
+                                <th style="padding: 10px;">React Virtualized</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Bundle Size</td>
+                                <td style="padding: 10px;">~6 KB</td>
+                                <td style="padding: 10px;">~27 KB</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Features</td>
+                                <td style="padding: 10px;">Basic, focused</td>
+                                <td style="padding: 10px;">Comprehensive</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Learning Curve</td>
+                                <td style="padding: 10px;">Easy</td>
+                                <td style="padding: 10px;">Moderate</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Use Case</td>
+                                <td style="padding: 10px;">Simple lists</td>
+                                <td style="padding: 10px;">Complex UIs</td>
+                            </tr>
+                        </table><br>
+                        
+                        <strong>React Window Implementation:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+import { FixedSizeList } from 'react-window';
+
+const MyList = ({ items }) => {
+  const Row = ({ index, style }) => (
+    &lt;div style={style}&gt;
+      Item {items[index].name}
+    &lt;/div&gt;
+  );
+  
+  return (
+    &lt;FixedSizeList
+      height={600}        // Container height
+      itemCount={items.length}
+      itemSize={50}       // Each item height
+      width="100%"
+    &gt;
+      {Row}
+    &lt;/FixedSizeList&gt;
+  );
+};</pre><br>
+                        
+                        <strong>Variable Size Items:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+import { VariableSizeList } from 'react-window';
+
+const DynamicList = ({ items }) => {
+  const listRef = useRef();
+  
+  const getItemSize = (index) => {
+    // Dynamic height based on content
+    return items[index].expanded ? 200 : 50;
+  };
+  
+  return (
+    &lt;VariableSizeList
+      ref={listRef}
+      height={600}
+      itemCount={items.length}
+      itemSize={getItemSize}
+      width="100%"
+    &gt;
+      {Row}
+    &lt;/VariableSizeList&gt;
+  );
+};</pre><br>
+                        
+                        <strong>Grid Virtualization:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+import { FixedSizeGrid } from 'react-window';
+
+const ImageGrid = ({ images }) => {
+  const Cell = ({ columnIndex, rowIndex, style }) => {
+    const index = rowIndex * 5 + columnIndex;
+    return (
+      &lt;div style={style}&gt;
+        &lt;img src={images[index]} /&gt;
+      &lt;/div&gt;
+    );
+  };
+  
+  return (
+    &lt;FixedSizeGrid
+      columnCount={5}
+      columnWidth={200}
+      height={600}
+      rowCount={Math.ceil(images.length / 5)}
+      rowHeight={200}
+      width={1000}
+    &gt;
+      {Cell}
+    &lt;/FixedSizeGrid&gt;
+  );
+};</pre><br>
+                        
+                        <strong>Performance Benefits:</strong><br>
+                        • Constant render time (O(1) instead of O(n))<br>
+                        • Minimal DOM nodes (~20 instead of 10,000)<br>
+                        • Lower memory usage<br>
+                        • Smooth 60fps scrolling<br>
+                        • Works with millions of items<br><br>
+                        
+                        <strong>When to Use:</strong><br>
+                        ✅ Lists with 100+ items<br>
+                        ✅ Infinite scroll<br>
+                        ✅ Large data tables<br>
+                        ✅ Image galleries<br>
+                        ✅ Chat message history<br>
+                        ✅ Any scrollable content with performance issues
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty hard">Hard</span>
+                    <h3>Q6: Web Workers kya hain? React mein heavy computations ko kaise offload karein? Complete implementation explain karo.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(6)">Show Answer</button>
+                    <div class="answer" id="answer-6">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Web Workers Kya Hain:</strong><br>
+                        Web Workers JavaScript ko background thread mein run karne dete hain, main UI thread ko block kiye bina. Yeh true parallelism provide karte hain aur heavy computations ke liye perfect hain.<br><br>
+                        
+                        <strong>Key Features:</strong><br>
+                        • Separate thread mein run hote hain<br>
+                        • Main thread ko block nahi karte<br>
+                        • No DOM access (security reasons)<br>
+                        • Message passing through postMessage<br>
+                        • Can import other scripts<br><br>
+                        
+                        <strong>Complete Implementation:</strong><br><br>
+                        
+                        <strong>Step 1: Create Worker File (worker.js):</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// worker.js
+self.addEventListener('message', (e) => {
+  const { type, data } = e.data;
+  
+  switch(type) {
+    case 'HEAVY_CALCULATION':
+      const result = performHeavyCalculation(data);
+      self.postMessage({ type: 'RESULT', result });
+      break;
+      
+    case 'PROCESS_DATA':
+      const processed = processLargeDataset(data);
+      self.postMessage({ type: 'PROCESSED', data: processed });
+      break;
+  }
+});
+
+function performHeavyCalculation(data) {
+  let sum = 0;
+  for (let i = 0; i < data.length; i++) {
+    sum += Math.sqrt(data[i]) * Math.sin(data[i]);
+  }
+  return sum;
+}
+
+function processLargeDataset(data) {
+  return data
+    .filter(item => item.active)
+    .map(item => ({
+      ...item,
+      computed: item.value * 2
+    }))
+    .sort((a, b) => b.computed - a.computed);
+}</pre><br>
+                        
+                        <strong>Step 2: Custom Hook for Worker:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// useWorker.js
+import { useEffect, useRef, useState } from 'react';
+
+const useWorker = (workerPath) => {
+  const workerRef = useRef(null);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  
+  useEffect(() => {
+    // Create worker
+    workerRef.current = new Worker(workerPath);
+    
+    // Listen for messages
+    workerRef.current.addEventListener('message', (e) => {
+      setResult(e.data);
+      setIsProcessing(false);
+    });
+    
+    // Listen for errors
+    workerRef.current.addEventListener('error', (e) => {
+      setError(e.message);
+      setIsProcessing(false);
+    });
+    
+    // Cleanup
+    return () => {
+      workerRef.current.terminate();
+    };
+  }, [workerPath]);
+  
+  const postMessage = (message) => {
+    setIsProcessing(true);
+    setError(null);
+    workerRef.current.postMessage(message);
+  };
+  
+  return { result, error, isProcessing, postMessage };
+};</pre><br>
+                        
+                        <strong>Step 3: Use in Component:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+const DataProcessor = () => {
+  const { result, isProcessing, postMessage } = useWorker('/worker.js');
+  const [data, setData] = useState([]);
+  
+  const handleProcess = () => {
+    postMessage({
+      type: 'HEAVY_CALCULATION',
+      data: data
+    });
+  };
+  
+  return (
+    &lt;div&gt;
+      &lt;button onClick={handleProcess} disabled={isProcessing}&gt;
+        {isProcessing ? 'Processing...' : 'Process Data'}
+      &lt;/button&gt;
+      {result && &lt;div&gt;Result: {result.result}&lt;/div&gt;}
+    &lt;/div&gt;
+  );
+};</pre><br>
+                        
+                        <strong>Alternative: Time Slicing (Without Workers):</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+const useTimeSlicing = (heavyTask, chunkSize = 1000) => {
+  const [result, setResult] = useState(null);
+  const [progress, setProgress] = useState(0);
+  
+  const process = async (data) => {
+    let index = 0;
+    let accumulated = [];
+    
+    while (index < data.length) {
+      const chunk = data.slice(index, index + chunkSize);
+      
+      // Process chunk in next tick
+      const chunkResult = await new Promise(resolve => {
+        setTimeout(() => {
+          resolve(heavyTask(chunk));
+        }, 0);
+      });
+      
+      accumulated.push(chunkResult);
+      index += chunkSize;
+      setProgress((index / data.length) * 100);
+    }
+    
+    setResult(accumulated);
+  };
+  
+  return { result, progress, process };
+};</pre><br>
+                        
+                        <strong>requestIdleCallback Approach:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+const processInIdle = (data, callback) => {
+  let index = 0;
+  let result = [];
+  
+  const processChunk = (deadline) => {
+    while (deadline.timeRemaining() > 0 && index < data.length) {
+      result.push(heavyOperation(data[index]));
+      index++;
+    }
+    
+    if (index < data.length) {
+      requestIdleCallback(processChunk);
+    } else {
+      callback(result);
+    }
+  };
+  
+  requestIdleCallback(processChunk);
+};</pre><br>
+                        
+                        <strong>Comparison:</strong><br>
+                        <table style="width: 100%; margin: 15px 0;">
+                            <tr style="background: #f8f9fa;">
+                                <th style="padding: 10px;">Technique</th>
+                                <th style="padding: 10px;">Pros</th>
+                                <th style="padding: 10px;">Cons</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;"><strong>Web Workers</strong></td>
+                                <td style="padding: 10px;">True parallelism, UI never blocks</td>
+                                <td style="padding: 10px;">No DOM access, setup overhead</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;"><strong>Time Slicing</strong></td>
+                                <td style="padding: 10px;">Simple, DOM access available</td>
+                                <td style="padding: 10px;">Slower overall, still on main thread</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;"><strong>requestIdleCallback</strong></td>
+                                <td style="padding: 10px;">Runs during idle time</td>
+                                <td style="padding: 10px;">Not guaranteed, browser support</td>
+                            </tr>
+                        </table><br>
+                        
+                        <strong>Best Practices:</strong><br>
+                        ✅ Use Workers for CPU-intensive tasks<br>
+                        ✅ Keep worker code separate and focused<br>
+                        ✅ Handle errors gracefully<br>
+                        ✅ Terminate workers when done<br>
+                        ✅ Consider worker pool for multiple tasks<br>
+                        ✅ Measure performance before/after
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <span class="difficulty hard">Hard</span>
+                    <h3>Q7: Production-ready React app mein performance optimization ka complete strategy kya hoga? Monitoring aur best practices explain karo.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(7)">Show Answer</button>
+                    <div class="answer" id="answer-7">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Complete Performance Strategy:</strong><br><br>
+                        
+                        <strong>Phase 1: Development (Build Time)</strong><br><br>
+                        
+                        <strong>1. Code Splitting:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// Route-based splitting
+const Home = lazy(() => import('./pages/Home'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+
+// Component-based splitting
+const HeavyChart = lazy(() => import('./components/Chart'));
+
+// Vendor splitting (webpack config)
+optimization: {
+  splitChunks: {
+    cacheGroups: {
+      vendor: {
+        test: /[\\/]node_modules[\\/]/,
+        name: 'vendors',
+        chunks: 'all'
+      }
+    }
+  }
+}</pre><br>
+                        
+                        <strong>2. Bundle Analysis:</strong><br>
+                        • webpack-bundle-analyzer use karo<br>
+                        • Large dependencies identify karo<br>
+                        • Tree-shaking verify karo<br>
+                        • Duplicate code eliminate karo<br><br>
+                        
+                        <strong>3. Component Optimization:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// Memoization strategy
+const ExpensiveList = React.memo(({ items }) => {
+  const sortedItems = useMemo(() => 
+    items.sort((a, b) => b.value - a.value),
+    [items]
+  );
+  
+  const handleClick = useCallback((id) => {
+    // Handle click
+  }, []);
+  
+  return sortedItems.map(item => 
+    &lt;Item key={item.id} onClick={handleClick} /&gt;
+  );
+});</pre><br>
+                        
+                        <strong>Phase 2: Runtime (User Experience)</strong><br><br>
+                        
+                        <strong>1. Loading States:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// Suspense with fallback
+&lt;Suspense fallback={&lt;LoadingSpinner /&gt;}&gt;
+  &lt;LazyComponent /&gt;
+&lt;/Suspense&gt;
+
+// Progressive loading
+const [isLoading, setIsLoading] = useState(true);
+const [data, setData] = useState(null);
+
+useEffect(() => {
+  // Show skeleton immediately
+  fetchData().then(result => {
+    setData(result);
+    setIsLoading(false);
+  });
+}, []);</pre><br>
+                        
+                        <strong>2. Virtualization:</strong><br>
+                        • Lists > 100 items ko virtualize karo<br>
+                        • react-window ya react-virtualized use karo<br>
+                        • Infinite scroll implement karo<br><br>
+                        
+                        <strong>3. Image Optimization:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// Lazy loading
+&lt;img src="image.jpg" loading="lazy" /&gt;
+
+// Responsive images
+&lt;img 
+  srcSet="small.jpg 480w, medium.jpg 800w, large.jpg 1200w"
+  sizes="(max-width: 600px) 480px, 800px"
+  src="medium.jpg"
+/&gt;
+
+// Progressive loading
+&lt;ProgressiveImage
+  placeholder="thumbnail.jpg"
+  src="full-image.jpg"
+/&gt;</pre><br>
+                        
+                        <strong>Phase 3: Monitoring (Production)</strong><br><br>
+                        
+                        <strong>1. Performance Metrics:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// Core Web Vitals
+import { getCLS, getFID, getLCP } from 'web-vitals';
+
+getCLS(console.log);  // Cumulative Layout Shift
+getFID(console.log);  // First Input Delay
+getLCP(console.log);  // Largest Contentful Paint
+
+// Custom metrics
+const onRenderCallback = (id, phase, actualDuration) => {
+  analytics.track('component_render', {
+    component: id,
+    phase: phase,
+    duration: actualDuration
+  });
+};</pre><br>
+                        
+                        <strong>2. Error Tracking:</strong><br>
+                        • Sentry for error monitoring<br>
+                        • LogRocket for session replay<br>
+                        • Custom error boundaries<br><br>
+                        
+                        <strong>3. Performance Budgets:</strong><br>
+                        <pre style="background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; margin: 10px 0;">
+// webpack.config.js
+performance: {
+  maxAssetSize: 250000,      // 250 KB
+  maxEntrypointSize: 400000, // 400 KB
+  hints: 'error'
+}</pre><br>
+                        
+                        <strong>Phase 4: Continuous Optimization</strong><br><br>
+                        
+                        <strong>Checklist:</strong><br>
+                        ☑️ Lighthouse score > 90<br>
+                        ☑️ First Contentful Paint < 1.8s<br>
+                        ☑️ Time to Interactive < 3.8s<br>
+                        ☑️ Total bundle size < 200 KB (gzipped)<br>
+                        ☑️ No unnecessary re-renders<br>
+                        ☑️ Images optimized (WebP, lazy loading)<br>
+                        ☑️ Code splitting implemented<br>
+                        ☑️ Caching strategy in place<br>
+                        ☑️ CDN for static assets<br>
+                        ☑️ Service Worker for offline support<br><br>
+                        
+                        <strong>Tools:</strong><br>
+                        • React DevTools Profiler<br>
+                        • Chrome DevTools Performance tab<br>
+                        • Lighthouse CI<br>
+                        • webpack-bundle-analyzer<br>
+                        • source-map-explorer<br>
+                        • Web Vitals library<br><br>
+                        
+                        <strong>Best Practices:</strong><br>
+                        ✅ Measure before optimizing<br>
+                        ✅ Set performance budgets<br>
+                        ✅ Automate performance testing<br>
+                        ✅ Monitor real user metrics (RUM)<br>
+                        ✅ Regular performance audits<br>
+                        ✅ Document optimization decisions<br>
+                        ✅ Train team on performance patterns
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // React.memo Demo
+        let parentRendersWithout = 0;
+        let childRendersWithout = 0;
+        let parentRendersWith = 0;
+        let childRendersWith = 0;
+        let propsChanged = false;
+
+        function triggerParentRender() {
+            parentRendersWithout++;
+            parentRendersWith++;
+            
+            // Without memo - child always renders
+            childRendersWithout++;
+            
+            // With memo - child only renders if props changed
+            if (propsChanged) {
+                childRendersWith++;
+            }
+            
+            updateMemoDisplay();
+        }
+
+        function changeChildProps() {
+            propsChanged = true;
+            triggerParentRender();
+            propsChanged = false;
+        }
+
+        function resetMemoDemo() {
+            parentRendersWithout = 0;
+            childRendersWithout = 0;
+            parentRendersWith = 0;
+            childRendersWith = 0;
+            propsChanged = false;
+            updateMemoDisplay();
+        }
+
+        function updateMemoDisplay() {
+            document.getElementById('parent-renders-without').textContent = parentRendersWithout;
+            document.getElementById('child-renders-without').textContent = childRendersWithout;
+            document.getElementById('parent-renders-with').textContent = parentRendersWith;
+            document.getElementById('child-renders-with').textContent = childRendersWith;
+            
+            const saved = parentRendersWith > 0 
+                ? Math.round(((childRendersWithout - childRendersWith) / childRendersWithout) * 100)
+                : 0;
+            document.getElementById('memo-savings').textContent = saved + '% renders saved';
+        }
+
+        // useCallback & useMemo Demo
+        let rendersWithout = 0;
+        let calcsWithout = 0;
+        let funcsWithout = 0;
+        let rendersWith = 0;
+        let calcsWith = 0;
+        let funcsWith = 0;
+
+        function triggerHookDemo(type) {
+            if (type === 'without') {
+                const start = performance.now();
+                rendersWithout++;
+                calcsWithout++;
+                funcsWithout++;
+                const time = Math.round(performance.now() - start + Math.random() * 50);
+                
+                document.getElementById('renders-without-hooks').textContent = rendersWithout;
+                document.getElementById('calcs-without-hooks').textContent = calcsWithout;
+                document.getElementById('funcs-without-hooks').textContent = funcsWithout;
+                document.getElementById('time-without-hooks').textContent = time + 'ms';
+                
+                updateHooksChart();
+            } else {
+                const start = performance.now();
+                rendersWith++;
+                // Memoized - calculations don't run every time
+                if (Math.random() > 0.7) calcsWith++;
+                if (Math.random() > 0.7) funcsWith++;
+                const time = Math.round(performance.now() - start + Math.random() * 10);
+                
+                document.getElementById('renders-with-hooks').textContent = rendersWith;
+                document.getElementById('calcs-with-hooks').textContent = calcsWith;
+                document.getElementById('funcs-with-hooks').textContent = funcsWith;
+                document.getElementById('time-with-hooks').textContent = time + 'ms';
+                
+                updateHooksChart();
+            }
+        }
+
+        function resetHookDemo() {
+            rendersWithout = calcsWithout = funcsWithout = 0;
+            rendersWith = calcsWith = funcsWith = 0;
+            
+            document.getElementById('renders-without-hooks').textContent = '0';
+            document.getElementById('calcs-without-hooks').textContent = '0';
+            document.getElementById('funcs-without-hooks').textContent = '0';
+            document.getElementById('time-without-hooks').textContent = '0ms';
+            document.getElementById('renders-with-hooks').textContent = '0';
+            document.getElementById('calcs-with-hooks').textContent = '0';
+            document.getElementById('funcs-with-hooks').textContent = '0';
+            document.getElementById('time-with-hooks').textContent = '0ms';
+            
+            updateHooksChart();
+        }
+
+        function updateHooksChart() {
+            const maxRenders = Math.max(rendersWithout, rendersWith, 1);
+            const maxCalcs = Math.max(calcsWithout, calcsWith, 1);
+            
+            document.getElementById('bar-renders').style.height = (rendersWithout / maxRenders * 100) + '%';
+            document.getElementById('bar-renders').querySelector('.chart-bar-value').textContent = rendersWithout;
+            
+            document.getElementById('bar-calcs').style.height = (calcsWithout / maxCalcs * 100) + '%';
+            document.getElementById('bar-calcs').querySelector('.chart-bar-value').textContent = calcsWithout;
+            
+            const timeWithout = parseInt(document.getElementById('time-without-hooks').textContent) || 0;
+            const timeWith = parseInt(document.getElementById('time-with-hooks').textContent) || 0;
+            const maxTime = Math.max(timeWithout, timeWith, 1);
+            
+            document.getElementById('bar-time').style.height = (timeWithout / maxTime * 100) + '%';
+            document.getElementById('bar-time').querySelector('.chart-bar-value').textContent = timeWithout + 'ms';
+        }
+
+        // Re-render Demo
+        let parentRenders = 0;
+        let childARenders = 0;
+        let childBRenders = 0;
+        let grandchildRenders = 0;
+
+        function testRerender(type) {
+            parentRenders++;
+            childBRenders++; // Not memoized
+            grandchildRenders++; // Child of non-memoized
+            
+            // Child A is memoized, only renders if props change
+            if (type === 'props') {
+                childARenders++;
+            }
+            
+            updateRerenderDisplay();
+        }
+
+        function resetRerenderDemo() {
+            parentRenders = childARenders = childBRenders = grandchildRenders = 0;
+            updateRerenderDisplay();
+        }
+
+        function updateRerenderDisplay() {
+            document.getElementById('parent-renders').textContent = parentRenders;
+            document.getElementById('child-a-renders').textContent = childARenders;
+            document.getElementById('child-b-renders').textContent = childBRenders;
+            document.getElementById('grandchild-renders').textContent = grandchildRenders;
+            
+            const total = parentRenders + childARenders + childBRenders + grandchildRenders;
+            const prevented = parentRenders > 0 ? (parentRenders - childARenders) : 0;
+            const gain = total > 0 ? Math.round((prevented / total) * 100) : 0;
+            
+            document.getElementById('total-rerenders').textContent = total;
+            document.getElementById('prevented-rerenders').textContent = prevented;
+            document.getElementById('performance-gain').textContent = gain + '%';
+        }
+
+        // Profiler Demo
+        let profilerCount = 0;
+
+        function profileComponent(type) {
+            profilerCount++;
+            
+            const profiles = {
+                'fast': { id: 'FastComponent', phase: 'update', actual: 2, base: 2, score: 'Excellent ⭐⭐⭐' },
+                'slow': { id: 'SlowComponent', phase: 'update', actual: 45, base: 15, score: 'Needs Optimization ⚠️' },
+                'heavy': { id: 'HeavyComponent', phase: 'mount', actual: 120, base: 80, score: 'Poor ❌' }
+            };
+            
+            const profile = profiles[type];
+            
+            document.getElementById('profiler-id').textContent = profile.id;
+            document.getElementById('profiler-phase').textContent = profile.phase;
+            document.getElementById('profiler-actual').textContent = profile.actual + 'ms';
+            document.getElementById('profiler-base').textContent = profile.base + 'ms';
+            document.getElementById('profiler-count').textContent = profilerCount;
+            document.getElementById('profiler-score').textContent = profile.score;
+            
+            // Update chart
+            const maxTime = 120;
+            document.getElementById('prof-bar-render').style.height = (profile.actual / maxTime * 100) + '%';
+            document.getElementById('prof-bar-render').querySelector('.chart-bar-value').textContent = profile.actual + 'ms';
+            
+            const commitTime = Math.round(profile.actual * 0.3);
+            document.getElementById('prof-bar-commit').style.height = (commitTime / maxTime * 100) + '%';
+            document.getElementById('prof-bar-commit').querySelector('.chart-bar-value').textContent = commitTime + 'ms';
+            
+            const effectsTime = Math.round(profile.actual * 0.2);
+            document.getElementById('prof-bar-effects').style.height = (effectsTime / maxTime * 100) + '%';
+            document.getElementById('prof-bar-effects').querySelector('.chart-bar-value').textContent = effectsTime + 'ms';
+        }
+
+        // Virtualization Demo
+        function generateList() {
+            const size = parseInt(document.getElementById('list-size').value);
+            const normalList = document.getElementById('normal-list');
+            const virtualList = document.getElementById('virtual-list');
+            
+            // Normal list - render all items
+            const normalStart = performance.now();
+            normalList.innerHTML = '';
+            for (let i = 0; i < size; i++) {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.textContent = `Item ${i + 1} - Lorem ipsum dolor sit amet`;
+                normalList.appendChild(item);
+            }
+            const normalTime = Math.round(performance.now() - normalStart);
+            
+            // Virtual list - render only visible items
+            const virtualStart = performance.now();
+            virtualList.innerHTML = '';
+            const visibleCount = 6; // Only render ~6 visible items
+            for (let i = 0; i < visibleCount; i++) {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.textContent = `Item ${i + 1} - Lorem ipsum dolor sit amet`;
+                virtualList.appendChild(item);
+            }
+            const virtualTime = Math.round(performance.now() - virtualStart);
+            
+            // Update stats
+            document.getElementById('normal-nodes').textContent = size;
+            document.getElementById('normal-time').textContent = normalTime + 'ms';
+            document.getElementById('normal-memory').textContent = (size * 0.05).toFixed(2) + ' MB';
+            
+            document.getElementById('virtual-nodes').textContent = visibleCount;
+            document.getElementById('virtual-time').textContent = virtualTime + 'ms';
+            document.getElementById('virtual-memory').textContent = (visibleCount * 0.05).toFixed(2) + ' MB';
+            
+            // Comparison
+            const speedImprovement = (normalTime / virtualTime).toFixed(1);
+            const memorySaved = Math.round(((size - visibleCount) / size) * 100);
+            const nodesSaved = Math.round(((size - visibleCount) / size) * 100);
+            
+            document.getElementById('speed-improvement').textContent = speedImprovement + 'x';
+            document.getElementById('memory-saved').textContent = memorySaved + '%';
+            document.getElementById('nodes-saved').textContent = nodesSaved + '%';
+        }
+
+        // Heavy Computation Demo
+        let uiResponsive = true;
+
+        function runHeavyTask(type) {
+            const statusEl = document.getElementById(type + '-status');
+            const timeEl = document.getElementById(type + '-time');
+            const progress = document.getElementById('computation-progress');
+            
+            statusEl.textContent = 'Running...';
+            progress.style.width = '0%';
+            progress.textContent = '0%';
+            
+            if (type === 'blocking') {
+                uiResponsive = false;
+                const start = performance.now();
+                
+                // Simulate heavy computation
+                let sum = 0;
+                for (let i = 0; i < 100000000; i++) {
+                    sum += Math.sqrt(i);
+                    if (i % 10000000 === 0) {
+                        const percent = Math.round((i / 100000000) * 100);
+                        progress.style.width = percent + '%';
+                        progress.textContent = percent + '%';
+                    }
+                }
+                
+                const time = Math.round(performance.now() - start);
+                statusEl.textContent = 'Completed';
+                timeEl.textContent = time + 'ms';
+                progress.style.width = '100%';
+                progress.textContent = '100%';
+                uiResponsive = true;
+            } else {
+                // Simulate non-blocking (worker or time-sliced)
+                let percent = 0;
+                const interval = setInterval(() => {
+                    percent += 10;
+                    progress.style.width = percent + '%';
+                    progress.textContent = percent + '%';
+                    
+                    if (percent >= 100) {
+                        clearInterval(interval);
+                        statusEl.textContent = 'Completed';
+                        timeEl.textContent = Math.round(Math.random() * 500 + 200) + 'ms';
+                    }
+                }, 100);
+            }
+        }
+
+        function testResponsiveness() {
+            const result = document.getElementById('responsiveness-result');
+            if (uiResponsive) {
+                result.innerHTML = '<div style="color: #28a745; font-weight: bold;">✅ UI is responsive! Button clicked successfully.</div>';
+            } else {
+                result.innerHTML = '<div style="color: #dc3545; font-weight: bold;">❌ UI is blocked! This click was delayed.</div>';
+            }
+            
+            setTimeout(() => {
+                result.innerHTML = 'Click the button to test UI responsiveness';
+            }, 3000);
+        }
+
+        // Toggle Answer Function
+        function toggleAnswer(num) {
+            const answer = document.getElementById('answer-' + num);
+            const button = answer.previousElementSibling;
+            
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                button.textContent = 'Show Answer';
+            } else {
+                answer.classList.add('show');
+                button.textContent = 'Hide Answer';
+            }
+        }
+    </script>
+</body>
+</html>

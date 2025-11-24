@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Data & TypeScript - Interactive Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin: 25px 0 15px 0;
+            font-size: 1.5em;
+        }
+
+        .hinglish {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .technical {
+            background: #d1ecf1;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #17a2b8;
+            font-family: 'Courier New', monospace;
+        }
+
+        .demo-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .message-box {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            min-height: 200px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+        }
+
+        .message {
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .message.sent {
+            background: #667eea;
+            color: white;
+            margin-left: 20%;
+        }
+
+        .message.received {
+            background: #28a745;
+            color: white;
+            margin-right: 20%;
+        }
+
+        .message.system {
+            background: #ffc107;
+            color: #333;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 120px);
+            padding: 12px;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            font-size: 1em;
+            margin-right: 10px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-connected {
+            background: #28a745;
+        }
+
+        .status-disconnected {
+            background: #dc3545;
+        }
+
+        .status-connecting {
+            background: #ffc107;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .code-block .keyword {
+            color: #c678dd;
+        }
+
+        .code-block .string {
+            color: #98c379;
+        }
+
+        .code-block .function {
+            color: #61afef;
+        }
+
+        .code-block .comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+
+        .interview-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+
+        .question-card {
+            background: white;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .question-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .question-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .answer.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .difficulty.easy {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .difficulty.medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .difficulty.hard {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .tab-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 12px 25px;
+            background: #e9ecef;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .visual-demo {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .node {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            position: relative;
+        }
+
+        .client {
+            background: #667eea;
+        }
+
+        .server {
+            background: #764ba2;
+        }
+
+        .arrow {
+            width: 150px;
+            height: 3px;
+            background: #28a745;
+            position: relative;
+            animation: dataFlow 2s infinite;
+        }
+
+        @keyframes dataFlow {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .arrow::after {
+            content: '→';
+            position: absolute;
+            right: -20px;
+            top: -12px;
+            font-size: 2em;
+            color: #28a745;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            input[type="text"] {
+                width: calc(100% - 100px);
+            }
+
+            .visual-demo {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .arrow {
+                width: 3px;
+                height: 80px;
+                transform: rotate(90deg);
+            }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .emoji {
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Real-time Data & TypeScript</h1>
+            <p>WebSockets, Socket.io, SSE aur React + TypeScript ka complete guide</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+        </header>
+
+        <div class="content">
+            <!-- Section 1: WebSockets -->
+            <div class="section">
+                <h2><span class="emoji">🔌</span> WebSockets</h2>
+                
+                <div class="hinglish">
+                    <strong>Kya hai WebSocket?</strong><br>
+                    WebSocket ek communication protocol hai jo client aur server ke beech <strong>full-duplex</strong> (do-taraf ka) real-time connection provide karta hai. Matlab dono taraf se simultaneously data bhej sakte hain, jaise phone call mein dono log ek saath baat kar sakte hain!
+                </div>
+
+                <div class="technical">
+                    <strong>Technical Definition:</strong><br>
+                    WebSocket is a computer communications protocol providing full-duplex communication channels over a single TCP connection. It enables persistent, bidirectional communication between client and server.
+                </div>
+
+                <h3>WebSocket vs HTTP - Difference samjho</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>HTTP</th>
+                            <th>WebSocket</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Communication</td>
+                            <td>Request-Response (ek taraf)</td>
+                            <td>Full-Duplex (dono taraf)</td>
+                        </tr>
+                        <tr>
+                            <td>Connection</td>
+                            <td>Har request ke liye naya</td>
+                            <td>Persistent (ek baar connect, hamesha on)</td>
+                        </tr>
+                        <tr>
+                            <td>Overhead</td>
+                            <td>High (headers har baar)</td>
+                            <td>Low (ek baar handshake)</td>
+                        </tr>
+                        <tr>
+                            <td>Real-time</td>
+                            <td>Polling required</td>
+                            <td>Native support</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>🎮 Interactive Demo: WebSocket Simulator</h3>
+                <div class="demo-box">
+                    <div class="visual-demo">
+                        <div class="node client">Client<br>🖥️</div>
+                        <div class="arrow" id="arrow1"></div>
+                        <div class="node server">Server<br>⚙️</div>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <span class="status-indicator" id="wsStatus"></span>
+                        <span id="wsStatusText">Disconnected</span>
+                    </div>
+
+                    <button class="btn btn-success" onclick="connectWebSocket()">Connect WebSocket</button>
+                    <button class="btn btn-danger" onclick="disconnectWebSocket()">Disconnect</button>
+                    
+                    <div style="margin-top: 20px;">
+                        <input type="text" id="wsMessage" placeholder="Message type karo..." onkeypress="if(event.key==='Enter') sendWSMessage()">
+                        <button class="btn" onclick="sendWSMessage()">Send</button>
+                    </div>
+
+                    <div class="message-box" id="wsMessages"></div>
+                </div>
+
+                <h3>Code Example</h3>
+                <div class="code-block">
+<span class="comment">// Client-side WebSocket</span>
+<span class="keyword">const</span> socket = <span class="keyword">new</span> <span class="function">WebSocket</span>(<span class="string">'ws://localhost:8080'</span>);
+
+<span class="comment">// Connection open hone par</span>
+socket.<span class="function">addEventListener</span>(<span class="string">'open'</span>, (event) => {
+    console.<span class="function">log</span>(<span class="string">'Connected to server!'</span>);
+    socket.<span class="function">send</span>(<span class="string">'Hello Server!'</span>);
+});
+
+<span class="comment">// Message receive karne par</span>
+socket.<span class="function">addEventListener</span>(<span class="string">'message'</span>, (event) => {
+    console.<span class="function">log</span>(<span class="string">'Message from server:'</span>, event.data);
+});
+
+<span class="comment">// Connection close hone par</span>
+socket.<span class="function">addEventListener</span>(<span class="string">'close'</span>, (event) => {
+    console.<span class="function">log</span>(<span class="string">'Disconnected from server'</span>);
+});
+                </div>
+            </div>
+
+            <!-- Section 2: Socket.io -->
+            <div class="section">
+                <h2><span class="emoji">⚡</span> Socket.io</h2>
+                
+                <div class="hinglish">
+                    <strong>Socket.io kya hai?</strong><br>
+                    Socket.io ek library hai jo WebSocket ke upar built hai, lekin isse bahut zyada features milte hain! Ye automatically fallback provide karta hai agar WebSocket support nahi hai, aur rooms, namespaces, acknowledgments jaise powerful features deta hai. Matlab ye WebSocket ka "supercharged" version hai! 💪
+                </div>
+
+                <div class="technical">
+                    <strong>Technical Definition:</strong><br>
+                    Socket.io is a JavaScript library for real-time web applications. It enables real-time, bidirectional, and event-based communication between browser and server. It consists of a Node.js server and a JavaScript client library.
+                </div>
+
+                <h3>Socket.io ke Special Features</h3>
+                <div class="tab-container">
+                    <button class="tab active" onclick="switchTab(0)">Rooms</button>
+                    <button class="tab" onclick="switchTab(1)">Events</button>
+                    <button class="tab" onclick="switchTab(2)">Broadcast</button>
+                </div>
+
+                <div class="tab-content active" id="tab0">
+                    <div class="hinglish">
+                        <strong>Rooms:</strong> Ye virtual channels hain jahan specific users ko group kar sakte ho. Jaise WhatsApp groups! Ek room mein message bhejo, sirf us room ke members ko milega.
+                    </div>
+                    <div class="code-block">
+<span class="comment">// Server-side: User ko room mein add karo</span>
+socket.<span class="function">join</span>(<span class="string">'room1'</span>);
+
+<span class="comment">// Specific room mein message bhejo</span>
+io.<span class="function">to</span>(<span class="string">'room1'</span>).<span class="function">emit</span>(<span class="string">'message'</span>, <span class="string">'Hello Room 1!'</span>);
+
+<span class="comment">// Room se leave karo</span>
+socket.<span class="function">leave</span>(<span class="string">'room1'</span>);
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab1">
+                    <div class="hinglish">
+                        <strong>Custom Events:</strong> Apne custom events create kar sakte ho, sirf 'message' tak limited nahi! Jaise 'userJoined', 'typing', 'notification' etc.
+                    </div>
+                    <div class="code-block">
+<span class="comment">// Server-side</span>
+socket.<span class="function">on</span>(<span class="string">'userTyping'</span>, (data) => {
+    socket.<span class="function">broadcast</span>.<span class="function">emit</span>(<span class="string">'userTyping'</span>, data);
+});
+
+<span class="comment">// Client-side</span>
+socket.<span class="function">emit</span>(<span class="string">'userTyping'</span>, { user: <span class="string">'Raj'</span>, typing: <span class="keyword">true</span> });
+
+socket.<span class="function">on</span>(<span class="string">'userTyping'</span>, (data) => {
+    console.<span class="function">log</span>(data.user + <span class="string">' is typing...'</span>);
+});
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab2">
+                    <div class="hinglish">
+                        <strong>Broadcasting:</strong> Ek message sabko bhejo except khud ko! Jaise jab koi user join kare, baaki sabko notify karo.
+                    </div>
+                    <div class="code-block">
+<span class="comment">// Sabko bhejo except sender</span>
+socket.<span class="function">broadcast</span>.<span class="function">emit</span>(<span class="string">'userJoined'</span>, <span class="string">'New user joined!'</span>);
+
+<span class="comment">// Sabko bhejo including sender</span>
+io.<span class="function">emit</span>(<span class="string">'announcement'</span>, <span class="string">'Server maintenance in 5 min'</span>);
+                    </div>
+                </div>
+
+                <h3>🎮 Interactive Demo: Chat Room Simulator</h3>
+                <div class="demo-box">
+                    <div style="margin-bottom: 20px;">
+                        <label><strong>Room select karo:</strong></label><br>
+                        <button class="btn" onclick="joinRoom('general')">General 💬</button>
+                        <button class="btn" onclick="joinRoom('tech')">Tech 💻</button>
+                        <button class="btn" onclick="joinRoom('random')">Random 🎲</button>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 15px 0;">
+                        <strong>Current Room: <span id="currentRoom">None</span></strong>
+                    </div>
+
+                    <div class="message-box" id="chatMessages"></div>
+                    
+                    <div style="margin-top: 15px;">
+                        <input type="text" id="chatInput" placeholder="Message type karo..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+                        <button class="btn" onclick="sendChatMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: SSE -->
+            <div class="section">
+                <h2><span class="emoji">📡</span> Server-Sent Events (SSE)</h2>
+                
+                <div class="hinglish">
+                    <strong>SSE kya hai?</strong><br>
+                    Server-Sent Events ek technology hai jahan <strong>sirf server client ko data bhej sakta hai</strong>, client server ko nahi. Ye one-way communication hai, jaise TV broadcast - tum sirf receive karte ho, wapas nahi bhej sakte. Ye stock prices, news feeds, notifications ke liye perfect hai! 📊
+                </div>
+
+                <div class="technical">
+                    <strong>Technical Definition:</strong><br>
+                    Server-Sent Events (SSE) is a server push technology enabling a client to receive automatic updates from a server via HTTP connection. It's a unidirectional communication channel from server to client.
+                </div>
+
+                <h3>SSE vs WebSocket - Kab kya use karein?</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>SSE</th>
+                            <th>WebSocket</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Direction</td>
+                            <td>Server → Client (one-way)</td>
+                            <td>Both ways (bidirectional)</td>
+                        </tr>
+                        <tr>
+                            <td>Protocol</td>
+                            <td>HTTP</td>
+                            <td>WebSocket Protocol</td>
+                        </tr>
+                        <tr>
+                            <td>Complexity</td>
+                            <td>Simple</td>
+                            <td>Complex</td>
+                        </tr>
+                        <tr>
+                            <td>Auto Reconnect</td>
+                            <td>Built-in</td>
+                            <td>Manual implementation</td>
+                        </tr>
+                        <tr>
+                            <td>Use Case</td>
+                            <td>News feeds, Stock prices, Notifications</td>
+                            <td>Chat apps, Gaming, Collaborative tools</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>🎮 Interactive Demo: Live Stock Price Simulator</h3>
+                <div class="demo-box">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <button class="btn btn-success" onclick="startSSE()">Start Live Updates</button>
+                        <button class="btn btn-danger" onclick="stopSSE()">Stop Updates</button>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 0.9em; color: #666;">AAPL</div>
+                            <div style="font-size: 2em; font-weight: bold; color: #667eea;" id="stock1">$150.00</div>
+                            <div style="font-size: 0.8em;" id="change1">--</div>
+                        </div>
+                        <div style="background: #f3e5f5; padding: 20px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 0.9em; color: #666;">GOOGL</div>
+                            <div style="font-size: 2em; font-weight: bold; color: #764ba2;" id="stock2">$2800.00</div>
+                            <div style="font-size: 0.8em;" id="change2">--</div>
+                        </div>
+                        <div style="background: #e8f5e9; padding: 20px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 0.9em; color: #666;">TSLA</div>
+                            <div style="font-size: 2em; font-weight: bold; color: #28a745;" id="stock3">$700.00</div>
+                            <div style="font-size: 0.8em;" id="change3">--</div>
+                        </div>
+                    </div>
+
+                    <div class="message-box" id="sseMessages" style="margin-top: 20px; max-height: 150px;"></div>
+                </div>
+
+                <h3>Code Example</h3>
+                <div class="code-block">
+<span class="comment">// Client-side SSE</span>
+<span class="keyword">const</span> eventSource = <span class="keyword">new</span> <span class="function">EventSource</span>(<span class="string">'/api/stream'</span>);
+
+<span class="comment">// Message receive karne par</span>
+eventSource.<span class="function">addEventListener</span>(<span class="string">'message'</span>, (event) => {
+    <span class="keyword">const</span> data = JSON.<span class="function">parse</span>(event.data);
+    console.<span class="function">log</span>(<span class="string">'Received:'</span>, data);
+});
+
+<span class="comment">// Custom event listen karo</span>
+eventSource.<span class="function">addEventListener</span>(<span class="string">'stockUpdate'</span>, (event) => {
+    <span class="keyword">const</span> stock = JSON.<span class="function">parse</span>(event.data);
+    <span class="function">updateStockPrice</span>(stock);
+});
+
+<span class="comment">// Connection close karo</span>
+eventSource.<span class="function">close</span>();
+                </div>
+            </div>
+
+            <!-- Section 4: React + TypeScript -->
+            <div class="section">
+                <h2><span class="emoji">⚛️</span> React + TypeScript</h2>
+                
+                <div class="hinglish">
+                    <strong>TypeScript React mein kyun?</strong><br>
+                    TypeScript React ke saath use karne se tumhare code mein <strong>type safety</strong> aati hai. Matlab galat type ka data pass kiya toh compile time pe hi error mil jayega, runtime pe nahi! Ye bugs kam karta hai aur code zyada maintainable banata hai. 🛡️
+                </div>
+
+                <div class="technical">
+                    <strong>Technical Definition:</strong><br>
+                    TypeScript is a strongly typed programming language that builds on JavaScript. When used with React, it provides static type checking, better IDE support, and improved code documentation through type annotations.
+                </div>
+
+                <h3>Props & State Types</h3>
+                <div class="code-block">
+<span class="comment">// Props ke liye interface define karo</span>
+<span class="keyword">interface</span> UserProps {
+    name: <span class="keyword">string</span>;
+    age: <span class="keyword">number</span>;
+    email?: <span class="keyword">string</span>; <span class="comment">// Optional prop</span>
+    onUpdate: (id: <span class="keyword">number</span>) => <span class="keyword">void</span>;
+}
+
+<span class="comment">// Functional Component with typed props</span>
+<span class="keyword">const</span> <span class="function">UserCard</span>: React.FC&lt;UserProps&gt; = ({ name, age, email, onUpdate }) => {
+    <span class="keyword">return</span> (
+        &lt;div&gt;
+            &lt;h3&gt;{name}&lt;/h3&gt;
+            &lt;p&gt;Age: {age}&lt;/p&gt;
+            {email && &lt;p&gt;Email: {email}&lt;/p&gt;}
+        &lt;/div&gt;
+    );
+};
+
+<span class="comment">// State ke liye type define karo</span>
+<span class="keyword">interface</span> AppState {
+    count: <span class="keyword">number</span>;
+    user: { name: <span class="keyword">string</span>; id: <span class="keyword">number</span> } | <span class="keyword">null</span>;
+    loading: <span class="keyword">boolean</span>;
+}
+
+<span class="keyword">const</span> [state, setState] = useState&lt;AppState&gt;({
+    count: <span class="keyword">0</span>,
+    user: <span class="keyword">null</span>,
+    loading: <span class="keyword">false</span>
+});
+                </div>
+
+                <h3>Custom Hooks with TypeScript</h3>
+                <div class="code-block">
+<span class="comment">// Custom hook for WebSocket</span>
+<span class="keyword">interface</span> UseWebSocketReturn {
+    messages: <span class="keyword">string</span>[];
+    sendMessage: (msg: <span class="keyword">string</span>) => <span class="keyword">void</span>;
+    isConnected: <span class="keyword">boolean</span>;
+}
+
+<span class="keyword">function</span> <span class="function">useWebSocket</span>(url: <span class="keyword">string</span>): UseWebSocketReturn {
+    <span class="keyword">const</span> [messages, setMessages] = useState&lt;<span class="keyword">string</span>[]&gt;([]);
+    <span class="keyword">const</span> [isConnected, setIsConnected] = useState(<span class="keyword">false</span>);
+    <span class="keyword">const</span> socketRef = useRef&lt;WebSocket | <span class="keyword">null</span>&gt;(<span class="keyword">null</span>);
+
+    useEffect(() => {
+        socketRef.current = <span class="keyword">new</span> <span class="function">WebSocket</span>(url);
+        
+        socketRef.current.<span class="function">addEventListener</span>(<span class="string">'open'</span>, () => {
+            setIsConnected(<span class="keyword">true</span>);
+        });
+
+        socketRef.current.<span class="function">addEventListener</span>(<span class="string">'message'</span>, (event) => {
+            setMessages(prev => [...prev, event.data]);
+        });
+
+        <span class="keyword">return</span> () => socketRef.current?.<span class="function">close</span>();
+    }, [url]);
+
+    <span class="keyword">const</span> <span class="function">sendMessage</span> = (msg: <span class="keyword">string</span>) => {
+        socketRef.current?.<span class="function">send</span>(msg);
+    };
+
+    <span class="keyword">return</span> { messages, sendMessage, isConnected };
+}
+                </div>
+
+                <h3>Redux with TypeScript</h3>
+                <div class="code-block">
+<span class="comment">// Action types define karo</span>
+<span class="keyword">interface</span> IncrementAction {
+    type: <span class="string">'INCREMENT'</span>;
+    payload: <span class="keyword">number</span>;
+}
+
+<span class="keyword">interface</span> DecrementAction {
+    type: <span class="string">'DECREMENT'</span>;
+    payload: <span class="keyword">number</span>;
+}
+
+<span class="keyword">type</span> CounterAction = IncrementAction | DecrementAction;
+
+<span class="comment">// State type</span>
+<span class="keyword">interface</span> CounterState {
+    value: <span class="keyword">number</span>;
+}
+
+<span class="comment">// Reducer with types</span>
+<span class="keyword">const</span> <span class="function">counterReducer</span> = (
+    state: CounterState = { value: <span class="keyword">0</span> },
+    action: CounterAction
+): CounterState => {
+    <span class="keyword">switch</span> (action.type) {
+        <span class="keyword">case</span> <span class="string">'INCREMENT'</span>:
+            <span class="keyword">return</span> { value: state.value + action.payload };
+        <span class="keyword">case</span> <span class="string">'DECREMENT'</span>:
+            <span class="keyword">return</span> { value: state.value - action.payload };
+        <span class="keyword">default</span>:
+            <span class="keyword">return</span> state;
+    }
+};
+                </div>
+
+                <h3>🎮 Interactive Demo: Type Safety Checker</h3>
+                <div class="demo-box">
+                    <div class="hinglish" style="margin-bottom: 20px;">
+                        Neeche different scenarios try karo aur dekho TypeScript kaise errors catch karta hai!
+                    </div>
+
+                    <div style="margin: 15px 0;">
+                        <strong>Scenario 1: Props Type Checking</strong>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                            <code>UserCard name="Raj" age="25" ❌</code>
+                            <div style="color: #dc3545; margin-top: 10px;">
+                                ❌ Error: Type 'string' is not assignable to type 'number'
+                            </div>
+                        </div>
+                        <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                            <code>UserCard name="Raj" age={25} ✅</code>
+                            <div style="color: #155724; margin-top: 10px;">
+                                ✅ Correct: All types match!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin: 15px 0;">
+                        <strong>Scenario 2: State Type Checking</strong>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                            <code>setState({ count: "10" }) ❌</code>
+                            <div style="color: #dc3545; margin-top: 10px;">
+                                ❌ Error: Type 'string' is not assignable to type 'number'
+                            </div>
+                        </div>
+                        <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                            <code>setState({ count: 10 }) ✅</code>
+                            <div style="color: #155724; margin-top: 10px;">
+                                ✅ Correct: Type matches AppState interface!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>TypeScript Best Practices</h3>
+                <div class="hinglish">
+                    <ul style="margin-left: 20px; line-height: 2;">
+                        <li>✅ <strong>Interfaces use karo</strong> props aur state ke liye</li>
+                        <li>✅ <strong>Type annotations</strong> explicitly likho, inference pe depend mat karo</li>
+                        <li>✅ <strong>Generics use karo</strong> reusable components ke liye</li>
+                        <li>✅ <strong>Strict mode enable karo</strong> tsconfig.json mein</li>
+                        <li>✅ <strong>Any type avoid karo</strong> jitna ho sake</li>
+                        <li>✅ <strong>Union types use karo</strong> multiple possible types ke liye</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Interview Questions Section -->
+            <div class="interview-section">
+                <h2 style="color: white; text-align: center; margin-bottom: 30px;">
+                    <span class="emoji">💼</span> Interview Questions
+                </h2>
+
+                <div class="question-card" onclick="toggleAnswer(1)">
+                    <h4>Q1: WebSocket aur HTTP mein kya difference hai? <span class="difficulty easy">Easy</span></h4>
+                    <div class="answer" id="answer1">
+                        <strong>Answer:</strong><br>
+                        <strong>HTTP:</strong> Request-response model hai. Client request bhejta hai, server response deta hai. Har request ke liye naya connection banta hai. Ye stateless protocol hai.<br><br>
+                        <strong>WebSocket:</strong> Persistent, full-duplex connection hai. Ek baar connection ban gaya toh dono taraf se simultaneously data bhej sakte hain. Ye stateful protocol hai aur real-time communication ke liye perfect hai.<br><br>
+                        <strong>Key Differences:</strong>
+                        <ul>
+                            <li>HTTP: Unidirectional, WebSocket: Bidirectional</li>
+                            <li>HTTP: New connection har request pe, WebSocket: Single persistent connection</li>
+                            <li>HTTP: High overhead (headers), WebSocket: Low overhead</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(2)">
+                    <h4>Q2: Socket.io mein rooms aur namespaces ka kya use hai? <span class="difficulty medium">Medium</span></h4>
+                    <div class="answer" id="answer2">
+                        <strong>Answer:</strong><br>
+                        <strong>Rooms:</strong> Rooms arbitrary channels hain jahan sockets ko group kar sakte ho. Ek socket multiple rooms mein ho sakta hai. Ye server-side concept hai aur specific groups ko messages broadcast karne ke liye use hota hai.<br><br>
+                        <strong>Example:</strong> Chat application mein different chat rooms (General, Tech, Random)<br><br>
+                        <strong>Namespaces:</strong> Namespaces application logic ko separate karne ka tarika hai. Ye different endpoints create karte hain ek hi connection pe. Har namespace ka apna event handlers aur rooms ho sakte hain.<br><br>
+                        <strong>Example:</strong> /admin namespace for admin users, /user namespace for regular users<br><br>
+                        <strong>Key Difference:</strong> Namespaces connection level pe separation provide karte hain, jabki rooms ek namespace ke andar grouping provide karte hain.
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(3)">
+                    <h4>Q3: SSE kab use karein aur kab WebSocket? <span class="difficulty medium">Medium</span></h4>
+                    <div class="answer" id="answer3">
+                        <strong>Answer:</strong><br>
+                        <strong>SSE use karo jab:</strong>
+                        <ul>
+                            <li>Sirf server se client ko data bhejna hai (one-way)</li>
+                            <li>Simple implementation chahiye</li>
+                            <li>Automatic reconnection chahiye</li>
+                            <li>HTTP infrastructure use karna hai</li>
+                            <li>Use cases: Stock prices, news feeds, notifications, live scores</li>
+                        </ul><br>
+                        <strong>WebSocket use karo jab:</strong>
+                        <ul>
+                            <li>Bidirectional communication chahiye</li>
+                            <li>Low latency critical hai</li>
+                            <li>High frequency data exchange hai</li>
+                            <li>Binary data transfer karna hai</li>
+                            <li>Use cases: Chat applications, multiplayer games, collaborative editing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(4)">
+                    <h4>Q4: React mein TypeScript ke kya benefits hain? <span class="difficulty easy">Easy</span></h4>
+                    <div class="answer" id="answer4">
+                        <strong>Answer:</strong><br>
+                        <strong>Main Benefits:</strong>
+                        <ul>
+                            <li><strong>Type Safety:</strong> Compile time pe errors catch ho jate hain, runtime pe nahi</li>
+                            <li><strong>Better IDE Support:</strong> Autocomplete, IntelliSense, aur refactoring tools better work karte hain</li>
+                            <li><strong>Self-documenting Code:</strong> Types se code ka documentation automatically ban jata hai</li>
+                            <li><strong>Easier Refactoring:</strong> Type system ki wajah se refactoring safe aur easy ho jata hai</li>
+                            <li><strong>Better Team Collaboration:</strong> Types se code ka contract clear hota hai</li>
+                            <li><strong>Catch Bugs Early:</strong> Props, state, aur function arguments mein type mismatches turant catch ho jate hain</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(5)">
+                    <h4>Q5: Custom hooks mein TypeScript kaise use karein? <span class="difficulty medium">Medium</span></h4>
+                    <div class="answer" id="answer5">
+                        <strong>Answer:</strong><br>
+                        Custom hooks mein TypeScript use karne ke liye:<br><br>
+                        <strong>1. Return type define karo:</strong> Hook kya return karega, uska interface/type banao<br>
+                        <strong>2. Parameter types define karo:</strong> Hook ko kya arguments chahiye<br>
+                        <strong>3. Internal state types:</strong> useState, useRef ke liye proper types use karo<br><br>
+                        <strong>Example Pattern:</strong><br>
+                        <code>
+                        interface UseApiReturn&lt;T&gt; {<br>
+                        &nbsp;&nbsp;data: T | null;<br>
+                        &nbsp;&nbsp;loading: boolean;<br>
+                        &nbsp;&nbsp;error: Error | null;<br>
+                        &nbsp;&nbsp;refetch: () => void;<br>
+                        }<br><br>
+                        function useApi&lt;T&gt;(url: string): UseApiReturn&lt;T&gt; { ... }
+                        </code><br><br>
+                        <strong>Benefits:</strong> Type safety, better autocomplete, aur reusability
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(6)">
+                    <h4>Q6: Redux mein TypeScript integration ke best practices kya hain? <span class="difficulty hard">Hard</span></h4>
+                    <div class="answer" id="answer6">
+                        <strong>Answer:</strong><br>
+                        <strong>Best Practices:</strong><br><br>
+                        <strong>1. Action Types:</strong> Union types use karo sabhi actions ke liye<br>
+                        <code>type AppActions = IncrementAction | DecrementAction | ResetAction;</code><br><br>
+                        <strong>2. State Type:</strong> Root state ka interface define karo<br>
+                        <code>interface RootState { counter: CounterState; user: UserState; }</code><br><br>
+                        <strong>3. Typed Hooks:</strong> useSelector aur useDispatch ko type karo<br>
+                        <code>const useAppDispatch = () => useDispatch&lt;AppDispatch&gt;();<br>
+                        const useAppSelector: TypedUseSelectorHook&lt;RootState&gt; = useSelector;</code><br><br>
+                        <strong>4. Action Creators:</strong> Return type explicitly define karo<br><br>
+                        <strong>5. Redux Toolkit:</strong> Use karo for better TypeScript support with less boilerplate<br><br>
+                        <strong>6. Discriminated Unions:</strong> Action types mein use karo for better type narrowing
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(7)">
+                    <h4>Q7: Real-time chat application mein scalability kaise achieve karein? <span class="difficulty hard">Hard</span></h4>
+                    <div class="answer" id="answer7">
+                        <strong>Answer:</strong><br>
+                        <strong>Scalability Strategies:</strong><br><br>
+                        <strong>1. Horizontal Scaling:</strong>
+                        <ul>
+                            <li>Multiple server instances run karo</li>
+                            <li>Load balancer use karo (sticky sessions ke saath)</li>
+                            <li>Redis adapter use karo Socket.io ke saath for cross-server communication</li>
+                        </ul><br>
+                        <strong>2. Message Queue:</strong>
+                        <ul>
+                            <li>RabbitMQ ya Kafka use karo message processing ke liye</li>
+                            <li>Decouple message handling from WebSocket connections</li>
+                        </ul><br>
+                        <strong>3. Database Optimization:</strong>
+                        <ul>
+                            <li>Message history ke liye efficient indexing</li>
+                            <li>Caching layer (Redis) for frequently accessed data</li>
+                            <li>Sharding for large user bases</li>
+                        </ul><br>
+                        <strong>4. Connection Management:</strong>
+                        <ul>
+                            <li>Connection pooling</li>
+                            <li>Heartbeat mechanism for dead connection cleanup</li>
+                            <li>Rate limiting to prevent abuse</li>
+                        </ul><br>
+                        <strong>5. CDN & Edge Computing:</strong> Static assets aur media files ke liye
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px; margin-top: 40px;">
+                <h2>🎉 Congratulations!</h2>
+                <p style="font-size: 1.2em; margin-top: 15px;">
+                    Tumne Real-time Data aur TypeScript ka complete journey complete kar liya!<br>
+                    Ab tum production-ready real-time applications build kar sakte ho! 🚀
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // WebSocket Simulator
+        let wsConnected = false;
+        let wsMessageCount = 0;
+
+        function connectWebSocket() {
+            if (wsConnected) return;
+            
+            wsConnected = true;
+            document.getElementById('wsStatus').className = 'status-indicator status-connected';
+            document.getElementById('wsStatusText').textContent = 'Connected';
+            
+            addWSMessage('system', 'WebSocket connection established! 🎉');
+            
+            // Simulate server messages
+            setTimeout(() => {
+                addWSMessage('received', 'Server: Welcome to WebSocket demo!');
+            }, 1000);
+        }
+
+        function disconnectWebSocket() {
+            if (!wsConnected) return;
+            
+            wsConnected = false;
+            document.getElementById('wsStatus').className = 'status-indicator status-disconnected';
+            document.getElementById('wsStatusText').textContent = 'Disconnected';
+            
+            addWSMessage('system', 'WebSocket connection closed');
+        }
+
+        function sendWSMessage() {
+            if (!wsConnected) {
+                alert('Pehle connect karo!');
+                return;
+            }
+            
+            const input = document.getElementById('wsMessage');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addWSMessage('sent', 'You: ' + message);
+            input.value = '';
+            
+            // Simulate server echo
+            setTimeout(() => {
+                addWSMessage('received', 'Server: Echo - ' + message);
+            }, 500);
+        }
+
+        function addWSMessage(type, text) {
+            const messagesDiv = document.getElementById('wsMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ' + type;
+            messageDiv.textContent = text;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Chat Room Simulator
+        let currentRoom = null;
+
+        function joinRoom(roomName) {
+            currentRoom = roomName;
+            document.getElementById('currentRoom').textContent = roomName.charAt(0).toUpperCase() + roomName.slice(1);
+            
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = '';
+            
+            addChatMessage('system', `Joined ${roomName} room! 🎉`);
+            
+            setTimeout(() => {
+                addChatMessage('received', `User123: Welcome to ${roomName}!`);
+            }, 1000);
+        }
+
+        function sendChatMessage() {
+            if (!currentRoom) {
+                alert('Pehle koi room join karo!');
+                return;
+            }
+            
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addChatMessage('sent', 'You: ' + message);
+            input.value = '';
+            
+            // Simulate other user response
+            setTimeout(() => {
+                const responses = [
+                    'User123: Interesting point!',
+                    'TechGuru: I agree with that',
+                    'CodeNinja: Great question!',
+                    'DevMaster: Let me explain...'
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addChatMessage('received', randomResponse);
+            }, 1500);
+        }
+
+        function addChatMessage(type, text) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ' + type;
+            messageDiv.textContent = text;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // SSE Simulator
+        let sseInterval = null;
+        let stockPrices = {
+            stock1: 150.00,
+            stock2: 2800.00,
+            stock3: 700.00
+        };
+
+        function startSSE() {
+            if (sseInterval) return;
+            
+            addSSEMessage('SSE connection started! 📡');
+            
+            sseInterval = setInterval(() => {
+                // Update stock prices randomly
+                Object.keys(stockPrices).forEach(stock => {
+                    const change = (Math.random() - 0.5) * 10;
+                    stockPrices[stock] += change;
+                    
+                    const priceElement = document.getElementById(stock);
+                    const changeElement = document.getElementById(stock.replace('stock', 'change'));
+                    
+                    priceElement.textContent = '$' + stockPrices[stock].toFixed(2);
+                    
+                    const changePercent = (change / stockPrices[stock] * 100).toFixed(2);
+                    changeElement.textContent = (change >= 0 ? '▲ ' : '▼ ') + Math.abs(changePercent) + '%';
+                    changeElement.style.color = change >= 0 ? '#28a745' : '#dc3545';
+                });
+                
+                addSSEMessage('Stock prices updated at ' + new Date().toLocaleTimeString());
+            }, 2000);
+        }
+
+        function stopSSE() {
+            if (sseInterval) {
+                clearInterval(sseInterval);
+                sseInterval = null;
+                addSSEMessage('SSE connection stopped');
+            }
+        }
+
+        function addSSEMessage(text) {
+            const messagesDiv = document.getElementById('sseMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.style.padding = '5px';
+            messageDiv.style.fontSize = '0.85em';
+            messageDiv.style.color = '#666';
+            messageDiv.textContent = text;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Tab Switching
+        function switchTab(index) {
+            // Remove active class from all tabs and contents
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to selected tab and content
+            document.querySelectorAll('.tab')[index].classList.add('active');
+            document.getElementById('tab' + index).classList.add('active');
+        }
+
+        // Interview Questions Toggle
+        function toggleAnswer(questionNumber) {
+            const answer = document.getElementById('answer' + questionNumber);
+            answer.classList.toggle('show');
+        }
+
+        // Progress Bar Animation
+        window.addEventListener('scroll', () => {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight - windowHeight;
+            const scrolled = window.scrollY;
+            const progress = (scrolled / documentHeight) * 100;
+            
+            document.getElementById('progressBar').style.width = progress + '%';
+        });
+
+        // Initial setup
+        document.getElementById('wsStatus').className = 'status-indicator status-disconnected';
+    </script>
+</body>
+</html>

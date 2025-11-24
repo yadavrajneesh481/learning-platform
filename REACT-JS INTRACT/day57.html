@@ -1,0 +1,2410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Security - Complete Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #991b1b 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        header h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.4em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b, #ef4444);
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 20px;
+            border-left: 6px solid #ef4444;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .section h2 {
+            color: #991b1b;
+            margin-bottom: 25px;
+            font-size: 2.5em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section h3 {
+            color: #dc2626;
+            margin: 30px 0 20px 0;
+            font-size: 1.8em;
+            border-bottom: 3px solid #ef4444;
+            padding-bottom: 10px;
+        }
+
+        .hinglish {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #f59e0b;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+            font-size: 1.05em;
+        }
+
+        .technical {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #3b82f6;
+            font-family: 'Courier New', monospace;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+            font-size: 1.05em;
+        }
+
+        .demo-box {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            margin: 25px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            border: 2px solid #e5e7eb;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 8px;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'CODE';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.7em;
+            color: #64748b;
+            font-weight: bold;
+        }
+
+        .keyword { color: #c678dd; font-weight: bold; }
+        .string { color: #98c379; }
+        .function { color: #61afef; }
+        .comment { color: #5c6370; font-style: italic; }
+        .number { color: #d19a66; }
+
+        .vulnerability-demo {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 3px solid #ef4444;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+        }
+
+        .safe-demo {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 3px solid #10b981;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .security-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            border-top: 5px solid #ef4444;
+            transition: all 0.3s ease;
+        }
+
+        .security-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        .security-card h4 {
+            color: #991b1b;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .security-card .icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .attack-demo {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            min-height: 150px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .attack-line {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 6px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .attack-line.danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border-left: 4px solid #ef4444;
+        }
+
+        .attack-line.safe {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+            border-left: 4px solid #10b981;
+        }
+
+        .attack-line.warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #991b1b 0%, #dc2626 100%);
+            color: white;
+            padding: 18px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 15px 18px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .comparison-table tr:hover {
+            background: #fef2f2;
+        }
+
+        .interview-section {
+            background: linear-gradient(135deg, #7e22ce 0%, #6b21a8 100%);
+            color: white;
+            padding: 50px;
+            border-radius: 20px;
+            margin-top: 50px;
+        }
+
+        .question-card {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .question-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .question-card h4 {
+            color: #991b1b;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .answer {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 3px solid #e5e7eb;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-left: 12px;
+        }
+
+        .difficulty.easy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .difficulty.medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .difficulty.hard {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .emoji {
+            font-size: 1.3em;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #ef4444;
+        }
+
+        .input-group {
+            margin: 20px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #991b1b;
+            font-size: 1.1em;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .visual-flow {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .flow-node {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e5e7eb 100%);
+            border-radius: 15px;
+            min-width: 150px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .flow-node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .flow-node .icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .arrow {
+            font-size: 2.5em;
+            color: #ef4444;
+            animation: slideRight 1.5s ease-in-out infinite;
+        }
+
+        @keyframes slideRight {
+            0%, 100% { transform: translateX(0); opacity: 0.5; }
+            50% { transform: translateX(10px); opacity: 1; }
+        }
+
+        .memory-leak-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .leak-box {
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .leak-bad {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 3px solid #ef4444;
+        }
+
+        .leak-good {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 3px solid #10b981;
+        }
+
+        .counter {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.2em;
+            }
+
+            .content {
+                padding: 25px;
+            }
+
+            .section {
+                padding: 25px;
+            }
+
+            .memory-leak-demo {
+                grid-template-columns: 1fr;
+            }
+
+            .visual-flow {
+                flex-direction: column;
+            }
+
+            .arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        .helmet-preview {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            margin: 20px 0;
+        }
+
+        .helmet-preview h5 {
+            color: #991b1b;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .helmet-preview ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .helmet-preview li {
+            padding: 10px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid #10b981;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            border-bottom: 2px dotted #ef4444;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: #1e293b;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9em;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ React Security</h1>
+            <p>XSS, CSRF, Input Sanitization, Memory Leaks aur Security Headers ka complete guide</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+        </header>
+
+        <div class="content">
+            <!-- Introduction -->
+            <div class="section">
+                <h2><span class="emoji">🔒</span> React Security Kyun Important Hai?</h2>
+                
+                <div class="hinglish">
+                    <strong>Security ka matlab sirf backend nahi hai!</strong><br><br>
+                    Bahut log sochte hain ki security sirf backend ki responsibility hai, lekin ye galat hai! Frontend security utna hi important hai. Agar tumhara React app secure nahi hai toh:<br><br>
+                    ❌ Hackers tumhara data chura sakte hain<br>
+                    ❌ Malicious code inject kar sakte hain<br>
+                    ❌ Users ke accounts hijack ho sakte hain<br>
+                    ❌ Sensitive information leak ho sakti hai<br>
+                    ❌ App crash ho sakta hai (memory leaks se)<br><br>
+                    <strong>Prevention is better than cure!</strong> Ek baar hack ho gaya toh bahut mushkil hai recover karna. Isliye shuru se hi security implement karo! 🔐
+                </div>
+
+                <div class="technical">
+                    <strong>Technical Definition:</strong><br>
+                    React security involves implementing multiple layers of protection including XSS (Cross-Site Scripting) prevention, CSRF (Cross-Site Request Forgery) protection, input sanitization, secure state management, memory leak prevention, and proper security headers configuration to protect both the application and its users from various attack vectors.
+                </div>
+
+                <h3>Major Security Threats</h3>
+                <div class="security-grid">
+                    <div class="security-card">
+                        <div class="icon">🚨</div>
+                        <h4>XSS Attack</h4>
+                        <p>Attacker malicious JavaScript inject karta hai jo user ke browser mein execute hota hai. Cookies, tokens, sensitive data chura sakte hain.</p>
+                        <span class="badge badge-danger">Critical</span>
+                    </div>
+                    <div class="security-card">
+                        <div class="icon">🎭</div>
+                        <h4>CSRF Attack</h4>
+                        <p>User ko trick karke unauthorized actions perform karate hain. Bank transfer, password change without user knowing.</p>
+                        <span class="badge badge-danger">High Risk</span>
+                    </div>
+                    <div class="security-card">
+                        <div class="icon">💉</div>
+                        <h4>Injection Attacks</h4>
+                        <p>Malicious input through forms jo system ko compromise kar sakta hai. SQL injection, command injection.</p>
+                        <span class="badge badge-warning">Medium Risk</span>
+                    </div>
+                    <div class="security-card">
+                        <div class="icon">💾</div>
+                        <h4>Memory Leaks</h4>
+                        <p>Resources cleanup na hone se memory occupied rehti hai. App slow hota hai, eventually crash kar sakta hai.</p>
+                        <span class="badge badge-warning">Performance</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- XSS Protection -->
+            <div class="section">
+                <h2><span class="emoji">🚨</span> XSS (Cross-Site Scripting) Protection</h2>
+                
+                <div class="hinglish">
+                    <strong>XSS kya hai aur kaise hota hai?</strong><br><br>
+                    Imagine karo tum ek comment section bana rahe ho. User comment mein ye likhe:<br>
+                    <code>&lt;script&gt;alert(document.cookie)&lt;/script&gt;</code><br><br>
+                    Agar tum directly ye HTML render kar doge, toh ye script execute ho jayega aur attacker ke paas user ki cookies chali jayengi! 😱<br><br>
+                    <strong>XSS ke 3 types hain:</strong><br>
+                    1. <strong>Stored XSS:</strong> Malicious code database mein save hota hai (comments, posts)<br>
+                    2. <strong>Reflected XSS:</strong> URL parameters mein code (phishing links)<br>
+                    3. <strong>DOM-based XSS:</strong> Client-side JavaScript manipulation
+                </div>
+
+                <div class="technical">
+                    <strong>Technical Definition:</strong><br>
+                    Cross-Site Scripting (XSS) is a security vulnerability that allows attackers to inject malicious scripts into web pages viewed by other users. These scripts execute in the victim's browser context, potentially stealing cookies, session tokens, or other sensitive information, and can even rewrite HTML content.
+                </div>
+
+                <h3>🎮 Interactive XSS Attack Demo</h3>
+                <div class="demo-box">
+                    <div class="input-group">
+                        <label>Enter Comment (try injecting script):</label>
+                        <textarea id="xssInput" rows="3" placeholder="Try: <script>alert('XSS Attack!')</script> or <img src=x onerror='alert(1)'>"></textarea>
+                    </div>
+                    
+                    <button class="btn btn-danger" onclick="renderUnsafe()">
+                        <span class="emoji">⚠️</span> Render Unsafe (Vulnerable)
+                    </button>
+                    <button class="btn btn-success" onclick="renderSafe()">
+                        <span class="emoji">✅</span> Render Safe (Protected)
+                    </button>
+                    <button class="btn" onclick="clearXSSDemo()">
+                        <span class="emoji">🔄</span> Clear
+                    </button>
+                    
+                    <div class="attack-demo" id="xssDemo">
+                        <div class="attack-line warning">💡 Try entering malicious scripts above and see the difference!</div>
+                        <div class="attack-line warning">Examples: &lt;script&gt;alert('XSS')&lt;/script&gt; or &lt;img src=x onerror="alert(1)"&gt;</div>
+                    </div>
+                </div>
+
+                <h3>React's Built-in XSS Protection</h3>
+                <div class="hinglish">
+                    <strong>Good news!</strong> React by default tumhe protect karta hai! 🎉<br><br>
+                    Jab tum JSX mein curly braces <code>{}</code> use karte ho, React automatically escape kar deta hai. Matlab special characters ko safe text mein convert kar deta hai.
+                </div>
+
+                <div class="safe-demo">
+                    <strong>✅ SAFE - React Automatic Escaping:</strong>
+                    <div class="code-block" style="margin-top: 15px;">
+<span class="comment">// React automatically escapes this</span>
+<span class="keyword">function</span> <span class="function">UserComment</span>({ comment }) {
+    <span class="keyword">return</span> (
+        &lt;div&gt;
+            {comment} <span class="comment">// Safe! React escapes automatically</span>
+        &lt;/div&gt;
+    );
+}
+
+<span class="comment">// Even if comment contains:</span>
+<span class="keyword">const</span> malicious = <span class="string">'&lt;script&gt;alert("XSS")&lt;/script&gt;'</span>;
+<span class="comment">// React will render it as text, not execute it!</span>
+                    </div>
+                </div>
+
+                <div class="vulnerability-demo">
+                    <strong>❌ DANGEROUS - dangerouslySetInnerHTML:</strong>
+                    <div class="code-block" style="margin-top: 15px;">
+<span class="comment">// This is VULNERABLE to XSS!</span>
+<span class="keyword">function</span> <span class="function">UnsafeComponent</span>({ html }) {
+    <span class="keyword">return</span> (
+        &lt;div 
+            <span class="function">dangerouslySetInnerHTML</span>={{ __html: html }}
+        /&gt;
+    );
+}
+
+<span class="comment">// Attacker can inject:</span>
+<span class="keyword">const</span> attack = <span class="string">'&lt;img src=x onerror="alert(document.cookie)"&gt;'</span>;
+<span class="comment">// This will EXECUTE! 🚨</span>
+                    </div>
+                </div>
+
+                <h3>Safe HTML Rendering with DOMPurify</h3>
+                <div class="hinglish">
+                    Agar tumhe HTML render karna hi hai (rich text editor, markdown), toh <strong>DOMPurify</strong> library use karo. Ye malicious code ko clean kar deta hai! 🧹
+                </div>
+
+                <div class="safe-demo">
+                    <strong>✅ SAFE - Using DOMPurify:</strong>
+                    <div class="code-block" style="margin-top: 15px;">
+<span class="comment">// Install: npm install dompurify</span>
+<span class="keyword">import</span> DOMPurify <span class="keyword">from</span> <span class="string">'dompurify'</span>;
+
+<span class="keyword">function</span> <span class="function">SafeHTMLComponent</span>({ html }) {
+    <span class="comment">// Sanitize the HTML first</span>
+    <span class="keyword">const</span> cleanHTML = DOMPurify.<span class="function">sanitize</span>(html, {
+        ALLOWED_TAGS: [<span class="string">'b'</span>, <span class="string">'i'</span>, <span class="string">'em'</span>, <span class="string">'strong'</span>, <span class="string">'a'</span>, <span class="string">'p'</span>],
+        ALLOWED_ATTR: [<span class="string">'href'</span>]
+    });
+    
+    <span class="keyword">return</span> (
+        &lt;div dangerouslySetInnerHTML={{ __html: cleanHTML }} /&gt;
+    );
+}
+
+<span class="comment">// DOMPurify removes malicious scripts automatically!</span>
+<span class="keyword">const</span> input = <span class="string">'&lt;p&gt;Hello&lt;/p&gt;&lt;script&gt;alert("XSS")&lt;/script&gt;'</span>;
+<span class="keyword">const</span> clean = DOMPurify.<span class="function">sanitize</span>(input);
+<span class="comment">// Result: '&lt;p&gt;Hello&lt;/p&gt;' (script removed!)</span>
+                    </div>
+                </div>
+
+                <h3>XSS Prevention Checklist</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Practice</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Use JSX Expressions</td>
+                            <td>Always use {variable} instead of dangerouslySetInnerHTML</td>
+                            <td><span class="badge badge-success">Recommended</span></td>
+                        </tr>
+                        <tr>
+                            <td>Sanitize HTML</td>
+                            <td>Use DOMPurify when rendering user HTML</td>
+                            <td><span class="badge badge-success">Required</span></td>
+                        </tr>
+                        <tr>
+                            <td>Validate Input</td>
+                            <td>Client + Server side validation</td>
+                            <td><span class="badge badge-success">Required</span></td>
+                        </tr>
+                        <tr>
+                            <td>Content Security Policy</td>
+                            <td>Set CSP headers to restrict script sources</td>
+                            <td><span class="badge badge-success">Recommended</span></td>
+                        </tr>
+                        <tr>
+                            <td>HttpOnly Cookies</td>
+                            <td>Prevent JavaScript access to cookies</td>
+                            <td><span class="badge badge-success">Required</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CSRF Protection -->
+            <div class="section">
+                <h2><span class="emoji">🎭</span> CSRF (Cross-Site Request Forgery) Protection</h2>
+                
+                <div class="hinglish">
+                    <strong>CSRF kya hai?</strong><br><br>
+                    Imagine karo tum bank ki website pe logged in ho. Attacker ek malicious website banata hai jisme ek hidden form hai:<br><br>
+                    <code>&lt;form action="https://bank.com/transfer" method="POST"&gt;<br>
+                    &nbsp;&nbsp;&lt;input name="to" value="attacker"&gt;<br>
+                    &nbsp;&nbsp;&lt;input name="amount" value="10000"&gt;<br>
+                    &lt;/form&gt;</code><br><br>
+                    Jab tum us malicious site pe jate ho, form automatically submit ho jata hai. Kyunki tum bank pe logged in ho, tumhare cookies automatically send ho jate hain aur transfer ho jata hai! 😱<br><br>
+                    <strong>Ye attack isliye kaam karta hai kyunki browser automatically cookies bhejta hai har request ke saath.</strong>
+                </div>
+
+                <div class="technical">
+                    <strong>Technical Definition:</strong><br>
+                    Cross-Site Request Forgery (CSRF) is an attack that forces authenticated users to submit a request to a web application against which they are currently authenticated. CSRF attacks exploit the trust that a site has in the user's browser, using the user's authenticated session to perform unauthorized actions.
+                </div>
+
+                <h3>CSRF Attack Flow</h3>
+                <div class="visual-flow">
+                    <div class="flow-node">
+                        <div class="icon">👤</div>
+                        <strong>User</strong>
+                        <p>Logged in Bank</p>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="icon">🦹</div>
+                        <strong>Attacker Site</strong>
+                        <p>Malicious Form</p>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="icon">🏦</div>
+                        <strong>Bank Server</strong>
+                        <p>Accepts Request</p>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="icon">💸</div>
+                        <strong>Money Transfer</strong>
+                        <p>Unauthorized!</p>
+                    </div>
+                </div>
+
+                <h3>CSRF Protection Methods</h3>
+
+                <div class="hinglish">
+                    <strong>1. CSRF Tokens (Most Common):</strong><br>
+                    Server ek unique token generate karta hai har session ke liye. Ye token form mein include karna padta hai. Attacker ke paas ye token nahi hota, toh request fail ho jati hai! 🎫
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Backend - Generate CSRF token</span>
+<span class="keyword">const</span> csrf = <span class="function">require</span>(<span class="string">'csurf'</span>);
+<span class="keyword">const</span> csrfProtection = <span class="function">csrf</span>({ cookie: <span class="keyword">true</span> });
+
+app.<span class="function">get</span>(<span class="string">'/form'</span>, csrfProtection, (req, res) => {
+    res.<span class="function">render</span>(<span class="string">'form'</span>, { csrfToken: req.csrfToken() });
+});
+
+<span class="comment">// Frontend - React component</span>
+<span class="keyword">function</span> <span class="function">TransferForm</span>() {
+    <span class="keyword">const</span> [csrfToken, setCsrfToken] = <span class="function">useState</span>(<span class="string">''</span>);
+
+    <span class="function">useEffect</span>(() => {
+        <span class="comment">// Get CSRF token from meta tag or API</span>
+        <span class="keyword">const</span> token = document
+            .<span class="function">querySelector</span>(<span class="string">'meta[name="csrf-token"]'</span>)
+            ?.<span class="function">getAttribute</span>(<span class="string">'content'</span>);
+        <span class="function">setCsrfToken</span>(token);
+    }, []);
+
+    <span class="keyword">const</span> <span class="function">handleSubmit</span> = <span class="keyword">async</span> (e) => {
+        e.<span class="function">preventDefault</span>();
+        
+        <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/transfer'</span>, {
+            method: <span class="string">'POST'</span>,
+            headers: {
+                <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,
+                <span class="string">'X-CSRF-Token'</span>: csrfToken <span class="comment">// Include token!</span>
+            },
+            body: JSON.<span class="function">stringify</span>({ amount: <span class="number">100</span>, to: <span class="string">'user123'</span> })
+        });
+    };
+
+    <span class="keyword">return</span> &lt;form onSubmit={handleSubmit}&gt;...&lt;/form&gt;;
+}
+                </div>
+
+                <div class="hinglish">
+                    <strong>2. SameSite Cookies (Modern Approach):</strong><br>
+                    Ye browser ko batata hai ki cookies sirf same site se requests mein bhejni hain, cross-site requests mein nahi! 🍪
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Backend - Set SameSite cookie</span>
+res.<span class="function">cookie</span>(<span class="string">'sessionId'</span>, <span class="string">'abc123'</span>, {
+    httpOnly: <span class="keyword">true</span>,      <span class="comment">// JavaScript se access nahi ho sakti</span>
+    secure: <span class="keyword">true</span>,        <span class="comment">// Sirf HTTPS pe</span>
+    sameSite: <span class="string">'strict'</span>   <span class="comment">// Cross-site requests mein nahi bhejni</span>
+});
+
+<span class="comment">// SameSite options:</span>
+<span class="comment">// 'strict' - Sabse secure, koi cross-site request nahi</span>
+<span class="comment">// 'lax' - GET requests allow (navigation), POST nahi</span>
+<span class="comment">// 'none' - Sab allow (Secure flag required)</span>
+                </div>
+
+                <div class="hinglish">
+                    <strong>3. Custom Headers:</strong><br>
+                    AJAX requests mein custom header add karo. Simple forms ye header nahi bhej sakte, sirf JavaScript bhej sakta hai! 📨
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Frontend - Add custom header</span>
+<span class="keyword">const</span> <span class="function">makeRequest</span> = <span class="keyword">async</span> () => {
+    <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/data'</span>, {
+        method: <span class="string">'POST'</span>,
+        headers: {
+            <span class="string">'X-Requested-With'</span>: <span class="string">'XMLHttpRequest'</span>,
+            <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>
+        },
+        credentials: <span class="string">'include'</span> <span class="comment">// Include cookies</span>
+    });
+};
+
+<span class="comment">// Backend - Verify custom header</span>
+app.<span class="function">post</span>(<span class="string">'/api/data'</span>, (req, res) => {
+    <span class="keyword">if</span> (req.<span class="function">get</span>(<span class="string">'X-Requested-With'</span>) !== <span class="string">'XMLHttpRequest'</span>) {
+        <span class="keyword">return</span> res.<span class="function">status</span>(<span class="number">403</span>).<span class="function">send</span>(<span class="string">'Forbidden'</span>);
+    }
+    <span class="comment">// Process request...</span>
+});
+                </div>
+
+                <h3>CSRF Protection Comparison</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Security Level</th>
+                            <th>Implementation</th>
+                            <th>Browser Support</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CSRF Tokens</td>
+                            <td><span class="badge badge-success">High</span></td>
+                            <td>Medium Complexity</td>
+                            <td>All Browsers</td>
+                        </tr>
+                        <tr>
+                            <td>SameSite Cookies</td>
+                            <td><span class="badge badge-success">High</span></td>
+                            <td>Easy</td>
+                            <td>Modern Browsers</td>
+                        </tr>
+                        <tr>
+                            <td>Custom Headers</td>
+                            <td><span class="badge badge-warning">Medium</span></td>
+                            <td>Easy</td>
+                            <td>All Browsers</td>
+                        </tr>
+                        <tr>
+                            <td>Origin Validation</td>
+                            <td><span class="badge badge-warning">Medium</span></td>
+                            <td>Easy</td>
+                            <td>All Browsers</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Input Sanitization -->
+            <div class="section">
+                <h2><span class="emoji">🧹</span> Input Sanitization</h2>
+                
+                <div class="hinglish">
+                    <strong>Input Sanitization kyun zaroori hai?</strong><br><br>
+                    <strong>Never trust user input!</strong> Ye security ka golden rule hai. User jo bhi input deta hai, usko validate aur sanitize karna zaroori hai. Kyunki:<br><br>
+                    ❌ Malicious scripts inject kar sakte hain (XSS)<br>
+                    ❌ SQL injection attacks kar sakte hain<br>
+                    ❌ Command injection kar sakte hain<br>
+                    ❌ Path traversal attacks kar sakte hain<br>
+                    ❌ Invalid data se app crash ho sakta hai<br><br>
+                    <strong>Validation = Check karo ki data correct format mein hai</strong><br>
+                    <strong>Sanitization = Dangerous characters ko remove/escape karo</strong>
+                </div>
+
+                <div class="technical">
+                    <strong>Technical Definition:</strong><br>
+                    Input sanitization is the process of cleaning user input by removing or escaping potentially dangerous characters and code. It involves validating input format, length, and type, then transforming it into a safe format before processing or storing. This prevents injection attacks and ensures data integrity.
+                </div>
+
+                <h3>🎮 Interactive Input Sanitization Demo</h3>
+                <div class="demo-box">
+                    <div class="input-group">
+                        <label>Enter Email:</label>
+                        <input type="text" id="emailInput" placeholder="test@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label>Enter Username (alphanumeric only):</label>
+                        <input type="text" id="usernameInput" placeholder="john_doe123">
+                    </div>
+                    <div class="input-group">
+                        <label>Enter Comment:</label>
+                        <textarea id="commentInput" rows="3" placeholder="Your comment here..."></textarea>
+                    </div>
+                    
+                    <button class="btn" onclick="validateInputs()">
+                        <span class="emoji">✅</span> Validate & Sanitize
+                    </button>
+                    <button class="btn btn-warning" onclick="clearInputDemo()">
+                        <span class="emoji">🔄</span> Clear
+                    </button>
+                    
+                    <div class="attack-demo" id="inputDemo">
+                        <div class="attack-line warning">💡 Enter different inputs and see validation in action!</div>
+                    </div>
+                </div>
+
+                <h3>Validation & Sanitization with Libraries</h3>
+                <div class="code-block">
+<span class="comment">// Install: npm install validator</span>
+<span class="keyword">import</span> validator <span class="keyword">from</span> <span class="string">'validator'</span>;
+
+<span class="keyword">function</span> <span class="function">LoginForm</span>() {
+    <span class="keyword">const</span> [email, setEmail] = <span class="function">useState</span>(<span class="string">''</span>);
+    <span class="keyword">const</span> [password, setPassword] = <span class="function">useState</span>(<span class="string">''</span>);
+    <span class="keyword">const</span> [errors, setErrors] = <span class="function">useState</span>({});
+
+    <span class="keyword">const</span> <span class="function">handleEmailChange</span> = (e) => {
+        <span class="keyword">let</span> value = e.target.value;
+        
+        <span class="comment">// 1. Sanitize - Remove dangerous characters</span>
+        value = validator.<span class="function">escape</span>(value);
+        value = validator.<span class="function">trim</span>(value);
+        
+        <span class="comment">// 2. Validate - Check format</span>
+        <span class="keyword">if</span> (!validator.<span class="function">isEmail</span>(value)) {
+            <span class="function">setErrors</span>(prev => ({ 
+                ...prev, 
+                email: <span class="string">'Invalid email format'</span> 
+            }));
+        } <span class="keyword">else</span> {
+            <span class="function">setErrors</span>(prev => ({ ...prev, email: <span class="keyword">null</span> }));
+        }
+        
+        <span class="function">setEmail</span>(value);
+    };
+
+    <span class="keyword">const</span> <span class="function">handlePasswordChange</span> = (e) => {
+        <span class="keyword">let</span> value = e.target.value;
+        
+        <span class="comment">// Validate password strength</span>
+        <span class="keyword">if</span> (!validator.<span class="function">isStrongPassword</span>(value, {
+            minLength: <span class="number">8</span>,
+            minLowercase: <span class="number">1</span>,
+            minUppercase: <span class="number">1</span>,
+            minNumbers: <span class="number">1</span>,
+            minSymbols: <span class="number">1</span>
+        })) {
+            <span class="function">setErrors</span>(prev => ({ 
+                ...prev, 
+                password: <span class="string">'Password too weak'</span> 
+            }));
+        } <span class="keyword">else</span> {
+            <span class="function">setErrors</span>(prev => ({ ...prev, password: <span class="keyword">null</span> }));
+        }
+        
+        <span class="function">setPassword</span>(value);
+    };
+
+    <span class="keyword">const</span> <span class="function">handleSubmit</span> = <span class="keyword">async</span> (e) => {
+        e.<span class="function">preventDefault</span>();
+        
+        <span class="comment">// Final validation before submit</span>
+        <span class="keyword">if</span> (Object.<span class="function">values</span>(errors).<span class="function">some</span>(err => err)) {
+            alert(<span class="string">'Please fix errors first'</span>);
+            <span class="keyword">return</span>;
+        }
+        
+        <span class="comment">// Submit to server (server will validate again!)</span>
+        <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/login'</span>, {
+            method: <span class="string">'POST'</span>,
+            body: JSON.<span class="function">stringify</span>({ email, password })
+        });
+    };
+
+    <span class="keyword">return</span> (
+        &lt;form onSubmit={handleSubmit}&gt;
+            &lt;input 
+                type=<span class="string">"email"</span>
+                value={email}
+                onChange={handleEmailChange}
+                maxLength={<span class="number">100</span>}
+            /&gt;
+            {errors.email && &lt;span&gt;{errors.email}&lt;/span&gt;}
+            
+            &lt;input 
+                type=<span class="string">"password"</span>
+                value={password}
+                onChange={handlePasswordChange}
+                maxLength={<span class="number">50</span>}
+            /&gt;
+            {errors.password && &lt;span&gt;{errors.password}&lt;/span&gt;}
+            
+            &lt;button type=<span class="string">"submit"</span>&gt;Login&lt;/button&gt;
+        &lt;/form&gt;
+    );
+}
+                </div>
+
+                <h3>Common Validation Rules</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Input Type</th>
+                            <th>Validation</th>
+                            <th>Sanitization</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Email</td>
+                            <td>isEmail(), max length 100</td>
+                            <td>trim(), escape(), toLowerCase()</td>
+                        </tr>
+                        <tr>
+                            <td>Password</td>
+                            <td>min 8 chars, complexity rules</td>
+                            <td>No sanitization (hash on server)</td>
+                        </tr>
+                        <tr>
+                            <td>Username</td>
+                            <td>alphanumeric + underscore, 3-20 chars</td>
+                            <td>trim(), remove special chars</td>
+                        </tr>
+                        <tr>
+                            <td>Phone</td>
+                            <td>isMobilePhone(), country code</td>
+                            <td>remove spaces, dashes</td>
+                        </tr>
+                        <tr>
+                            <td>URL</td>
+                            <td>isURL(), allowed protocols</td>
+                            <td>trim(), normalizeURL()</td>
+                        </tr>
+                        <tr>
+                            <td>Text/Comment</td>
+                            <td>max length, no scripts</td>
+                            <td>escape(), strip HTML tags</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="hinglish">
+                    <strong>⚠️ Important:</strong> Client-side validation sirf UX ke liye hai! <strong>Server-side validation zaroori hai</strong> kyunki attacker client-side validation ko bypass kar sakta hai. Always validate on both sides! 🔒
+                </div>
+            </div>
+
+            <!-- Safe State Updates -->
+            <div class="section">
+                <h2><span class="emoji">🔐</span> Safe State Updates</h2>
+                
+                <div class="hinglish">
+                    <strong>State mein kya store karna chahiye aur kya nahi?</strong><br><br>
+                    React state browser memory mein hota hai, aur Redux DevTools se easily dekha ja sakta hai. Isliye sensitive data state mein store karna dangerous hai! 🚨<br><br>
+                    <strong>❌ State mein NEVER store karo:</strong><br>
+                    • Passwords (plain text)<br>
+                    • Credit card numbers<br>
+                    • Social security numbers<br>
+                    • API keys / secrets<br>
+                    • Private keys<br><br>
+                    <strong>✅ State mein store kar sakte ho:</strong><br>
+                    • User ID<br>
+                    • Username / Email<br>
+                    • User preferences<br>
+                    • UI state (modals, tabs, etc.)<br>
+                    • Non-sensitive user data
+                </div>
+
+                <div class="technical">
+                    <strong>Technical Definition:</strong><br>
+                    Safe state management involves storing only necessary, non-sensitive data in React state or Redux store. Sensitive information should be handled server-side, transmitted securely, and stored in httpOnly cookies or secure storage mechanisms. State should be properly typed, validated, and protected from unauthorized access or manipulation.
+                </div>
+
+                <h3>Unsafe vs Safe State Management</h3>
+                <div class="vulnerability-demo">
+                    <strong>❌ UNSAFE - Storing Sensitive Data:</strong>
+                    <div class="code-block" style="margin-top: 15px;">
+<span class="comment">// DON'T DO THIS!</span>
+<span class="keyword">const</span> [user, setUser] = <span class="function">useState</span>({
+    id: <span class="number">1</span>,
+    name: <span class="string">'John Doe'</span>,
+    email: <span class="string">'john@example.com'</span>,
+    password: <span class="string">'myPassword123'</span>,        <span class="comment">// ❌ NEVER!</span>
+    creditCard: <span class="string">'1234-5678-9012-3456'</span>, <span class="comment">// ❌ NEVER!</span>
+    ssn: <span class="string">'123-45-6789'</span>              <span class="comment">// ❌ NEVER!</span>
+});
+
+<span class="comment">// Storing tokens in localStorage (XSS vulnerable)</span>
+localStorage.<span class="function">setItem</span>(<span class="string">'authToken'</span>, token); <span class="comment">// ❌ BAD!</span>
+
+<span class="comment">// Redux DevTools will show everything!</span>
+<span class="keyword">const</span> store = <span class="function">createStore</span>(reducer); <span class="comment">// All state visible</span>
+                    </div>
+                </div>
+
+                <div class="safe-demo">
+                    <strong>✅ SAFE - Proper State Management:</strong>
+                    <div class="code-block" style="margin-top: 15px;">
+<span class="comment">// Store only non-sensitive data</span>
+<span class="keyword">const</span> [user, setUser] = <span class="function">useState</span>({
+    id: <span class="number">1</span>,
+    name: <span class="string">'John Doe'</span>,
+    email: <span class="string">'john@example.com'</span>,
+    role: <span class="string">'user'</span>,
+    preferences: {
+        theme: <span class="string">'dark'</span>,
+        language: <span class="string">'en'</span>
+    }
+});
+
+<span class="comment">// Token storage options:</span>
+
+<span class="comment">// 1. httpOnly Cookie (BEST - server-side only)</span>
+<span class="comment">// Set-Cookie: token=xyz; HttpOnly; Secure; SameSite=Strict</span>
+<span class="comment">// JavaScript cannot access this!</span>
+
+<span class="comment">// 2. Memory storage (lost on refresh but secure)</span>
+<span class="keyword">let</span> authToken = <span class="keyword">null</span>;
+
+<span class="keyword">export</span> <span class="keyword">const</span> <span class="function">setToken</span> = (token) => {
+    authToken = token;
+};
+
+<span class="keyword">export</span> <span class="keyword">const</span> <span class="function">getToken</span> = () => {
+    <span class="keyword">return</span> authToken;
+};
+
+<span class="comment">// 3. SessionStorage (better than localStorage)</span>
+<span class="comment">// Cleared when tab closes</span>
+sessionStorage.<span class="function">setItem</span>(<span class="string">'token'</span>, token);
+
+<span class="comment">// Redux DevTools - Disable in production</span>
+<span class="keyword">const</span> store = <span class="function">createStore</span>(
+    reducer,
+    process.env.NODE_ENV === <span class="string">'development'</span>
+        ? window.__REDUX_DEVTOOLS_EXTENSION__?.()
+        : <span class="keyword">undefined</span>
+);
+                    </div>
+                </div>
+
+                <h3>Secure Token Storage Comparison</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Storage Method</th>
+                            <th>XSS Protection</th>
+                            <th>CSRF Protection</th>
+                            <th>Persistence</th>
+                            <th>Recommendation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>httpOnly Cookie</td>
+                            <td><span class="badge badge-success">Yes</span></td>
+                            <td><span class="badge badge-warning">Need SameSite</span></td>
+                            <td>Until expiry</td>
+                            <td><span class="badge badge-success">Best</span></td>
+                        </tr>
+                        <tr>
+                            <td>Memory (Variable)</td>
+                            <td><span class="badge badge-success">Yes</span></td>
+                            <td><span class="badge badge-success">Yes</span></td>
+                            <td>Lost on refresh</td>
+                            <td><span class="badge badge-success">Good</span></td>
+                        </tr>
+                        <tr>
+                            <td>sessionStorage</td>
+                            <td><span class="badge badge-danger">No</span></td>
+                            <td><span class="badge badge-success">Yes</span></td>
+                            <td>Until tab close</td>
+                            <td><span class="badge badge-warning">OK</span></td>
+                        </tr>
+                        <tr>
+                            <td>localStorage</td>
+                            <td><span class="badge badge-danger">No</span></td>
+                            <td><span class="badge badge-success">Yes</span></td>
+                            <td>Forever</td>
+                            <td><span class="badge badge-danger">Avoid</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Memory Leaks -->
+            <div class="section">
+                <h2><span class="emoji">💾</span> Avoiding Memory Leaks</h2>
+                
+                <div class="hinglish">
+                    <strong>Memory Leak kya hai?</strong><br><br>
+                    Jab component unmount ho jaye (screen se hata diya jaye) lekin uske resources (timers, event listeners, subscriptions) cleanup na ho, toh memory leak hota hai. 🕳️<br><br>
+                    <strong>Kya hota hai memory leak se?</strong><br>
+                    • Memory occupied rehti hai unnecessarily<br>
+                    • App slow ho jata hai<br>
+                    • Battery drain hoti hai<br>
+                    • Eventually app crash kar sakta hai<br>
+                    • Mobile devices pe zyada problem<br><br>
+                    <strong>Common causes:</strong><br>
+                    • setInterval/setTimeout cleanup nahi<br>
+                    • Event listeners remove nahi kiye<br>
+                    • WebSocket/SSE connections close nahi kiye<br>
+                    • Subscriptions unsubscribe nahi kiye<br>
+                    • Async operations cancel nahi kiye
+                </div>
+
+                <div class="technical">
+                    <strong>Technical Definition:</strong><br>
+                    Memory leaks occur when allocated memory is not properly released after it's no longer needed. In React, this typically happens when components unmount but their side effects (timers, listeners, subscriptions) continue running, preventing garbage collection and causing memory accumulation over time.
+                </div>
+
+                <h3>🎮 Interactive Memory Leak Demo</h3>
+                <div class="demo-box">
+                    <div class="memory-leak-demo">
+                        <div class="leak-box leak-bad">
+                            <h4 style="color: #991b1b;">❌ With Memory Leak</h4>
+                            <div class="counter" id="badCounter">0</div>
+                            <button class="btn btn-danger" onclick="startBadComponent()">Start Bad Component</button>
+                            <button class="btn" onclick="stopBadComponent()">Stop (Leak!)</button>
+                            <p style="margin-top: 15px; font-size: 0.9em;">Timer continues even after stop!</p>
+                        </div>
+                        <div class="leak-box leak-good">
+                            <h4 style="color: #065f46;">✅ Without Memory Leak</h4>
+                            <div class="counter" id="goodCounter">0</div>
+                            <button class="btn btn-success" onclick="startGoodComponent()">Start Good Component</button>
+                            <button class="btn" onclick="stopGoodComponent()">Stop (Clean!)</button>
+                            <p style="margin-top: 15px; font-size: 0.9em;">Timer properly cleaned up!</p>
+                        </div>
+                    </div>
+                    <div class="attack-demo" id="memoryDemo">
+                        <div class="attack-line warning">💡 Start both components and then stop them. Notice the difference!</div>
+                    </div>
+                </div>
+
+                <h3>Common Memory Leak Patterns & Fixes</h3>
+
+                <div class="vulnerability-demo">
+                    <strong>❌ MEMORY LEAK - setInterval without cleanup:</strong>
+                    <div class="code-block" style="margin-top: 15px;">
+<span class="comment">// BAD - Memory leak!</span>
+<span class="keyword">function</span> <span class="function">BadComponent</span>() {
+    <span class="keyword">const</span> [count, setCount] = <span class="function">useState</span>(<span class="number">0</span>);
+    
+    <span class="function">useEffect</span>(() => {
+        <span class="function">setInterval</span>(() => {
+            <span class="function">setCount</span>(c => c + <span class="number">1</span>);
+        }, <span class="number">1000</span>);
+        
+        <span class="comment">// No cleanup! Timer keeps running! 🚨</span>
+    }, []);
+    
+    <span class="keyword">return</span> &lt;div&gt;{count}&lt;/div&gt;;
+}
+                    </div>
+                </div>
+
+                <div class="safe-demo">
+                    <strong>✅ FIXED - Proper cleanup:</strong>
+                    <div class="code-block" style="margin-top: 15px;">
+<span class="comment">// GOOD - Cleanup function!</span>
+<span class="keyword">function</span> <span class="function">GoodComponent</span>() {
+    <span class="keyword">const</span> [count, setCount] = <span class="function">useState</span>(<span class="number">0</span>);
+    
+    <span class="function">useEffect</span>(() => {
+        <span class="keyword">const</span> intervalId = <span class="function">setInterval</span>(() => {
+            <span class="function">setCount</span>(c => c + <span class="number">1</span>);
+        }, <span class="number">1000</span>);
+        
+        <span class="comment">// Cleanup function - runs when component unmounts</span>
+        <span class="keyword">return</span> () => {
+            <span class="function">clearInterval</span>(intervalId);
+            console.<span class="function">log</span>(<span class="string">'Cleaned up!'</span>);
+        };
+    }, []);
+    
+    <span class="keyword">return</span> &lt;div&gt;{count}&lt;/div&gt;;
+}
+                    </div>
+                </div>
+
+                <h3>More Memory Leak Examples</h3>
+                <div class="code-block">
+<span class="comment">// 1. Event Listeners</span>
+<span class="keyword">function</span> <span class="function">WindowResizeComponent</span>() {
+    <span class="keyword">const</span> [width, setWidth] = <span class="function">useState</span>(window.innerWidth);
+    
+    <span class="function">useEffect</span>(() => {
+        <span class="keyword">const</span> <span class="function">handleResize</span> = () => {
+            <span class="function">setWidth</span>(window.innerWidth);
+        };
+        
+        window.<span class="function">addEventListener</span>(<span class="string">'resize'</span>, handleResize);
+        
+        <span class="comment">// Cleanup - remove listener</span>
+        <span class="keyword">return</span> () => {
+            window.<span class="function">removeEventListener</span>(<span class="string">'resize'</span>, handleResize);
+        };
+    }, []);
+    
+    <span class="keyword">return</span> &lt;div&gt;Width: {width}&lt;/div&gt;;
+}
+
+<span class="comment">// 2. WebSocket Connections</span>
+<span class="keyword">function</span> <span class="function">ChatComponent</span>() {
+    <span class="keyword">const</span> [messages, setMessages] = <span class="function">useState</span>([]);
+    
+    <span class="function">useEffect</span>(() => {
+        <span class="keyword">const</span> socket = <span class="keyword">new</span> <span class="function">WebSocket</span>(<span class="string">'ws://localhost:8080'</span>);
+        
+        socket.<span class="function">addEventListener</span>(<span class="string">'message'</span>, (event) => {
+            <span class="function">setMessages</span>(prev => [...prev, event.data]);
+        });
+        
+        <span class="comment">// Cleanup - close connection</span>
+        <span class="keyword">return</span> () => {
+            socket.<span class="function">close</span>();
+        };
+    }, []);
+    
+    <span class="keyword">return</span> &lt;div&gt;{messages.<span class="function">map</span>(m => &lt;p&gt;{m}&lt;/p&gt;)}&lt;/div&gt;;
+}
+
+<span class="comment">// 3. Async Operations</span>
+<span class="keyword">function</span> <span class="function">DataFetchComponent</span>() {
+    <span class="keyword">const</span> [data, setData] = <span class="function">useState</span>(<span class="keyword">null</span>);
+    
+    <span class="function">useEffect</span>(() => {
+        <span class="keyword">let</span> cancelled = <span class="keyword">false</span>;
+        
+        <span class="keyword">const</span> <span class="function">fetchData</span> = <span class="keyword">async</span> () => {
+            <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/data'</span>);
+            <span class="keyword">const</span> result = <span class="keyword">await</span> response.<span class="function">json</span>();
+            
+            <span class="comment">// Only update if not cancelled</span>
+            <span class="keyword">if</span> (!cancelled) {
+                <span class="function">setData</span>(result);
+            }
+        };
+        
+        <span class="function">fetchData</span>();
+        
+        <span class="comment">// Cleanup - mark as cancelled</span>
+        <span class="keyword">return</span> () => {
+            cancelled = <span class="keyword">true</span>;
+        };
+    }, []);
+    
+    <span class="keyword">return</span> &lt;div&gt;{data}&lt;/div&gt;;
+}
+
+<span class="comment">// 4. Subscriptions (Redux, RxJS, etc.)</span>
+<span class="keyword">function</span> <span class="function">ReduxComponent</span>() {
+    <span class="keyword">const</span> [state, setState] = <span class="function">useState</span>(store.<span class="function">getState</span>());
+    
+    <span class="function">useEffect</span>(() => {
+        <span class="comment">// Subscribe to store</span>
+        <span class="keyword">const</span> unsubscribe = store.<span class="function">subscribe</span>(() => {
+            <span class="function">setState</span>(store.<span class="function">getState</span>());
+        });
+        
+        <span class="comment">// Cleanup - unsubscribe</span>
+        <span class="keyword">return</span> unsubscribe;
+    }, []);
+    
+    <span class="keyword">return</span> &lt;div&gt;{state.value}&lt;/div&gt;;
+}
+                </div>
+
+                <h3>Memory Leak Detection</h3>
+                <div class="hinglish">
+                    <strong>Kaise pata chalega ki memory leak hai?</strong><br><br>
+                    1. <strong>Chrome DevTools Memory Profiler:</strong><br>
+                    • DevTools → Memory → Take Heap Snapshot<br>
+                    • Component mount/unmount karo multiple times<br>
+                    • Snapshot compare karo<br>
+                    • Detached DOM nodes dekho<br><br>
+                    2. <strong>React DevTools Profiler:</strong><br>
+                    • Component render times dekho<br>
+                    • Unnecessary re-renders identify karo<br><br>
+                    3. <strong>Console Warnings:</strong><br>
+                    • React Strict Mode warnings<br>
+                    • "Can't perform a React state update on unmounted component"<br><br>
+                    4. <strong>Performance Monitoring:</strong><br>
+                    • App slow ho raha hai over time?<br>
+                    • Memory usage badhta ja raha hai?
+                </div>
+            </div>
+
+            <!-- React Helmet -->
+            <div class="section">
+                <h2><span class="emoji">⛑️</span> React Helmet - SEO + Security Headers</h2>
+                
+                <div class="hinglish">
+                    <strong>React Helmet kya hai?</strong><br><br>
+                    React Helmet ek library hai jo tumhe document <code>&lt;head&gt;</code> ko manage karne deti hai React components se! Ye do cheezein provide karta hai:<br><br>
+                    1. <strong>SEO:</strong> Title, meta tags, Open Graph tags (social media previews)<br>
+                    2. <strong>Security:</strong> Security headers jo browser ko batate hain ki kaise behave karna hai<br><br>
+                    Ye especially important hai Single Page Applications (SPA) ke liye kyunki traditional HTML mein head static hota hai, lekin React mein dynamic chahiye! 🎯
+                </div>
+
+                <div class="technical">
+                    <strong>Technical Definition:</strong><br>
+                    React Helmet is a reusable React component that manages changes to the document head. It allows you to set meta tags, title, and security headers dynamically from within React components. This is crucial for SEO in SPAs and for implementing Content Security Policy and other security headers.
+                </div>
+
+                <h3>Installation & Basic Usage</h3>
+                <div class="code-block">
+<span class="comment">// Install React Helmet</span>
+npm install react-helmet
+
+<span class="comment">// Basic usage</span>
+<span class="keyword">import</span> { Helmet } <span class="keyword">from</span> <span class="string">'react-helmet'</span>;
+
+<span class="keyword">function</span> <span class="function">HomePage</span>() {
+    <span class="keyword">return</span> (
+        &lt;&gt;
+            &lt;Helmet&gt;
+                &lt;title&gt;Home - My Secure App&lt;/title&gt;
+                &lt;meta name=<span class="string">"description"</span> content=<span class="string">"Welcome to my secure React app"</span> /&gt;
+            &lt;/Helmet&gt;
+            
+            &lt;div&gt;
+                &lt;h1&gt;Welcome!&lt;/h1&gt;
+            &lt;/div&gt;
+        &lt;/&gt;
+    );
+}
+                </div>
+
+                <h3>SEO Meta Tags</h3>
+                <div class="code-block">
+<span class="keyword">function</span> <span class="function">ProductPage</span>({ product }) {
+    <span class="keyword">return</span> (
+        &lt;&gt;
+            &lt;Helmet&gt;
+                <span class="comment">{/* Basic SEO */}</span>
+                &lt;title&gt;{product.name} - Buy Now&lt;/title&gt;
+                &lt;meta name=<span class="string">"description"</span> content={product.description} /&gt;
+                &lt;meta name=<span class="string">"keywords"</span> content={product.tags.<span class="function">join</span>(<span class="string">', '</span>)} /&gt;
+                
+                <span class="comment">{/* Open Graph - Facebook, LinkedIn */}</span>
+                &lt;meta property=<span class="string">"og:title"</span> content={product.name} /&gt;
+                &lt;meta property=<span class="string">"og:description"</span> content={product.description} /&gt;
+                &lt;meta property=<span class="string">"og:image"</span> content={product.image} /&gt;
+                &lt;meta property=<span class="string">"og:url"</span> content={window.location.href} /&gt;
+                &lt;meta property=<span class="string">"og:type"</span> content=<span class="string">"product"</span> /&gt;
+                
+                <span class="comment">{/* Twitter Card */}</span>
+                &lt;meta name=<span class="string">"twitter:card"</span> content=<span class="string">"summary_large_image"</span> /&gt;
+                &lt;meta name=<span class="string">"twitter:title"</span> content={product.name} /&gt;
+                &lt;meta name=<span class="string">"twitter:description"</span> content={product.description} /&gt;
+                &lt;meta name=<span class="string">"twitter:image"</span> content={product.image} /&gt;
+                
+                <span class="comment">{/* Canonical URL - Prevent duplicate content */}</span>
+                &lt;link rel=<span class="string">"canonical"</span> href={window.location.href} /&gt;
+            &lt;/Helmet&gt;
+            
+            &lt;div&gt;
+                &lt;h1&gt;{product.name}&lt;/h1&gt;
+                &lt;p&gt;{product.description}&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/&gt;
+    );
+}
+                </div>
+
+                <h3>Security Headers</h3>
+                <div class="hinglish">
+                    <strong>Security headers browser ko batate hain ki kaise behave karna hai:</strong><br><br>
+                    • <strong>Content-Security-Policy (CSP):</strong> Kahan se scripts load kar sakte hain<br>
+                    • <strong>X-Frame-Options:</strong> Iframe mein load ho sakta hai ya nahi (clickjacking prevention)<br>
+                    • <strong>X-XSS-Protection:</strong> Browser ka built-in XSS filter enable karo<br>
+                    • <strong>X-Content-Type-Options:</strong> MIME type sniffing prevent karo<br>
+                    • <strong>Referrer-Policy:</strong> Kitni referrer information bhejni hai
+                </div>
+
+                <div class="code-block">
+<span class="keyword">function</span> <span class="function">App</span>() {
+    <span class="keyword">return</span> (
+        &lt;&gt;
+            &lt;Helmet&gt;
+                <span class="comment">{/* Content Security Policy - Most Important! */}</span>
+                &lt;meta 
+                    httpEquiv=<span class="string">"Content-Security-Policy"</span>
+                    content=<span class="string">"
+                        default-src 'self';
+                        script-src 'self' 'unsafe-inline' https://cdn.example.com;
+                        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                        img-src 'self' data: https:;
+                        font-src 'self' https://fonts.gstatic.com;
+                        connect-src 'self' https://api.example.com wss://api.example.com;
+                        frame-ancestors 'none';
+                    "</span>
+                /&gt;
+                
+                <span class="comment">{/* Prevent Clickjacking */}</span>
+                &lt;meta httpEquiv=<span class="string">"X-Frame-Options"</span> content=<span class="string">"DENY"</span> /&gt;
+                
+                <span class="comment">{/* XSS Protection */}</span>
+                &lt;meta httpEquiv=<span class="string">"X-XSS-Protection"</span> content=<span class="string">"1; mode=block"</span> /&gt;
+                
+                <span class="comment">{/* Prevent MIME Sniffing */}</span>
+                &lt;meta httpEquiv=<span class="string">"X-Content-Type-Options"</span> content=<span class="string">"nosniff"</span> /&gt;
+                
+                <span class="comment">{/* Referrer Policy */}</span>
+                &lt;meta name=<span class="string">"referrer"</span> content=<span class="string">"strict-origin-when-cross-origin"</span> /&gt;
+                
+                <span class="comment">{/* Force HTTPS */}</span>
+                &lt;meta httpEquiv=<span class="string">"Strict-Transport-Security"</span> 
+                      content=<span class="string">"max-age=31536000; includeSubDomains"</span> /&gt;
+            &lt;/Helmet&gt;
+            
+            &lt;div&gt;Your app content&lt;/div&gt;
+        &lt;/&gt;
+    );
+}
+                </div>
+
+                <h3>Content Security Policy (CSP) Explained</h3>
+                <div class="helmet-preview">
+                    <h5>CSP Directives:</h5>
+                    <ul>
+                        <li><strong>default-src 'self'</strong> - By default sirf apni site se resources load karo</li>
+                        <li><strong>script-src 'self' cdn.com</strong> - Scripts sirf apni site aur cdn.com se</li>
+                        <li><strong>style-src 'self' 'unsafe-inline'</strong> - Styles apni site se + inline styles</li>
+                        <li><strong>img-src 'self' data: https:</strong> - Images apni site, data URLs, aur HTTPS se</li>
+                        <li><strong>connect-src 'self' api.com</strong> - AJAX/WebSocket sirf apni site aur api.com se</li>
+                        <li><strong>frame-ancestors 'none'</strong> - Kisi iframe mein load nahi ho sakta</li>
+                    </ul>
+                </div>
+
+                <div class="hinglish">
+                    <strong>⚠️ Important Notes:</strong><br><br>
+                    1. <strong>'unsafe-inline'</strong> use karna avoid karo! Ye inline scripts allow karta hai jo XSS vulnerable hai. Lekin React apps mein sometimes zaroori hota hai.<br><br>
+                    2. <strong>Server-side headers better hain!</strong> Meta tags se CSP set karna limited hai. Production mein server se headers bhejo (Helmet.js for Express).<br><br>
+                    3. <strong>Testing:</strong> CSP violations browser console mein dikhte hain. Pehle report-only mode mein test karo.
+                </div>
+
+                <h3>Server-side Security Headers (Express + Helmet)</h3>
+                <div class="code-block">
+<span class="comment">// Backend - Express.js with Helmet</span>
+<span class="keyword">const</span> express = <span class="function">require</span>(<span class="string">'express'</span>);
+<span class="keyword">const</span> helmet = <span class="function">require</span>(<span class="string">'helmet'</span>);
+
+<span class="keyword">const</span> app = <span class="function">express</span>();
+
+<span class="comment">// Use Helmet for security headers</span>
+app.<span class="function">use</span>(<span class="function">helmet</span>({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: [<span class="string">"'self'"</span>],
+            scriptSrc: [<span class="string">"'self'"</span>, <span class="string">"'unsafe-inline'"</span>, <span class="string">"cdn.example.com"</span>],
+            styleSrc: [<span class="string">"'self'"</span>, <span class="string">"'unsafe-inline'"</span>, <span class="string">"fonts.googleapis.com"</span>],
+            imgSrc: [<span class="string">"'self'"</span>, <span class="string">"data:"</span>, <span class="string">"https:"</span>],
+            connectSrc: [<span class="string">"'self'"</span>, <span class="string">"api.example.com"</span>],
+            fontSrc: [<span class="string">"'self'"</span>, <span class="string">"fonts.gstatic.com"</span>],
+            frameAncestors: [<span class="string">"'none'"</span>]
+        }
+    },
+    hsts: {
+        maxAge: <span class="number">31536000</span>,
+        includeSubDomains: <span class="keyword">true</span>,
+        preload: <span class="keyword">true</span>
+    }
+}));
+
+<span class="comment">// Your routes...</span>
+app.<span class="function">get</span>(<span class="string">'/'</span>, (req, res) => {
+    res.<span class="function">sendFile</span>(__dirname + <span class="string">'/build/index.html'</span>);
+});
+
+app.<span class="function">listen</span>(<span class="number">3000</span>);
+                </div>
+            </div>
+
+            <!-- Interview Questions -->
+            <div class="interview-section">
+                <h2 style="color: white; text-align: center; margin-bottom: 40px;">
+                    <span class="emoji">💼</span> Interview Questions
+                </h2>
+
+                <div class="question-card" onclick="toggleAnswer(1)">
+                    <h4>Q1: XSS attack kya hai aur React mein kaise prevent karein? <span class="difficulty easy">Easy</span></h4>
+                    <div class="answer" id="answer1">
+                        <strong>Answer:</strong><br><br>
+                        <strong>XSS (Cross-Site Scripting):</strong><br>
+                        XSS ek security vulnerability hai jahan attacker malicious JavaScript code inject karta hai jo victim ke browser mein execute hota hai. Isse attacker cookies steal kar sakta hai, session hijack kar sakta hai, ya user ke behalf pe actions perform kar sakta hai.<br><br>
+                        
+                        <strong>Types of XSS:</strong><br>
+                        1. <strong>Stored XSS:</strong> Malicious code database mein save hota hai (e.g., comments, posts)<br>
+                        2. <strong>Reflected XSS:</strong> URL parameters mein code (e.g., phishing links)<br>
+                        3. <strong>DOM-based XSS:</strong> Client-side JavaScript manipulation<br><br>
+                        
+                        <strong>React mein Prevention:</strong><br><br>
+                        
+                        <strong>1. React's Default Escaping:</strong><br>
+                        React automatically JSX expressions ko escape karta hai:<br>
+                        <code>
+                        &lt;div&gt;{userInput}&lt;/div&gt; // Safe!
+                        </code><br><br>
+                        
+                        <strong>2. Avoid dangerouslySetInnerHTML:</strong><br>
+                        Agar use karna hi hai toh DOMPurify se sanitize karo:<br>
+                        <code>
+                        import DOMPurify from 'dompurify';<br>
+                        const clean = DOMPurify.sanitize(html);<br>
+                        &lt;div dangerouslySetInnerHTML={{__html: clean}} /&gt;
+                        </code><br><br>
+                        
+                        <strong>3. Input Validation & Sanitization:</strong><br>
+                        - Client-side: validator.js use karo<br>
+                        - Server-side: Always validate (client bypass ho sakta hai)<br><br>
+                        
+                        <strong>4. Content Security Policy (CSP):</strong><br>
+                        <code>
+                        Content-Security-Policy: default-src 'self'; script-src 'self'
+                        </code><br><br>
+                        
+                        <strong>5. HttpOnly Cookies:</strong><br>
+                        Cookies ko JavaScript se access nahi hone do
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(2)">
+                    <h4>Q2: CSRF attack kaise hota hai aur protection methods kya hain? <span class="difficulty medium">Medium</span></h4>
+                    <div class="answer" id="answer2">
+                        <strong>Answer:</strong><br><br>
+                        <strong>CSRF (Cross-Site Request Forgery):</strong><br>
+                        CSRF attack mein attacker authenticated user ko trick karke unauthorized actions perform karata hai. Ye attack isliye successful hota hai kyunki browser automatically cookies bhejta hai har request ke saath.<br><br>
+                        
+                        <strong>Attack Example:</strong><br>
+                        User bank site pe logged in hai. Attacker ki malicious site pe ek hidden form hai:<br>
+                        <code>
+                        &lt;form action="https://bank.com/transfer" method="POST"&gt;<br>
+                        &nbsp;&nbsp;&lt;input name="to" value="attacker" /&gt;<br>
+                        &nbsp;&nbsp;&lt;input name="amount" value="10000" /&gt;<br>
+                        &lt;/form&gt;<br>
+                        &lt;script&gt;document.forms[0].submit();&lt;/script&gt;
+                        </code><br>
+                        Form automatically submit ho jata hai aur user ke cookies ke saath request jati hai!<br><br>
+                        
+                        <strong>Protection Methods:</strong><br><br>
+                        
+                        <strong>1. CSRF Tokens (Most Common):</strong><br>
+                        - Server unique token generate karta hai<br>
+                        - Token form/request mein include karo<br>
+                        - Server verify karta hai<br>
+                        <code>
+                        // React<br>
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;<br>
+                        fetch('/api/transfer', {<br>
+                        &nbsp;&nbsp;headers: { 'X-CSRF-Token': csrfToken }<br>
+                        });
+                        </code><br><br>
+                        
+                        <strong>2. SameSite Cookies:</strong><br>
+                        <code>
+                        Set-Cookie: sessionId=abc; SameSite=Strict; Secure; HttpOnly<br><br>
+                        
+                        - Strict: Cross-site requests mein cookies nahi bhejte<br>
+                        - Lax: GET requests allow (navigation)<br>
+                        - None: Sab allow (Secure required)
+                        </code><br><br>
+                        
+                        <strong>3. Custom Headers:</strong><br>
+                        AJAX requests mein custom header add karo:<br>
+                        <code>
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                        </code><br><br>
+                        
+                        <strong>4. Double Submit Cookie:</strong><br>
+                        - Cookie mein token<br>
+                        - Request body/header mein bhi same token<br>
+                        - Server dono match karta hai<br><br>
+                        
+                        <strong>5. Origin/Referer Validation:</strong><br>
+                        Server check karta hai request kahan se aayi hai
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(3)">
+                    <h4>Q3: React mein memory leaks kaise hote hain aur kaise prevent karein? <span class="difficulty medium">Medium</span></h4>
+                    <div class="answer" id="answer3">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Memory Leaks kya hain:</strong><br>
+                        Jab component unmount ho jaye lekin uske resources (timers, listeners, subscriptions) cleanup na ho, toh memory leak hota hai. Memory occupied rehti hai unnecessarily, app slow hota hai, eventually crash kar sakta hai.<br><br>
+                        
+                        <strong>Common Causes & Solutions:</strong><br><br>
+                        
+                        <strong>1. Timers (setInterval, setTimeout):</strong><br>
+                        <code>
+                        // ❌ BAD<br>
+                        useEffect(() => {<br>
+                        &nbsp;&nbsp;setInterval(() => console.log('tick'), 1000);<br>
+                        }, []);<br><br>
+                        
+                        // ✅ GOOD<br>
+                        useEffect(() => {<br>
+                        &nbsp;&nbsp;const id = setInterval(() => console.log('tick'), 1000);<br>
+                        &nbsp;&nbsp;return () => clearInterval(id);<br>
+                        }, []);
+                        </code><br><br>
+                        
+                        <strong>2. Event Listeners:</strong><br>
+                        <code>
+                        useEffect(() => {<br>
+                        &nbsp;&nbsp;const handleResize = () => setWidth(window.innerWidth);<br>
+                        &nbsp;&nbsp;window.addEventListener('resize', handleResize);<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;return () => window.removeEventListener('resize', handleResize);<br>
+                        }, []);
+                        </code><br><br>
+                        
+                        <strong>3. WebSocket/SSE Connections:</strong><br>
+                        <code>
+                        useEffect(() => {<br>
+                        &nbsp;&nbsp;const socket = new WebSocket('ws://localhost:8080');<br>
+                        &nbsp;&nbsp;socket.addEventListener('message', handleMessage);<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;return () => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;socket.removeEventListener('message', handleMessage);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;socket.close();<br>
+                        &nbsp;&nbsp;};<br>
+                        }, []);
+                        </code><br><br>
+                        
+                        <strong>4. Async Operations:</strong><br>
+                        <code>
+                        useEffect(() => {<br>
+                        &nbsp;&nbsp;let cancelled = false;<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;fetchData().then(data => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;if (!cancelled) setState(data);<br>
+                        &nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;return () => { cancelled = true; };<br>
+                        }, []);
+                        </code><br><br>
+                        
+                        <strong>5. Subscriptions (Redux, RxJS):</strong><br>
+                        <code>
+                        useEffect(() => {<br>
+                        &nbsp;&nbsp;const unsubscribe = store.subscribe(handleChange);<br>
+                        &nbsp;&nbsp;return unsubscribe;<br>
+                        }, []);
+                        </code><br><br>
+                        
+                        <strong>Detection Methods:</strong><br>
+                        - Chrome DevTools Memory Profiler<br>
+                        - React DevTools Profiler<br>
+                        - Console warnings (React strict mode)<br>
+                        - "Can't perform a React state update on unmounted component" warning
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(4)">
+                    <h4>Q4: Input validation aur sanitization mein kya difference hai? <span class="difficulty easy">Easy</span></h4>
+                    <div class="answer" id="answer4">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Validation:</strong><br>
+                        Input ko check karna ki wo correct format, type, aur range mein hai ya nahi. Agar invalid hai toh reject kar do.<br><br>
+                        
+                        <strong>Examples:</strong><br>
+                        - Email format check: test@example.com<br>
+                        - Password length: minimum 8 characters<br>
+                        - Phone number: 10 digits<br>
+                        - Age: between 18-100<br>
+                        - Username: alphanumeric only<br><br>
+                        
+                        <code>
+                        import validator from 'validator';<br><br>
+                        
+                        if (!validator.isEmail(email)) {<br>
+                        &nbsp;&nbsp;return 'Invalid email';<br>
+                        }<br><br>
+                        
+                        if (!validator.isStrongPassword(password)) {<br>
+                        &nbsp;&nbsp;return 'Weak password';<br>
+                        }
+                        </code><br><br>
+                        
+                        <strong>Sanitization:</strong><br>
+                        Input ko clean karna by removing or escaping dangerous characters. Data ko safe format mein convert karna.<br><br>
+                        
+                        <strong>Examples:</strong><br>
+                        - HTML tags remove karna: &lt;script&gt; → (removed)<br>
+                        - Special characters escape karna: &lt; → &amp;lt;<br>
+                        - Whitespace trim karna<br>
+                        - SQL injection characters escape karna<br><br>
+                        
+                        <code>
+                        import validator from 'validator';<br>
+                        import DOMPurify from 'dompurify';<br><br>
+                        
+                        // Sanitize email<br>
+                        let email = validator.trim(email);<br>
+                        email = validator.normalizeEmail(email);<br>
+                        email = validator.escape(email);<br><br>
+                        
+                        // Sanitize HTML<br>
+                        const cleanHTML = DOMPurify.sanitize(dirtyHTML);
+                        </code><br><br>
+                        
+                        <strong>Key Difference:</strong><br>
+                        - <strong>Validation:</strong> Check karo → Accept ya Reject<br>
+                        - <strong>Sanitization:</strong> Clean karo → Safe format mein convert<br><br>
+                        
+                        <strong>Best Practice:</strong><br>
+                        Dono use karo! Pehle sanitize karo, phir validate karo. Aur hamesha server-side bhi karo, client-side bypass ho sakta hai!
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(5)">
+                    <h4>Q5: Content Security Policy (CSP) kya hai aur kaise implement karein? <span class="difficulty hard">Hard</span></h4>
+                    <div class="answer" id="answer5">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Content Security Policy (CSP):</strong><br>
+                        CSP ek security layer hai jo browser ko batata hai ki kahan se resources (scripts, styles, images) load karne allowed hain. Ye XSS attacks prevent karta hai by restricting inline scripts aur unauthorized sources.<br><br>
+                        
+                        <strong>CSP Directives:</strong><br>
+                        - <strong>default-src:</strong> Default policy for all resources<br>
+                        - <strong>script-src:</strong> JavaScript sources<br>
+                        - <strong>style-src:</strong> CSS sources<br>
+                        - <strong>img-src:</strong> Image sources<br>
+                        - <strong>connect-src:</strong> AJAX, WebSocket, EventSource<br>
+                        - <strong>font-src:</strong> Font sources<br>
+                        - <strong>frame-src:</strong> iframe sources<br>
+                        - <strong>frame-ancestors:</strong> Kahan embed ho sakta hai<br><br>
+                        
+                        <strong>Implementation Methods:</strong><br><br>
+                        
+                        <strong>1. Meta Tag (React Helmet):</strong><br>
+                        <code>
+                        import { Helmet } from 'react-helmet';<br><br>
+                        
+                        &lt;Helmet&gt;<br>
+                        &nbsp;&nbsp;&lt;meta <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;httpEquiv="Content-Security-Policy"<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;content="<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default-src 'self';<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;script-src 'self' 'unsafe-inline' cdn.com;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;style-src 'self' 'unsafe-inline';<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;img-src 'self' data: https:;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connect-src 'self' api.com;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"<br>
+                        &nbsp;&nbsp;/&gt;<br>
+                        &lt;/Helmet&gt;
+                        </code><br><br>
+                        
+                        <strong>2. Server-side Header (Better!):</strong><br>
+                        <code>
+                        // Express.js with Helmet<br>
+                        const helmet = require('helmet');<br><br>
+                        
+                        app.use(helmet.contentSecurityPolicy({<br>
+                        &nbsp;&nbsp;directives: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;defaultSrc: ["'self'"],<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;scriptSrc: ["'self'", "cdn.com"],<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;styleSrc: ["'self'", "'unsafe-inline'"],<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;imgSrc: ["'self'", "data:", "https:"],<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;connectSrc: ["'self'", "api.com"]<br>
+                        &nbsp;&nbsp;}<br>
+                        }));
+                        </code><br><br>
+                        
+                        <strong>3. Nonce-based CSP (Most Secure):</strong><br>
+                        <code>
+                        // Server generates random nonce<br>
+                        const nonce = crypto.randomBytes(16).toString('base64');<br><br>
+                        
+                        // CSP header<br>
+                        Content-Security-Policy: script-src 'nonce-${nonce}'<br><br>
+                        
+                        // HTML<br>
+                        &lt;script nonce="${nonce}"&gt;...&lt;/script&gt;
+                        </code><br><br>
+                        
+                        <strong>Common Issues:</strong><br>
+                        - <strong>'unsafe-inline':</strong> Inline scripts/styles allow (less secure)<br>
+                        - <strong>'unsafe-eval':</strong> eval() allow (dangerous)<br>
+                        - React inline styles need nonce or hash<br><br>
+                        
+                        <strong>Testing:</strong><br>
+                        - Browser console mein CSP violations dikhte hain<br>
+                        - Report-only mode for testing:<br>
+                        <code>Content-Security-Policy-Report-Only: ...</code><br><br>
+                        
+                        <strong>Best Practices:</strong><br>
+                        - Start strict, relax as needed<br>
+                        - Avoid 'unsafe-inline' and 'unsafe-eval'<br>
+                        - Use nonces for inline scripts<br>
+                        - Whitelist specific domains, not wildcards<br>
+                        - Monitor CSP reports
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(6)">
+                    <h4>Q6: Sensitive data ko React app mein kaise securely store karein? <span class="difficulty medium">Medium</span></h4>
+                    <div class="answer" id="answer6">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Rule #1: Never store sensitive data in React state or localStorage!</strong><br><br>
+                        
+                        <strong>❌ NEVER Store in State/localStorage:</strong><br>
+                        - Passwords (plain text)<br>
+                        - Credit card numbers<br>
+                        - Social security numbers<br>
+                        - API keys / secrets<br>
+                        - Private keys<br>
+                        - Full authentication tokens (if possible)<br><br>
+                        
+                        <strong>Why?</strong><br>
+                        - State visible in React DevTools<br>
+                        - localStorage accessible via JavaScript (XSS vulnerable)<br>
+                        - Redux DevTools shows everything<br>
+                        - Browser extensions can access<br><br>
+                        
+                        <strong>✅ Secure Storage Options:</strong><br><br>
+                        
+                        <strong>1. httpOnly Cookies (BEST for tokens):</strong><br>
+                        <code>
+                        // Server-side (Express)<br>
+                        res.cookie('authToken', token, {<br>
+                        &nbsp;&nbsp;httpOnly: true,  // JavaScript se access nahi<br>
+                        &nbsp;&nbsp;secure: true,    // Sirf HTTPS<br>
+                        &nbsp;&nbsp;sameSite: 'strict', // CSRF protection<br>
+                        &nbsp;&nbsp;maxAge: 3600000  // 1 hour<br>
+                        });<br><br>
+                        
+                        // Client automatically bhejta hai cookies<br>
+                        fetch('/api/data', { credentials: 'include' });
+                        </code><br><br>
+                        
+                        <strong>2. Memory Storage (for short-term):</strong><br>
+                        <code>
+                        // Module-level variable<br>
+                        let authToken = null;<br><br>
+                        
+                        export const setToken = (token) => {<br>
+                        &nbsp;&nbsp;authToken = token;<br>
+                        };<br><br>
+                        
+                        export const getToken = () => authToken;<br><br>
+                        
+                        // Lost on page refresh but secure from XSS
+                        </code><br><br>
+                        
+                        <strong>3. sessionStorage (better than localStorage):</strong><br>
+                        <code>
+                        // Cleared when tab closes<br>
+                        sessionStorage.setItem('token', token);<br><br>
+                        
+                        // Still XSS vulnerable but better than localStorage
+                        </code><br><br>
+                        
+                        <strong>4. Encrypted Storage (if must use localStorage):</strong><br>
+                        <code>
+                        import CryptoJS from 'crypto-js';<br><br>
+                        
+                        const SECRET_KEY = 'your-secret-key';<br><br>
+                        
+                        // Encrypt before storing<br>
+                        const encrypted = CryptoJS.AES.encrypt(data, SECRET_KEY);<br>
+                        localStorage.setItem('data', encrypted.toString());<br><br>
+                        
+                        // Decrypt when reading<br>
+                        const decrypted = CryptoJS.AES.decrypt(encrypted, SECRET_KEY);<br>
+                        const data = decrypted.toString(CryptoJS.enc.Utf8);
+                        </code><br><br>
+                        
+                        <strong>Best Practices:</strong><br>
+                        - Use httpOnly cookies for authentication tokens<br>
+                        - Never log sensitive data to console<br>
+                        - Disable Redux DevTools in production<br>
+                        - Use environment variables for API keys (server-side)<br>
+                        - Implement token refresh mechanism<br>
+                        - Clear sensitive data on logout<br>
+                        - Use HTTPS always
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(7)">
+                    <h4>Q7: Production React app deploy karte waqt kya security measures lene chahiye? <span class="difficulty hard">Hard</span></h4>
+                    <div class="answer" id="answer7">
+                        <strong>Answer:</strong><br><br>
+                        <strong>Production Security Checklist:</strong><br><br>
+                        
+                        <strong>1. Environment Variables:</strong><br>
+                        <code>
+                        // .env.production<br>
+                        REACT_APP_API_URL=https://api.example.com<br>
+                        // Never commit .env files!<br><br>
+                        
+                        // Use in code<br>
+                        const API_URL = process.env.REACT_APP_API_URL;
+                        </code><br><br>
+                        
+                        <strong>2. Build Optimization:</strong><br>
+                        <code>
+                        // package.json<br>
+                        "build": "GENERATE_SOURCEMAP=false react-scripts build"<br><br>
+                        
+                        // Disable source maps in production<br>
+                        // Minify and uglify code
+                        </code><br><br>
+                        
+                        <strong>3. Security Headers (Server):</strong><br>
+                        <code>
+                        const helmet = require('helmet');<br><br>
+                        
+                        app.use(helmet({<br>
+                        &nbsp;&nbsp;contentSecurityPolicy: { /* CSP config */ },<br>
+                        &nbsp;&nbsp;hsts: { maxAge: 31536000 },<br>
+                        &nbsp;&nbsp;frameguard: { action: 'deny' },<br>
+                        &nbsp;&nbsp;noSniff: true,<br>
+                        &nbsp;&nbsp;xssFilter: true<br>
+                        }));
+                        </code><br><br>
+                        
+                        <strong>4. HTTPS Enforcement:</strong><br>
+                        - SSL/TLS certificate install karo<br>
+                        - HTTP to HTTPS redirect<br>
+                        - HSTS header enable karo<br><br>
+                        
+                        <strong>5. Dependency Security:</strong><br>
+                        <code>
+                        // Regular audit<br>
+                        npm audit<br>
+                        npm audit fix<br><br>
+                        
+                        // Use Snyk or Dependabot<br>
+                        // Update dependencies regularly
+                        </code><br><br>
+                        
+                        <strong>6. API Security:</strong><br>
+                        - Rate limiting implement karo<br>
+                        - CORS properly configure karo<br>
+                        - API keys server-side rakho<br>
+                        - Input validation server-side<br>
+                        - Authentication & Authorization<br><br>
+                        
+                        <strong>7. Monitoring & Logging:</strong><br>
+                        - Error tracking (Sentry, Rollbar)<br>
+                        - Security monitoring<br>
+                        - Audit logs<br>
+                        - Performance monitoring<br><br>
+                        
+                        <strong>8. Code Security:</strong><br>
+                        - Remove console.logs<br>
+                        - Remove debug code<br>
+                        - Disable React DevTools<br>
+                        - Disable Redux DevTools<br>
+                        - Code obfuscation (optional)<br><br>
+                        
+                        <strong>9. Authentication:</strong><br>
+                        - JWT with short expiry<br>
+                        - Refresh token mechanism<br>
+                        - httpOnly cookies<br>
+                        - Logout functionality<br>
+                        - Session timeout<br><br>
+                        
+                        <strong>10. Regular Security Audits:</strong><br>
+                        - Penetration testing<br>
+                        - Code reviews<br>
+                        - Security scanning tools<br>
+                        - Stay updated with security patches
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; padding: 50px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #991b1b 100%); color: white; border-radius: 20px; margin-top: 50px;">
+                <h2>🎉 Congratulations!</h2>
+                <p style="font-size: 1.3em; margin-top: 20px;">
+                    Tumne React Security ka complete journey complete kar liya!<br>
+                    Ab tum secure React applications build kar sakte ho! 🛡️
+                </p>
+                <div style="margin-top: 30px; font-size: 3em;">
+                    🏆 💪 🔒 ⚡ 🔥
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // XSS Demo
+        function renderUnsafe() {
+            const input = document.getElementById('xssInput').value;
+            const demo = document.getElementById('xssDemo');
+            
+            demo.innerHTML = `
+                <div class="attack-line danger">⚠️ VULNERABLE: Rendering without sanitization</div>
+                <div class="attack-line danger">Input: ${escapeHtml(input)}</div>
+                <div class="attack-line danger">🚨 If this was real HTML rendering, scripts would execute!</div>
+                <div class="attack-line danger">Example: &lt;img src=x onerror="alert('XSS')"&gt; would trigger alert</div>
+            `;
+        }
+
+        function renderSafe() {
+            const input = document.getElementById('xssInput').value;
+            const demo = document.getElementById('xssDemo');
+            
+            const escaped = escapeHtml(input);
+            
+            demo.innerHTML = `
+                <div class="attack-line safe">✅ SAFE: Input sanitized and escaped</div>
+                <div class="attack-line safe">Original: ${escaped}</div>
+                <div class="attack-line safe">Rendered as text, not HTML</div>
+                <div class="attack-line safe">🛡️ Protected from XSS! All special characters escaped.</div>
+            `;
+        }
+
+        function clearXSSDemo() {
+            document.getElementById('xssInput').value = '';
+            document.getElementById('xssDemo').innerHTML = `
+                <div class="attack-line warning">💡 Try entering malicious scripts above and see the difference!</div>
+                <div class="attack-line warning">Examples: &lt;script&gt;alert('XSS')&lt;/script&gt; or &lt;img src=x onerror="alert(1)"&gt;</div>
+            `;
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Input Validation Demo
+        function validateInputs() {
+            const email = document.getElementById('emailInput').value;
+            const username = document.getElementById('usernameInput').value;
+            const comment = document.getElementById('commentInput').value;
+            const demo = document.getElementById('inputDemo');
+            
+            let messages = [];
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email) {
+                messages.push('<div class="attack-line danger">❌ Email: Required field</div>');
+            } else if (!emailRegex.test(email)) {
+                messages.push('<div class="attack-line danger">❌ Email: Invalid format</div>');
+            } else {
+                messages.push('<div class="attack-line safe">✅ Email: Valid format</div>');
+            }
+            
+            // Username validation
+            const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+            if (!username) {
+                messages.push('<div class="attack-line danger">❌ Username: Required field</div>');
+            } else if (!usernameRegex.test(username)) {
+                messages.push('<div class="attack-line danger">❌ Username: Only alphanumeric and underscore, 3-20 chars</div>');
+            } else {
+                messages.push('<div class="attack-line safe">✅ Username: Valid format</div>');
+            }
+            
+            // Comment sanitization
+            if (!comment) {
+                messages.push('<div class="attack-line danger">❌ Comment: Required field</div>');
+            } else if (comment.length > 500) {
+                messages.push('<div class="attack-line danger">❌ Comment: Too long (max 500 chars)</div>');
+            } else {
+                const sanitized = escapeHtml(comment);
+                messages.push('<div class="attack-line safe">✅ Comment: Sanitized successfully</div>');
+                messages.push(`<div class="attack-line safe">Sanitized: ${sanitized.substring(0, 50)}...</div>`);
+            }
+            
+            demo.innerHTML = messages.join('');
+        }
+
+        function clearInputDemo() {
+            document.getElementById('emailInput').value = '';
+            document.getElementById('usernameInput').value = '';
+            document.getElementById('commentInput').value = '';
+            document.getElementById('inputDemo').innerHTML = `
+                <div class="attack-line warning">💡 Enter different inputs and see validation in action!</div>
+            `;
+        }
+
+        // Memory Leak Demo
+        let badInterval = null;
+        let goodInterval = null;
+        let badCount = 0;
+        let goodCount = 0;
+
+        function startBadComponent() {
+            badCount = 0;
+            if (badInterval) clearInterval(badInterval);
+            
+            badInterval = setInterval(() => {
+                badCount++;
+                document.getElementById('badCounter').textContent = badCount;
+            }, 100);
+            
+            addMemoryLog('danger', '❌ Bad component started - Timer running without cleanup reference');
+        }
+
+        function stopBadComponent() {
+            // Intentionally NOT clearing the interval to demonstrate leak
+            addMemoryLog('danger', '🚨 MEMORY LEAK! Timer still running in background!');
+            addMemoryLog('warning', 'Check console - timer continues even after "stop"');
+        }
+
+        function startGoodComponent() {
+            goodCount = 0;
+            if (goodInterval) clearInterval(goodInterval);
+            
+            goodInterval = setInterval(() => {
+                goodCount++;
+                document.getElementById('goodCounter').textContent = goodCount;
+            }, 100);
+            
+            addMemoryLog('safe', '✅ Good component started - Timer with cleanup reference');
+        }
+
+        function stopGoodComponent() {
+            if (goodInterval) {
+                clearInterval(goodInterval);
+                goodInterval = null;
+                addMemoryLog('safe', '✅ Timer properly cleaned up! No memory leak.');
+            }
+        }
+
+        function addMemoryLog(type, message) {
+            const demo = document.getElementById('memoryDemo');
+            const line = document.createElement('div');
+            line.className = `attack-line ${type}`;
+            line.textContent = message;
+            demo.appendChild(line);
+            demo.scrollTop = demo.scrollHeight;
+        }
+
+        // Interview Questions Toggle
+        function toggleAnswer(questionNumber) {
+            const answer = document.getElementById('answer' + questionNumber);
+            answer.classList.toggle('show');
+        }
+
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight - windowHeight;
+            const scrolled = window.scrollY;
+            const progress = (scrolled / documentHeight) * 100;
+            
+            document.getElementById('progressBar').style.width = progress + '%';
+        });
+    </script>
+</body>
+</html>

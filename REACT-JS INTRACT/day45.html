@@ -1,0 +1,2703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced React Component Patterns - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 35px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 6px solid #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateX(5px);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 2.2em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin: 25px 0 15px 0;
+            font-size: 1.6em;
+        }
+
+        .hinglish {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .hinglish strong {
+            color: #856404;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 25px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .code-block::before {
+            content: 'JSX';
+            position: absolute;
+            top: 8px;
+            right: 15px;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            font-weight: bold;
+        }
+
+        .interactive-demo {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 3px solid #667eea;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .demo-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pattern-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .pattern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .pattern-card h4 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.05em;
+            transition: all 0.3s ease;
+            margin: 8px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .key-concept {
+            background: linear-gradient(135deg, #e7f3ff 0%, #cfe7ff 100%);
+            border-left: 5px solid #2196F3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .key-concept strong {
+            color: #1976D2;
+            font-size: 1.1em;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        .comparison-table td {
+            padding: 15px 18px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .pros, .cons {
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .pros {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 5px solid #28a745;
+        }
+
+        .cons {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border-left: 5px solid #dc3545;
+        }
+
+        .pros h4, .cons h4 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .visual-demo {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border: 2px dashed #667eea;
+        }
+
+        .component-box {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .component-box:hover {
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .component-label {
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .flow-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .flow-arrow {
+            font-size: 2em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .interview-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 40px;
+            margin-top: 50px;
+            border-radius: 15px;
+        }
+
+        .question-card {
+            background: white;
+            color: #333;
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.15em;
+            color: #667eea;
+        }
+
+        .difficulty {
+            padding: 6px 18px;
+            border-radius: 25px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .difficulty-easy {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .difficulty-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .difficulty-hard {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .answer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+            display: none;
+            line-height: 1.8;
+        }
+
+        .answer.show {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-10px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .toggle-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-icon.rotated {
+            transform: rotate(180deg);
+        }
+
+        .tab-container {
+            margin: 25px 0;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 25px;
+            background: #e9ecef;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #667eea;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+
+            .pattern-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-diagram {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        .live-demo-output {
+            background: #282c34;
+            color: #61dafb;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-family: monospace;
+            min-height: 100px;
+        }
+
+        .control-panel {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 5px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 Advanced React Component Patterns</h1>
+            <p>Master karo professional React patterns aur banao scalable applications!</p>
+        </header>
+
+        <div class="content">
+            <!-- Introduction -->
+            <div class="section">
+                <h2>📚 Component Patterns Kya Hain?</h2>
+                <div class="hinglish">
+                    <p><strong>Component Patterns</strong> wo proven solutions hain jo common problems ko solve karte hain React applications mein. Ye patterns aapko help karte hain:</p>
+                    <ul style="margin-left: 20px; margin-top: 15px;">
+                        <li>🔄 <strong>Reusability:</strong> Code ko multiple jagah use kar sako</li>
+                        <li>🎯 <strong>Flexibility:</strong> Components ko easily customize kar sako</li>
+                        <li>📦 <strong>Maintainability:</strong> Code ko maintain karna easy ho jaye</li>
+                        <li>🧩 <strong>Composition:</strong> Chhote components se bade components banao</li>
+                        <li>⚡ <strong>Performance:</strong> Efficient aur optimized code likho</li>
+                    </ul>
+                </div>
+
+                <div class="key-concept">
+                    <strong>💡 Key Insight:</strong> Patterns sikhne se aap better architect ban sakte ho aur production-ready code likh sakte ho jo industry standards follow karta hai.
+                </div>
+
+                <div class="pattern-grid">
+                    <div class="pattern-card" onclick="scrollToSection('hoc')">
+                        <h4>🎭 Higher-Order Components</h4>
+                        <p>Components ko wrap karke extra functionality add karo</p>
+                    </div>
+                    <div class="pattern-card" onclick="scrollToSection('render-props')">
+                        <h4>🎪 Render Props</h4>
+                        <p>Function as prop pass karke rendering logic share karo</p>
+                    </div>
+                    <div class="pattern-card" onclick="scrollToSection('compound')">
+                        <h4>🧩 Compound Components</h4>
+                        <p>Related components ko group karke implicit state share karo</p>
+                    </div>
+                    <div class="pattern-card" onclick="scrollToSection('controlled')">
+                        <h4>🎮 Controlled vs Uncontrolled</h4>
+                        <p>Form state management ke different approaches</p>
+                    </div>
+                    <div class="pattern-card" onclick="scrollToSection('provider')">
+                        <h4>🌐 Provider Pattern</h4>
+                        <p>Context API se global state management</p>
+                    </div>
+                    <div class="pattern-card" onclick="scrollToSection('state-reducer')">
+                        <h4>⚙️ State Reducer Pattern</h4>
+                        <p>Complex state logic ko control karo</p>
+                    </div>
+                    <div class="pattern-card" onclick="scrollToSection('headless')">
+                        <h4>👻 Headless Components</h4>
+                        <p>Logic aur UI ko separate karo</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Higher-Order Components -->
+            <div class="section" id="hoc">
+                <h2>🎭 Higher-Order Components (HOCs)</h2>
+                <div class="hinglish">
+                    <p><strong>Higher-Order Component (HOC)</strong> ek function hai jo ek component leta hai aur ek naya enhanced component return karta hai. Ye <span class="highlight">component reusability</span> ke liye bahut powerful pattern hai.</p>
+                    <p><strong>Simple words mein:</strong> Ek wrapper function jo aapke component ko superpowers deta hai! 🦸‍♂️</p>
+                </div>
+
+                <div class="key-concept">
+                    <strong>Definition:</strong> A Higher-Order Component is a function that takes a component and returns a new component with additional props or behavior.
+                </div>
+
+                <h3>Basic HOC Example</h3>
+                <div class="code-block">
+// withLoading HOC - Loading functionality add karta hai
+function withLoading(Component) {
+  return function WithLoadingComponent({ isLoading, ...props }) {
+    if (isLoading) {
+      return &lt;div&gt;Loading...&lt;/div&gt;;
+    }
+    return &lt;Component {...props} /&gt;;
+  };
+}
+
+// Original Component
+function UserList({ users }) {
+  return (
+    &lt;ul&gt;
+      {users.map(user => (
+        &lt;li key={user.id}&gt;{user.name}&lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+
+// Enhanced Component with loading
+const UserListWithLoading = withLoading(UserList);
+
+// Usage
+&lt;UserListWithLoading isLoading={true} users={[]} /&gt;
+                </div>
+
+                <h3>Advanced HOC - Authentication</h3>
+                <div class="code-block">
+// withAuth HOC - Authentication check karta hai
+function withAuth(Component) {
+  return function WithAuthComponent(props) {
+    const { isAuthenticated, user } = useAuth();
+    
+    if (!isAuthenticated) {
+      return &lt;Navigate to="/login" /&gt;;
+    }
+    
+    return &lt;Component {...props} user={user} /&gt;;
+  };
+}
+
+// Protected Component
+function Dashboard({ user }) {
+  return &lt;h1&gt;Welcome, {user.name}!&lt;/h1&gt;;
+}
+
+// Enhanced with authentication
+const ProtectedDashboard = withAuth(Dashboard);
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive HOC Demo</div>
+                    <div class="control-panel">
+                        <label>
+                            <input type="checkbox" id="hoc-loading" onchange="updateHOCDemo()">
+                            Show Loading State
+                        </label>
+                        <br><br>
+                        <label>
+                            <input type="checkbox" id="hoc-auth" onchange="updateHOCDemo()" checked>
+                            User Authenticated
+                        </label>
+                    </div>
+                    <div class="live-demo-output" id="hoc-output"></div>
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Advantages</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>Code reusability bahut achi</li>
+                            <li>Cross-cutting concerns handle kar sakte ho</li>
+                            <li>Component logic ko separate kar sakte ho</li>
+                            <li>Multiple HOCs compose kar sakte ho</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>❌ Disadvantages</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>Wrapper hell ho sakta hai</li>
+                            <li>Props collision ka risk</li>
+                            <li>Debugging mushkil ho sakti hai</li>
+                            <li>Static methods copy nahi hote</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Multiple HOCs Composition</h3>
+                <div class="code-block">
+// Multiple HOCs ko compose karna
+import { compose } from 'redux'; // ya lodash/flowRight
+
+const enhance = compose(
+  withAuth,
+  withLoading,
+  withErrorBoundary,
+  withAnalytics
+);
+
+const EnhancedComponent = enhance(MyComponent);
+
+// Ya manually
+const EnhancedComponent = withAuth(
+  withLoading(
+    withErrorBoundary(
+      withAnalytics(MyComponent)
+    )
+  )
+);
+                </div>
+            </div>
+
+            <!-- Render Props -->
+            <div class="section" id="render-props">
+                <h2>🎪 Render Props Pattern</h2>
+                <div class="hinglish">
+                    <p><strong>Render Props</strong> ek technique hai jisme aap ek function ko prop ke through pass karte ho jo batata hai ki component ko kya render karna hai. Ye pattern <span class="highlight">logic sharing</span> ke liye bahut useful hai.</p>
+                    <p><strong>Simple analogy:</strong> Aap chef ko recipe dete ho (function), aur chef dish banata hai (render)! 👨‍🍳</p>
+                </div>
+
+                <div class="key-concept">
+                    <strong>Definition:</strong> A component with a render prop takes a function that returns a React element and calls it instead of implementing its own render logic.
+                </div>
+
+                <h3>Basic Render Props Example</h3>
+                <div class="code-block">
+// Mouse Tracker Component with Render Props
+class MouseTracker extends React.Component {
+  state = { x: 0, y: 0 };
+  
+  handleMouseMove = (event) => {
+    this.setState({
+      x: event.clientX,
+      y: event.clientY
+    });
+  };
+  
+  render() {
+    return (
+      &lt;div onMouseMove={this.handleMouseMove}&gt;
+        {this.props.render(this.state)}
+      &lt;/div&gt;
+    );
+  }
+}
+
+// Usage - Different rendering logic
+&lt;MouseTracker render={({ x, y }) => (
+  &lt;h1&gt;Mouse position: {x}, {y}&lt;/h1&gt;
+)} /&gt;
+
+&lt;MouseTracker render={({ x, y }) => (
+  &lt;div style={{ position: 'absolute', left: x, top: y }}&gt;
+    🎯
+  &lt;/div&gt;
+)} /&gt;
+                </div>
+
+                <h3>Modern Approach with Children Function</h3>
+                <div class="code-block">
+// Using children as function (cleaner syntax)
+function DataFetcher({ url, children }) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
+  }, [url]);
+  
+  return children({ data, loading, error });
+}
+
+// Usage
+&lt;DataFetcher url="/api/users"&gt;
+  {({ data, loading, error }) => {
+    if (loading) return &lt;Spinner /&gt;;
+    if (error) return &lt;Error message={error.message} /&gt;;
+    return &lt;UserList users={data} /&gt;;
+  }}
+&lt;/DataFetcher&gt;
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Render Props Demo</div>
+                    <div class="control-panel">
+                        <p>Move your mouse over the box below:</p>
+                    </div>
+                    <div style="border: 2px solid #667eea; padding: 40px; border-radius: 10px; position: relative; height: 200px; background: #f8f9fa;" 
+                         onmousemove="updateMousePosition(event)">
+                        <div id="mouse-display" style="font-size: 1.2em; color: #667eea; font-weight: bold;"></div>
+                        <div id="mouse-cursor" style="position: absolute; font-size: 2em;">🎯</div>
+                    </div>
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Advantages</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>Bahut flexible aur dynamic</li>
+                            <li>Props collision nahi hota</li>
+                            <li>Runtime pe rendering decide kar sakte ho</li>
+                            <li>TypeScript ke saath better type safety</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>❌ Disadvantages</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>Callback hell ho sakta hai</li>
+                            <li>Syntax thoda verbose hai</li>
+                            <li>Performance issues (inline functions)</li>
+                            <li>Hooks ne isko mostly replace kar diya</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Render Props vs Hooks</h3>
+                <div class="code-block">
+// Render Props approach
+&lt;MouseTracker&gt;
+  {({ x, y }) => &lt;Display x={x} y={y} /&gt;}
+&lt;/MouseTracker&gt;
+
+// Hooks approach (Modern & Preferred)
+function Display() {
+  const { x, y } = useMousePosition();
+  return &lt;div&gt;{x}, {y}&lt;/div&gt;;
+}
+
+// Custom Hook
+function useMousePosition() {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  
+  useEffect(() => {
+    const handleMove = (e) => {
+      setPosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMove);
+    return () => window.removeEventListener('mousemove', handleMove);
+  }, []);
+  
+  return position;
+}
+                </div>
+            </div>
+
+            <!-- Compound Components -->
+            <div class="section" id="compound">
+                <h2>🧩 Compound Components Pattern</h2>
+                <div class="hinglish">
+                    <p><strong>Compound Components</strong> ek pattern hai jisme multiple components milkar ek single functionality provide karte hain. Ye components <span class="highlight">implicit state share</span> karte hain aur ek dusre ke saath communicate karte hain.</p>
+                    <p><strong>Real-world example:</strong> HTML ke &lt;select&gt; aur &lt;option&gt; tags ki tarah! 🎯</p>
+                </div>
+
+                <div class="key-concept">
+                    <strong>Definition:</strong> Compound components are a set of components that work together to form a complete UI, sharing implicit state through React Context.
+                </div>
+
+                <h3>Classic Example - Tabs Component</h3>
+                <div class="code-block">
+// Tabs Compound Component
+const TabsContext = React.createContext();
+
+function Tabs({ children, defaultValue }) {
+  const [activeTab, setActiveTab] = useState(defaultValue);
+  
+  return (
+    &lt;TabsContext.Provider value={{ activeTab, setActiveTab }}&gt;
+      &lt;div className="tabs"&gt;{children}&lt;/div&gt;
+    &lt;/TabsContext.Provider&gt;
+  );
+}
+
+function TabList({ children }) {
+  return &lt;div className="tab-list"&gt;{children}&lt;/div&gt;;
+}
+
+function Tab({ value, children }) {
+  const { activeTab, setActiveTab } = useContext(TabsContext);
+  const isActive = activeTab === value;
+  
+  return (
+    &lt;button
+      className={isActive ? 'tab active' : 'tab'}
+      onClick={() => setActiveTab(value)}
+    &gt;
+      {children}
+    &lt;/button&gt;
+  );
+}
+
+function TabPanel({ value, children }) {
+  const { activeTab } = useContext(TabsContext);
+  return activeTab === value ? &lt;div&gt;{children}&lt;/div&gt; : null;
+}
+
+// Compound API
+Tabs.List = TabList;
+Tabs.Tab = Tab;
+Tabs.Panel = TabPanel;
+
+// Usage - Very intuitive!
+&lt;Tabs defaultValue="profile"&gt;
+  &lt;Tabs.List&gt;
+    &lt;Tabs.Tab value="profile"&gt;Profile&lt;/Tabs.Tab&gt;
+    &lt;Tabs.Tab value="settings"&gt;Settings&lt;/Tabs.Tab&gt;
+  &lt;/Tabs.List&gt;
+  
+  &lt;Tabs.Panel value="profile"&gt;
+    Profile Content
+  &lt;/Tabs.Panel&gt;
+  &lt;Tabs.Panel value="settings"&gt;
+    Settings Content
+  &lt;/Tabs.Panel&gt;
+&lt;/Tabs&gt;
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Compound Components Demo</div>
+                    <div class="tab-container">
+                        <div class="tabs">
+                            <button class="tab active" onclick="switchTab(event, 'tab1')">🏠 Home</button>
+                            <button class="tab" onclick="switchTab(event, 'tab2')">👤 Profile</button>
+                            <button class="tab" onclick="switchTab(event, 'tab3')">⚙️ Settings</button>
+                        </div>
+                        <div class="tab-content active" id="tab1">
+                            <h3>Home Content</h3>
+                            <p>Welcome to the home page! Ye compound components ka example hai.</p>
+                        </div>
+                        <div class="tab-content" id="tab2">
+                            <h3>Profile Content</h3>
+                            <p>Your profile information would be displayed here.</p>
+                        </div>
+                        <div class="tab-content" id="tab3">
+                            <h3>Settings Content</h3>
+                            <p>Configure your application settings here.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Another Example - Accordion</h3>
+                <div class="code-block">
+// Accordion Compound Component
+function Accordion({ children, allowMultiple = false }) {
+  const [openItems, setOpenItems] = useState([]);
+  
+  const toggleItem = (value) => {
+    if (allowMultiple) {
+      setOpenItems(prev => 
+        prev.includes(value)
+          ? prev.filter(item => item !== value)
+          : [...prev, value]
+      );
+    } else {
+      setOpenItems(prev => 
+        prev.includes(value) ? [] : [value]
+      );
+    }
+  };
+  
+  return (
+    &lt;AccordionContext.Provider value={{ openItems, toggleItem }}&gt;
+      {children}
+    &lt;/AccordionContext.Provider&gt;
+  );
+}
+
+function AccordionItem({ value, children }) {
+  return &lt;div className="accordion-item"&gt;{children}&lt;/div&gt;;
+}
+
+function AccordionTrigger({ value, children }) {
+  const { openItems, toggleItem } = useContext(AccordionContext);
+  const isOpen = openItems.includes(value);
+  
+  return (
+    &lt;button onClick={() => toggleItem(value)}&gt;
+      {children} {isOpen ? '▼' : '▶'}
+    &lt;/button&gt;
+  );
+}
+
+function AccordionContent({ value, children }) {
+  const { openItems } = useContext(AccordionContext);
+  return openItems.includes(value) ? &lt;div&gt;{children}&lt;/div&gt; : null;
+}
+
+// Usage
+&lt;Accordion allowMultiple&gt;
+  &lt;AccordionItem value="item1"&gt;
+    &lt;AccordionTrigger value="item1"&gt;Question 1&lt;/AccordionTrigger&gt;
+    &lt;AccordionContent value="item1"&gt;Answer 1&lt;/AccordionContent&gt;
+  &lt;/AccordionItem&gt;
+&lt;/Accordion&gt;
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Advantages</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>API bahut intuitive aur readable</li>
+                            <li>Flexible composition</li>
+                            <li>State automatically share hota hai</li>
+                            <li>Separation of concerns</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>❌ Disadvantages</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>Implementation complex ho sakta hai</li>
+                            <li>JSX structure rigid hona chahiye</li>
+                            <li>Context overhead</li>
+                            <li>Learning curve thoda steep</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controlled vs Uncontrolled -->
+            <div class="section" id="controlled">
+                <h2>🎮 Controlled vs Uncontrolled Components</h2>
+                <div class="hinglish">
+                    <p>Form elements ko handle karne ke <strong>do main approaches</strong> hain React mein. Ye decide karta hai ki <span class="highlight">state kahan rahega</span> - React mein ya DOM mein.</p>
+                </div>
+
+                <div class="key-concept">
+                    <strong>Key Difference:</strong> Controlled components mein React state source of truth hai, uncontrolled mein DOM source of truth hai.
+                </div>
+
+                <h3>Controlled Components</h3>
+                <div class="hinglish">
+                    <p><strong>Controlled Component</strong> mein form data React component ki state se control hota hai. Har keystroke pe state update hoti hai.</p>
+                </div>
+
+                <div class="code-block">
+// Controlled Component Example
+function ControlledForm() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log({ name, email });
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Name"
+      /&gt;
+      &lt;input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+      /&gt;
+      &lt;button type="submit"&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+
+// Benefits:
+// ✅ Instant validation
+// ✅ Conditional disabling
+// ✅ Format enforcement
+// ✅ Dynamic feedback
+                </div>
+
+                <h3>Uncontrolled Components</h3>
+                <div class="hinglish">
+                    <p><strong>Uncontrolled Component</strong> mein form data DOM ke through handle hota hai. Refs use karke values access karte hain.</p>
+                </div>
+
+                <div class="code-block">
+// Uncontrolled Component Example
+function UncontrolledForm() {
+  const nameRef = useRef();
+  const emailRef = useRef();
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log({
+      name: nameRef.current.value,
+      email: emailRef.current.value
+    });
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input
+        type="text"
+        ref={nameRef}
+        defaultValue=""
+        placeholder="Name"
+      /&gt;
+      &lt;input
+        type="email"
+        ref={emailRef}
+        defaultValue=""
+        placeholder="Email"
+      /&gt;
+      &lt;button type="submit"&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+
+// Benefits:
+// ✅ Less code
+// ✅ Better performance (no re-renders)
+// ✅ Easy integration with non-React code
+// ✅ Good for simple forms
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Controlled vs Uncontrolled Demo</div>
+                    <div class="tab-container">
+                        <div class="tabs">
+                            <button class="tab active" onclick="switchFormTab(event, 'controlled-form')">Controlled</button>
+                            <button class="tab" onclick="switchFormTab(event, 'uncontrolled-form')">Uncontrolled</button>
+                        </div>
+                        <div class="tab-content active" id="controlled-form">
+                            <h4>Controlled Form</h4>
+                            <input type="text" id="controlled-input" placeholder="Type something..." oninput="updateControlledDemo(this.value)">
+                            <p style="margin-top: 15px;">Current Value: <strong id="controlled-value">""</strong></p>
+                            <p>Character Count: <strong id="controlled-count">0</strong></p>
+                            <p style="color: #28a745;">✅ Real-time validation possible</p>
+                        </div>
+                        <div class="tab-content" id="uncontrolled-form">
+                            <h4>Uncontrolled Form</h4>
+                            <input type="text" id="uncontrolled-input" placeholder="Type something...">
+                            <button onclick="getUncontrolledValue()">Get Value</button>
+                            <p style="margin-top: 15px;">Value: <strong id="uncontrolled-value">Not retrieved yet</strong></p>
+                            <p style="color: #ffc107;">⚠️ Value only accessed when needed</p>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Controlled</th>
+                            <th>Uncontrolled</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>State Location</strong></td>
+                            <td>React State</td>
+                            <td>DOM</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Access Method</strong></td>
+                            <td>State variable</td>
+                            <td>Refs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Re-renders</strong></td>
+                            <td>On every change</td>
+                            <td>No re-renders</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Validation</strong></td>
+                            <td>Real-time</td>
+                            <td>On submit</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Performance</strong></td>
+                            <td>Slower (more renders)</td>
+                            <td>Faster</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Use Case</strong></td>
+                            <td>Complex forms, validation</td>
+                            <td>Simple forms, file uploads</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>When to Use What?</h3>
+                <div class="hinglish">
+                    <p><strong>Controlled Components use karo jab:</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>Real-time validation chahiye</li>
+                        <li>Conditional logic based on input</li>
+                        <li>Dynamic form fields</li>
+                        <li>Format enforcement (phone, credit card)</li>
+                    </ul>
+                    <br>
+                    <p><strong>Uncontrolled Components use karo jab:</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>Simple forms with minimal logic</li>
+                        <li>File uploads</li>
+                        <li>Integration with non-React code</li>
+                        <li>Performance critical scenarios</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Provider Pattern -->
+            <div class="section" id="provider">
+                <h2>🌐 Provider Pattern</h2>
+                <div class="hinglish">
+                    <p><strong>Provider Pattern</strong> React Context API use karke <span class="highlight">global state management</span> provide karta hai. Ye prop drilling problem ko solve karta hai.</p>
+                    <p><strong>Analogy:</strong> Ek central warehouse se sabko supplies milti hain, har level pe pass karne ki zarurat nahi! 📦</p>
+                </div>
+
+                <div class="key-concept">
+                    <strong>Definition:</strong> Provider Pattern uses React Context to make data available to all components in a tree without explicitly passing props through every level.
+                </div>
+
+                <h3>Basic Provider Implementation</h3>
+                <div class="code-block">
+// Theme Provider Example
+const ThemeContext = createContext();
+
+function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState('light');
+  
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
+  
+  const value = {
+    theme,
+    toggleTheme
+  };
+  
+  return (
+    &lt;ThemeContext.Provider value={value}&gt;
+      {children}
+    &lt;/ThemeContext.Provider&gt;
+  );
+}
+
+// Custom Hook for easy access
+function useTheme() {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used within ThemeProvider');
+  }
+  return context;
+}
+
+// Usage in App
+function App() {
+  return (
+    &lt;ThemeProvider&gt;
+      &lt;Header /&gt;
+      &lt;Main /&gt;
+      &lt;Footer /&gt;
+    &lt;/ThemeProvider&gt;
+  );
+}
+
+// Usage in any nested component
+function Header() {
+  const { theme, toggleTheme } = useTheme();
+  
+  return (
+    &lt;header className={theme}&gt;
+      &lt;button onClick={toggleTheme}&gt;
+        Toggle Theme
+      &lt;/button&gt;
+    &lt;/header&gt;
+  );
+}
+                </div>
+
+                <h3>Advanced Provider - Auth Example</h3>
+                <div class="code-block">
+// Authentication Provider
+const AuthContext = createContext();
+
+function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetchUser(token).then(setUser).finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
+  }, []);
+  
+  const login = async (credentials) => {
+    const { user, token } = await api.login(credentials);
+    localStorage.setItem('token', token);
+    setUser(user);
+  };
+  
+  const logout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+  };
+  
+  const value = {
+    user,
+    loading,
+    login,
+    logout,
+    isAuthenticated: !!user
+  };
+  
+  return (
+    &lt;AuthContext.Provider value={value}&gt;
+      {children}
+    &lt;/AuthContext.Provider&gt;
+  );
+}
+
+function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+  return context;
+}
+
+// Protected Route Component
+function ProtectedRoute({ children }) {
+  const { isAuthenticated, loading } = useAuth();
+  
+  if (loading) return &lt;Spinner /&gt;;
+  if (!isAuthenticated) return &lt;Navigate to="/login" /&gt;;
+  
+  return children;
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Provider Pattern Demo</div>
+                    <div class="control-panel">
+                        <p><strong>Current Theme:</strong> <span id="current-theme" class="badge">Light</span></p>
+                        <button onclick="toggleThemeDemo()">🌓 Toggle Theme</button>
+                    </div>
+                    <div id="theme-demo-box" style="padding: 30px; border-radius: 10px; margin-top: 20px; background: white; color: #333; transition: all 0.3s ease;">
+                        <h3>Sample Content</h3>
+                        <p>This content changes based on the theme from Provider!</p>
+                        <p>No prop drilling needed - any component can access theme.</p>
+                    </div>
+                </div>
+
+                <h3>Multiple Providers Composition</h3>
+                <div class="code-block">
+// Composing multiple providers
+function AppProviders({ children }) {
+  return (
+    &lt;AuthProvider&gt;
+      &lt;ThemeProvider&gt;
+        &lt;LanguageProvider&gt;
+          &lt;NotificationProvider&gt;
+            {children}
+          &lt;/NotificationProvider&gt;
+        &lt;/LanguageProvider&gt;
+      &lt;/ThemeProvider&gt;
+    &lt;/AuthProvider&gt;
+  );
+}
+
+// Usage
+function App() {
+  return (
+    &lt;AppProviders&gt;
+      &lt;Router&gt;
+        &lt;Routes /&gt;
+      &lt;/Router&gt;
+    &lt;/AppProviders&gt;
+  );
+}
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Advantages</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>Prop drilling eliminate ho jata hai</li>
+                            <li>Global state management easy</li>
+                            <li>Clean component hierarchy</li>
+                            <li>Easy to test and maintain</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>❌ Disadvantages</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>Performance issues (unnecessary re-renders)</li>
+                            <li>Context value change pe sab consumers re-render</li>
+                            <li>Debugging mushkil ho sakti hai</li>
+                            <li>Provider hell ho sakta hai</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="hinglish">
+                    <h3>⚡ Performance Optimization Tips</h3>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Split contexts:</strong> Ek hi context mein sab kuch mat dalo</li>
+                        <li><strong>Memoize value:</strong> useMemo use karo context value ke liye</li>
+                        <li><strong>Separate state:</strong> Frequently changing aur stable state ko alag rakho</li>
+                        <li><strong>Use selectors:</strong> Sirf required data access karo</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- State Reducer Pattern -->
+            <div class="section" id="state-reducer">
+                <h2>⚙️ State Reducer Pattern</h2>
+                <div class="hinglish">
+                    <p><strong>State Reducer Pattern</strong> users ko <span class="highlight">state management logic ko control</span> karne ki power deta hai. Ye pattern Redux se inspired hai aur complex state logic ke liye perfect hai.</p>
+                    <p><strong>Power:</strong> Component ka behavior customize kar sakte ho without modifying component code! 🎛️</p>
+                </div>
+
+                <div class="key-concept">
+                    <strong>Definition:</strong> State Reducer Pattern allows users to invert control over state management by providing their own reducer function to override default behavior.
+                </div>
+
+                <h3>Basic State Reducer Example</h3>
+                <div class="code-block">
+// Counter with State Reducer
+function useCounter({ 
+  initialCount = 0, 
+  reducer = (state, action) => state // default reducer
+}) {
+  const [count, setCount] = useReducer(
+    (state, action) => {
+      // User's custom reducer gets first chance
+      const changes = reducer(state, action);
+      
+      // Default behavior
+      switch (action.type) {
+        case 'INCREMENT':
+          return changes ?? state + 1;
+        case 'DECREMENT':
+          return changes ?? state - 1;
+        case 'RESET':
+          return changes ?? initialCount;
+        default:
+          return state;
+      }
+    },
+    initialCount
+  );
+  
+  const increment = () => setCount({ type: 'INCREMENT' });
+  const decrement = () => setCount({ type: 'DECREMENT' });
+  const reset = () => setCount({ type: 'RESET' });
+  
+  return { count, increment, decrement, reset };
+}
+
+// Usage 1: Default behavior
+function Counter1() {
+  const { count, increment, decrement } = useCounter({ 
+    initialCount: 0 
+  });
+  
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Count: {count}&lt;/p&gt;
+      &lt;button onClick={increment}&gt;+&lt;/button&gt;
+      &lt;button onClick={decrement}&gt;-&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Usage 2: Custom behavior - Max limit
+function Counter2() {
+  const { count, increment, decrement } = useCounter({
+    initialCount: 0,
+    reducer: (state, action) => {
+      if (action.type === 'INCREMENT' && state >= 10) {
+        return state; // Don't increment beyond 10
+      }
+      if (action.type === 'DECREMENT' && state <= 0) {
+        return state; // Don't decrement below 0
+      }
+      return undefined; // Use default behavior
+    }
+  });
+  
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Count: {count} (Max: 10)&lt;/p&gt;
+      &lt;button onClick={increment}&gt;+&lt;/button&gt;
+      &lt;button onClick={decrement}&gt;-&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+
+                <h3>Advanced Example - Toggle with State Reducer</h3>
+                <div class="code-block">
+// Toggle Component with State Reducer
+function useToggle({ 
+  initialOn = false,
+  reducer = (state, action) => action.changes // default
+}) {
+  const [state, dispatch] = useReducer((state, action) => {
+    const changes = { on: !state.on };
+    
+    // Let user's reducer modify changes
+    const userChanges = reducer(state, { ...action, changes });
+    
+    return userChanges ?? changes;
+  }, { on: initialOn });
+  
+  const toggle = () => dispatch({ type: 'TOGGLE' });
+  const setOn = () => dispatch({ type: 'SET_ON' });
+  const setOff = () => dispatch({ type: 'SET_OFF' });
+  
+  return { on: state.on, toggle, setOn, setOff };
+}
+
+// Usage: Toggle with click limit
+function LimitedToggle() {
+  const [clickCount, setClickCount] = useState(0);
+  
+  const { on, toggle } = useToggle({
+    reducer: (state, action) => {
+      if (clickCount >= 4) {
+        return state; // No more toggles after 4 clicks
+      }
+      return action.changes;
+    }
+  });
+  
+  const handleToggle = () => {
+    toggle();
+    setClickCount(c => c + 1);
+  };
+  
+  return (
+    &lt;div&gt;
+      &lt;button onClick={handleToggle}&gt;
+        {on ? 'ON' : 'OFF'}
+      &lt;/button&gt;
+      &lt;p&gt;Clicks: {clickCount}/4&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive State Reducer Demo</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="component-box">
+                            <div class="component-label">Normal Counter</div>
+                            <p style="font-size: 2em; text-align: center; margin: 20px 0;">
+                                <strong id="normal-counter">0</strong>
+                            </p>
+                            <div style="text-align: center;">
+                                <button onclick="updateCounter('normal', 1)">➕</button>
+                                <button onclick="updateCounter('normal', -1)">➖</button>
+                                <button onclick="resetCounter('normal')">🔄</button>
+                            </div>
+                        </div>
+                        <div class="component-box">
+                            <div class="component-label">Limited Counter (0-10)</div>
+                            <p style="font-size: 2em; text-align: center; margin: 20px 0;">
+                                <strong id="limited-counter">0</strong>
+                            </p>
+                            <div style="text-align: center;">
+                                <button onclick="updateCounter('limited', 1)">➕</button>
+                                <button onclick="updateCounter('limited', -1)">➖</button>
+                                <button onclick="resetCounter('limited')">🔄</button>
+                            </div>
+                            <p style="text-align: center; color: #667eea; margin-top: 10px;">
+                                <small>Custom reducer with limits!</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Advantages</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>Inversion of control - users customize behavior</li>
+                            <li>Component reusability bahut high</li>
+                            <li>Complex state logic handle kar sakte ho</li>
+                            <li>Predictable state updates</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>❌ Disadvantages</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>API complex ho sakta hai</li>
+                            <li>Learning curve steep hai</li>
+                            <li>Over-engineering ka risk</li>
+                            <li>Documentation zaroori hai</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="hinglish">
+                    <h3>🎯 When to Use State Reducer?</h3>
+                    <ul style="margin-left: 20px;">
+                        <li>Jab users ko component behavior customize karni ho</li>
+                        <li>Complex state transitions handle karne ke liye</li>
+                        <li>Library/framework components banate waqt</li>
+                        <li>Jab default behavior sufficient nahi hai</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Headless Components -->
+            <div class="section" id="headless">
+                <h2>👻 Headless Components Pattern</h2>
+                <div class="hinglish">
+                    <p><strong>Headless Components</strong> wo components hain jo <span class="highlight">logic provide karte hain but UI nahi</span>. Ye pattern maximum flexibility deta hai styling aur structure ke liye.</p>
+                    <p><strong>Philosophy:</strong> "Bring your own UI" - Logic hum denge, design tum karo! 🎨</p>
+                </div>
+
+                <div class="key-concept">
+                    <strong>Definition:</strong> Headless components provide functionality and behavior without prescribing any specific UI, allowing complete control over rendering and styling.
+                </div>
+
+                <h3>Basic Headless Component Example</h3>
+                <div class="code-block">
+// Headless Dropdown Component
+function useDropdown() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const dropdownRef = useRef(null);
+  
+  // Close on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+  
+  // Keyboard navigation
+  const handleKeyDown = (event) => {
+    if (event.key === 'Escape') {
+      setIsOpen(false);
+    }
+  };
+  
+  return {
+    isOpen,
+    selectedItem,
+    dropdownRef,
+    getToggleProps: () => ({
+      onClick: () => setIsOpen(!isOpen),
+      onKeyDown: handleKeyDown,
+      'aria-expanded': isOpen,
+      'aria-haspopup': true
+    }),
+    getMenuProps: () => ({
+      role: 'menu',
+      hidden: !isOpen
+    }),
+    getItemProps: (item) => ({
+      role: 'menuitem',
+      onClick: () => {
+        setSelectedItem(item);
+        setIsOpen(false);
+      }
+    })
+  };
+}
+
+// Usage 1: Simple Dropdown
+function SimpleDropdown() {
+  const { 
+    isOpen, 
+    selectedItem, 
+    dropdownRef, 
+    getToggleProps, 
+    getMenuProps, 
+    getItemProps 
+  } = useDropdown();
+  
+  const items = ['Apple', 'Banana', 'Orange'];
+  
+  return (
+    &lt;div ref={dropdownRef}&gt;
+      &lt;button {...getToggleProps()}&gt;
+        {selectedItem || 'Select fruit'} ▼
+      &lt;/button&gt;
+      &lt;ul {...getMenuProps()}&gt;
+        {items.map(item => (
+          &lt;li key={item} {...getItemProps(item)}&gt;
+            {item}
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Usage 2: Fancy Dropdown (Same logic, different UI!)
+function FancyDropdown() {
+  const { 
+    isOpen, 
+    selectedItem, 
+    dropdownRef, 
+    getToggleProps, 
+    getMenuProps, 
+    getItemProps 
+  } = useDropdown();
+  
+  const items = [
+    { id: 1, name: 'Apple', icon: '🍎' },
+    { id: 2, name: 'Banana', icon: '🍌' },
+    { id: 3, name: 'Orange', icon: '🍊' }
+  ];
+  
+  return (
+    &lt;div ref={dropdownRef} className="fancy-dropdown"&gt;
+      &lt;div className="fancy-trigger" {...getToggleProps()}&gt;
+        {selectedItem ? (
+          &lt;&gt;{selectedItem.icon} {selectedItem.name}&lt;/&gt;
+        ) : (
+          'Choose your favorite fruit'
+        )}
+      &lt;/div&gt;
+      &lt;div className="fancy-menu" {...getMenuProps()}&gt;
+        {items.map(item => (
+          &lt;div 
+            key={item.id} 
+            className="fancy-item"
+            {...getItemProps(item)}
+          &gt;
+            &lt;span className="icon"&gt;{item.icon}&lt;/span&gt;
+            &lt;span className="name"&gt;{item.name}&lt;/span&gt;
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+
+                <h3>Real-World Example - Headless Table</h3>
+                <div class="code-block">
+// Headless Table Hook
+function useTable({ data, columns }) {
+  const [sortConfig, setSortConfig] = useState(null);
+  const [selectedRows, setSelectedRows] = useState(new Set());
+  
+  const sortedData = useMemo(() => {
+    if (!sortConfig) return data;
+    
+    return [...data].sort((a, b) => {
+      const aVal = a[sortConfig.key];
+      const bVal = b[sortConfig.key];
+      
+      if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [data, sortConfig]);
+  
+  const handleSort = (key) => {
+    setSortConfig(prev => ({
+      key,
+      direction: prev?.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
+    }));
+  };
+  
+  const toggleRowSelection = (id) => {
+    setSelectedRows(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
+  
+  return {
+    data: sortedData,
+    columns,
+    sortConfig,
+    selectedRows,
+    getTableProps: () => ({ role: 'table' }),
+    getHeaderProps: (column) => ({
+      onClick: () => handleSort(column.key),
+      'aria-sort': sortConfig?.key === column.key ? sortConfig.direction : 'none'
+    }),
+    getRowProps: (row) => ({
+      'aria-selected': selectedRows.has(row.id),
+      onClick: () => toggleRowSelection(row.id)
+    }),
+    getCellProps: () => ({ role: 'cell' })
+  };
+}
+
+// Usage: Custom styled table
+function DataTable() {
+  const data = [
+    { id: 1, name: 'John', age: 30, city: 'NYC' },
+    { id: 2, name: 'Jane', age: 25, city: 'LA' },
+    { id: 3, name: 'Bob', age: 35, city: 'Chicago' }
+  ];
+  
+  const columns = [
+    { key: 'name', label: 'Name' },
+    { key: 'age', label: 'Age' },
+    { key: 'city', label: 'City' }
+  ];
+  
+  const { 
+    data: sortedData, 
+    columns: tableColumns,
+    getTableProps,
+    getHeaderProps,
+    getRowProps,
+    getCellProps
+  } = useTable({ data, columns });
+  
+  return (
+    &lt;table {...getTableProps()}&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;
+          {tableColumns.map(col => (
+            &lt;th key={col.key} {...getHeaderProps(col)}&gt;
+              {col.label}
+            &lt;/th&gt;
+          ))}
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        {sortedData.map(row => (
+          &lt;tr key={row.id} {...getRowProps(row)}&gt;
+            {tableColumns.map(col => (
+              &lt;td key={col.key} {...getCellProps()}&gt;
+                {row[col.key]}
+              &lt;/td&gt;
+            ))}
+          &lt;/tr&gt;
+        ))}
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  );
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Interactive Headless Component Demo</div>
+                    <p style="margin-bottom: 15px;">Same logic, different UIs! Click to see variations:</p>
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchHeadlessDemo(event, 'simple')">Simple UI</button>
+                        <button class="tab" onclick="switchHeadlessDemo(event, 'fancy')">Fancy UI</button>
+                        <button class="tab" onclick="switchHeadlessDemo(event, 'minimal')">Minimal UI</button>
+                    </div>
+                    <div class="tab-content active" id="simple" style="margin-top: 20px;">
+                        <select style="width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #667eea; font-size: 1em;">
+                            <option>🍎 Apple</option>
+                            <option>🍌 Banana</option>
+                            <option>🍊 Orange</option>
+                        </select>
+                        <p style="margin-top: 10px; color: #666;">Simple dropdown - basic styling</p>
+                    </div>
+                    <div class="tab-content" id="fancy" style="margin-top: 20px;">
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 12px; cursor: pointer;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 1.5em;">🍎</span>
+                                <span style="font-size: 1.1em; font-weight: bold;">Apple</span>
+                            </div>
+                        </div>
+                        <p style="margin-top: 10px; color: #666;">Fancy dropdown - gradient styling</p>
+                    </div>
+                    <div class="tab-content" id="minimal" style="margin-top: 20px;">
+                        <div style="border-bottom: 2px solid #667eea; padding: 10px 0; cursor: pointer;">
+                            Apple ▼
+                        </div>
+                        <p style="margin-top: 10px; color: #666;">Minimal dropdown - borderless design</p>
+                    </div>
+                    <p style="margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 8px;">
+                        <strong>💡 Same headless logic powers all three UIs!</strong> Ye flexibility headless components ki power hai.
+                    </p>
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Advantages</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>Complete styling freedom</li>
+                            <li>Maximum reusability</li>
+                            <li>Accessibility built-in</li>
+                            <li>Framework agnostic logic</li>
+                            <li>Easy to test</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>❌ Disadvantages</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>More boilerplate code</li>
+                            <li>Steeper learning curve</li>
+                            <li>No default UI (extra work)</li>
+                            <li>Can be overkill for simple cases</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="hinglish">
+                    <h3>🌟 Popular Headless Libraries</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <div style="background: white; padding: 15px; border-radius: 10px; border: 2px solid #667eea;">
+                            <h4 style="color: #667eea;">Headless UI</h4>
+                            <p>Tailwind team ka library - accessible components</p>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 10px; border: 2px solid #667eea;">
+                            <h4 style="color: #667eea;">Radix UI</h4>
+                            <p>Unstyled, accessible components</p>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 10px; border: 2px solid #667eea;">
+                            <h4 style="color: #667eea;">React Table</h4>
+                            <p>Headless table library</p>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 10px; border: 2px solid #667eea;">
+                            <h4 style="color: #667eea;">Downshift</h4>
+                            <p>Headless autocomplete/dropdown</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pattern Comparison -->
+            <div class="section">
+                <h2>📊 Pattern Comparison & When to Use</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Pattern</th>
+                            <th>Best For</th>
+                            <th>Complexity</th>
+                            <th>Modern Alternative</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>HOC</strong></td>
+                            <td>Cross-cutting concerns, authentication</td>
+                            <td>Medium</td>
+                            <td>Custom Hooks</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Render Props</strong></td>
+                            <td>Dynamic rendering logic</td>
+                            <td>Medium</td>
+                            <td>Custom Hooks</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Compound Components</strong></td>
+                            <td>Related components, UI libraries</td>
+                            <td>High</td>
+                            <td>Still relevant!</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Controlled</strong></td>
+                            <td>Forms with validation</td>
+                            <td>Low</td>
+                            <td>React Hook Form</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Provider</strong></td>
+                            <td>Global state, theming</td>
+                            <td>Low-Medium</td>
+                            <td>Still relevant!</td>
+                        </tr>
+                        <tr>
+                            <td><strong>State Reducer</strong></td>
+                            <td>Complex state, libraries</td>
+                            <td>High</td>
+                            <td>Still relevant!</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Headless</strong></td>
+                            <td>Maximum flexibility, design systems</td>
+                            <td>High</td>
+                            <td>Still relevant!</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="hinglish" style="margin-top: 30px;">
+                    <h3>🎯 Decision Tree: Kaunsa Pattern Use Karein?</h3>
+                    <div class="flow-diagram">
+                        <div class="flow-box">Need to share logic?</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">Custom Hook</div>
+                    </div>
+                    <div class="flow-diagram">
+                        <div class="flow-box">Need global state?</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">Provider Pattern</div>
+                    </div>
+                    <div class="flow-diagram">
+                        <div class="flow-box">Building UI library?</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">Compound + Headless</div>
+                    </div>
+                    <div class="flow-diagram">
+                        <div class="flow-box">Need customizable behavior?</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">State Reducer</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interview Questions -->
+            <div class="interview-section">
+                <h2 style="color: white; text-align: center; margin-bottom: 40px;">🎯 Interview Questions</h2>
+                
+                <div class="question-card" onclick="toggleAnswer(1)">
+                    <div class="question-header">
+                        <span>1. HOC aur Custom Hooks mein kya difference hai? Kab kaunsa use karein?</span>
+                        <div>
+                            <span class="difficulty difficulty-medium">Medium</span>
+                            <span class="toggle-icon" id="icon-1">▼</span>
+                        </div>
+                    </div>
+                    <div class="answer" id="answer-1">
+                        <p><strong>Answer:</strong></p>
+                        <p><strong>Higher-Order Components (HOC):</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Component ko wrap karke new component return karta hai</li>
+                            <li>Props ke through data pass hota hai</li>
+                            <li>Component tree mein extra layer add hota hai</li>
+                            <li>Class aur functional dono components ke saath kaam karta hai</li>
+                        </ul>
+                        <br>
+                        <p><strong>Custom Hooks:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Logic ko reuse karne ka modern way</li>
+                            <li>Direct values return karta hai, component nahi</li>
+                            <li>No wrapper hell, cleaner code</li>
+                            <li>Sirf functional components ke saath</li>
+                        </ul>
+                        <br>
+                        <p><strong>When to use:</strong></p>
+                        <p>✅ <strong>Custom Hooks prefer karo</strong> - Modern, cleaner, aur React team ka recommendation</p>
+                        <p>⚠️ <strong>HOC use karo</strong> - Legacy code maintain karte waqt ya jab component wrapping zaroori ho</p>
+                        <div class="code-block" style="margin-top: 15px;">
+// HOC
+const Enhanced = withAuth(Component);
+
+// Custom Hook (Better!)
+function Component() {
+  const { user, isAuth } = useAuth();
+  // Direct use, no wrapping
+}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(2)">
+                    <div class="question-header">
+                        <span>2. Compound Components pattern ko implement kaise karenge? Example ke saath explain karo.</span>
+                        <div>
+                            <span class="difficulty difficulty-hard">Hard</span>
+                            <span class="toggle-icon" id="icon-2">▼</span>
+                        </div>
+                    </div>
+                    <div class="answer" id="answer-2">
+                        <p><strong>Answer:</strong></p>
+                        <p>Compound Components pattern mein hum Context API use karke related components ko implicit state share karate hain.</p>
+                        <div class="code-block" style="margin-top: 15px;">
+// Step 1: Create Context
+const AccordionContext = createContext();
+
+// Step 2: Parent Component with Provider
+function Accordion({ children, allowMultiple = false }) {
+  const [openItems, setOpenItems] = useState([]);
+  
+  const toggle = (id) => {
+    setOpenItems(prev => {
+      if (allowMultiple) {
+        return prev.includes(id) 
+          ? prev.filter(i => i !== id)
+          : [...prev, id];
+      }
+      return prev.includes(id) ? [] : [id];
+    });
+  };
+  
+  return (
+    &lt;AccordionContext.Provider value={{ openItems, toggle }}&gt;
+      {children}
+    &lt;/AccordionContext.Provider&gt;
+  );
+}
+
+// Step 3: Child Components
+function AccordionItem({ id, children }) {
+  return &lt;div className="item"&gt;{children}&lt;/div&gt;;
+}
+
+function AccordionHeader({ id, children }) {
+  const { openItems, toggle } = useContext(AccordionContext);
+  const isOpen = openItems.includes(id);
+  
+  return (
+    &lt;button onClick={() => toggle(id)}&gt;
+      {children} {isOpen ? '▼' : '▶'}
+    &lt;/button&gt;
+  );
+}
+
+function AccordionPanel({ id, children }) {
+  const { openItems } = useContext(AccordionContext);
+  return openItems.includes(id) ? &lt;div&gt;{children}&lt;/div&gt; : null;
+}
+
+// Step 4: Attach to parent
+Accordion.Item = AccordionItem;
+Accordion.Header = AccordionHeader;
+Accordion.Panel = AccordionPanel;
+
+// Usage
+&lt;Accordion allowMultiple&gt;
+  &lt;Accordion.Item id="1"&gt;
+    &lt;Accordion.Header id="1"&gt;Question 1&lt;/Accordion.Header&gt;
+    &lt;Accordion.Panel id="1"&gt;Answer 1&lt;/Accordion.Panel&gt;
+  &lt;/Accordion.Item&gt;
+&lt;/Accordion&gt;
+                        </div>
+                        <p style="margin-top: 15px;"><strong>Key Points:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Context se implicit state sharing</li>
+                            <li>Flexible composition</li>
+                            <li>Intuitive API</li>
+                            <li>Components tightly coupled but loosely structured</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(3)">
+                    <div class="question-header">
+                        <span>3. Controlled vs Uncontrolled components - performance implications kya hain?</span>
+                        <div>
+                            <span class="difficulty difficulty-medium">Medium</span>
+                            <span class="toggle-icon" id="icon-3">▼</span>
+                        </div>
+                    </div>
+                    <div class="answer" id="answer-3">
+                        <p><strong>Answer:</strong></p>
+                        <p><strong>Controlled Components:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>❌ <strong>Performance Impact:</strong> Har keystroke pe component re-render hota hai</li>
+                            <li>❌ Large forms mein slow ho sakta hai</li>
+                            <li>✅ Real-time validation possible</li>
+                            <li>✅ Conditional logic easy</li>
+                        </ul>
+                        <br>
+                        <p><strong>Uncontrolled Components:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>✅ <strong>Better Performance:</strong> No re-renders on input change</li>
+                            <li>✅ Large forms ke liye better</li>
+                            <li>❌ Validation sirf submit pe</li>
+                            <li>❌ Dynamic behavior mushkil</li>
+                        </ul>
+                        <br>
+                        <p><strong>Performance Optimization Tips:</strong></p>
+                        <div class="code-block" style="margin-top: 10px;">
+// 1. Debouncing for controlled inputs
+const [value, setValue] = useState('');
+const debouncedValue = useDebounce(value, 300);
+
+// 2. Use React Hook Form (best of both worlds)
+const { register } = useForm();
+&lt;input {...register('email')} /&gt;
+
+// 3. Split large forms into smaller components
+// Each section manages its own state
+
+// 4. Use uncontrolled for simple forms
+const nameRef = useRef();
+// Access only on submit
+                        </div>
+                        <p style="margin-top: 15px;"><strong>Recommendation:</strong> Modern apps mein React Hook Form use karo - ye uncontrolled approach use karta hai but controlled jaise features deta hai!</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(4)">
+                    <div class="question-header">
+                        <span>4. Provider Pattern mein performance issues kaise avoid karein?</span>
+                        <div>
+                            <span class="difficulty difficulty-hard">Hard</span>
+                            <span class="toggle-icon" id="icon-4">▼</span>
+                        </div>
+                    </div>
+                    <div class="answer" id="answer-4">
+                        <p><strong>Answer:</strong></p>
+                        <p>Provider Pattern mein main problem ye hai ki context value change hone pe <strong>saare consumers re-render</strong> ho jate hain, chahe unhe us value ki zarurat ho ya nahi.</p>
+                        <br>
+                        <p><strong>Solutions:</strong></p>
+                        <p><strong>1. Split Contexts (Most Important!):</strong></p>
+                        <div class="code-block" style="margin-top: 10px;">
+// ❌ Bad - Everything in one context
+const AppContext = createContext();
+function AppProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [theme, setTheme] = useState('light');
+  const [notifications, setNotifications] = useState([]);
+  // Theme change pe sab re-render!
+}
+
+// ✅ Good - Separate contexts
+const UserContext = createContext();
+const ThemeContext = createContext();
+const NotificationContext = createContext();
+// Ab sirf relevant components re-render honge
+                        </div>
+                        <p><strong>2. Memoize Context Value:</strong></p>
+                        <div class="code-block" style="margin-top: 10px;">
+function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState('light');
+  
+  // ✅ Memoize to prevent unnecessary re-renders
+  const value = useMemo(() => ({
+    theme,
+    setTheme
+  }), [theme]);
+  
+  return (
+    &lt;ThemeContext.Provider value={value}&gt;
+      {children}
+    &lt;/ThemeContext.Provider&gt;
+  );
+}
+                        </div>
+                        <p><strong>3. Use Selectors:</strong></p>
+                        <div class="code-block" style="margin-top: 10px;">
+// Custom hook with selector
+function useUser(selector = (state) => state) {
+  const context = useContext(UserContext);
+  return selector(context);
+}
+
+// Usage - only re-render when name changes
+function UserName() {
+  const name = useUser(state => state.user.name);
+  return &lt;div&gt;{name}&lt;/div&gt;;
+}
+                        </div>
+                        <p><strong>4. Separate State and Dispatch:</strong></p>
+                        <div class="code-block" style="margin-top: 10px;">
+const StateContext = createContext();
+const DispatchContext = createContext();
+
+// Components jo sirf dispatch use karte hain
+// wo state changes pe re-render nahi honge
+function Button() {
+  const dispatch = useContext(DispatchContext);
+  // No re-render on state change!
+}
+                        </div>
+                        <p style="margin-top: 15px;"><strong>Best Practice:</strong> Frequently changing state aur stable state ko alag contexts mein rakho!</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(5)">
+                    <div class="question-header">
+                        <span>5. State Reducer Pattern ka real-world use case explain karo.</span>
+                        <div>
+                            <span class="difficulty difficulty-hard">Hard</span>
+                            <span class="toggle-icon" id="icon-5">▼</span>
+                        </div>
+                    </div>
+                    <div class="answer" id="answer-5">
+                        <p><strong>Answer:</strong></p>
+                        <p><strong>Real-World Scenario:</strong> Ek reusable Modal component jo different apps mein different behavior chahiye.</p>
+                        <div class="code-block" style="margin-top: 15px;">
+// Modal with State Reducer
+function useModal({ 
+  initialOpen = false,
+  reducer = (state, action) => action.changes 
+}) {
+  const [state, dispatch] = useReducer((state, action) => {
+    const changes = (() => {
+      switch (action.type) {
+        case 'OPEN':
+          return { isOpen: true };
+        case 'CLOSE':
+          return { isOpen: false };
+        case 'TOGGLE':
+          return { isOpen: !state.isOpen };
+        default:
+          return state;
+      }
+    })();
+    
+    // User's custom reducer can override
+    return reducer(state, { ...action, changes }) ?? changes;
+  }, { isOpen: initialOpen });
+  
+  return {
+    isOpen: state.isOpen,
+    open: () => dispatch({ type: 'OPEN' }),
+    close: () => dispatch({ type: 'CLOSE' }),
+    toggle: () => dispatch({ type: 'TOGGLE' })
+  };
+}
+
+// Use Case 1: Normal Modal (Default behavior)
+function NormalModal() {
+  const { isOpen, open, close } = useModal();
+  return (
+    &lt;&gt;
+      &lt;button onClick={open}&gt;Open&lt;/button&gt;
+      {isOpen && &lt;Modal onClose={close} /&gt;}
+    &lt;/&gt;
+  );
+}
+
+// Use Case 2: Confirmation Required Modal
+function ConfirmModal() {
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(true);
+  
+  const { isOpen, open, close } = useModal({
+    reducer: (state, action) => {
+      // Prevent closing if unsaved changes
+      if (action.type === 'CLOSE' && hasUnsavedChanges) {
+        const confirmed = window.confirm('Unsaved changes. Close anyway?');
+        if (!confirmed) {
+          return state; // Don't close
+        }
+      }
+      return action.changes; // Use default behavior
+    }
+  });
+  
+  return (
+    &lt;&gt;
+      &lt;button onClick={open}&gt;Open&lt;/button&gt;
+      {isOpen && (
+        &lt;Modal onClose={close}&gt;
+          &lt;input onChange={() => setHasUnsavedChanges(true)} /&gt;
+        &lt;/Modal&gt;
+      )}
+    &lt;/&gt;
+  );
+}
+
+// Use Case 3: Analytics Tracking Modal
+function AnalyticsModal() {
+  const { isOpen, open, close } = useModal({
+    reducer: (state, action) => {
+      // Track every modal interaction
+      if (action.type === 'OPEN') {
+        analytics.track('Modal Opened');
+      }
+      if (action.type === 'CLOSE') {
+        analytics.track('Modal Closed');
+      }
+      return action.changes;
+    }
+  });
+  
+  return &lt;Modal isOpen={isOpen} onClose={close} /&gt;;
+}
+                        </div>
+                        <p style="margin-top: 15px;"><strong>Benefits:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Same component, different behaviors</li>
+                            <li>No need to modify original component</li>
+                            <li>Users control the logic</li>
+                            <li>Perfect for library authors</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(6)">
+                    <div class="question-header">
+                        <span>6. Headless Components ka main advantage kya hai? Kab use nahi karna chahiye?</span>
+                        <div>
+                            <span class="difficulty difficulty-medium">Medium</span>
+                            <span class="toggle-icon" id="icon-6">▼</span>
+                        </div>
+                    </div>
+                    <div class="answer" id="answer-6">
+                        <p><strong>Answer:</strong></p>
+                        <p><strong>Main Advantages:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>🎨 <strong>Complete Styling Freedom:</strong> Apni design system use kar sakte ho</li>
+                            <li>♿ <strong>Accessibility Built-in:</strong> Logic mein accessibility handle hoti hai</li>
+                            <li>🔄 <strong>Maximum Reusability:</strong> Same logic, infinite UIs</li>
+                            <li>🧪 <strong>Easy Testing:</strong> Logic aur UI separately test kar sakte ho</li>
+                            <li>📦 <strong>Framework Agnostic:</strong> Logic ko kahi bhi use kar sakte ho</li>
+                        </ul>
+                        <br>
+                        <p><strong>When NOT to use:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>❌ Simple components jo rarely customize hote hain</li>
+                            <li>❌ Jab ready-made UI library sufficient hai</li>
+                            <li>❌ Tight deadlines aur limited resources</li>
+                            <li>❌ Team mein headless pattern ka experience nahi</li>
+                            <li>❌ Prototype ya MVP bana rahe ho</li>
+                        </ul>
+                        <br>
+                        <p><strong>Example Comparison:</strong></p>
+                        <div class="code-block" style="margin-top: 10px;">
+// Regular Component (Opinionated UI)
+&lt;Button variant="primary" size="large"&gt;
+  Click Me
+&lt;/Button&gt;
+// Limited customization
+
+// Headless Component (Full Control)
+&lt;Button&gt;
+  {({ isPressed, isHovered }) => (
+    &lt;div className={myCustomStyles}&gt;
+      {isPressed ? '👇' : isHovered ? '👆' : '👉'} Click Me
+    &lt;/div&gt;
+  )}
+&lt;/Button&gt;
+// Unlimited customization
+                        </div>
+                        <p style="margin-top: 15px;"><strong>Best Use Cases:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Design systems aur component libraries</li>
+                            <li>Complex interactive components (dropdowns, modals, tables)</li>
+                            <li>Jab multiple brands/themes support karni ho</li>
+                            <li>Accessibility critical applications</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(7)">
+                    <div class="question-header">
+                        <span>7. Modern React mein kaunse patterns still relevant hain aur kaunse obsolete ho gaye?</span>
+                        <div>
+                            <span class="difficulty difficulty-easy">Easy</span>
+                            <span class="toggle-icon" id="icon-7">▼</span>
+                        </div>
+                    </div>
+                    <div class="answer" id="answer-7">
+                        <p><strong>Answer:</strong></p>
+                        <p><strong>✅ Still Relevant & Recommended:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>Compound Components:</strong> UI libraries ke liye perfect, intuitive API</li>
+                            <li><strong>Provider Pattern:</strong> Global state management ke liye essential</li>
+                            <li><strong>Headless Components:</strong> Design systems aur flexibility ke liye best</li>
+                            <li><strong>State Reducer:</strong> Complex state logic ke liye powerful</li>
+                            <li><strong>Controlled Components:</strong> Forms ke liye standard approach</li>
+                        </ul>
+                        <br>
+                        <p><strong>⚠️ Less Common (Better Alternatives Exist):</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>HOCs:</strong> Custom Hooks ne mostly replace kar diya
+                                <div class="code-block" style="margin-top: 5px;">
+// Old: HOC
+const Enhanced = withAuth(Component);
+
+// New: Custom Hook
+function Component() {
+  const auth = useAuth();
+}
+                                </div>
+                            </li>
+                            <li><strong>Render Props:</strong> Custom Hooks cleaner alternative
+                                <div class="code-block" style="margin-top: 5px;">
+// Old: Render Props
+&lt;Mouse&gt;
+  {({ x, y }) => &lt;Display x={x} y={y} /&gt;}
+&lt;/Mouse&gt;
+
+// New: Custom Hook
+function Display() {
+  const { x, y } = useMouse();
+}
+                                </div>
+                            </li>
+                        </ul>
+                        <br>
+                        <p><strong>🚀 Modern Recommendations:</strong></p>
+                        <table class="comparison-table" style="margin-top: 15px;">
+                            <tr>
+                                <th>Need</th>
+                                <th>Use This</th>
+                            </tr>
+                            <tr>
+                                <td>Share logic</td>
+                                <td>Custom Hooks</td>
+                            </tr>
+                            <tr>
+                                <td>Global state</td>
+                                <td>Context + Provider</td>
+                            </tr>
+                            <tr>
+                                <td>Complex state</td>
+                                <td>useReducer + State Reducer</td>
+                            </tr>
+                            <tr>
+                                <td>UI library</td>
+                                <td>Compound + Headless</td>
+                            </tr>
+                            <tr>
+                                <td>Forms</td>
+                                <td>React Hook Form</td>
+                            </tr>
+                        </table>
+                        <p style="margin-top: 15px;"><strong>Key Takeaway:</strong> Hooks ne bahut patterns ko simplify kar diya, but architectural patterns (Compound, Headless, Provider) still valuable hain!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                <h2 style="color: white;">🎓 Summary & Key Takeaways</h2>
+                <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 15px; margin-top: 25px;">
+                    <h3 style="color: white; margin-bottom: 20px;">📝 Pattern Selection Guide:</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px;">
+                            <h4 style="color: white;">🎯 For Logic Sharing</h4>
+                            <p>Use <strong>Custom Hooks</strong> - Modern, clean, aur React team ka recommendation</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px;">
+                            <h4 style="color: white;">🌐 For Global State</h4>
+                            <p>Use <strong>Provider Pattern</strong> - Context API ke saath perfect combination</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px;">
+                            <h4 style="color: white;">🧩 For UI Libraries</h4>
+                            <p>Use <strong>Compound Components</strong> - Intuitive API aur flexible composition</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px;">
+                            <h4 style="color: white;">👻 For Maximum Flexibility</h4>
+                            <p>Use <strong>Headless Components</strong> - Complete styling freedom</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px;">
+                            <h4 style="color: white;">⚙️ For Complex State</h4>
+                            <p>Use <strong>State Reducer</strong> - User-controlled behavior</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px;">
+                            <h4 style="color: white;">🎮 For Forms</h4>
+                            <p>Use <strong>Controlled</strong> with validation or <strong>React Hook Form</strong></p>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 15px; margin-top: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px;">💡 Final Tips:</h3>
+                    <ul style="line-height: 2; font-size: 1.1em;">
+                        <li>✅ Patterns ko blindly follow mat karo - problem ko samjho pehle</li>
+                        <li>✅ Simple solutions prefer karo - over-engineering se bacho</li>
+                        <li>✅ Team ke experience level consider karo</li>
+                        <li>✅ Performance implications samjho</li>
+                        <li>✅ Modern alternatives explore karo (Hooks!)</li>
+                        <li>✅ Documentation aur examples zaroori hain</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Scroll to section
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // HOC Demo
+        let hocState = { loading: false, authenticated: true };
+        
+        function updateHOCDemo() {
+            hocState.loading = document.getElementById('hoc-loading').checked;
+            hocState.authenticated = document.getElementById('hoc-auth').checked;
+            
+            const output = document.getElementById('hoc-output');
+            
+            if (hocState.loading) {
+                output.innerHTML = '<div style="color: #ffc107;">⏳ Loading...</div>';
+            } else if (!hocState.authenticated) {
+                output.innerHTML = '<div style="color: #dc3545;">🔒 Access Denied - Please login</div>';
+            } else {
+                output.innerHTML = '<div style="color: #28a745;">✅ Welcome to Dashboard!<br><br>User: John Doe<br>Role: Admin</div>';
+            }
+        }
+        
+        updateHOCDemo();
+
+        // Mouse Position Demo
+        function updateMousePosition(event) {
+            const rect = event.currentTarget.getBoundingClientRect();
+            const x = Math.round(event.clientX - rect.left);
+            const y = Math.round(event.clientY - rect.top);
+            
+            document.getElementById('mouse-display').textContent = `Mouse Position: (${x}, ${y})`;
+            
+            const cursor = document.getElementById('mouse-cursor');
+            cursor.style.left = (x - 15) + 'px';
+            cursor.style.top = (y - 15) + 'px';
+        }
+
+        // Tab Switching
+        function switchTab(event, tabId) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Form Tab Switching
+        function switchFormTab(event, tabId) {
+            const tabs = event.target.parentElement.querySelectorAll('.tab');
+            const contents = event.target.parentElement.parentElement.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Controlled Input Demo
+        function updateControlledDemo(value) {
+            document.getElementById('controlled-value').textContent = `"${value}"`;
+            document.getElementById('controlled-count').textContent = value.length;
+        }
+
+        // Uncontrolled Input Demo
+        function getUncontrolledValue() {
+            const value = document.getElementById('uncontrolled-input').value;
+            document.getElementById('uncontrolled-value').textContent = `"${value}"`;
+        }
+
+        // Theme Toggle Demo
+        let currentTheme = 'light';
+        
+        function toggleThemeDemo() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            const themeBox = document.getElementById('theme-demo-box');
+            const themeBadge = document.getElementById('current-theme');
+            
+            if (currentTheme === 'dark') {
+                themeBox.style.background = '#282c34';
+                themeBox.style.color = '#ffffff';
+                themeBadge.textContent = 'Dark';
+                themeBadge.style.background = '#282c34';
+            } else {
+                themeBox.style.background = '#ffffff';
+                themeBox.style.color = '#333333';
+                themeBadge.textContent = 'Light';
+                themeBadge.style.background = '#667eea';
+            }
+        }
+
+        // Counter Demo
+        let normalCount = 0;
+        let limitedCount = 0;
+        
+        function updateCounter(type, delta) {
+            if (type === 'normal') {
+                normalCount += delta;
+                document.getElementById('normal-counter').textContent = normalCount;
+            } else {
+                const newValue = limitedCount + delta;
+                if (newValue >= 0 && newValue <= 10) {
+                    limitedCount = newValue;
+                    document.getElementById('limited-counter').textContent = limitedCount;
+                }
+            }
+        }
+        
+        function resetCounter(type) {
+            if (type === 'normal') {
+                normalCount = 0;
+                document.getElementById('normal-counter').textContent = normalCount;
+            } else {
+                limitedCount = 0;
+                document.getElementById('limited-counter').textContent = limitedCount;
+            }
+        }
+
+        // Headless Demo Switching
+        function switchHeadlessDemo(event, demoId) {
+            const tabs = event.target.parentElement.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('#simple, #fancy, #minimal');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(demoId).classList.add('active');
+        }
+
+        // Interview Questions Toggle
+        function toggleAnswer(num) {
+            const answer = document.getElementById(`answer-${num}`);
+            const icon = document.getElementById(`icon-${num}`);
+            
+            answer.classList.toggle('show');
+            icon.classList.toggle('rotated');
+        }
+    </script>
+</body>
+</html>

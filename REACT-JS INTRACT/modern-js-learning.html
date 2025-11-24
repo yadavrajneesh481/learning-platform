@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern JavaScript ES6-ES2023 - Interactive Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .topic-section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .topic-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .topic-section h3 {
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+        }
+
+        .explanation {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+
+        .keyword { color: #c678dd; }
+        .string { color: #98c379; }
+        .function { color: #61afef; }
+        .comment { color: #5c6370; font-style: italic; }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #667eea22 0%, #764ba222 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px dashed #667eea;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .output {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            min-height: 50px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .quiz-section {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 50px;
+        }
+
+        .quiz-section h2 {
+            color: #d63031;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .question {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .question h3 {
+            color: #2d3436;
+            margin-bottom: 15px;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .easy { background: #55efc4; color: #00b894; }
+        .medium { background: #fdcb6e; color: #f39c12; }
+        .hard { background: #ff7675; color: #d63031; }
+
+        .toggle-answer {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: #d63031;
+            margin-top: 10px;
+        }
+
+        .answer {
+            display: none;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #00b894;
+        }
+
+        .hinglish {
+            color: #e74c3c;
+            font-weight: 500;
+        }
+
+        .tech-term {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+
+            .topic-section {
+                padding: 20px;
+            }
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .visual-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .demo-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .demo-box:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Modern JavaScript ES6-ES2023</h1>
+            <p>React ke liye essential JavaScript concepts - Interactive Learning Guide</p>
+        </header>
+
+        <div class="content">
+            <!-- Section 1: var vs let vs const -->
+            <div class="topic-section">
+                <h2>1. var vs let vs const</h2>
+                <div class="explanation">
+                    <p><span class="hinglish">Pehle</span> JavaScript mein sirf <span class="tech-term">var</span> tha, <span class="hinglish">lekin</span> ES6 mein <span class="tech-term">let</span> aur <span class="tech-term">const</span> aaye jo better scope aur control dete hain.</p>
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>var</th>
+                            <th>let</th>
+                            <th>const</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Scope</strong></td>
+                            <td>Function-scoped</td>
+                            <td>Block-scoped</td>
+                            <td>Block-scoped</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reassignment</strong></td>
+                            <td>✅ Allowed</td>
+                            <td>✅ Allowed</td>
+                            <td>❌ Not Allowed</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hoisting</strong></td>
+                            <td>✅ Yes (undefined)</td>
+                            <td>⚠️ Yes (TDZ)</td>
+                            <td>⚠️ Yes (TDZ)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Redeclaration</strong></td>
+                            <td>✅ Allowed</td>
+                            <td>❌ Not Allowed</td>
+                            <td>❌ Not Allowed</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo - Scope Testing</h3>
+                    <div class="demo-controls">
+                        <button onclick="testVar()">Test var Scope</button>
+                        <button onclick="testLet()">Test let Scope</button>
+                        <button onclick="testConst()">Test const Behavior</button>
+                    </div>
+                    <div class="output" id="scopeOutput">Click buttons to see scope differences</div>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// var - function scoped</span>
+<span class="keyword">if</span> (<span class="keyword">true</span>) {
+    <span class="keyword">var</span> x = <span class="string">"accessible"</span>;
+}
+console.log(x); <span class="comment">// "accessible" - var scope leak!</span>
+
+<span class="comment">// let - block scoped</span>
+<span class="keyword">if</span> (<span class="keyword">true</span>) {
+    <span class="keyword">let</span> y = <span class="string">"blocked"</span>;
+}
+<span class="comment">// console.log(y); // Error! y is not defined</span>
+
+<span class="comment">// const - cannot reassign</span>
+<span class="keyword">const</span> z = <span class="string">"fixed"</span>;
+<span class="comment">// z = "new"; // Error! Cannot reassign const</span>
+                </div>
+            </div>
+
+            <!-- Section 2: Arrow Functions -->
+            <div class="topic-section">
+                <h2>2. Arrow Functions & Implicit Return</h2>
+                <div class="explanation">
+                    <p><span class="tech-term">Arrow functions</span> <span class="hinglish">ek concise tarika hai functions likhne ka</span>. Ye <span class="tech-term">this</span> binding ko parent se inherit karte hain, <span class="hinglish">jo React mein bahut useful hai</span>.</p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Traditional function</span>
+<span class="keyword">function</span> <span class="function">add</span>(a, b) {
+    <span class="keyword">return</span> a + b;
+}
+
+<span class="comment">// Arrow function with explicit return</span>
+<span class="keyword">const</span> add = (a, b) => {
+    <span class="keyword">return</span> a + b;
+};
+
+<span class="comment">// Arrow function with implicit return</span>
+<span class="keyword">const</span> add = (a, b) => a + b;
+
+<span class="comment">// Single parameter - no parentheses needed</span>
+<span class="keyword">const</span> square = x => x * x;
+
+<span class="comment">// Implicit return of object (wrap in parentheses)</span>
+<span class="keyword">const</span> makePerson = name => ({ name, age: 25 });
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Arrow Function Calculator</h3>
+                    <div class="demo-controls">
+                        <input type="number" id="num1" placeholder="Number 1" value="5" style="padding: 10px; border-radius: 5px; border: 2px solid #667eea;">
+                        <input type="number" id="num2" placeholder="Number 2" value="3" style="padding: 10px; border-radius: 5px; border: 2px solid #667eea;">
+                        <button onclick="arrowAdd()">Add</button>
+                        <button onclick="arrowMultiply()">Multiply</button>
+                        <button onclick="arrowPower()">Power</button>
+                    </div>
+                    <div class="output" id="arrowOutput">Results will appear here</div>
+                </div>
+            </div>
+
+            <!-- Section 3: Template Literals -->
+            <div class="topic-section">
+                <h2>3. Template Literals</h2>
+                <div class="explanation">
+                    <p><span class="tech-term">Template literals</span> <span class="hinglish">backticks (`) use karte hain aur</span> string interpolation ko easy banate hain. <span class="hinglish">Multi-line strings aur expressions embed kar sakte hain directly</span>.</p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Old way - string concatenation</span>
+<span class="keyword">const</span> name = <span class="string">"Rahul"</span>;
+<span class="keyword">const</span> age = 25;
+<span class="keyword">const</span> msg = <span class="string">"Hello "</span> + name + <span class="string">", you are "</span> + age + <span class="string">" years old"</span>;
+
+<span class="comment">// Modern way - template literals</span>
+<span class="keyword">const</span> msg = <span class="string">`Hello ${name}, you are ${age} years old`</span>;
+
+<span class="comment">// Multi-line strings</span>
+<span class="keyword">const</span> html = <span class="string">`
+    &lt;div&gt;
+        &lt;h1&gt;${name}&lt;/h1&gt;
+        &lt;p&gt;Age: ${age}&lt;/p&gt;
+    &lt;/div&gt;
+`</span>;
+
+<span class="comment">// Expressions inside template literals</span>
+<span class="keyword">const</span> result = <span class="string">`Sum: ${10 + 20}, Product: ${5 * 4}`</span>;
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Template Literal Builder</h3>
+                    <input type="text" id="userName" placeholder="Your Name" style="padding: 10px; border-radius: 5px; border: 2px solid #667eea; width: 200px; margin: 10px;">
+                    <input type="number" id="userAge" placeholder="Your Age" style="padding: 10px; border-radius: 5px; border: 2px solid #667eea; width: 200px; margin: 10px;">
+                    <div class="demo-controls">
+                        <button onclick="buildTemplate()">Build Template</button>
+                    </div>
+                    <div class="output" id="templateOutput">Enter details and click button</div>
+                </div>
+            </div>
+
+            <!-- Section 4: Destructuring -->
+            <div class="topic-section">
+                <h2>4. Destructuring Objects & Arrays</h2>
+                <div class="explanation">
+                    <p><span class="tech-term">Destructuring</span> <span class="hinglish">se hum objects aur arrays se values ko easily extract kar sakte hain</span>. React props mein bahut use hota hai.</p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Object Destructuring</span>
+<span class="keyword">const</span> user = { name: <span class="string">"Priya"</span>, age: 28, city: <span class="string">"Mumbai"</span> };
+<span class="keyword">const</span> { name, age, city } = user;
+
+<span class="comment">// Renaming variables</span>
+<span class="keyword">const</span> { name: userName, age: userAge } = user;
+
+<span class="comment">// Default values</span>
+<span class="keyword">const</span> { name, country = <span class="string">"India"</span> } = user;
+
+<span class="comment">// Array Destructuring</span>
+<span class="keyword">const</span> colors = [<span class="string">"red"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>];
+<span class="keyword">const</span> [first, second, third] = colors;
+
+<span class="comment">// Skip elements</span>
+<span class="keyword">const</span> [, , third] = colors;
+
+<span class="comment">// Rest operator in destructuring</span>
+<span class="keyword">const</span> [first, ...rest] = colors;
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Destructuring Demo</h3>
+                    <div class="demo-controls">
+                        <button onclick="destructureObject()">Destructure Object</button>
+                        <button onclick="destructureArray()">Destructure Array</button>
+                        <button onclick="nestedDestructure()">Nested Destructuring</button>
+                    </div>
+                    <div class="output" id="destructureOutput">Click buttons to see destructuring in action</div>
+                </div>
+            </div>
+
+            <!-- Section 5: Spread & Rest -->
+            <div class="topic-section">
+                <h2>5. Spread & Rest Operators (...)</h2>
+                <div class="explanation">
+                    <p><span class="hinglish">Dono operators same symbol use karte hain (...) lekin</span> context ke according different kaam karte hain. <span class="tech-term">Spread</span> expands, <span class="tech-term">Rest</span> collects.</p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// SPREAD - expands array/object</span>
+<span class="keyword">const</span> arr1 = [1, 2, 3];
+<span class="keyword">const</span> arr2 = [4, 5, 6];
+<span class="keyword">const</span> combined = [...arr1, ...arr2]; <span class="comment">// [1,2,3,4,5,6]</span>
+
+<span class="comment">// Spread in objects (React state updates)</span>
+<span class="keyword">const</span> user = { name: <span class="string">"Amit"</span>, age: 30 };
+<span class="keyword">const</span> updatedUser = { ...user, age: 31 };
+
+<span class="comment">// REST - collects remaining elements</span>
+<span class="keyword">function</span> <span class="function">sum</span>(...numbers) {
+    <span class="keyword">return</span> numbers.<span class="function">reduce</span>((a, b) => a + b, 0);
+}
+<span class="function">sum</span>(1, 2, 3, 4, 5); <span class="comment">// 15</span>
+
+<span class="comment">// Rest in destructuring</span>
+<span class="keyword">const</span> { name, ...otherProps } = user;
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Spread & Rest Visualizer</h3>
+                    <div class="demo-controls">
+                        <button onclick="spreadArrays()">Spread Arrays</button>
+                        <button onclick="spreadObjects()">Spread Objects</button>
+                        <button onclick="restParams()">Rest Parameters</button>
+                    </div>
+                    <div class="output" id="spreadOutput">Click buttons to see spread & rest operations</div>
+                </div>
+            </div>
+
+            <!-- Section 6: Array Methods -->
+            <div class="topic-section">
+                <h2>6. Array Methods (map, filter, reduce, find, some, every)</h2>
+                <div class="explanation">
+                    <p><span class="hinglish">Ye methods React mein data manipulation ke liye bahut important hain</span>. Immutable operations perform karte hain - original array change nahi hota.</p>
+                </div>
+
+                <div class="code-block">
+<span class="keyword">const</span> numbers = [1, 2, 3, 4, 5];
+
+<span class="comment">// map - transforms each element</span>
+<span class="keyword">const</span> doubled = numbers.<span class="function">map</span>(n => n * 2); <span class="comment">// [2,4,6,8,10]</span>
+
+<span class="comment">// filter - returns elements that pass test</span>
+<span class="keyword">const</span> evens = numbers.<span class="function">filter</span>(n => n % 2 === 0); <span class="comment">// [2,4]</span>
+
+<span class="comment">// reduce - reduces array to single value</span>
+<span class="keyword">const</span> sum = numbers.<span class="function">reduce</span>((acc, n) => acc + n, 0); <span class="comment">// 15</span>
+
+<span class="comment">// find - returns first element that matches</span>
+<span class="keyword">const</span> found = numbers.<span class="function">find</span>(n => n > 3); <span class="comment">// 4</span>
+
+<span class="comment">// some - checks if ANY element passes test</span>
+<span class="keyword">const</span> hasEven = numbers.<span class="function">some</span>(n => n % 2 === 0); <span class="comment">// true</span>
+
+<span class="comment">// every - checks if ALL elements pass test</span>
+<span class="keyword">const</span> allPositive = numbers.<span class="function">every</span>(n => n > 0); <span class="comment">// true</span>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Array Methods Playground</h3>
+                    <p>Array: [2, 4, 6, 8, 10, 15, 20, 25, 30]</p>
+                    <div class="demo-controls">
+                        <button onclick="demoMap()">map (x2)</button>
+                        <button onclick="demoFilter()">filter (>10)</button>
+                        <button onclick="demoReduce()">reduce (sum)</button>
+                        <button onclick="demoFind()">find (>15)</button>
+                        <button onclick="demoSome()">some (>25)</button>
+                        <button onclick="demoEvery()">every (>0)</button>
+                    </div>
+                    <div class="output" id="arrayOutput">Click buttons to see array methods in action</div>
+                </div>
+            </div>
+
+            <!-- Section 7: Promises & Async/Await -->
+            <div class="topic-section">
+                <h2>7. Promises + Async/Await + Error Handling</h2>
+                <div class="explanation">
+                    <p><span class="tech-term">Promises</span> <span class="hinglish">asynchronous operations handle karne ke liye use hote hain</span>. <span class="tech-term">async/await</span> promises ko synchronous jaisa dikhata hai, making code cleaner.</p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Promise basics</span>
+<span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="function">Promise</span>((resolve, reject) => {
+    <span class="keyword">if</span> (success) {
+        <span class="function">resolve</span>(<span class="string">"Data loaded!"</span>);
+    } <span class="keyword">else</span> {
+        <span class="function">reject</span>(<span class="string">"Error occurred"</span>);
+    }
+});
+
+<span class="comment">// Using .then().catch()</span>
+promise
+    .<span class="function">then</span>(data => console.<span class="function">log</span>(data))
+    .<span class="function">catch</span>(err => console.<span class="function">error</span>(err));
+
+<span class="comment">// Async/Await - cleaner syntax</span>
+<span class="keyword">async function</span> <span class="function">fetchData</span>() {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'api/data'</span>);
+        <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+        <span class="keyword">return</span> data;
+    } <span class="keyword">catch</span> (error) {
+        console.<span class="function">error</span>(<span class="string">'Error:'</span>, error);
+    }
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Async Operations Simulator</h3>
+                    <div class="demo-controls">
+                        <button onclick="simulatePromise()">Simulate Promise</button>
+                        <button onclick="simulateAsync()">Simulate Async/Await</button>
+                        <button onclick="simulateError()">Simulate Error</button>
+                    </div>
+                    <div class="output" id="asyncOutput">Click buttons to see async operations</div>
+                </div>
+            </div>
+
+            <!-- Section 8: Deep vs Shallow Copy -->
+            <div class="topic-section">
+                <h2>8. Deep Copy vs Shallow Copy</h2>
+                <div class="explanation">
+                    <p><span class="tech-term">Shallow copy</span> <span class="hinglish">sirf top-level copy karta hai, nested objects reference share karte hain</span>. <span class="tech-term">Deep copy</span> complete independent copy banata hai.</p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Shallow Copy - spread operator</span>
+<span class="keyword">const</span> obj1 = { a: 1, b: { c: 2 } };
+<span class="keyword">const</span> shallow = { ...obj1 };
+shallow.b.c = 99; <span class="comment">// obj1.b.c is also 99! ⚠️</span>
+
+<span class="comment">// Deep Copy - JSON method (simple objects only)</span>
+<span class="keyword">const</span> deep = JSON.<span class="function">parse</span>(JSON.<span class="function">stringify</span>(obj1));
+deep.b.c = 99; <span class="comment">// obj1.b.c remains 2 ✅</span>
+
+<span class="comment">// Deep Copy - structuredClone (modern way)</span>
+<span class="keyword">const</span> deep2 = structuredClone(obj1);
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Copy Behavior Visualizer</h3>
+                    <div class="demo-controls">
+                        <button onclick="testShallowCopy()">Test Shallow Copy</button>
+                        <button onclick="testDeepCopy()">Test Deep Copy</button>
+                    </div>
+                    <div class="output" id="copyOutput">Click buttons to see copy differences</div>
+                </div>
+            </div>
+
+            <!-- Section 9: Optional Chaining & Nullish Coalescing -->
+            <div class="topic-section">
+                <h2>9. Optional Chaining (?.) & Nullish Coalescing (??)</h2>
+                <div class="explanation">
+                    <p><span class="hinglish">Ye modern operators safely nested properties access karne aur default values set karne mein help karte hain</span>.</p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Optional Chaining - safely access nested properties</span>
+<span class="keyword">const</span> user = { name: <span class="string">"Raj"</span>, address: { city: <span class="string">"Delhi"</span> } };
+
+<span class="comment">// Old way - multiple checks</span>
+<span class="keyword">const</span> city = user && user.address && user.address.city;
+
+<span class="comment">// Modern way - optional chaining</span>
+<span class="keyword">const</span> city = user?.address?.city; <span class="comment">// "Delhi"</span>
+<span class="keyword">const</span> zip = user?.address?.zip; <span class="comment">// undefined (no error!)</span>
+
+<span class="comment">// Nullish Coalescing - default values</span>
+<span class="keyword">const</span> port = process.env.PORT ?? 3000; <span class="comment">// 3000 if null/undefined</span>
+
+<span class="comment">// Difference from || operator</span>
+<span class="keyword">const</span> a = 0 || 10; <span class="comment">// 10 (0 is falsy)</span>
+<span class="keyword">const</span> b = 0 ?? 10; <span class="comment">// 0 (only null/undefined trigger ??)</span>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Optional Chaining Demo</h3>
+                    <div class="demo-controls">
+                        <button onclick="testOptionalChaining()">Test Optional Chaining</button>
+                        <button onclick="testNullishCoalescing()">Test Nullish Coalescing</button>
+                    </div>
+                    <div class="output" id="optionalOutput">Click buttons to see operators in action</div>
+                </div>
+            </div>
+
+            <!-- Section 10: Debouncing & Throttling -->
+            <div class="topic-section">
+                <h2>10. Debouncing & Throttling</h2>
+                <div class="explanation">
+                    <p><span class="tech-term">Debouncing</span> <span class="hinglish">function ko tab call karta hai jab user typing/action stop kare</span>. <span class="tech-term">Throttling</span> <span class="hinglish">function ko fixed intervals pe call karta hai</span>. Search bars aur scroll events mein use hota hai.</p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// DEBOUNCING - waits until user stops typing</span>
+<span class="keyword">function</span> <span class="function">debounce</span>(func, delay) {
+    <span class="keyword">let</span> timeoutId;
+    <span class="keyword">return function</span>(...args) {
+        <span class="function">clearTimeout</span>(timeoutId);
+        timeoutId = <span class="function">setTimeout</span>(() => func.<span class="function">apply</span>(<span class="keyword">this</span>, args), delay);
+    };
+}
+
+<span class="comment">// Usage in search</span>
+<span class="keyword">const</span> searchAPI = <span class="function">debounce</span>((query) => {
+    console.<span class="function">log</span>(<span class="string">`Searching for: ${query}`</span>);
+}, 500);
+
+<span class="comment">// THROTTLING - limits execution rate</span>
+<span class="keyword">function</span> <span class="function">throttle</span>(func, limit) {
+    <span class="keyword">let</span> inThrottle;
+    <span class="keyword">return function</span>(...args) {
+        <span class="keyword">if</span> (!inThrottle) {
+            func.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+            inThrottle = <span class="keyword">true</span>;
+            <span class="function">setTimeout</span>(() => inThrottle = <span class="keyword">false</span>, limit);
+        }
+    };
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Live Debouncing & Throttling</h3>
+                    <p><strong>Debouncing (Search):</strong> <span class="hinglish">Type karo aur 500ms baad function call hoga</span></p>
+                    <input type="text" id="debounceInput" placeholder="Type to search..." style="padding: 12px; border-radius: 8px; border: 2px solid #667eea; width: 100%; margin: 10px 0; font-size: 1em;">
+                    <div class="output" id="debounceOutput" style="margin-bottom: 20px;">Debounce calls: 0</div>
+
+                    <p><strong>Throttling (Button Click):</strong> <span class="hinglish">Kitna bhi click karo, har 1 second mein ek hi call</span></p>
+                    <button onclick="throttledClick()">Click Me Rapidly!</button>
+                    <div class="output" id="throttleOutput">Throttle calls: 0</div>
+                </div>
+            </div>
+
+            <!-- Section 11: Classes & OOP -->
+            <div class="topic-section">
+                <h2>11. Classes and OOP Essentials</h2>
+                <div class="explanation">
+                    <p><span class="tech-term">Classes</span> <span class="hinglish">ES6 mein aaye, React class components mein use hote the</span>. Now mostly functional components with hooks, <span class="hinglish">lekin OOP concepts samajhna important hai</span>.</p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Class definition</span>
+<span class="keyword">class</span> <span class="function">Person</span> {
+    <span class="function">constructor</span>(name, age) {
+        <span class="keyword">this</span>.name = name;
+        <span class="keyword">this</span>.age = age;
+    }
+
+    <span class="comment">// Method</span>
+    <span class="function">greet</span>() {
+        <span class="keyword">return</span> <span class="string">`Hello, I'm ${<span class="keyword">this</span>.name}`</span>;
+    }
+
+    <span class="comment">// Static method</span>
+    <span class="keyword">static</span> <span class="function">species</span>() {
+        <span class="keyword">return</span> <span class="string">"Homo Sapiens"</span>;
+    }
+}
+
+<span class="comment">// Inheritance</span>
+<span class="keyword">class</span> <span class="function">Student</span> <span class="keyword">extends</span> <span class="function">Person</span> {
+    <span class="function">constructor</span>(name, age, grade) {
+        <span class="keyword">super</span>(name, age); <span class="comment">// Call parent constructor</span>
+        <span class="keyword">this</span>.grade = grade;
+    }
+
+    <span class="function">study</span>() {
+        <span class="keyword">return</span> <span class="string">`${<span class="keyword">this</span>.name} is studying`</span>;
+    }
+}
+
+<span class="keyword">const</span> student = <span class="keyword">new</span> <span class="function">Student</span>(<span class="string">"Priya"</span>, 20, <span class="string">"A"</span>);
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Class Creation Demo</h3>
+                    <input type="text" id="className" placeholder="Student Name" style="padding: 10px; border-radius: 5px; border: 2px solid #667eea; margin: 5px;">
+                    <input type="number" id="classAge" placeholder="Age" style="padding: 10px; border-radius: 5px; border: 2px solid #667eea; margin: 5px;">
+                    <input type="text" id="classGrade" placeholder="Grade" style="padding: 10px; border-radius: 5px; border: 2px solid #667eea; margin: 5px;">
+                    <div class="demo-controls">
+                        <button onclick="createStudent()">Create Student</button>
+                    </div>
+                    <div class="output" id="classOutput">Create a student to see class methods in action</div>
+                </div>
+            </div>
+
+            <!-- Section 12: Modules -->
+            <div class="topic-section">
+                <h2>12. Modules (import/export)</h2>
+                <div class="explanation">
+                    <p><span class="tech-term">ES6 Modules</span> <span class="hinglish">code ko organize karne ka modern tarika hai</span>. React components, utilities, aur constants ko alag files mein rakhte hain.</p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// mathUtils.js - Named exports</span>
+<span class="keyword">export const</span> add = (a, b) => a + b;
+<span class="keyword">export const</span> subtract = (a, b) => a - b;
+<span class="keyword">export const</span> PI = 3.14159;
+
+<span class="comment">// Default export</span>
+<span class="keyword">const</span> multiply = (a, b) => a * b;
+<span class="keyword">export default</span> multiply;
+
+<span class="comment">// Importing - Named imports</span>
+<span class="keyword">import</span> { add, subtract, PI } <span class="keyword">from</span> <span class="string">'./mathUtils'</span>;
+
+<span class="comment">// Importing default export</span>
+<span class="keyword">import</span> multiply <span class="keyword">from</span> <span class="string">'./mathUtils'</span>;
+
+<span class="comment">// Import everything</span>
+<span class="keyword">import</span> * <span class="keyword">as</span> math <span class="keyword">from</span> <span class="string">'./mathUtils'</span>;
+
+<span class="comment">// Rename imports</span>
+<span class="keyword">import</span> { add <span class="keyword">as</span> sum } <span class="keyword">from</span> <span class="string">'./mathUtils'</span>;
+                </div>
+
+                <div class="explanation">
+                    <h3>React mein usage:</h3>
+                    <div class="code-block">
+<span class="comment">// Component.jsx</span>
+<span class="keyword">import</span> React, { useState, useEffect } <span class="keyword">from</span> <span class="string">'react'</span>;
+<span class="keyword">import</span> Button <span class="keyword">from</span> <span class="string">'./Button'</span>;
+<span class="keyword">import</span> { formatDate } <span class="keyword">from</span> <span class="string">'./utils'</span>;
+
+<span class="keyword">export default function</span> <span class="function">MyComponent</span>() {
+    <span class="comment">// Component code</span>
+}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 13: Default Parameters -->
+            <div class="topic-section">
+                <h2>13. Default Parameters</h2>
+                <div class="explanation">
+                    <p><span class="tech-term">Default parameters</span> <span class="hinglish">se function arguments ko default values de sakte hain agar value pass nahi ki</span>.</p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Old way</span>
+<span class="keyword">function</span> <span class="function">greet</span>(name) {
+    name = name || <span class="string">"Guest"</span>;
+    <span class="keyword">return</span> <span class="string">`Hello ${name}`</span>;
+}
+
+<span class="comment">// Modern way - default parameters</span>
+<span class="keyword">function</span> <span class="function">greet</span>(name = <span class="string">"Guest"</span>) {
+    <span class="keyword">return</span> <span class="string">`Hello ${name}`</span>;
+}
+
+<span class="comment">// Multiple defaults</span>
+<span class="keyword">function</span> <span class="function">createUser</span>(name = <span class="string">"Anonymous"</span>, role = <span class="string">"user"</span>, active = <span class="keyword">true</span>) {
+    <span class="keyword">return</span> { name, role, active };
+}
+
+<span class="comment">// Default can be expressions</span>
+<span class="keyword">function</span> <span class="function">calculate</span>(a, b = a * 2) {
+    <span class="keyword">return</span> a + b;
+}
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Default Parameters Demo</h3>
+                    <div class="demo-controls">
+                        <button onclick="testDefaults('Ravi')">Call with Name</button>
+                        <button onclick="testDefaults()">Call without Name</button>
+                    </div>
+                    <div class="output" id="defaultOutput">Click buttons to test default parameters</div>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="quiz-section">
+                <h2>🎯 Interview Questions</h2>
+
+                <div class="question">
+                    <span class="difficulty easy">Easy</span>
+                    <h3>Q1: What is the difference between let, const, and var?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(1)">Show Answer</button>
+                    <div class="answer" id="answer1">
+                        <p><strong>var:</strong></p>
+                        <ul>
+                            <li>Function-scoped (not block-scoped)</li>
+                            <li>Can be redeclared and reassigned</li>
+                            <li>Hoisted with undefined value</li>
+                            <li>Creates property on global object when declared globally</li>
+                        </ul>
+                        <p><strong>let:</strong></p>
+                        <ul>
+                            <li>Block-scoped { }</li>
+                            <li>Cannot be redeclared, but can be reassigned</li>
+                            <li>Temporal Dead Zone (TDZ) - cannot access before declaration</li>
+                            <li>Best for variables that will change</li>
+                        </ul>
+                        <p><strong>const:</strong></p>
+                        <ul>
+                            <li>Block-scoped { }</li>
+                            <li>Cannot be redeclared or reassigned</li>
+                            <li>Must be initialized at declaration</li>
+                            <li>Object/Array properties can still be modified (reference is constant, not content)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <span class="difficulty easy">Easy</span>
+                    <h3>Q2: Explain arrow functions and when to use them in React.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(2)">Show Answer</button>
+                    <div class="answer" id="answer2">
+                        <p><strong>Arrow Functions:</strong> Concise syntax for writing functions with lexical 'this' binding.</p>
+                        <p><strong>Key differences from regular functions:</strong></p>
+                        <ul>
+                            <li>No own 'this' - inherits from parent scope</li>
+                            <li>Cannot be used as constructors</li>
+                            <li>No 'arguments' object</li>
+                            <li>Implicit return for single expressions</li>
+                        </ul>
+                        <p><strong>Use in React:</strong></p>
+                        <ul>
+                            <li>Event handlers: onClick={() => handleClick()}</li>
+                            <li>Array methods: data.map(item => &lt;Component /&gt;)</li>
+                            <li>Functional components</li>
+                            <li>Callbacks in useEffect, useState</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Q3: What is the difference between map(), filter(), and reduce()? Give React examples.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(3)">Show Answer</button>
+                    <div class="answer" id="answer3">
+                        <p><strong>map():</strong> Transforms each element and returns new array of same length</p>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px;">// React: Rendering list
+users.map(user => &lt;UserCard key={user.id} user={user} /&gt;)</pre>
+
+                        <p><strong>filter():</strong> Returns new array with elements that pass a test</p>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px;">// React: Filtering active users
+activeUsers = users.filter(user => user.active)</pre>
+
+                        <p><strong>reduce():</strong> Reduces array to single value (sum, object, etc.)</p>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px;">// React: Calculate total price
+const total = cart.reduce((sum, item) => sum + item.price, 0)</pre>
+
+                        <p><strong>Can be chained:</strong></p>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px;">products
+  .filter(p => p.inStock)
+  .map(p => p.price)
+  .reduce((sum, price) => sum + price, 0)</pre>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Q4: Explain Promises, async/await, and error handling in API calls.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(4)">Show Answer</button>
+                    <div class="answer" id="answer4">
+                        <p><strong>Promises:</strong> Objects representing eventual completion/failure of async operation</p>
+                        <p><strong>Three states:</strong> Pending → Fulfilled/Rejected</p>
+                        
+                        <p><strong>Promise approach:</strong></p>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px;">fetch('/api/users')
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => console.error(err))
+  .finally(() => setLoading(false))</pre>
+
+                        <p><strong>Async/Await approach (cleaner):</strong></p>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px;">async function fetchUsers() {
+  try {
+    const res = await fetch('/api/users');
+    const data = await res.json();
+    setUsers(data);
+  } catch (error) {
+    setError(error.message);
+  } finally {
+    setLoading(false);
+  }
+}</pre>
+
+                        <p><strong>Key points:</strong></p>
+                        <ul>
+                            <li>async functions always return a Promise</li>
+                            <li>await pauses execution until Promise resolves</li>
+                            <li>Always use try-catch for error handling</li>
+                            <li>finally block runs regardless of success/failure</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <span class="difficulty medium">Medium</span>
+                    <h3>Q5: What is the difference between shallow copy and deep copy? How do you create them?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(5)">Show Answer</button>
+                    <div class="answer" id="answer5">
+                        <p><strong>Shallow Copy:</strong> Copies top-level properties only. Nested objects/arrays are still referenced.</p>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px;">// Spread operator (shallow)
+const copy = { ...original };
+const arrCopy = [...originalArr];
+
+// Object.assign (shallow)
+const copy = Object.assign({}, original);</pre>
+
+                        <p><strong>Deep Copy:</strong> Creates completely independent copy with all nested levels.</p>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px;">// JSON method (limitations: no functions, dates, undefined)
+const deepCopy = JSON.parse(JSON.stringify(original));
+
+// structuredClone (modern, best)
+const deepCopy = structuredClone(original);
+
+// Lodash library
+const deepCopy = _.cloneDeep(original);</pre>
+
+                        <p><strong>React State Management:</strong></p>
+                        <ul>
+                            <li>Never mutate state directly</li>
+                            <li>Use spread for shallow updates: setState({...state, name: 'New'})</li>
+                            <li>For nested updates, create new objects at each level</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <span class="difficulty hard">Hard</span>
+                    <h3>Q6: Explain debouncing vs throttling with real-world React use cases.</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(6)">Show Answer</button>
+                    <div class="answer" id="answer6">
+                        <p><strong>Debouncing:</strong> Delays function execution until after a specified time has passed since the last call.</p>
+                        <p><strong>Use cases:</strong> Search bars, auto-save, window resize</p>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px;">// Search implementation
+const searchAPI = debounce((query) => {
+  fetch(`/api/search?q=${query}`)
+    .then(res => res.json())
+    .then(setResults);
+}, 500);
+
+// In component
+&lt;input onChange={(e) => searchAPI(e.target.value)} /&gt;</pre>
+
+                        <p><strong>Throttling:</strong> Ensures function executes at most once in a specified time period.</p>
+                        <p><strong>Use cases:</strong> Scroll events, button clicks, window resize with live updates</p>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px;">// Infinite scroll
+const handleScroll = throttle(() => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+    loadMoreData();
+  }
+}, 1000);
+
+window.addEventListener('scroll', handleScroll);</pre>
+
+                        <p><strong>Key Difference:</strong></p>
+                        <ul>
+                            <li>Debounce: Wait until user stops (delay after last event)</li>
+                            <li>Throttle: Execute at regular intervals (ignore intermediate events)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <span class="difficulty hard">Hard</span>
+                    <h3>Q7: Explain optional chaining (?.) and nullish coalescing (??). Why are they better than older alternatives?</h3>
+                    <button class="toggle-answer" onclick="toggleAnswer(7)">Show Answer</button>
+                    <div class="answer" id="answer7">
+                        <p><strong>Optional Chaining (?.):</strong> Safely access nested properties without checking each level</p>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px;">// Old way - verbose
+const city = user && user.address && user.address.city;
+
+// New way - concise
+const city = user?.address?.city;
+
+// Works with methods
+user?.getName?.();
+
+// Works with arrays
+users?.[0]?.name;</pre>
+
+                        <p><strong>Nullish Coalescing (??):</strong> Returns right operand only when left is null/undefined</p>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px;">// || problem: treats 0, '', false as falsy
+const count = 0;
+const value1 = count || 10;  // 10 (wrong!)
+const value2 = count ?? 10;  // 0 (correct!)
+
+// React example
+function Component({ timeout = 0 }) {
+  // timeout can be 0 (valid), but || would fail
+  const delay = timeout ?? 1000;
+}</pre>
+
+                        <p><strong>Why better:</strong></p>
+                        <ul>
+                            <li>Shorter, more readable code</li>
+                            <li>No runtime errors for undefined access</li>
+                            <li>?? only checks null/undefined, not all falsy values</li>
+                            <li>Prevents bugs with 0, '', false values</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Debounce and Throttle implementations
+        let debounceCount = 0;
+        let throttleCount = 0;
+
+        function debounce(func, delay) {
+            let timeoutId;
+            return function(...args) {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        function throttle(func, limit) {
+            let inThrottle;
+            return function(...args) {
+                if (!inThrottle) {
+                    func.apply(this, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            };
+        }
+
+        // Section 1: var vs let vs const
+        function testVar() {
+            let output = '';
+            if (true) {
+                var x = "I am var - accessible outside block!";
+            }
+            output = `<strong>var test:</strong><br>Inside if block: var x = "I am var"<br>`;
+            output += `Outside if block: x = "${x}"<br>`;
+            output += `<span style="color: #e74c3c;">⚠️ var leaks out of block scope!</span>`;
+            document.getElementById('scopeOutput').innerHTML = output;
+        }
+
+        function testLet() {
+            let output = '';
+            try {
+                if (true) {
+                    let y = "I am let - block scoped!";
+                    output = `<strong>let test:</strong><br>Inside if block: let y = "I am let"<br>`;
+                }
+                output += `Trying to access y outside block...<br>`;
+                output += `Result: ${y}`;
+            } catch(e) {
+                output += `<span style="color: #00b894;">✅ Error: ${e.message}<br>let is properly block-scoped!</span>`;
+            }
+            document.getElementById('scopeOutput').innerHTML = output;
+        }
+
+        function testConst() {
+            let output = '';
+            try {
+                const z = "I am const";
+                output = `<strong>const test:</strong><br>const z = "I am const"<br>`;
+                output += `Trying to reassign: z = "new value"<br>`;
+                z = "new value";
+            } catch(e) {
+                output += `<span style="color: #00b894;">✅ Error: ${e.message}<br>const cannot be reassigned!</span>`;
+            }
+            document.getElementById('scopeOutput').innerHTML = output;
+        }
+
+        // Section 2: Arrow Functions
+        function arrowAdd() {
+            const num1 = parseFloat(document.getElementById('num1').value) || 0;
+            const num2 = parseFloat(document.getElementById('num2').value) || 0;
+            const add = (a, b) => a + b;
+            document.getElementById('arrowOutput').innerHTML = 
+                `<strong>Arrow Function:</strong> (a, b) => a + b<br>
+                Result: ${num1} + ${num2} = <strong>${add(num1, num2)}</strong>`;
+        }
+
+        function arrowMultiply() {
+            const num1 = parseFloat(document.getElementById('num1').value) || 0;
+            const num2 = parseFloat(document.getElementById('num2').value) || 0;
+            const multiply = (a, b) => a * b;
+            document.getElementById('arrowOutput').innerHTML = 
+                `<strong>Arrow Function:</strong> (a, b) => a * b<br>
+                Result: ${num1} × ${num2} = <strong>${multiply(num1, num2)}</strong>`;
+        }
+
+        function arrowPower() {
+            const num1 = parseFloat(document.getElementById('num1').value) || 0;
+            const num2 = parseFloat(document.getElementById('num2').value) || 0;
+            const power = (a, b) => Math.pow(a, b);
+            document.getElementById('arrowOutput').innerHTML = 
+                `<strong>Arrow Function:</strong> (a, b) => Math.pow(a, b)<br>
+                Result: ${num1}^${num2} = <strong>${power(num1, num2)}</strong>`;
+        }
+
+        // Section 3: Template Literals
+        function buildTemplate() {
+            const name = document.getElementById('userName').value || 'Guest';
+            const age = document.getElementById('userAge').value || 'Unknown';
+            const template = `
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px;">
+                    <h3>User Profile</h3>
+                    <p><strong>Name:</strong> ${name}</p>
+                    <p><strong>Age:</strong> ${age}</p>
+                    <p><strong>Status:</strong> ${age > 18 ? 'Adult' : 'Minor'}</p>
+                    <p><strong>Year of Birth:</strong> ${2025 - (age || 0)}</p>
+                </div>
+            `;
+            document.getElementById('templateOutput').innerHTML = template;
+        }
+
+        // Section 4: Destructuring
+        function destructureObject() {
+            const user = { name: "Priya", age: 28, city: "Mumbai", country: "India" };
+            const { name, age, city } = user;
+            document.getElementById('destructureOutput').innerHTML = 
+                `<strong>Original Object:</strong><br>${JSON.stringify(user, null, 2)}<br><br>
+                <strong>Destructured:</strong><br>
+                const { name, age, city } = user;<br><br>
+                name = "${name}"<br>
+                age = ${age}<br>
+                city = "${city}"`;
+        }
+
+        function destructureArray() {
+            const colors = ["Red", "Green", "Blue", "Yellow", "Orange"];
+            const [first, second, , fourth] = colors;
+            document.getElementById('destructureOutput').innerHTML = 
+                `<strong>Original Array:</strong><br>${JSON.stringify(colors)}<br><br>
+                <strong>Destructured:</strong><br>
+                const [first, second, , fourth] = colors;<br><br>
+                first = "${first}"<br>
+                second = "${second}"<br>
+                fourth = "${fourth}" (skipped third!)`;
+        }
+
+        function nestedDestructure() {
+            const user = {
+                name: "Raj",
+                address: {
+                    city: "Delhi",
+                    pincode: 110001
+                }
+            };
+            const { name, address: { city, pincode } } = user;
+            document.getElementById('destructureOutput').innerHTML = 
+                `<strong>Nested Object:</strong><br>${JSON.stringify(user, null, 2)}<br><br>
+                <strong>Nested Destructured:</strong><br>
+                const { name, address: { city, pincode } } = user;<br><br>
+                name = "${name}"<br>
+                city = "${city}"<br>
+                pincode = ${pincode}`;
+        }
+
+        // Section 5: Spread & Rest
+        function spreadArrays() {
+            const arr1 = [1, 2, 3];
+            const arr2 = [4, 5, 6];
+            const combined = [...arr1, ...arr2];
+            const withExtra = [0, ...arr1, 3.5, ...arr2, 7];
+            
+            document.getElementById('spreadOutput').innerHTML = 
+                `<strong>Array 1:</strong> ${JSON.stringify(arr1)}<br>
+                <strong>Array 2:</strong> ${JSON.stringify(arr2)}<br><br>
+                <strong>Spread:</strong> [...arr1, ...arr2]<br>
+                <strong>Result:</strong> ${JSON.stringify(combined)}<br><br>
+                <strong>With extras:</strong> [0, ...arr1, 3.5, ...arr2, 7]<br>
+                <strong>Result:</strong> ${JSON.stringify(withExtra)}`;
+        }
+
+        function spreadObjects() {
+            const user = { name: "Amit", age: 30 };
+            const address = { city: "Bangalore", country: "India" };
+            const combined = { ...user, ...address };
+            const updated = { ...user, age: 31, role: "Developer" };
+            
+            document.getElementById('spreadOutput').innerHTML = 
+                `<strong>User Object:</strong> ${JSON.stringify(user)}<br>
+                <strong>Address Object:</strong> ${JSON.stringify(address)}<br><br>
+                <strong>Spread:</strong> { ...user, ...address }<br>
+                <strong>Result:</strong> ${JSON.stringify(combined)}<br><br>
+                <strong>Update:</strong> { ...user, age: 31, role: "Developer" }<br>
+                <strong>Result:</strong> ${JSON.stringify(updated)}`;
+        }
+
+        function restParams() {
+            const sum = (...numbers) => numbers.reduce((a, b) => a + b, 0);
+            const result1 = sum(1, 2, 3, 4, 5);
+            const result2 = sum(10, 20, 30);
+            
+            document.getElementById('spreadOutput').innerHTML = 
+                `<strong>Rest Parameters Function:</strong><br>
+                const sum = (...numbers) => numbers.reduce((a, b) => a + b, 0);<br><br>
+                <strong>Call 1:</strong> sum(1, 2, 3, 4, 5) = <strong>${result1}</strong><br>
+                <strong>Call 2:</strong> sum(10, 20, 30) = <strong>${result2}</strong><br><br>
+                <span style="color: #00b894;">✅ Rest collects all arguments into array!</span>`;
+        }
+
+        // Section 6: Array Methods
+        const demoArray = [2, 4, 6, 8, 10, 15, 20, 25, 30];
+
+        function demoMap() {
+            const result = demoArray.map(x => x * 2);
+            document.getElementById('arrayOutput').innerHTML = 
+                `<strong>Original:</strong> ${JSON.stringify(demoArray)}<br>
+                <strong>map(x => x * 2):</strong><br>
+                <strong>Result:</strong> ${JSON.stringify(result)}<br>
+                <span style="color: #667eea;">Transforms each element, returns new array</span>`;
+        }
+
+        function demoFilter() {
+            const result = demoArray.filter(x => x > 10);
+            document.getElementById('arrayOutput').innerHTML = 
+                `<strong>Original:</strong> ${JSON.stringify(demoArray)}<br>
+                <strong>filter(x => x > 10):</strong><br>
+                <strong>Result:</strong> ${JSON.stringify(result)}<br>
+                <span style="color: #667eea;">Returns elements that pass the test</span>`;
+        }
+
+        function demoReduce() {
+            const result = demoArray.reduce((acc, x) => acc + x, 0);
+            document.getElementById('arrayOutput').innerHTML = 
+                `<strong>Original:</strong> ${JSON.stringify(demoArray)}<br>
+                <strong>reduce((acc, x) => acc + x, 0):</strong><br>
+                <strong>Result:</strong> ${result}<br>
+                <span style="color: #667eea;">Reduces array to single value (sum)</span>`;
+        }
+
+        function demoFind() {
+            const result = demoArray.find(x => x > 15);
+            document.getElementById('arrayOutput').innerHTML = 
+                `<strong>Original:</strong> ${JSON.stringify(demoArray)}<br>
+                <strong>find(x => x > 15):</strong><br>
+                <strong>Result:</strong> ${result}<br>
+                <span style="color: #667eea;">Returns first element that matches</span>`;
+        }
+
+        function demoSome() {
+            const result = demoArray.some(x => x > 25);
+            document.getElementById('arrayOutput').innerHTML = 
+                `<strong>Original:</strong> ${JSON.stringify(demoArray)}<br>
+                <strong>some(x => x > 25):</strong><br>
+                <strong>Result:</strong> ${result}<br>
+                <span style="color: #667eea;">Checks if ANY element passes test</span>`;
+        }
+
+        function demoEvery() {
+            const result = demoArray.every(x => x > 0);
+            document.getElementById('arrayOutput').innerHTML = 
+                `<strong>Original:</strong> ${JSON.stringify(demoArray)}<br>
+                <strong>every(x => x > 0):</strong><br>
+                <strong>Result:</strong> ${result}<br>
+                <span style="color: #667eea;">Checks if ALL elements pass test</span>`;
+        }
+
+        // Section 7: Promises & Async
+        function simulatePromise() {
+            document.getElementById('asyncOutput').innerHTML = '⏳ Loading...';
+            
+            const promise = new Promise((resolve) => {
+                setTimeout(() => resolve("Data fetched successfully!"), 2000);
+            });
+
+            promise.then(data => {
+                document.getElementById('asyncOutput').innerHTML = 
+                    `<strong>Promise Result:</strong><br>
+                    ${data}<br>
+                    <span style="color: #00b894;">✅ Promise resolved after 2 seconds</span>`;
+            });
+        }
+
+        async function simulateAsync() {
+            document.getElementById('asyncOutput').innerHTML = '⏳ Fetching with async/await...';
+            
+            try {
+                const result = await new Promise((resolve) => {
+                    setTimeout(() => resolve("Async data loaded!"), 2000);
+                });
+                
+                document.getElementById('asyncOutput').innerHTML = 
+                    `<strong>Async/Await Result:</strong><br>
+                    ${result}<br>
+                    <span style="color: #00b894;">✅ Async function completed</span>`;
+            } catch (error) {
+                document.getElementById('asyncOutput').innerHTML = 
+                    `<span style="color: #e74c3c;">❌ Error: ${error}</span>`;
+            }
+        }
+
+        async function simulateError() {
+            document.getElementById('asyncOutput').innerHTML = '⏳ Processing...';
+            
+            try {
+                await new Promise((resolve, reject) => {
+                    setTimeout(() => reject(new Error("Network failed!")), 1500);
+                });
+            } catch (error) {
+                document.getElementById('asyncOutput').innerHTML = 
+                    `<strong>Error Handling Demo:</strong><br>
+                    <span style="color: #e74c3c;">❌ Caught Error: ${error.message}</span><br>
+                    <span style="color: #667eea;">Try-catch successfully handled the error!</span>`;
+            }
+        }
+
+        // Section 8: Deep vs Shallow Copy
+        function testShallowCopy() {
+            const original = { a: 1, b: { c: 2 } };
+            const shallow = { ...original };
+            
+            shallow.a = 100;
+            shallow.b.c = 999;
+            
+            document.getElementById('copyOutput').innerHTML = 
+                `<strong>Original Object:</strong> { a: 1, b: { c: 2 } }<br>
+                <strong>Shallow Copy:</strong> { ...original }<br><br>
+                <strong>After modifying copy:</strong><br>
+                shallow.a = 100<br>
+                shallow.b.c = 999<br><br>
+                <strong>Original:</strong> ${JSON.stringify(original)}<br>
+                <strong>Shallow Copy:</strong> ${JSON.stringify(shallow)}<br><br>
+                <span style="color: #e74c3c;">⚠️ Nested object 'b' was modified in both!</span>`;
+        }
+
+        function testDeepCopy() {
+            const original = { a: 1, b: { c: 2 } };
+            const deep = JSON.parse(JSON.stringify(original));
+            
+            deep.a = 100;
+            deep.b.c = 999;
+            
+            document.getElementById('copyOutput').innerHTML = 
+                `<strong>Original Object:</strong> { a: 1, b: { c: 2 } }<br>
+                <strong>Deep Copy:</strong> JSON.parse(JSON.stringify(original))<br><br>
+                <strong>After modifying copy:</strong><br>
+                deep.a = 100<br>
+                deep.b.c = 999<br><br>
+                <strong>Original:</strong> ${JSON.stringify(original)}<br>
+                <strong>Deep Copy:</strong> ${JSON.stringify(deep)}<br><br>
+                <span style="color: #00b894;">✅ Original remains unchanged!</span>`;
+        }
+
+        // Section 9: Optional Chaining & Nullish Coalescing
+        function testOptionalChaining() {
+            const user1 = { name: "Raj", address: { city: "Delhi" } };
+            const user2 = { name: "Priya" };
+            
+            const city1 = user1?.address?.city;
+            const city2 = user2?.address?.city;
+            
+            document.getElementById('optionalOutput').innerHTML = 
+                `<strong>User 1:</strong> ${JSON.stringify(user1)}<br>
+                <strong>User 2:</strong> ${JSON.stringify(user2)}<br><br>
+                <strong>Optional Chaining:</strong> user?.address?.city<br><br>
+                <strong>User 1 City:</strong> "${city1}"<br>
+                <strong>User 2 City:</strong> ${city2 === undefined ? 'undefined' : city2}<br><br>
+                <span style="color: #00b894;">✅ No error even though user2 has no address!</span>`;
+        }
+
+        function testNullishCoalescing() {
+            const values = [0, '', false, null, undefined, 'actual'];
+            
+            let output = '<strong>Value | || Operator | ?? Operator</strong><br>';
+            output += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>';
+            
+            values.forEach(val => {
+                const orResult = val || 'default';
+                const nullishResult = val ?? 'default';
+                const valStr = val === '' ? '""' : val === null ? 'null' : val === undefined ? 'undefined' : val;
+                output += `${valStr} | ${orResult} | ${nullishResult}<br>`;
+            });
+            
+            output += '<br><span style="color: #667eea;">?? only treats null/undefined as "empty"</span>';
+            
+            document.getElementById('optionalOutput').innerHTML = output;
+        }
+
+        // Section 10: Debouncing & Throttling
+        const debouncedSearch = debounce((value) => {
+            debounceCount++;
+            document.getElementById('debounceOutput').innerHTML = 
+                `<strong>Debounce calls:</strong> ${debounceCount}<br>
+                <strong>Search query:</strong> "${value}"<br>
+                <span style="color: #00b894;">✅ API called after 500ms pause</span>`;
+        }, 500);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('debounceInput');
+            if (input) {
+                input.addEventListener('input', (e) => debouncedSearch(e.target.value));
+            }
+        });
+
+        const throttledClick = throttle(() => {
+            throttleCount++;
+            document.getElementById('throttleOutput').innerHTML = 
+                `<strong>Throttle calls:</strong> ${throttleCount}<br>
+                <span style="color: #00b894;">✅ Called once per second, no matter how many clicks</span>`;
+        }, 1000);
+
+        // Section 11: Classes
+        class Student {
+            constructor(name, age, grade) {
+                this.name = name;
+                this.age = age;
+                this.grade = grade;
+            }
+
+            greet() {
+                return `Hello! I'm ${this.name}, ${this.age} years old.`;
+            }
+
+            study() {
+                return `${this.name} is studying hard for grade ${this.grade}!`;
+            }
+
+            getInfo() {
+                return {
+                    name: this.name,
+                    age: this.age,
+                    grade: this.grade,
+                    status: this.age >= 18 ? 'Adult' : 'Minor'
+                };
+            }
+        }
+
+        function createStudent() {
+            const name = document.getElementById('className').value || 'Anonymous';
+            const age = parseInt(document.getElementById('classAge').value) || 18;
+            const grade = document.getElementById('classGrade').value || 'A';
+
+            const student = new Student(name, age, grade);
+            
+            document.getElementById('classOutput').innerHTML = 
+                `<strong>Student Created:</strong><br><br>
+                <strong>Object:</strong> ${JSON.stringify(student.getInfo(), null, 2)}<br><br>
+                <strong>Methods:</strong><br>
+                greet(): "${student.greet()}"<br>
+                study(): "${student.study()}"<br><br>
+                <span style="color: #00b894;">✅ Class instance with methods working!</span>`;
+        }
+
+        // Section 13: Default Parameters
+        function testDefaults(name) {
+            function greet(userName = "Guest", greeting = "Hello") {
+                return `${greeting}, ${userName}! Welcome to the app.`;
+            }
+
+            const result = greet(name);
+            
+            document.getElementById('defaultOutput').innerHTML = 
+                `<strong>Function:</strong> greet(userName = "Guest", greeting = "Hello")<br><br>
+                <strong>Called with:</strong> ${name ? `"${name}"` : 'no arguments'}<br>
+                <strong>Result:</strong> "${result}"<br><br>
+                <span style="color: #667eea;">${name ? 'Provided name used' : 'Default "Guest" used'}</span>`;
+        }
+
+        // Quiz toggle answers
+        function toggleAnswer(num) {
+            const answer = document.getElementById(`answer${num}`);
+            const button = event.target;
+            
+            if (answer.style.display === 'none' || answer.style.display === '') {
+                answer.style.display = 'block';
+                button.textContent = 'Hide Answer';
+            } else {
+                answer.style.display = 'none';
+                button.textContent = 'Show Answer';
+            }
+        }
+    </script>
+</body>
+</html>

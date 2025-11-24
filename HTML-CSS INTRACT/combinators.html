@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Combinators Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            padding: 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .combinator-section {
+            margin-bottom: 40px;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .combinator-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .combinator-title {
+            font-size: 1.8rem;
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .combinator-symbol {
+            background: #667eea;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        .description {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .code-section {
+            background: #2d3748;
+            border-radius: 10px;
+            padding: 20px;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+
+        .code-section::before {
+            content: 'CSS';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .demo-html {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 200px;
+        }
+
+        .css-rule {
+            color: #68d391;
+            margin-bottom: 10px;
+        }
+
+        .selector {
+            color: #fbb6ce;
+        }
+
+        .property {
+            color: #90cdf4;
+        }
+
+        .value {
+            color: #fed7d7;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn.active {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+        }
+
+        /* Demo styles that will be dynamically applied */
+        .demo-element {
+            padding: 15px;
+            margin: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        .parent {
+            background: #e3f2fd !important;
+            border-color: #2196f3 !important;
+        }
+
+        .child {
+            background: #f3e5f5 !important;
+            border-color: #9c27b0 !important;
+        }
+
+        .sibling {
+            background: #fff3e0 !important;
+            border-color: #ff9800 !important;
+        }
+
+        .targeted {
+            background: #ffebee !important;
+            border-color: #f44336 !important;
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+        }
+
+        /* Highlight animations */
+        @keyframes highlight {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .highlight {
+            animation: highlight 0.6s ease-in-out;
+        }
+
+        .syntax-highlight {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CSS Combinators</h1>
+            <p>Master the art of element relationships with interactive examples</p>
+        </div>
+
+        <div class="content">
+            <!-- Descendant Combinator -->
+            <div class="combinator-section" id="descendant-section">
+                <h2 class="combinator-title">
+                    <span class="combinator-symbol">SPACE</span>
+                    Descendant Combinator
+                </h2>
+                <div class="description">
+                    Selects all elements that are descendants (nested inside) of a specified element, regardless of how deep the nesting is.
+                </div>
+                <div class="demo-container">
+                    <div class="code-section">
+                        <div class="css-rule">
+                            <span class="selector">div p</span> {<br>
+                            &nbsp;&nbsp;<span class="property">color</span>: <span class="value">red</span>;<br>
+                            &nbsp;&nbsp;<span class="property">font-weight</span>: <span class="value">bold</span>;<br>
+                            }
+                        </div>
+                    </div>
+                    <div class="demo-html" id="descendant-demo">
+                        <div class="demo-element parent">
+                            div (parent)
+                            <p class="demo-element child">p (direct child) - SELECTED</p>
+                            <span class="demo-element">
+                                span
+                                <p class="demo-element child">p (nested descendant) - SELECTED</p>
+                            </span>
+                        </div>
+                        <p class="demo-element">p (not inside div) - NOT selected</p>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="highlightDescendant()">Highlight Matches</button>
+                    <button class="btn" onclick="resetDemo('descendant')">Reset</button>
+                </div>
+            </div>
+
+            <!-- Child Combinator -->
+            <div class="combinator-section" id="child-section">
+                <h2 class="combinator-title">
+                    <span class="combinator-symbol">></span>
+                    Child Combinator
+                </h2>
+                <div class="description">
+                    Selects only direct children of a specified element. It does not select grandchildren or deeper descendants.
+                </div>
+                <div class="demo-container">
+                    <div class="code-section">
+                        <div class="css-rule">
+                            <span class="selector">div > p</span> {<br>
+                            &nbsp;&nbsp;<span class="property">background</span>: <span class="value">yellow</span>;<br>
+                            &nbsp;&nbsp;<span class="property">border</span>: <span class="value">2px solid orange</span>;<br>
+                            }
+                        </div>
+                    </div>
+                    <div class="demo-html" id="child-demo">
+                        <div class="demo-element parent">
+                            div (parent)
+                            <p class="demo-element child">p (direct child) - SELECTED</p>
+                            <span class="demo-element">
+                                span (direct child)
+                                <p class="demo-element child">p (grandchild) - NOT selected</p>
+                            </span>
+                        </div>
+                        <p class="demo-element">p (not child of div) - NOT selected</p>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="highlightChild()">Highlight Matches</button>
+                    <button class="btn" onclick="resetDemo('child')">Reset</button>
+                </div>
+            </div>
+
+            <!-- Adjacent Sibling Combinator -->
+            <div class="combinator-section" id="adjacent-section">
+                <h2 class="combinator-title">
+                    <span class="combinator-symbol">+</span>
+                    Adjacent Sibling Combinator
+                </h2>
+                <div class="description">
+                    Selects an element that immediately follows another element, and both share the same parent.
+                </div>
+                <div class="demo-container">
+                    <div class="code-section">
+                        <div class="css-rule">
+                            <span class="selector">h3 + p</span> {<br>
+                            &nbsp;&nbsp;<span class="property">background</span>: <span class="value">lightgreen</span>;<br>
+                            &nbsp;&nbsp;<span class="property">margin-top</span>: <span class="value">0</span>;<br>
+                            }
+                        </div>
+                    </div>
+                    <div class="demo-html" id="adjacent-demo">
+                        <div class="demo-element parent">
+                            <h3 class="demo-element">h3 heading</h3>
+                            <p class="demo-element sibling">p (immediately after h3) - SELECTED</p>
+                            <p class="demo-element sibling">p (second paragraph) - NOT selected</p>
+                            <div class="demo-element">div between</div>
+                            <h3 class="demo-element">h3 heading</h3>
+                            <p class="demo-element sibling">p (immediately after h3) - SELECTED</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="highlightAdjacent()">Highlight Matches</button>
+                    <button class="btn" onclick="resetDemo('adjacent')">Reset</button>
+                </div>
+            </div>
+
+            <!-- General Sibling Combinator -->
+            <div class="combinator-section" id="general-section">
+                <h2 class="combinator-title">
+                    <span class="combinator-symbol">~</span>
+                    General Sibling Combinator
+                </h2>
+                <div class="description">
+                    Selects all elements that are siblings and come after a specified element (not necessarily immediately).
+                </div>
+                <div class="demo-container">
+                    <div class="code-section">
+                        <div class="css-rule">
+                            <span class="selector">h3 ~ p</span> {<br>
+                            &nbsp;&nbsp;<span class="property">border-left</span>: <span class="value">4px solid blue</span>;<br>
+                            &nbsp;&nbsp;<span class="property">padding-left</span>: <span class="value">15px</span>;<br>
+                            }
+                        </div>
+                    </div>
+                    <div class="demo-html" id="general-demo">
+                        <div class="demo-element parent">
+                            <p class="demo-element sibling">p (before h3) - NOT selected</p>
+                            <h3 class="demo-element">h3 heading</h3>
+                            <p class="demo-element sibling">p (after h3) - SELECTED</p>
+                            <div class="demo-element">div between</div>
+                            <p class="demo-element sibling">p (also after h3) - SELECTED</p>
+                            <span class="demo-element">span (not a p) - NOT selected</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="highlightGeneral()">Highlight Matches</button>
+                    <button class="btn" onclick="resetDemo('general')">Reset</button>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="combinator-section">
+                <h2 class="combinator-title">
+                    <span class="combinator-symbol">📋</span>
+                    Quick Reference
+                </h2>
+                <div class="description">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px;">
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                            <strong><span class="syntax-highlight">A B</span></strong><br>
+                            Descendant - All B inside A
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
+                            <strong><span class="syntax-highlight">A > B</span></strong><br>
+                            Child - Direct B children of A
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                            <strong><span class="syntax-highlight">A + B</span></strong><br>
+                            Adjacent - B immediately after A
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #dc3545;">
+                            <strong><span class="syntax-highlight">A ~ B</span></strong><br>
+                            General Sibling - B after A (same parent)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    -- <script>
+        function resetDemo(type) {
+            const demo = document.getElementById(`${type}-demo`);
+            const elements = demo.querySelectorAll('.demo-element');
+            elements.forEach(el => {
+                el.classList.remove('targeted', 'highlight');
+            });
+        }
+
+        function highlightDescendant() {
+            resetDemo('descendant');
+            const demo = document.getElementById('descendant-demo');
+            const divs = demo.querySelectorAll('div');
+            
+            divs.forEach(div => {
+                const paragraphs = div.querySelectorAll('p');
+                paragraphs.forEach(p => {
+                    p.classList.add('targeted', 'highlight');
+                });
+            });
+        }
+
+        function highlightChild() {
+            resetDemo('child');
+            const demo = document.getElementById('child-demo');
+            const divs = demo.querySelectorAll('div');
+            
+            divs.forEach(div => {
+                const directChildren = Array.from(div.children).filter(child => child.tagName === 'P');
+                directChildren.forEach(p => {
+                    p.classList.add('targeted', 'highlight');
+                });
+            });
+        }
+
+        function highlightAdjacent() {
+            resetDemo('adjacent');
+            const demo = document.getElementById('adjacent-demo');
+            const h3s = demo.querySelectorAll('h3');
+            
+            h3s.forEach(h3 => {
+                const nextSibling = h3.nextElementSibling;
+                if (nextSibling && nextSibling.tagName === 'P') {
+                    nextSibling.classList.add('targeted', 'highlight');
+                }
+            });
+        }
+
+        function highlightGeneral() {
+            resetDemo('general');
+            const demo = document.getElementById('general-demo');
+            const h3s = demo.querySelectorAll('h3');
+            
+            h3s.forEach(h3 => {
+                let nextSibling = h3.nextElementSibling;
+                while (nextSibling) {
+                    if (nextSibling.tagName === 'P') {
+                        nextSibling.classList.add('targeted', 'highlight');
+                    }
+                    nextSibling = nextSibling.nextElementSibling;
+                }
+            });
+        }
+
+        // Auto-highlight on load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                highlightDescendant();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

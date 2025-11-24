@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Week 2 - Interactive Study Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            flex: 1;
+            min-width: 120px;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #495057;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab:hover {
+            background: #e9ecef;
+            color: #667eea;
+        }
+
+        .nav-tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .definition-box {
+            background: #e7f3ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .definition-box strong {
+            color: #667eea;
+        }
+
+        .key-points {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .key-points ul {
+            margin-left: 20px;
+        }
+
+        .key-points li {
+            margin: 8px 0;
+            color: #333;
+        }
+
+        .interview-section {
+            background: #f0f4ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+        }
+
+        .interview-question {
+            background: white;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            border-left: 4px solid #764ba2;
+            transition: all 0.3s ease;
+        }
+
+        .interview-question:hover {
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+
+        .interview-question.active {
+            background: #e7f3ff;
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .answer-text {
+            display: none;
+            color: #555;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .answer-text.show {
+            display: block;
+        }
+
+        .hinglish {
+            color: #764ba2;
+            font-style: italic;
+        }
+
+        .example-box {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 2px dashed #667eea;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .visual-demo {
+            background: #f9f9f9;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            text-align: center;
+        }
+
+        .collapsible {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1em;
+            font-weight: 600;
+            border-radius: 5px;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+
+        .collapsible:hover {
+            background: #764ba2;
+        }
+
+        .collapsible.active {
+            background: #764ba2;
+        }
+
+        .collapsible-content {
+            display: none;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .collapsible-content.show {
+            display: block;
+        }
+
+        .responsive-note {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            color: #155724;
+        }
+
+        .color-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .color-box {
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .flex-demo {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f0f4ff;
+            border-radius: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .flex-item {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            min-width: 100px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e9ecef;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .nav-tab {
+                min-width: 100px;
+                font-size: 0.85em;
+                padding: 12px 10px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 CSS Week 2 - Interactive Study Guide</h1>
+            <p>Days 8-14: CSS Basics to Intermediate with Interview Questions</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab(0)">Day 8: CSS Intro</button>
+            <button class="nav-tab" onclick="switchTab(1)">Day 9: Box Model</button>
+            <button class="nav-tab" onclick="switchTab(2)">Day 10: Colors & Units</button>
+            <button class="nav-tab" onclick="switchTab(3)">Day 11: Typography</button>
+            <button class="nav-tab" onclick="switchTab(4)">Day 12: Positioning</button>
+            <button class="nav-tab" onclick="switchTab(5)">Day 13: Flexbox</button>
+            <button class="nav-tab" onclick="switchTab(6)">Day 14: Project</button>
+        </div>
+
+        <div class="content">
+            <!-- DAY 8: CSS INTRO -->
+            <div class="tab-content active">
+                <div class="section">
+                    <h2 class="section-title">📌 Day 8: Introduction to CSS</h2>
+
+                    <div class="definition-box">
+                        <strong>What is CSS?</strong><br><br>
+                        CSS stands for <strong>Cascading Style Sheets</strong>. Think of it like this: HTML is the skeleton of a webpage (structure), and CSS is the clothes and makeup (styling). CSS tells the browser HOW to display HTML elements - colors, sizes, positions, fonts, etc.
+                    </div>
+
+                    <div class="key-points">
+                        <strong>🎯 Key Points to Remember:</strong>
+                        <ul>
+                            <li>CSS makes websites look beautiful and organized</li>
+                            <li>Without CSS, websites look plain and boring (like plain text)</li>
+                            <li>CSS is separate from HTML (though it can be mixed)</li>
+                            <li>One CSS file can style multiple HTML pages</li>
+                        </ul>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">📖 Three Ways to Apply CSS</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">1️⃣ Inline CSS (सीधे HTML element में)</div>
+                            <p>CSS directly written in the HTML tag itself.</p>
+                            <div class="code-block">&lt;p style="color: red; font-size: 20px;"&gt;Hello World&lt;/p&gt;</div>
+                            <p style="margin-top: 10px; color: #555;"><strong>Hinglish:</strong> <span class="hinglish">Yeh tarika sirf ek element ko style karne ke liye use hota hai. Agar 100 paragraphs hain to 100 baar likhna padega!</span></p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">2️⃣ Internal CSS (HTML file ke andar)</div>
+                            <p>CSS written inside &lt;style&gt; tag in the &lt;head&gt; section.</p>
+                            <div class="code-block">&lt;head&gt;
+    &lt;style&gt;
+        p { color: blue; }
+    &lt;/style&gt;
+&lt;/head&gt;</div>
+                            <p style="margin-top: 10px; color: #555;"><strong>Hinglish:</strong> <span class="hinglish">Ek hi file mein HTML aur CSS dono hote hain. Chhote projects ke liye theek hai.</span></p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">3️⃣ External CSS (Alag file - सबसे अच्छा तरीका)</div>
+                            <p>CSS in a separate file (style.css) linked to HTML.</p>
+                            <div class="code-block">&lt;!-- In HTML file --&gt;
+&lt;link rel="stylesheet" href="style.css"&gt;
+
+&lt;!-- In style.css file --&gt;
+p { color: green; }</div>
+                            <p style="margin-top: 10px; color: #555;"><strong>Hinglish:</strong> <span class="hinglish">Yeh sabse professional tarika hai! Ek CSS file se multiple HTML pages ko style kar sakte ho. Maintenance bhi easy hai.</span></p>
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">🎨 CSS Selectors Explained</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">1. Universal Selector (*)</div>
+                            <p>Selects ALL elements on the page.</p>
+                            <div class="code-block">* { margin: 0; padding: 0; }</div>
+                            <p style="margin-top: 10px;"><strong>Real-world example:</strong> Jab aap sabhi elements se default spacing hatana chahte ho.</p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">2. Element Selector</div>
+                            <p>Selects all elements of a specific type.</p>
+                            <div class="code-block">p { color: red; }
+h1 { font-size: 30px; }</div>
+                            <p style="margin-top: 10px;"><strong>Real-world example:</strong> Sabhi paragraphs ko red color dena.</p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">3. Class Selector (.classname)</div>
+                            <p>Selects elements with a specific class. One element can have multiple classes.</p>
+                            <div class="code-block">.button { background: blue; padding: 10px; }
+
+&lt;button class="button"&gt;Click Me&lt;/button&gt;</div>
+                            <p style="margin-top: 10px;"><strong>Real-world example:</strong> Multiple buttons, cards, or containers ko same style dena.</p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">4. ID Selector (#idname)</div>
+                            <p>Selects a unique element with a specific ID. Each ID should be used only ONCE.</p>
+                            <div class="code-block">#header { background: navy; color: white; }
+
+&lt;div id="header"&gt;Welcome&lt;/div&gt;</div>
+                            <p style="margin-top: 10px;"><strong>Real-world example:</strong> Navbar, footer, main content area - unique sections ke liye.</p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">5. Grouping Selector (,)</div>
+                            <p>Apply same style to multiple selectors.</p>
+                            <div class="code-block">h1, h2, h3 { color: purple; font-weight: bold; }</div>
+                            <p style="margin-top: 10px;"><strong>Real-world example:</strong> Sabhi headings ko same color dena bina ek-ek karke likhe.</p>
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <h3 style="color: #667eea; margin-bottom: 15px;">💼 Interview Questions - Day 8</h3>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q1: CSS kya hota hai aur HTML se alag kyu hota hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                HTML structure provide karta hai (skeleton), CSS styling provide karta hai (clothes).<br><br>
+                                <span class="hinglish">HTML bina CSS ke plain text jaisa dikhta hai. CSS se colors, fonts, spacing, animations sab add hote hain. Alag file rakhne se code organized rehta hai aur reuse karna easy hota hai.</span><br><br>
+                                <strong>Example:</strong><br>
+                                HTML: &lt;p&gt;Hello&lt;/p&gt; → Plain text<br>
+                                CSS: p { color: red; font-size: 20px; } → Styled text
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q2: Inline, Internal, aur External CSS mein kya difference hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>Inline:</strong> Style attribute directly HTML tag mein. Sirf ek element ke liye. Reuse nahi kar sakte.<br>
+                                <strong>Internal:</strong> &lt;style&gt; tag HTML file ke head mein. Ek file mein CSS aur HTML. Chhote projects ke liye theek.<br>
+                                <strong>External:</strong> Alag CSS file. Multiple HTML pages ko style kar sakte ho. Professional aur maintainable.<br><br>
+                                <span class="hinglish">Production websites mein hamesha external CSS use hota hai kyunki scalable aur organized hota hai.</span>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q3: Class selector aur ID selector mein kya difference hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>Class (.classname):</strong> Multiple elements ke liye. Ek element mein multiple classes ho sakte hain.<br>
+                                <strong>ID (#idname):</strong> Unique element ke liye. Ek page mein ek ID sirf ek baar use hona chahiye.<br><br>
+                                <strong>Example:</strong><br>
+                                <div class="code-block">&lt;!-- Class: Multiple buttons --&gt;
+&lt;button class="btn"&gt;Button 1&lt;/button&gt;
+&lt;button class="btn"&gt;Button 2&lt;/button&gt;
+
+&lt;!-- ID: Unique header --&gt;
+&lt;div id="main-header"&gt;...&lt;/div&gt;</div>
+                                <span class="hinglish">Class = reusable, ID = unique. Agar 10 buttons hain to class use karo, agar sirf ek navbar hai to ID use karo.</span>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q4: CSS Selectors ka hierarchy (priority) kya hota hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                Priority order (highest to lowest):<br>
+                                1. Inline CSS (style attribute) - सबसे ज्यादा priority<br>
+                                2. ID selector (#)<br>
+                                3. Class selector (.)<br>
+                                4. Element selector (p, div, etc.)<br>
+                                5. Universal selector (*) - सबसे कम priority<br><br>
+                                <span class="hinglish">Agar ek element ko multiple selectors se style kiya gaya to highest priority wala apply hoga. Isko "Specificity" kehte hain.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAY 9: BOX MODEL -->
+            <div class="tab-content">
+                <div class="section">
+                    <h2 class="section-title">📦 Day 9: CSS Box Model (Most Important!)</h2>
+
+                    <div class="definition-box">
+                        <strong>What is Box Model?</strong><br><br>
+                        हर HTML element एक box है। Box Model बताता है कि यह box कैसे बना है। सोचो - एक gift box है जिसमें:
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li><strong>Content:</strong> Gift (actual content)</li>
+                            <li><strong>Padding:</strong> Bubble wrap (space inside)</li>
+                            <li><strong>Border:</strong> Box ka edge (boundary)</li>
+                            <li><strong>Margin:</strong> Space outside (distance from other boxes)</li>
+                        </ul>
+                    </div>
+
+                    <div class="visual-demo">
+                        <h3 style="color: #667eea; margin-bottom: 20px;">📊 Box Model Visualization</h3>
+                        <div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto;">
+                            <div style="background: #e7f3ff; padding: 30px; border: 2px dashed #667eea; text-align: center; font-weight: bold; color: #667eea;">
+                                MARGIN (बाहर की जगह)
+                                <div style="background: #fff3cd; padding: 20px; margin-top: 10px; border: 2px dashed #ffc107; text-align: center; font-weight: bold; color: #ffc107;">
+                                    BORDER (किनारा)
+                                    <div style="background: #e7f7e7; padding: 20px; margin-top: 10px; border: 2px dashed #28a745; text-align: center; font-weight: bold; color: #28a745;">
+                                        PADDING (अंदर की जगह)
+                                        <div style="background: #667eea; color: white; padding: 20px; text-align: center; font-weight: bold;">
+                                            CONTENT
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">📏 Padding, Border, Margin Explained</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">1. PADDING (अंदर की जगह)</div>
+                            <p>Content और border के बीच की जगह। Element के अंदर की space।</p>
+                            <div class="code-block">div { padding: 20px; }
+/* सभी sides पर 20px */
+
+div { padding: 10px 20px; }
+/* Top/Bottom: 10px, Left/Right: 20px */
+
+div { padding: 10px 20px 30px 40px; }
+/* Top, Right, Bottom, Left (clockwise) */</div>
+                            <p style="margin-top: 10px;"><strong>Real-world example:</strong> Button के अंदर text को border से दूर रखना।</p>
+                            <div style="background: #667eea; color: white; padding: 20px; margin-top: 10px; border-radius: 5px; text-align: center;">
+                                यह padding है - text के चारों ओर space
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">2. BORDER (किनारा)</div>
+                            <p>Element के चारों ओर की line/edge।</p>
+                            <div class="code-block">div { border: 5px solid red; }
+/* width, style, color */
+
+div { border-width: 5px; }
+div { border-style: solid; /* solid, dashed, dotted */ }
+div { border-color: red; }
+div { border-radius: 10px; /* rounded corners */ }</div>
+                            <p style="margin-top: 10px;"><strong>Real-world example:</strong> Cards, input boxes, buttons को define करना।</p>
+                            <div style="border: 5px solid #667eea; padding: 15px; margin-top: 10px; border-radius: 5px; text-align: center;">
+                                यह border है - element के चारों ओर
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">3. MARGIN (बाहर की जगह)</div>
+                            <p>Element के बाहर की जगह। दूसरे elements से distance।</p>
+                            <div class="code-block">div { margin: 30px; }
+/* सभी sides पर 30px */
+
+div { margin: 20px auto; }
+/* Top/Bottom: 20px, Left/Right: auto (center करता है) */
+
+div { margin-top: 10px; }
+div { margin-bottom: 20px; }</div>
+                            <p style="margin-top: 10px;"><strong>Real-world example:</strong> Cards को एक-दूसरे से दूर रखना।</p>
+                            <div style="background: #f0f4ff; padding: 15px; margin: 30px 0; border: 2px dashed #667eea; text-align: center; border-radius: 5px;">
+                                यह margin है - element के बाहर space
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">📦 Content Box vs Border Box</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">box-sizing: content-box (Default)</div>
+                            <p>Width और height सिर्फ content के लिए। Padding और border add होते हैं।</p>
+                            <div class="code-block">div {
+    width: 200px;
+    padding: 20px;
+    border: 5px solid;
+    box-sizing: content-box;
+}
+/* Total width = 200 + 20 + 20 + 5 + 5 = 250px */</div>
+                            <p style="margin-top: 10px; color: #d9534f;"><strong>⚠️ Problem:</strong> Width calculate करना मुश्किल हो जाता है।</p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">box-sizing: border-box (बेहतर तरीका)</div>
+                            <p>Width और height में padding और border शामिल होते हैं।</p>
+                            <div class="code-block">* { box-sizing: border-box; }
+/* सभी elements के लिए */
+
+div {
+    width: 200px;
+    padding: 20px;
+    border: 5px solid;
+}
+/* Total width = 200px (padding और border included) */</div>
+                            <p style="margin-top: 10px; color: #5cb85c;"><strong>✅ Benefit:</strong> Width exactly वही होता है जो आप specify करते हो।</p>
+                        </div>
+
+                        <div class="responsive-note">
+                            <strong>💡 Best Practice:</strong> हमेशा अपनी CSS की शुरुआत में यह लिखो:<br>
+                            <div class="code-block" style="margin-top: 10px;">* { box-sizing: border-box; }</div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">🎯 Display Types: Block, Inline, Inline-Block</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">1. Display: Block</div>
+                            <p>पूरी width लेता है। हमेशा नई line से शुरू होता है।</p>
+                            <div class="code-block">div { display: block; }
+/* Default: div, p, h1, section, etc. */</div>
+                            <p style="margin-top: 10px;"><strong>Visual Example:</strong></p>
+                            <div style="display: block; background: #667eea; color: white; padding: 10px; margin: 5px 0; text-align: center;">Block 1 - पूरी width लेता है</div>
+                            <div style="display: block; background: #764ba2; color: white; padding: 10px; margin: 5px 0; text-align: center;">Block 2 - नई line पर</div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">2. Display: Inline</div>
+                            <p>सिर्फ जितनी width चाहिए। एक ही line पर रहते हैं।</p>
+                            <div class="code-block">span { display: inline; }
+/* Default: span, a, strong, em, etc. */</div>
+                            <p style="margin-top: 10px;"><strong>Visual Example:</strong></p>
+                            <div style="background: #f0f4ff; padding: 10px; border-radius: 5px;">
+                                <span style="display: inline; background: #667eea; color: white; padding: 5px 10px; margin: 2px;">Inline 1</span>
+                                <span style="display: inline; background: #667eea; color: white; padding: 5px 10px; margin: 2px;">Inline 2</span>
+                                <span style="display: inline; background: #667eea; color: white; padding: 5px 10px; margin: 2px;">Inline 3</span>
+                            </div>
+                            <p style="margin-top: 10px; color: #d9534f;"><strong>⚠️ Problem:</strong> Width/height set nahi kar sakte। Padding/margin top-bottom काम नहीं करते।</p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">3. Display: Inline-Block (Best of Both)</div>
+                            <p>एक ही line पर रहते हैं लेकिन width/height/padding/margin सब काम करते हैं।</p>
+                            <div class="code-block">button { display: inline-block; }
+/* Buttons, badges, small cards */</div>
+                            <p style="margin-top: 10px;"><strong>Visual Example:</strong></p>
+                            <div style="background: #f0f4ff; padding: 10px; border-radius: 5px;">
+                                <div style="display: inline-block; background: #667eea; color: white; padding: 10px 20px; margin: 5px; border-radius: 5px;">Button 1</div>
+                                <div style="display: inline-block; background: #667eea; color: white; padding: 10px 20px; margin: 5px; border-radius: 5px;">Button 2</div>
+                                <div style="display: inline-block; background: #667eea; color: white; padding: 10px 20px; margin: 5px; border-radius: 5px;">Button 3</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">🌊 Overflow Properties</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">overflow: visible (Default)</div>
+                            <p>Content box से बाहर निकल जाता है।</p>
+                            <div style="width: 200px; height: 100px; background: #f0f4ff; border: 2px solid #667eea; overflow: visible; margin: 10px 0;">
+                                यह content बहुत लंबा है और box से बाहर निकल जाएगा। यह default behavior है।
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">overflow: hidden</div>
+                            <p>Content को crop कर देता है।</p>
+                            <div style="width: 200px; height: 100px; background: #f0f4ff; border: 2px solid #667eea; overflow: hidden; margin: 10px 0;">
+                                यह content बहुत लंबा है लेकिन छुप जाएगा। Extra content दिखाई नहीं देगा।
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">overflow: scroll</div>
+                            <p>Scrollbar add करता है (हमेशा)।</p>
+                            <div style="width: 200px; height: 100px; background: #f0f4ff; border: 2px solid #667eea; overflow: scroll; margin: 10px 0;">
+                                यह content बहुत लंबा है और scrollbar दिखेगा। आप scroll करके पूरा content देख सकते हो। Scrollbar हमेशा दिखता है चाहे content छोटा हो या बड़ा।
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">overflow: auto (सबसे अच्छा)</div>
+                            <p>जरूरत पड़ने पर ही scrollbar दिखाता है।</p>
+                            <div style="width: 200px; height: 100px; background: #f0f4ff; border: 2px solid #667eea; overflow: auto; margin: 10px 0;">
+                                यह content बहुत लंबा है। Scrollbar सिर्फ तब दिखेगा जब content overflow हो। यह सबसे smart option है।
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <h3 style="color: #667eea; margin-bottom: 15px;">💼 Interview Questions - Day 9</h3>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q1: Box Model kya hai? Iske components explain karo.</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                Box Model बताता है कि हर HTML element एक rectangular box है जिसमें 4 parts होते हैं:<br><br>
+                                1. <strong>Content:</strong> Actual content (text, image)<br>
+                                2. <strong>Padding:</strong> Content और border के बीच की space<br>
+                                3. <strong>Border:</strong> Element के चारों ओर की boundary<br>
+                                4. <strong>Margin:</strong> Element के बाहर की space (दूसरे elements से distance)<br><br>
+                                <span class="hinglish">Gift box ki tarah socho: Content = gift, Padding = bubble wrap, Border = box ka edge, Margin = boxes ke beech ki jagah.</span><br><br>
+                                <strong>Total Width = Content Width + Padding + Border + Margin</strong>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q2: Padding aur Margin mein kya difference hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>Padding:</strong> Element के अंदर की space। Content और border के बीच।<br>
+                                <strong>Margin:</strong> Element के बाहर की space। दूसरे elements से distance।<br><br>
+                                <span class="hinglish">Padding element ke andar hota hai (background color dikhta hai), Margin element ke bahar hota hai (background color nahi dikhta).</span><br><br>
+                                <strong>Example:</strong><br>
+                                <div class="code-block">/* Padding - अंदर की जगह */
+button { padding: 20px; background: blue; }
+/* Background color padding area mein bhi dikhega */
+
+/* Margin - बाहर की जगह */
+button { margin: 20px; }
+/* Background color margin area mein nahi dikhega */</div>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q3: box-sizing: border-box kya karta hai aur kyun use karte hain?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>Default (content-box):</strong> Width sirf content ke liye। Padding aur border alag se add hote hain।<br>
+                                <strong>border-box:</strong> Width mein padding aur border included hote hain।<br><br>
+                                <span class="hinglish">Border-box use karne se width calculate karna easy ho jata hai। Agar aap 200px width dete ho to element exactly 200px ka hoga, chahe padding aur border kitna bhi ho।</span><br><br>
+                                <strong>Example:</strong><br>
+                                <div class="code-block">/* Without border-box */
+div { width: 200px; padding: 20px; border: 5px; }
+/* Total = 200 + 40 + 10 = 250px */
+
+/* With border-box */
+div { width: 200px; padding: 20px; border: 5px; box-sizing: border-box; }
+/* Total = 200px (padding aur border included) */</div>
+                                <strong>Best Practice:</strong> * { box-sizing: border-box; }
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q4: Block, Inline, aur Inline-Block display mein kya difference hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>Block:</strong><br>
+                                - पूरी width लेता है<br>
+                                - नई line से शुरू होता है<br>
+                                - Width/height set kar sakte hain<br>
+                                - Example: div, p, h1<br><br>
+                                <strong>Inline:</strong><br>
+                                - सिर्फ जितनी width चाहिए<br>
+                                - एक ही line पर रहते हैं<br>
+                                - Width/height set नहीं कर सकते<br>
+                                - Example: span, a, strong<br><br>
+                                <strong>Inline-Block:</strong><br>
+                                - एक ही line पर रहते हैं<br>
+                                - Width/height set कर सकते हैं<br>
+                                - Best of both worlds<br>
+                                - Example: buttons, badges<br><br>
+                                <span class="hinglish">Inline-block sabse versatile hai - line mein bhi reh sakte ho aur size bhi control kar sakte ho।</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAY 10: COLORS & UNITS -->
+            <div class="tab-content">
+                <div class="section">
+                    <h2 class="section-title">🎨 Day 10: Colors, Backgrounds & Units</h2>
+
+                    <div class="definition-box">
+                        <strong>CSS Colors</strong><br><br>
+                        CSS में colors को 5 तरीकों से define कर सकते हैं। सोचो - एक painter के पास अलग-अलग तरीके हैं colors mix करने के!
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">🌈 Color Formats</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">1. Color Names (140+ predefined)</div>
+                            <div class="code-block">color: red;
+color: blue;
+color: tomato;
+color: dodgerblue;</div>
+                            <div class="color-demo">
+                                <div class="color-box" style="background: red;">red</div>
+                                <div class="color-box" style="background: blue;">blue</div>
+                                <div class="color-box" style="background: tomato;">tomato</div>
+                                <div class="color-box" style="background: dodgerblue;">dodgerblue</div>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">2. Hexadecimal (#RRGGBB)</div>
+                            <p>6 digits: Red, Green, Blue (00 to FF)</p>
+                            <div class="code-block">color: #FF0000; /* Red */
+color: #00FF00; /* Green */
+color: #0000FF; /* Blue */
+color: #667eea; /* Custom purple */</div>
+                            <div class="color-demo">
+                                <div class="color-box" style="background: #FF0000;">#FF0000</div>
+                                <div class="color-box" style="background: #00FF00;">#00FF00</div>
+                                <div class="color-box" style="background: #0000FF;">#0000FF</div>
+                                <div class="color-box" style="background: #667eea;">#667eea</div>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">3. RGB (Red, Green, Blue)</div>
+                            <p>Values: 0 to 255</p>
+                            <div class="code-block">color: rgb(255, 0, 0); /* Red */
+color: rgb(0, 255, 0); /* Green */
+color: rgb(0, 0, 255); /* Blue */
+color: rgb(102, 126, 234); /* Custom */</div>
+                            <div class="color-demo">
+                                <div class="color-box" style="background: rgb(255, 0, 0);">rgb(255,0,0)</div>
+                                <div class="color-box" style="background: rgb(0, 255, 0);">rgb(0,255,0)</div>
+                                <div class="color-box" style="background: rgb(0, 0, 255);">rgb(0,0,255)</div>
+                                <div class="color-box" style="background: rgb(102, 126, 234);">rgb(102,126,234)</div>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">4. RGBA (RGB + Alpha/Transparency)</div>
+                            <p>Alpha: 0 (transparent) to 1 (opaque)</p>
+                            <div class="code-block">color: rgba(255, 0, 0, 1); /* Fully opaque */
+color: rgba(255, 0, 0, 0.5); /* 50% transparent */
+color: rgba(255, 0, 0, 0.2); /* 80% transparent */</div>
+                            <div style="background: white; padding: 20px; border-radius: 8px;">
+                                <div class="color-demo">
+                                    <div class="color-box" style="background: rgba(102, 126, 234, 1);">Alpha: 1</div>
+                                    <div class="color-box" style="background: rgba(102, 126, 234, 0.7);">Alpha: 0.7</div>
+                                    <div class="color-box" style="background: rgba(102, 126, 234, 0.4);">Alpha: 0.4</div>
+                                    <div class="color-box" style="background: rgba(102, 126, 234, 0.1); color: #333;">Alpha: 0.1</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">5. HSL (Hue, Saturation, Lightness)</div>
+                            <p>Hue: 0-360 (color wheel), Saturation: 0-100%, Lightness: 0-100%</p>
+                            <div class="code-block">color: hsl(0, 100%, 50%); /* Red */
+color: hsl(120, 100%, 50%); /* Green */
+color: hsl(240, 100%, 50%); /* Blue */
+color: hsla(240, 100%, 50%, 0.5); /* Blue with transparency */</div>
+                            <div class="color-demo">
+                                <div class="color-box" style="background: hsl(0, 100%, 50%);">hsl(0,100%,50%)</div>
+                                <div class="color-box" style="background: hsl(120, 100%, 50%);">hsl(120,100%,50%)</div>
+                                <div class="color-box" style="background: hsl(240, 100%, 50%);">hsl(240,100%,50%)</div>
+                                <div class="color-box" style="background: hsl(280, 70%, 65%);">hsl(280,70%,65%)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">🖼️ Background Properties</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">Background Color</div>
+                            <div class="code-block">background-color: #667eea;
+background-color: rgba(102, 126, 234, 0.5);</div>
+                            <div style="background-color: #667eea; color: white; padding: 20px; border-radius: 5px; text-align: center;">
+                                Background Color Example
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">Background Image</div>
+                            <div class="code-block">background-image: url('image.jpg');
+background-repeat: no-repeat; /* repeat, repeat-x, repeat-y */
+background-size: cover; /* contain, 100px, 50% */
+background-position: center; /* top, bottom, left, right */</div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">Linear Gradient</div>
+                            <div class="code-block">background: linear-gradient(to right, #667eea, #764ba2);
+background: linear-gradient(45deg, red, blue);
+background: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);</div>
+                            <div style="background: linear-gradient(to right, #667eea, #764ba2); color: white; padding: 30px; border-radius: 5px; text-align: center; font-weight: bold;">
+                                Linear Gradient Example
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">Radial Gradient</div>
+                            <div class="code-block">background: radial-gradient(circle, #667eea, #764ba2);
+background: radial-gradient(ellipse at top, red, blue);</div>
+                            <div style="background: radial-gradient(circle, #667eea, #764ba2); color: white; padding: 30px; border-radius: 5px; text-align: center; font-weight: bold;">
+                                Radial Gradient Example
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">📏 CSS Units (बहुत Important!)</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">1. Absolute Units</div>
+                            <p><strong>px (Pixels):</strong> Fixed size। Screen पर exact size।</p>
+                            <div class="code-block">width: 200px;
+font-size: 16px;
+padding: 20px;</div>
+                            <p style="margin-top: 10px;"><span class="hinglish">Pixels fixed hote hain - screen size change hone par bhi same size rahenge। Responsive design ke liye best nahi।</span></p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">2. Relative Units (Responsive के लिए)</div>
+                            
+                            <p><strong>% (Percentage):</strong> Parent element के relative।</p>
+                            <div class="code-block">width: 50%; /* Parent ka 50% */
+padding: 10%; /* Parent width ka 10% */</div>
+                            <div style="background: #f0f4ff; padding: 20px; border-radius: 5px;">
+                                <div style="background: #667eea; color: white; padding: 10px; width: 50%; text-align: center;">50% width</div>
+                            </div>
+
+                            <p style="margin-top: 20px;"><strong>em:</strong> Parent element के font-size के relative।</p>
+                            <div class="code-block">/* Parent font-size: 16px */
+font-size: 2em; /* 32px (16 * 2) */
+padding: 1.5em; /* 24px (16 * 1.5) */</div>
+                            <p style="margin-top: 10px; color: #d9534f;"><strong>⚠️ Problem:</strong> Nested elements में compound हो जाता है।</p>
+
+                            <p style="margin-top: 20px;"><strong>rem (Root em - सबसे अच्छा!):</strong> Root element (html) के font-size के relative।</p>
+                            <div class="code-block">/* Root font-size: 16px */
+font-size: 2rem; /* 32px */
+padding: 1.5rem; /* 24px */
+margin: 2rem; /* 32px */</div>
+                            <p style="margin-top: 10px; color: #5cb85c;"><strong>✅ Benefit:</strong> Consistent sizing। Nesting से affect नहीं होता।</p>
+
+                            <p style="margin-top: 20px;"><strong>vh (Viewport Height):</strong> Screen height का percentage।</p>
+                            <div class="code-block">height: 100vh; /* Full screen height */
+height: 50vh; /* Half screen height */</div>
+
+                            <p style="margin-top: 20px;"><strong>vw (Viewport Width):</strong> Screen width का percentage।</p>
+                            <div class="code-block">width: 100vw; /* Full screen width */
+width: 50vw; /* Half screen width */
+font-size: 5vw; /* Responsive font */</div>
+                        </div>
+
+                        <div class="responsive-note">
+                            <strong>💡 Best Practices:</strong><br>
+                            - Font sizes के लिए: <strong>rem</strong> use करो<br>
+                            - Padding/Margin के लिए: <strong>rem</strong> या <strong>px</strong><br>
+                            - Width/Height के लिए: <strong>%</strong> या <strong>vw/vh</strong><br>
+                            - Full-screen sections के लिए: <strong>100vh</strong><br>
+                            - Responsive typography के लिए: <strong>vw</strong> + <strong>rem</strong>
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <h3 style="color: #667eea; margin-bottom: 15px;">💼 Interview Questions - Day 10</h3>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q1: RGB aur RGBA mein kya difference hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>RGB:</strong> Red, Green, Blue - तीन colors mix करके कोई भी color बनाते हैं। Values 0-255।<br>
+                                <strong>RGBA:</strong> RGB + Alpha (transparency)। Alpha value 0 (पूरा transparent) से 1 (पूरा opaque) तक।<br><br>
+                                <span class="hinglish">RGBA use karte hain jab element ko semi-transparent banana ho। Jaise overlays, modals, hover effects mein।</span><br><br>
+                                <strong>Example:</strong><br>
+                                <div class="code-block">background: rgb(255, 0, 0); /* Solid red */
+background: rgba(255, 0, 0, 0.5); /* 50% transparent red */</div>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q2: px, em, rem, aur % units mein kya difference hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>px (Pixels):</strong> Fixed unit। Responsive नहीं। Exact size।<br>
+                                <strong>em:</strong> Parent element के font-size के relative। Nesting में compound होता है।<br>
+                                <strong>rem:</strong> Root (html) element के font-size के relative। Consistent sizing।<br>
+                                <strong>%:</strong> Parent element के size के relative।<br><br>
+                                <span class="hinglish">Modern websites mein rem sabse zyada use hota hai kyunki consistent aur predictable hai। Percentage width/height ke liye best hai।</span><br><br>
+                                <strong>Example:</strong><br>
+                                <div class="code-block">/* Root font-size: 16px */
+font-size: 16px; /* Fixed */
+font-size: 1em; /* Parent ke equal */
+font-size: 1rem; /* 16px (root ke equal) */
+width: 50%; /* Parent ka 50% */</div>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q3: vh aur vw units ka kya use hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>vh (Viewport Height):</strong> Screen/browser window की height का percentage।<br>
+                                <strong>vw (Viewport Width):</strong> Screen/browser window की width का percentage।<br><br>
+                                <span class="hinglish">Yeh units responsive design ke liye bahut useful hain। Screen size change hone par automatically adjust ho jate hain।</span><br><br>
+                                <strong>Common Uses:</strong><br>
+                                - 100vh: Full-screen hero sections<br>
+                                - 100vw: Full-width containers<br>
+                                - 5vw: Responsive font sizes<br><br>
+                                <strong>Example:</strong><br>
+                                <div class="code-block">/* Hero section */
+.hero {
+    height: 100vh; /* Full screen height */
+    width: 100vw; /* Full screen width */
+}
+
+/* Responsive heading */
+h1 { font-size: 5vw; } /* Screen width ke according */</div>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q4: Linear gradient aur Radial gradient mein kya difference hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>Linear Gradient:</strong> Colors एक सीधी line में transition करते हैं। Direction specify कर सकते हो (top, bottom, left, right, diagonal)।<br>
+                                <strong>Radial Gradient:</strong> Colors center से बाहर की ओर circular/elliptical pattern में transition करते हैं।<br><br>
+                                <span class="hinglish">Linear gradient buttons, headers, backgrounds ke liye use hota hai। Radial gradient spotlight effects, circular designs ke liye।</span><br><br>
+                                <strong>Example:</strong><br>
+                                <div class="code-block">/* Linear - left to right */
+background: linear-gradient(to right, red, blue);
+
+/* Linear - diagonal */
+background: linear-gradient(45deg, red, blue);
+
+/* Radial - center se bahar */
+background: radial-gradient(circle, red, blue);</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAY 11: TYPOGRAPHY -->
+            <div class="tab-content">
+                <div class="section">
+                    <h2 class="section-title">✍️ Day 11: Fonts, Typography & Icons</h2>
+
+                    <div class="definition-box">
+                        <strong>Typography</strong><br><br>
+                        Typography मतलब text को beautiful और readable बनाना। सोचो - एक book में अलग-अलग fonts, sizes, spacing होती है जो reading experience को better बनाती है!
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">🔤 Font Properties</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">font-family (Font का नाम)</div>
+                            <div class="code-block">/* Single font */
+font-family: Arial;
+
+/* Font stack (fallback) */
+font-family: 'Helvetica Neue', Arial, sans-serif;
+
+/* Generic families */
+font-family: serif; /* Times New Roman style */
+font-family: sans-serif; /* Arial style */
+font-family: monospace; /* Code style */
+font-family: cursive; /* Handwriting style */</div>
+                            <div style="margin-top: 15px;">
+                                <p style="font-family: serif; font-size: 18px;">Serif Font - Traditional look</p>
+                                <p style="font-family: sans-serif; font-size: 18px;">Sans-serif Font - Modern look</p>
+                                <p style="font-family: monospace; font-size: 18px;">Monospace Font - Code style</p>
+                                <p style="font-family: cursive; font-size: 18px;">Cursive Font - Handwriting</p>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">font-size (Text का size)</div>
+                            <div class="code-block">font-size: 16px; /* Fixed */
+font-size: 1rem; /* Relative to root */
+font-size: 1.5em; /* Relative to parent */
+font-size: 2vw; /* Responsive */</div>
+                            <div style="margin-top: 15px;">
+                                <p style="font-size: 12px;">12px - Small text</p>
+                                <p style="font-size: 16px;">16px - Normal text</p>
+                                <p style="font-size: 24px;">24px - Large text</p>
+                                <p style="font-size: 32px;">32px - Heading size</p>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">font-weight (Text की thickness)</div>
+                            <div class="code-block">font-weight: normal; /* 400 */
+font-weight: bold; /* 700 */
+font-weight: 100; /* Thin */
+font-weight: 900; /* Extra bold */</div>
+                            <div style="margin-top: 15px;">
+                                <p style="font-weight: 100; font-size: 18px;">100 - Thin</p>
+                                <p style="font-weight: 400; font-size: 18px;">400 - Normal</p>
+                                <p style="font-weight: 700; font-size: 18px;">700 - Bold</p>
+                                <p style="font-weight: 900; font-size: 18px;">900 - Extra Bold</p>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">font-style (Text का style)</div>
+                            <div class="code-block">font-style: normal;
+font-style: italic;
+font-style: oblique;</div>
+                            <div style="margin-top: 15px;">
+                                <p style="font-style: normal; font-size: 18px;">Normal text</p>
+                                <p style="font-style: italic; font-size: 18px;">Italic text</p>
+                                <p style="font-style: oblique; font-size: 18px;">Oblique text</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">📝 Text Properties</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">text-align (Text की alignment)</div>
+                            <div class="code-block">text-align: left;
+text-align: center;
+text-align: right;
+text-align: justify;</div>
+                            <div style="margin-top: 15px; background: #f0f4ff; padding: 15px; border-radius: 5px;">
+                                <p style="text-align: left; margin: 10px 0;">Left aligned text</p>
+                                <p style="text-align: center; margin: 10px 0;">Center aligned text</p>
+                                <p style="text-align: right; margin: 10px 0;">Right aligned text</p>
+                                <p style="text-align: justify; margin: 10px 0;">Justified text spreads evenly across the line. This is commonly used in newspapers and books.</p>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">text-decoration (Text की decoration)</div>
+                            <div class="code-block">text-decoration: none; /* Remove underline from links */
+text-decoration: underline;
+text-decoration: overline;
+text-decoration: line-through;</div>
+                            <div style="margin-top: 15px;">
+                                <p style="text-decoration: none; font-size: 18px;">No decoration</p>
+                                <p style="text-decoration: underline; font-size: 18px;">Underline text</p>
+                                <p style="text-decoration: overline; font-size: 18px;">Overline text</p>
+                                <p style="text-decoration: line-through; font-size: 18px;">Line-through text</p>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">text-transform (Text का case)</div>
+                            <div class="code-block">text-transform: uppercase;
+text-transform: lowercase;
+text-transform: capitalize;</div>
+                            <div style="margin-top: 15px;">
+                                <p style="text-transform: uppercase; font-size: 18px;">uppercase text</p>
+                                <p style="text-transform: lowercase; font-size: 18px;">LOWERCASE TEXT</p>
+                                <p style="text-transform: capitalize; font-size: 18px;">capitalize each word</p>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">line-height (Lines के बीच की space)</div>
+                            <div class="code-block">line-height: 1; /* Tight */
+line-height: 1.5; /* Normal */
+line-height: 2; /* Loose */</div>
+                            <div style="margin-top: 15px; background: #f0f4ff; padding: 15px; border-radius: 5px;">
+                                <p style="line-height: 1; margin: 10px 0;">Line height 1 - This text has tight spacing between lines. It's harder to read when there are multiple lines.</p>
+                                <p style="line-height: 1.5; margin: 10px 0;">Line height 1.5 - This is the recommended spacing. It's comfortable to read and looks professional.</p>
+                                <p style="line-height: 2; margin: 10px 0;">Line height 2 - This text has loose spacing. Good for emphasis but can look too spread out.</p>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">letter-spacing (Letters के बीच की space)</div>
+                            <div class="code-block">letter-spacing: normal;
+letter-spacing: 2px;
+letter-spacing: -1px;</div>
+                            <div style="margin-top: 15px;">
+                                <p style="letter-spacing: normal; font-size: 18px;">Normal spacing</p>
+                                <p style="letter-spacing: 2px; font-size: 18px;">Increased spacing</p>
+                                <p style="letter-spacing: 5px; font-size: 18px;">Wide spacing</p>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">word-spacing (Words के बीच की space)</div>
+                            <div class="code-block">word-spacing: normal;
+word-spacing: 10px;
+word-spacing: 20px;</div>
+                            <div style="margin-top: 15px;">
+                                <p style="word-spacing: normal; font-size: 18px;">Normal word spacing in this sentence</p>
+                                <p style="word-spacing: 10px; font-size: 18px;">Increased word spacing in this sentence</p>
+                                <p style="word-spacing: 20px; font-size: 18px;">Wide word spacing in this sentence</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">🌐 Google Fonts (Custom Fonts)</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">How to Use Google Fonts</div>
+                            <p><strong>Step 1:</strong> Go to <a href="https://fonts.google.com" target="_blank" style="color: #667eea;">fonts.google.com</a></p>
+                            <p><strong>Step 2:</strong> Select a font (e.g., Roboto, Open Sans, Poppins)</p>
+                            <p><strong>Step 3:</strong> Copy the link tag</p>
+                            <div class="code-block">&lt;!-- In HTML head --&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"&gt;
+
+&lt;!-- In CSS --&gt;
+body {
+    font-family: 'Roboto', sans-serif;
+}</div>
+                            <p style="margin-top: 15px;"><span class="hinglish">Google Fonts free hain aur bahut zyada variety hai। Professional websites mein mostly Google Fonts hi use hote hain।</span></p>
+                        </div>
+
+                        <div class="responsive-note">
+                            <strong>💡 Popular Google Fonts:</strong><br>
+                            - Roboto (Modern, clean)<br>
+                            - Open Sans (Readable, friendly)<br>
+                            - Poppins (Geometric, modern)<br>
+                            - Montserrat (Bold, stylish)<br>
+                            - Lato (Professional, versatile)
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">🎨 Icons (Font Awesome, Material Icons)</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">Font Awesome Icons</div>
+                            <p><strong>Step 1:</strong> Include Font Awesome CDN</p>
+                            <div class="code-block">&lt;!-- In HTML head --&gt;
+&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"&gt;
+
+&lt;!-- Use icons --&gt;
+&lt;i class="fas fa-home"&gt;&lt;/i&gt; Home
+&lt;i class="fas fa-user"&gt;&lt;/i&gt; User
+&lt;i class="fas fa-heart"&gt;&lt;/i&gt; Like
+&lt;i class="fas fa-shopping-cart"&gt;&lt;/i&gt; Cart</div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">Material Icons (Google)</div>
+                            <div class="code-block">&lt;!-- In HTML head --&gt;
+&lt;link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"&gt;
+
+&lt;!-- Use icons --&gt;
+&lt;span class="material-icons"&gt;home&lt;/span&gt;
+&lt;span class="material-icons"&gt;favorite&lt;/span&gt;
+&lt;span class="material-icons"&gt;shopping_cart&lt;/span&gt;</div>
+                        </div>
+
+                        <div class="responsive-note">
+                            <strong>💡 Icon Usage:</strong><br>
+                            - Buttons में icons add करना<br>
+                            - Navigation menu में<br>
+                            - Social media links<br>
+                            - Feature highlights<br>
+                            - Loading indicators
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <h3 style="color: #667eea; margin-bottom: 15px;">💼 Interview Questions - Day 11</h3>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q1: font-family mein fallback fonts kyun use karte hain?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                Fallback fonts एक backup system है। अगर पहला font load नहीं होता या user के system में नहीं है, तो browser अगला font try करता है।<br><br>
+                                <span class="hinglish">Hamesha font stack use karo - specific font, similar font, generic family। Isse ensure hota hai ki text hamesha readable rahe।</span><br><br>
+                                <strong>Example:</strong><br>
+                                <div class="code-block">font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+/* 1. Roboto (custom)
+   2. Helvetica Neue (similar)
+   3. Arial (common)
+   4. sans-serif (generic fallback) */</div>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q2: line-height ka kya use hai aur ideal value kya hoti hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                Line-height lines के बीच की vertical space control करता है। यह readability के लिए बहुत important है।<br><br>
+                                <span class="hinglish">Agar line-height kam hai to text cramped lagta hai। Agar zyada hai to disconnected lagta hai। Ideal value 1.5 to 1.6 hoti hai body text ke liye।</span><br><br>
+                                <strong>Best Practices:</strong><br>
+                                - Body text: 1.5 to 1.6<br>
+                                - Headings: 1.2 to 1.3<br>
+                                - Small text: 1.4<br><br>
+                                <strong>Example:</strong><br>
+                                <div class="code-block">body {
+    line-height: 1.6; /* Comfortable reading */
+}
+
+h1, h2, h3 {
+    line-height: 1.2; /* Tighter for headings */
+}</div>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q3: Google Fonts kaise use karte hain aur kyun?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                Google Fonts free, high-quality fonts provide karta है जो easily integrate हो जाते हैं।<br><br>
+                                <strong>Steps:</strong><br>
+                                1. fonts.google.com पर जाओ<br>
+                                2. Font select करो<br>
+                                3. Link tag copy करो<br>
+                                4. HTML head में paste करो<br>
+                                5. CSS में font-family use करो<br><br>
+                                <span class="hinglish">Google Fonts use karne se website professional dikhti hai। System fonts se better variety milti hai aur cross-browser compatible hote hain।</span><br><br>
+                                <strong>Example:</strong><br>
+                                <div class="code-block">&lt;!-- HTML --&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"&gt;
+
+/* CSS */
+body {
+    font-family: 'Poppins', sans-serif;
+}</div>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q4: text-transform aur text-decoration ka kya use hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>text-transform:</strong> Text का case change करता है (uppercase, lowercase, capitalize)।<br>
+                                <strong>text-decoration:</strong> Text पर lines add करता है (underline, overline, line-through)।<br><br>
+                                <span class="hinglish">Text-transform buttons, headings, labels ke liye use hota hai। Text-decoration links se underline hatane ya strikethrough price dikhane ke liye।</span><br><br>
+                                <strong>Example:</strong><br>
+                                <div class="code-block">/* Uppercase button text */
+button {
+    text-transform: uppercase;
+}
+
+/* Remove link underline */
+a {
+    text-decoration: none;
+}
+
+/* Strikethrough old price */
+.old-price {
+    text-decoration: line-through;
+}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAY 12: POSITIONING -->
+            <div class="tab-content">
+                <div class="section">
+                    <h2 class="section-title">📍 Day 12: CSS Positioning & Z-index</h2>
+
+                    <div class="definition-box">
+                        <strong>CSS Positioning</strong><br><br>
+                        Positioning बताता है कि elements page पर कहाँ रहेंगे। सोचो - एक room में furniture को अलग-अलग तरीकों से arrange कर सकते हो!
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">📌 Position Types</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">1. position: static (Default)</div>
+                            <p>Normal document flow में रहता है। top, right, bottom, left काम नहीं करते।</p>
+                            <div class="code-block">div {
+    position: static; /* Default */
+}</div>
+                            <p style="margin-top: 10px;"><span class="hinglish">Yeh default behavior hai। Elements ek ke baad ek aate hain jaise HTML mein likhe hain।</span></p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">2. position: relative</div>
+                            <p>अपनी original position के relative move होता है। Space reserved रहती है।</p>
+                            <div class="code-block">div {
+    position: relative;
+    top: 20px; /* Original position से 20px नीचे */
+    left: 30px; /* Original position से 30px दाएं */
+}</div>
+                            <div style="background: #f0f4ff; padding: 20px; border-radius: 5px; margin-top: 15px;">
+                                <div style="background: #e9ecef; padding: 10px; margin: 5px 0;">Box 1</div>
+                                <div style="background: #ffc107; padding: 10px; margin: 5px 0; position: relative; top: 10px; left: 20px;">Box 2 (relative - moved)</div>
+                                <div style="background: #e9ecef; padding: 10px; margin: 5px 0;">Box 3</div>
+                            </div>
+                            <p style="margin-top: 10px;"><span class="hinglish">Relative positioning se element move hota hai lekin uski original jagah reserved rehti hai। Dusre elements affect nahi hote।</span></p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">3. position: absolute</div>
+                            <p>Nearest positioned parent के relative position होता है। Document flow से हट जाता है।</p>
+                            <div class="code-block">/* Parent */
+.container {
+    position: relative; /* Reference point */
+}
+
+/* Child */
+.box {
+    position: absolute;
+    top: 20px; /* Parent के top से 20px */
+    right: 30px; /* Parent के right से 30px */
+}</div>
+                            <div style="position: relative; background: #f0f4ff; padding: 40px; border-radius: 5px; margin-top: 15px; height: 200px; border: 2px dashed #667eea;">
+                                <p style="margin: 0;">Parent Container (position: relative)</p>
+                                <div style="position: absolute; top: 20px; right: 20px; background: #dc3545; color: white; padding: 10px; border-radius: 5px;">
+                                    Absolute Box
+                                </div>
+                            </div>
+                            <p style="margin-top: 10px;"><span class="hinglish">Absolute positioning se element document flow se bahar ho jata hai। Yeh parent ke andar kahi bhi place ho sakta hai। Modals, dropdowns, tooltips ke liye use hota hai।</span></p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">4. position: fixed</div>
+                            <p>Viewport (screen) के relative fixed रहता है। Scroll करने पर bhi same जगह रहता है।</p>
+                            <div class="code-block">div {
+    position: fixed;
+    top: 0; /* Screen के top पर */
+    left: 0;
+    width: 100%;
+}</div>
+                            <p style="margin-top: 10px;"><strong>Real-world examples:</strong></p>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>Fixed navigation bar (scroll करने पर bhi top पर रहे)</li>
+                                <li>Floating action button (bottom-right corner में)</li>
+                                <li>Cookie consent banner (bottom पर fixed)</li>
+                                <li>Chat widget (bottom-right में fixed)</li>
+                            </ul>
+                            <p style="margin-top: 10px;"><span class="hinglish">Fixed elements hamesha screen par ek hi jagah dikhte hain, chahe aap kitna bhi scroll karo। Navbar, chat buttons ke liye perfect।</span></p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">5. position: sticky</div>
+                            <p>Relative और fixed का combination। Scroll करने पर एक point पर fixed हो जाता है।</p>
+                            <div class="code-block">div {
+    position: sticky;
+    top: 0; /* Scroll करने पर top पर stick हो जाएगा */
+}</div>
+                            <p style="margin-top: 10px;"><strong>Real-world examples:</strong></p>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>Table headers (scroll करने पर top पर stick हो जाएं)</li>
+                                <li>Section headings</li>
+                                <li>Sidebar navigation</li>
+                            </ul>
+                            <p style="margin-top: 10px;"><span class="hinglish">Sticky positioning bahut useful hai। Pehle normal flow mein rehta hai, phir scroll karne par fixed ho jata hai। Table headers ke liye best।</span></p>
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">🔢 Z-index (Layering)</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">What is Z-index?</div>
+                            <p>Z-index बताता है कि elements कौन सी layer पर हैं। Higher value = ऊपर की layer।</p>
+                            <div class="code-block">/* Lower z-index - पीछे */
+.box1 {
+    position: relative;
+    z-index: 1;
+}
+
+/* Higher z-index - आगे */
+.box2 {
+    position: relative;
+    z-index: 10;
+}</div>
+                            <div style="position: relative; height: 200px; background: #f0f4ff; padding: 20px; border-radius: 5px; margin-top: 15px;">
+                                <div style="position: absolute; top: 20px; left: 20px; width: 150px; height: 150px; background: #667eea; color: white; padding: 20px; z-index: 1; border-radius: 5px;">
+                                    Z-index: 1<br>(पीछे)
+                                </div>
+                                <div style="position: absolute; top: 60px; left: 80px; width: 150px; height: 150px; background: #ffc107; color: white; padding: 20px; z-index: 10; border-radius: 5px;">
+                                    Z-index: 10<br>(आगे)
+                                </div>
+                            </div>
+                            <p style="margin-top: 10px;"><span class="hinglish">Z-index sirf positioned elements (relative, absolute, fixed, sticky) par kaam karta hai। Static elements par nahi।</span></p>
+                        </div>
+
+                        <div class="responsive-note">
+                            <strong>💡 Common Z-index Values:</strong><br>
+                            - Normal content: 1-10<br>
+                            - Dropdowns: 100-500<br>
+                            - Modals/Overlays: 1000-5000<br>
+                            - Tooltips: 10000+<br>
+                            - Fixed navbar: 100-1000
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">🎈 Float Property (Old Method)</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">Float: left / right</div>
+                            <p>Element को left या right side पर float करता है। Text wrap हो जाता है।</p>
+                            <div class="code-block">img {
+    float: left;
+    margin-right: 20px;
+}
+
+/* Clear float */
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}</div>
+                            <div style="background: #f0f4ff; padding: 20px; border-radius: 5px; margin-top: 15px; overflow: auto;">
+                                <div style="float: left; width: 100px; height: 100px; background: #667eea; margin-right: 15px; border-radius: 5px;"></div>
+                                <p>यह text float किए गए box के चारों ओर wrap हो रहा है। Float property पहले layouts बनाने के लिए use होती थी, लेकिन अब Flexbox और Grid बेहतर options हैं। Float अब mostly images के साथ text wrap करने के लिए use होता है।</p>
+                            </div>
+                            <p style="margin-top: 10px;"><span class="hinglish">Float purana method hai। Ab Flexbox aur Grid use karte hain layouts ke liye। Float sirf images ke saath text wrap karne ke liye use hota hai।</span></p>
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <h3 style="color: #667eea; margin-bottom: 15px;">💼 Interview Questions - Day 12</h3>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q1: Relative aur Absolute positioning mein kya difference hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>Relative:</strong><br>
+                                - अपनी original position के relative move होता है<br>
+                                - Document flow में रहता है (space reserved)<br>
+                                - दूसरे elements affect नहीं होते<br><br>
+                                <strong>Absolute:</strong><br>
+                                - Nearest positioned parent के relative position होता है<br>
+                                - Document flow से बाहर हो जाता है (no space reserved)<br>
+                                - दूसरे elements overlap हो सकते हैं<br><br>
+                                <span class="hinglish">Relative positioning se element thoda move hota hai lekin jagah reserved rehti hai। Absolute positioning se element completely flow se bahar ho jata hai aur parent ke andar kahi bhi place ho sakta hai।</span><br><br>
+                                <strong>Example:</strong><br>
+                                <div class="code-block">/* Relative - slight adjustment */
+.button {
+    position: relative;
+    top: 5px; /* Thoda neeche */
+}
+
+/* Absolute - complete control */
+.dropdown {
+    position: absolute;
+    top: 100%; /* Parent ke neeche */
+    left: 0;
+}</div>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q2: Fixed aur Sticky positioning mein kya difference hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>Fixed:</strong><br>
+                                - Viewport (screen) के relative fixed रहता है<br>
+                                - हमेशा same position पर (scroll करने पर भी)<br>
+                                - Document flow से completely बाहर<br><br>
+                                <strong>Sticky:</strong><br>
+                                - Pehle normal flow में, फिर scroll पर fixed<br>
+                                - Parent container के अंदर ही stick होता है<br>
+                                - Hybrid behavior (relative + fixed)<br><br>
+                                <span class="hinglish">Fixed navbar hamesha screen par dikhta hai। Sticky header pehle normal rehta hai, scroll karne par top par stick ho jata hai। Sticky parent container ke andar hi kaam karta hai।</span><br><br>
+                                <strong>Use Cases:</strong><br>
+                                - Fixed: Navbar, chat button, cookie banner<br>
+                                - Sticky: Table headers, section headings
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q3: Z-index kya hai aur kab use hota hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                Z-index elements की stacking order control करता है। Higher value वाला element ऊपर की layer पर होता है।<br><br>
+                                <strong>Important Points:</strong><br>
+                                - Sirf positioned elements पर काम करता है (relative, absolute, fixed, sticky)<br>
+                                - Static elements पर काम नहीं करता<br>
+                                - Negative values भी हो सकती हैं<br>
+                                - Parent-child relationship matter करती है<br><br>
+                                <span class="hinglish">Z-index tab use hota hai jab elements overlap ho rahe hain aur aapko decide karna hai ki kaun sa element upar dikhega। Modals, dropdowns, tooltips mein bahut use hota hai।</span><br><br>
+                                <strong>Example:</strong><br>
+                                <div class="code-block">/* Navbar */
+.navbar {
+    position: fixed;
+    z-index: 100;
+}
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    z-index: 1000;
+}
+
+/* Modal content */
+.modal {
+    position: fixed;
+    z-index: 1001;
+}</div>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q4: Float property ka kya use hai aur ab kyun kam use hoti hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                Float property elements को left या right side पर float करती है और text को wrap करती है।<br><br>
+                                <strong>Pehle:</strong> Layouts बनाने के लिए float use होता था (columns, grids)<br>
+                                <strong>Ab:</strong> Flexbox और Grid बेहतर options हैं layouts के लिए<br><br>
+                                <span class="hinglish">Float ab mostly images ke saath text wrap karne ke liye use hota hai। Layouts ke liye Flexbox aur Grid modern aur powerful hain। Float se bahut saari problems thi jaise parent collapse, clearing issues।</span><br><br>
+                                <strong>Modern Alternative:</strong><br>
+                                <div class="code-block">/* Old way - Float */
+.column {
+    float: left;
+    width: 50%;
+}
+
+/* Modern way - Flexbox */
+.container {
+    display: flex;
+}
+.column {
+    flex: 1;
+}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAY 13: FLEXBOX -->
+            <div class="tab-content">
+                <div class="section">
+                    <h2 class="section-title">📐 Day 13: Flexbox (Modern Layout)</h2>
+
+                    <div class="definition-box">
+                        <strong>What is Flexbox?</strong><br><br>
+                        Flexbox एक modern layout system है जो elements को flexible और responsive तरीके से arrange करता है। सोचो - एक elastic band जो stretch और shrink हो सकता है!
+                    </div>
+
+                    <div class="key-points">
+                        <strong>🎯 Why Flexbox?</strong>
+                        <ul>
+                            <li>Easy alignment (center, space-between, etc.)</li>
+                            <li>Responsive layouts without media queries</li>
+                            <li>Equal height columns automatically</li>
+                            <li>Reordering elements without changing HTML</li>
+                            <li>Better than float and positioning</li>
+                        </ul>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">📦 Flex Container Properties</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">display: flex</div>
+                            <p>Container को flex container बनाता है। Direct children flex items बन जाते हैं।</p>
+                            <div class="code-block">.container {
+    display: flex;
+}</div>
+                            <div style="display: flex; gap: 10px; background: #f0f4ff; padding: 20px; border-radius: 5px; margin-top: 15px;">
+                                <div style="background: #667eea; color: white; padding: 20px; border-radius: 5px; flex: 1; text-align: center;">Item 1</div>
+                                <div style="background: #667eea; color: white; padding: 20px; border-radius: 5px; flex: 1; text-align: center;">Item 2</div>
+                                <div style="background: #667eea; color: white; padding: 20px; border-radius: 5px; flex: 1; text-align: center;">Item 3</div>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">flex-direction (Main axis की direction)</div>
+                            <div class="code-block">flex-direction: row; /* Default - left to right */
+flex-direction: row-reverse; /* Right to left */
+flex-direction: column; /* Top to bottom */
+flex-direction: column-reverse; /* Bottom to top */</div>
+                            <p style="margin-top: 15px;"><strong>row (Default):</strong></p>
+                            <div style="display: flex; flex-direction: row; gap: 10px; background: #f0f4ff; padding: 20px; border-radius: 5px;">
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">1</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">2</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">3</div>
+                            </div>
+                            <p style="margin-top: 15px;"><strong>column:</strong></p>
+                            <div style="display: flex; flex-direction: column; gap: 10px; background: #f0f4ff; padding: 20px; border-radius: 5px;">
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">1</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">2</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">3</div>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">justify-content (Main axis पर alignment)</div>
+                            <div class="code-block">justify-content: flex-start; /* Start से */
+justify-content: flex-end; /* End से */
+justify-content: center; /* Center में */
+justify-content: space-between; /* Equal space between */
+justify-content: space-around; /* Equal space around */
+justify-content: space-evenly; /* Perfectly equal space */</div>
+                            
+                            <p style="margin-top: 15px;"><strong>flex-start:</strong></p>
+                            <div style="display: flex; justify-content: flex-start; gap: 10px; background: #f0f4ff; padding: 20px; border-radius: 5px;">
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">1</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">2</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">3</div>
+                            </div>
+
+                            <p style="margin-top: 15px;"><strong>center:</strong></p>
+                            <div style="display: flex; justify-content: center; gap: 10px; background: #f0f4ff; padding: 20px; border-radius: 5px;">
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">1</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">2</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">3</div>
+                            </div>
+
+                            <p style="margin-top: 15px;"><strong>space-between:</strong></p>
+                            <div style="display: flex; justify-content: space-between; background: #f0f4ff; padding: 20px; border-radius: 5px;">
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">1</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">2</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">3</div>
+                            </div>
+
+                            <p style="margin-top: 15px;"><strong>space-evenly:</strong></p>
+                            <div style="display: flex; justify-content: space-evenly; background: #f0f4ff; padding: 20px; border-radius: 5px;">
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">1</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">2</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px;">3</div>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">align-items (Cross axis पर alignment)</div>
+                            <div class="code-block">align-items: stretch; /* Default - full height */
+align-items: flex-start; /* Top */
+align-items: flex-end; /* Bottom */
+align-items: center; /* Center */
+align-items: baseline; /* Text baseline */</div>
+                            
+                            <p style="margin-top: 15px;"><strong>center (Perfect centering!):</strong></p>
+                            <div style="display: flex; align-items: center; justify-content: center; height: 150px; background: #f0f4ff; padding: 20px; border-radius: 5px;">
+                                <div style="background: #667eea; color: white; padding: 20px; border-radius: 5px;">Perfectly Centered!</div>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">flex-wrap (Wrapping control)</div>
+                            <div class="code-block">flex-wrap: nowrap; /* Default - single line */
+flex-wrap: wrap; /* Multiple lines */
+flex-wrap: wrap-reverse; /* Reverse order */</div>
+                            
+                            <p style="margin-top: 15px;"><strong>wrap (Responsive!):</strong></p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; background: #f0f4ff; padding: 20px; border-radius: 5px;">
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px; min-width: 100px;">1</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px; min-width: 100px;">2</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px; min-width: 100px;">3</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px; min-width: 100px;">4</div>
+                                <div style="background: #667eea; color: white; padding: 15px; border-radius: 5px; min-width: 100px;">5</div>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">gap (Space between items)</div>
+                            <div class="code-block">gap: 20px; /* All sides */
+gap: 10px 20px; /* Row gap, Column gap */
+row-gap: 10px;
+column-gap: 20px;</div>
+                            <div style="display: flex; gap: 20px; background: #f0f4ff; padding: 20px; border-radius: 5px; margin-top: 15px;">
+                                <div style="background: #667eea; color: white; padding: 20px; border-radius: 5px; flex: 1; text-align: center;">Item 1</div>
+                                <div style="background: #667eea; color: white; padding: 20px; border-radius: 5px; flex: 1; text-align: center;">Item 2</div>
+                                <div style="background: #667eea; color: white; padding: 20px; border-radius: 5px; flex: 1; text-align: center;">Item 3</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">🎯 Flex Item Properties</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">flex-grow (Extra space लेने की ability)</div>
+                            <div class="code-block">.item {
+    flex-grow: 1; /* Equal distribution */
+}
+
+.item-large {
+    flex-grow: 2; /* Double space */
+}</div>
+                            <div style="display: flex; gap: 10px; background: #f0f4ff; padding: 20px; border-radius: 5px; margin-top: 15px;">
+                                <div style="background: #667eea; color: white; padding: 20px; border-radius: 5px; flex-grow: 1; text-align: center;">flex-grow: 1</div>
+                                <div style="background: #ffc107; color: white; padding: 20px; border-radius: 5px; flex-grow: 2; text-align: center;">flex-grow: 2 (Double!)</div>
+                                <div style="background: #667eea; color: white; padding: 20px; border-radius: 5px; flex-grow: 1; text-align: center;">flex-grow: 1</div>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">flex-shrink (Shrink होने की ability)</div>
+                            <div class="code-block">.item {
+    flex-shrink: 1; /* Can shrink */
+}
+
+.item-fixed {
+    flex-shrink: 0; /* Won't shrink */
+}</div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">flex-basis (Initial size)</div>
+                            <div class="code-block">.item {
+    flex-basis: 200px; /* Starting width */
+    flex-basis: 30%; /* Percentage */
+    flex-basis: auto; /* Content size */
+}</div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">flex (Shorthand - सबसे common!)</div>
+                            <div class="code-block">/* flex: grow shrink basis */
+flex: 1; /* flex: 1 1 0 - Equal distribution */
+flex: 2; /* flex: 2 1 0 - Double space */
+flex: 0 0 200px; /* Fixed 200px width */
+flex: 1 0 auto; /* Grow but don't shrink */</div>
+                            <div style="display: flex; gap: 10px; background: #f0f4ff; padding: 20px; border-radius: 5px; margin-top: 15px;">
+                                <div style="background: #667eea; color: white; padding: 20px; border-radius: 5px; flex: 1; text-align: center;">flex: 1</div>
+                                <div style="background: #667eea; color: white; padding: 20px; border-radius: 5px; flex: 1; text-align: center;">flex: 1</div>
+                                <div style="background: #ffc107; color: white; padding: 20px; border-radius: 5px; flex: 2; text-align: center;">flex: 2</div>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">align-self (Individual alignment)</div>
+                            <div class="code-block">.item {
+    align-self: flex-start;
+    align-self: flex-end;
+    align-self: center;
+    align-self: stretch;
+}</div>
+                            <div style="display: flex; align-items: flex-start; height: 150px; gap: 10px; background: #f0f4ff; padding: 20px; border-radius: 5px; margin-top: 15px;">
+                                <div style="background: #667eea; color: white; padding: 20px; border-radius: 5px;">Normal</div>
+                                <div style="background: #ffc107; color: white; padding: 20px; border-radius: 5px; align-self: center;">align-self: center</div>
+                                <div style="background: #667eea; color: white; padding: 20px; border-radius: 5px;">Normal</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">🎨 Common Flexbox Patterns</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">1. Perfect Centering</div>
+                            <div class="code-block">.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}</div>
+                            <div style="display: flex; justify-content: center; align-items: center; height: 150px; background: #f0f4ff; border-radius: 5px; margin-top: 15px;">
+                                <div style="background: #667eea; color: white; padding: 20px; border-radius: 5px;">Perfectly Centered!</div>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">2. Navigation Bar</div>
+                            <div class="code-block">.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}</div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; background: #667eea; color: white; padding: 15px 20px; border-radius: 5px; margin-top: 15px;">
+                                <div style="font-weight: bold; font-size: 1.2em;">Logo</div>
+                                <div style="display: flex; gap: 20px;">
+                                    <span>Home</span>
+                                    <span>About</span>
+                                    <span>Contact</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">3. Card Grid (Responsive)</div>
+                            <div class="code-block">.grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    flex: 1 1 300px; /* Min 300px, then grow */
+}</div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 15px; background: #f0f4ff; padding: 20px; border-radius: 5px; margin-top: 15px;">
+                                <div style="flex: 1 1 150px; background: #667eea; color: white; padding: 30px; border-radius: 5px; text-align: center;">Card 1</div>
+                                <div style="flex: 1 1 150px; background: #667eea; color: white; padding: 30px; border-radius: 5px; text-align: center;">Card 2</div>
+                                <div style="flex: 1 1 150px; background: #667eea; color: white; padding: 30px; border-radius: 5px; text-align: center;">Card 3</div>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">4. Sidebar Layout</div>
+                            <div class="code-block">.container {
+    display: flex;
+}
+
+.sidebar {
+    flex: 0 0 250px; /* Fixed 250px */
+}
+
+.main {
+    flex: 1; /* Take remaining space */
+}</div>
+                            <div style="display: flex; gap: 15px; background: #f0f4ff; padding: 20px; border-radius: 5px; margin-top: 15px; min-height: 150px;">
+                                <div style="flex: 0 0 150px; background: #667eea; color: white; padding: 20px; border-radius: 5px;">Sidebar<br>(Fixed 150px)</div>
+                                <div style="flex: 1; background: #764ba2; color: white; padding: 20px; border-radius: 5px;">Main Content<br>(Flexible)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <h3 style="color: #667eea; margin-bottom: 15px;">💼 Interview Questions - Day 13</h3>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q1: Flexbox kya hai aur traditional layouts se kaise better hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                Flexbox एक modern CSS layout module है जो elements को flexible और responsive तरीके से arrange करता है।<br><br>
+                                <strong>Traditional (Float/Position) vs Flexbox:</strong><br>
+                                - Float: Complex, clearing issues, not intuitive<br>
+                                - Flexbox: Simple, powerful, intuitive<br><br>
+                                <span class="hinglish">Flexbox se layouts banana bahut easy ho gaya hai। Centering, equal heights, responsive grids - sab kuch simple ho gaya। Float aur positioning se bahut better hai।</span><br><br>
+                                <strong>Benefits:</strong><br>
+                                - Perfect centering (vertical + horizontal)<br>
+                                - Equal height columns automatically<br>
+                                - Responsive without media queries<br>
+                                - Reordering without changing HTML<br>
+                                - Better browser support
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q2: justify-content aur align-items mein kya difference hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>justify-content:</strong> Main axis (default: horizontal) पर alignment control करता है।<br>
+                                <strong>align-items:</strong> Cross axis (default: vertical) पर alignment control करता है।<br><br>
+                                <span class="hinglish">Agar flex-direction row hai to justify-content horizontal alignment control karega aur align-items vertical। Agar flex-direction column hai to ulta ho jayega।</span><br><br>
+                                <strong>Perfect Centering:</strong><br>
+                                <div class="code-block">.container {
+    display: flex;
+    justify-content: center; /* Horizontal center */
+    align-items: center; /* Vertical center */
+    height: 100vh;
+}</div>
+                                <strong>Common Values:</strong><br>
+                                - justify-content: flex-start, center, space-between, space-evenly<br>
+                                - align-items: flex-start, center, flex-end, stretch
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q3: flex: 1 ka kya matlab hai?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <code>flex: 1</code> एक shorthand property है जो तीन values set करती है:<br>
+                                - flex-grow: 1 (extra space ले सकता है)<br>
+                                - flex-shrink: 1 (shrink हो सकता है)<br>
+                                - flex-basis: 0 (starting size 0)<br><br>
+                                <span class="hinglish">flex: 1 ka matlab hai ki element available space ko equally distribute karega। Agar teen items hain aur sabko flex: 1 diya to teeno equal width lenge।</span><br><br>
+                                <strong>Example:</strong><br>
+                                <div class="code-block">/* Equal width columns */
+.item {
+    flex: 1; /* All items equal */
+}
+
+/* One item double width */
+.item-large {
+    flex: 2; /* Double space */
+}
+
+/* Fixed width item */
+.item-fixed {
+    flex: 0 0 200px; /* Fixed 200px */
+}</div>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q4: Flexbox se responsive layout kaise banate hain?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                Flexbox naturally responsive है। <code>flex-wrap: wrap</code> use करके items automatically next line पर चले जाते हैं।<br><br>
+                                <span class="hinglish">flex-wrap: wrap use karne se items screen size ke according adjust ho jate hain। Agar jagah kam hai to next line par chale jayenge। Media queries ki zarurat kam pad jati hai।</span><br><br>
+                                <strong>Responsive Card Grid:</strong><br>
+                                <div class="code-block">.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    flex: 1 1 300px; /* Min 300px, then grow */
+    /* Screen chhoti hogi to wrap ho jayega */
+}
+
+/* Mobile: 1 column
+   Tablet: 2 columns
+   Desktop: 3+ columns
+   Automatically! */</div>
+                                <strong>Key Properties:</strong><br>
+                                - flex-wrap: wrap (wrapping enable)<br>
+                                - flex: 1 1 300px (min-width with flexibility)<br>
+                                - gap: 20px (spacing between items)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAY 14: PROJECT -->
+            <div class="tab-content">
+                <div class="section">
+                    <h2 class="section-title">🚀 Day 14: Week 2 Project & Summary</h2>
+
+                    <div class="definition-box">
+                        <strong>Week 2 Complete! 🎉</strong><br><br>
+                        आपने CSS के सभी important concepts सीख लिए हैं। अब इन सबको एक साथ use करके एक complete responsive webpage बनाएंगे!
+                    </div>
+
+                    <div class="key-points">
+                        <strong>📚 What You Learned This Week:</strong>
+                        <ul>
+                            <li><strong>Day 8:</strong> CSS Basics, Selectors, Ways to Apply CSS</li>
+                            <li><strong>Day 9:</strong> Box Model, Padding, Margin, Border, Display Types</li>
+                            <li><strong>Day 10:</strong> Colors (RGB, RGBA, HSL), Backgrounds, Units (px, rem, vh, vw)</li>
+                            <li><strong>Day 11:</strong> Typography, Fonts, Google Fonts, Icons</li>
+                            <li><strong>Day 12:</strong> Positioning (relative, absolute, fixed, sticky), Z-index</li>
+                            <li><strong>Day 13:</strong> Flexbox (complete layout system)</li>
+                        </ul>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">🎨 Complete Project: Modern Landing Page</button>
+                    <div class="collapsible-content">
+                        <div class="example-box">
+                            <div class="example-title">Project Requirements</div>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>✅ Fixed navigation bar with logo and menu</li>
+                                <li>✅ Hero section with centered content (Flexbox)</li>
+                                <li>✅ Features section with cards (Flexbox grid)</li>
+                                <li>✅ Responsive design (flex-wrap)</li>
+                                <li>✅ Custom colors and gradients</li>
+                                <li>✅ Google Fonts</li>
+                                <li>✅ Icons (Font Awesome)</li>
+                                <li>✅ Proper spacing (margin, padding)</li>
+                                <li>✅ Hover effects</li>
+                                <li>✅ Footer with social links</li>
+                            </ul>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">Complete HTML + CSS Code</div>
+                            <div class="code-block">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Modern Landing Page&lt;/title&gt;
+    
+    &lt;!-- Google Fonts --&gt;
+    &lt;link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"&gt;
+    
+    &lt;!-- Font Awesome --&gt;
+    &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"&gt;
+    
+    &lt;style&gt;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #667eea;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 60px;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #667eea;
+        }
+
+        .features-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .feature-card {
+            flex: 1 1 300px;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #667eea;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .nav-menu {
+                gap: 1rem;
+            }
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Navigation --&gt;
+    &lt;nav class="navbar"&gt;
+        &lt;div class="nav-container"&gt;
+            &lt;div class="logo"&gt;MyBrand&lt;/div&gt;
+            &lt;ul class="nav-menu"&gt;
+                &lt;li&gt;&lt;a href="#home"&gt;Home&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#features"&gt;Features&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#contact"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/nav&gt;
+
+    &lt;!-- Hero Section --&gt;
+    &lt;section class="hero" id="home"&gt;
+        &lt;div class="hero-content"&gt;
+            &lt;h1&gt;Welcome to the Future&lt;/h1&gt;
+            &lt;p&gt;Build amazing websites with modern CSS&lt;/p&gt;
+            &lt;a href="#features" class="btn"&gt;Get Started&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;!-- Features Section --&gt;
+    &lt;section class="features" id="features"&gt;
+        &lt;h2 class="section-title"&gt;Our Features&lt;/h2&gt;
+        &lt;div class="features-grid"&gt;
+            &lt;div class="feature-card"&gt;
+                &lt;i class="fas fa-rocket feature-icon"&gt;&lt;/i&gt;
+                &lt;h3&gt;Fast Performance&lt;/h3&gt;
+                &lt;p&gt;Lightning fast load times for better user experience&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="feature-card"&gt;
+                &lt;i class="fas fa-mobile-alt feature-icon"&gt;&lt;/i&gt;
+                &lt;h3&gt;Responsive Design&lt;/h3&gt;
+                &lt;p&gt;Works perfectly on all devices and screen sizes&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="feature-card"&gt;
+                &lt;i class="fas fa-shield-alt feature-icon"&gt;&lt;/i&gt;
+                &lt;h3&gt;Secure & Reliable&lt;/h3&gt;
+                &lt;p&gt;Built with security and reliability in mind&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;!-- Footer --&gt;
+    &lt;footer class="footer"&gt;
+        &lt;p&gt;&copy; 2024 MyBrand. All rights reserved.&lt;/p&gt;
+        &lt;div class="social-links"&gt;
+            &lt;a href="#"&gt;&lt;i class="fab fa-facebook"&gt;&lt;/i&gt;&lt;/a&gt;
+            &lt;a href="#"&gt;&lt;i class="fab fa-twitter"&gt;&lt;/i&gt;&lt;/a&gt;
+            &lt;a href="#"&gt;&lt;i class="fab fa-instagram"&gt;&lt;/i&gt;&lt;/a&gt;
+            &lt;a href="#"&gt;&lt;i class="fab fa-linkedin"&gt;&lt;/i&gt;&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+                        </div>
+
+                        <div class="responsive-note">
+                            <strong>💡 What This Project Demonstrates:</strong><br>
+                            ✅ Fixed navbar (position: fixed)<br>
+                            ✅ Flexbox centering (hero section)<br>
+                            ✅ Responsive grid (flex-wrap)<br>
+                            ✅ Gradients (linear-gradient)<br>
+                            ✅ Google Fonts (Poppins)<br>
+                            ✅ Font Awesome icons<br>
+                            ✅ Hover effects (transform, box-shadow)<br>
+                            ✅ Box model (padding, margin)<br>
+                            ✅ Z-index (navbar on top)<br>
+                            ✅ Media queries (responsive)
+                        </div>
+                    </div>
+
+                    <button class="collapsible" onclick="toggleCollapsible(this)">📝 Week 2 Summary & Best Practices</button>
+                    <div class="collapsible-content">
+                        <div class="key-points">
+                            <strong>🎯 CSS Best Practices:</strong>
+                            <ul>
+                                <li>Always use <code>box-sizing: border-box</code></li>
+                                <li>Use <code>rem</code> for font sizes (not px)</li>
+                                <li>Use Flexbox for layouts (not float)</li>
+                                <li>Use external CSS files (not inline)</li>
+                                <li>Use meaningful class names (.btn, .card, not .blue-box)</li>
+                                <li>Group related styles together</li>
+                                <li>Use CSS variables for colors and spacing</li>
+                                <li>Mobile-first approach (start with mobile, then desktop)</li>
+                                <li>Use gap instead of margin for Flexbox spacing</li>
+                                <li>Test on multiple browsers and devices</li>
+                            </ul>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">CSS Variables (Modern Approach)</div>
+                            <div class="code-block">:root {
+    /* Colors */
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --text-color: #333;
+    --bg-color: #f5f5f5;
+    
+    /* Spacing */
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+    
+    /* Font sizes */
+    --font-sm: 0.875rem;
+    --font-md: 1rem;
+    --font-lg: 1.5rem;
+}
+
+/* Usage */
+.button {
+    background: var(--primary-color);
+    padding: var(--spacing-md);
+    font-size: var(--font-md);
+}</div>
+                        </div>
+
+                        <div class="responsive-note">
+                            <strong>🚀 Next Steps (Week 3):</strong><br>
+                            - CSS Grid (advanced layouts)<br>
+                            - Animations & Transitions<br>
+                            - Responsive Design (media queries)<br>
+                            - CSS Transforms<br>
+                            - Advanced Selectors<br>
+                            - CSS Frameworks (Bootstrap, Tailwind)
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <h3 style="color: #667eea; margin-bottom: 15px;">💼 Final Interview Questions - Week 2 Revision</h3>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q1: Modern website banane ke liye sabse important CSS concepts kaunse hain?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>Top 5 Essential Concepts:</strong><br><br>
+                                1. <strong>Box Model:</strong> Padding, margin, border समझना जरूरी है। box-sizing: border-box use करो।<br><br>
+                                2. <strong>Flexbox:</strong> Modern layouts के लिए। Centering, responsive grids, navigation - सब कुछ।<br><br>
+                                3. <strong>Positioning:</strong> Fixed navbar, modals, dropdowns के लिए। Relative, absolute, fixed समझो।<br><br>
+                                4. <strong>Units:</strong> rem use करो fonts के लिए, % या vw/vh responsive layouts के लिए।<br><br>
+                                5. <strong>Colors & Typography:</strong> RGBA for transparency, Google Fonts for professional look।<br><br>
+                                <span class="hinglish">Yeh 5 concepts master kar lo to aap koi bhi modern website bana sakte ho। Flexbox sabse important hai - isko achhe se practice karo।</span>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q2: Responsive website banane ke liye kya karna chahiye?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>Responsive Design Checklist:</strong><br><br>
+                                1. <strong>Viewport Meta Tag:</strong> &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;<br><br>
+                                2. <strong>Flexible Units:</strong> rem, %, vw, vh use करो (px नहीं)<br><br>
+                                3. <strong>Flexbox with flex-wrap:</strong> Automatic wrapping for different screens<br><br>
+                                4. <strong>Media Queries:</strong> Different styles for different screen sizes<br><br>
+                                5. <strong>Mobile-First:</strong> Pehle mobile design करो, फिर desktop<br><br>
+                                6. <strong>Images:</strong> max-width: 100% for responsive images<br><br>
+                                <span class="hinglish">Flexbox aur proper units use karne se bahut kuch automatically responsive ho jata hai। Media queries sirf fine-tuning ke liye use karo।</span>
+                            </div>
+                        </div>
+
+                        <div class="interview-question" onclick="toggleAnswer(this)">
+                            <div class="question-text">Q3: CSS performance improve karne ke liye kya karna chahiye?</div>
+                            <div class="answer-text">
+                                <strong>Answer:</strong><br>
+                                <strong>CSS Performance Tips:</strong><br><br>
+                                1. <strong>Minimize CSS:</strong> Remove unused styles, minify files<br><br>
+                                2. <strong>Avoid Complex Selectors:</strong> .class better than div > ul > li > a<br><br>
+                                3. <strong>Use Shorthand:</strong> margin: 10px 20px instead of 4 separate properties<br><br>
+                                4. <strong>Optimize Images:</strong> Compress, use appropriate formats<br><br>
+                                5. <strong>Reduce Repaints:</strong> Avoid changing layout properties frequently<br><br>
+                                6. <strong>CSS Variables:</strong> Reuse values, easier maintenance<br><br>
+                                <span class="hinglish">Simple selectors use karo, unnecessary styles mat likho, aur images optimize karo। Yeh basic tips follow karne se website fast load hogi।</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 15px; text-align: center; margin-top: 40px;">
+                        <h2 style="font-size: 2em; margin-bottom: 20px;">🎉 Congratulations!</h2>
+                        <p style="font-size: 1.2em; margin-bottom: 20px;">आपने Week 2 successfully complete कर लिया है!</p>
+                        <p style="font-size: 1.1em; opacity: 0.9;">अब आप modern, responsive websites बना सकते हैं। Keep practicing और Week 3 में मिलते हैं! 🚀</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 CSS Week 2 Study Guide - Created for Interview Preparation</p>
+            <p style="margin-top: 10px;">Keep Learning, Keep Building! 💪</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab switching
+        function switchTab(index) {
+            const tabs = document.querySelectorAll('.nav-tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            tabs[index].classList.add('active');
+            contents[index].classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Collapsible sections
+        function toggleCollapsible(element) {
+            element.classList.toggle('active');
+            const content = element.nextElementSibling;
+            
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+            } else {
+                content.classList.add('show');
+            }
+        }
+
+        // Interview question toggle
+        function toggleAnswer(element) {
+            element.classList.toggle('active');
+            const answer = element.querySelector('.answer-text');
+            answer.classList.toggle('show');
+        }
+
+        // Add click event to all interview questions
+        document.querySelectorAll('.interview-question').forEach(question => {
+            question.addEventListener('click', function() {
+                toggleAnswer(this);
+            });
+        });
+    </script>
+</body>
+</html>

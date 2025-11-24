@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Float and Clear Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #007bff;
+            margin-top: 30px;
+        }
+        
+        .example-box {
+            background: #e9ecef;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #007bff;
+            border-radius: 5px;
+        }
+        
+        .demo-area {
+            background: #fff;
+            border: 2px dashed #007bff;
+            padding: 20px;
+            margin: 15px 0;
+            min-height: 100px;
+        }
+        
+        /* Float Examples */
+        .float-left {
+            float: left;
+            width: 150px;
+            height: 100px;
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            margin: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
+        
+        .float-right {
+            float: right;
+            width: 150px;
+            height: 100px;
+            background: #dc3545;
+            color: white;
+            padding: 10px;
+            margin: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
+        
+        .normal-text {
+            background: #ffc107;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        
+        /* Clear Examples */
+        .clear-left {
+            clear: left;
+            background: #17a2b8;
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .clear-right {
+            clear: right;
+            background: #6f42c1;
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .clear-both {
+            clear: both;
+            background: #fd7e14;
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        /* Interactive buttons */
+        .control-panel {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        .reset-btn {
+            background: #6c757d;
+        }
+        
+        .reset-btn:hover {
+            background: #545b62;
+        }
+        
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 CSS Float and Clear - Simple Guide</h1>
+        
+        <div class="highlight">
+            <strong>What is Float?</strong><br>
+            Float moves an element to the left or right side of its container. Other content flows around it like water flowing around a rock in a river!
+        </div>
+        
+        <h2>1. Float Left Example</h2>
+        <div class="example-box">
+            <p>The green box is floated left. Watch how text wraps around it:</p>
+            <div class="demo-area">
+                <div class="float-left">I'm floating left!</div>
+                <div class="normal-text">This is normal text. See how it flows around the floated element? It's like the floated box is a rock in a river and the text is water flowing around it. This is the main purpose of float - to make text wrap around images or other elements.</div>
+            </div>
+        </div>
+        
+        <div class="code-example">
+.float-left {
+    float: left;
+    width: 150px;
+    height: 100px;
+}
+        </div>
+        
+        <h2>2. Float Right Example</h2>
+        <div class="example-box">
+            <p>The red box is floated right:</p>
+            <div class="demo-area">
+                <div class="float-right">I'm floating right!</div>
+                <div class="normal-text">This text wraps around the right-floated element. Notice how the text starts from the left but wraps around the red box on the right side. This is commonly used for images in articles.</div>
+            </div>
+        </div>
+        
+        <div class="code-example">
+.float-right {
+    float: right;
+    width: 150px;
+    height: 100px;
+}
+        </div>
+        
+        <h2>3. Both Left and Right Float</h2>
+        <div class="example-box">
+            <p>Green floated left, red floated right:</p>
+            <div class="demo-area">
+                <div class="float-left">Left float</div>
+                <div class="float-right">Right float</div>
+                <div class="normal-text">This text flows between both floated elements. It's squeezed in the middle space. This creates a nice layout effect!</div>
+            </div>
+        </div>
+        
+        <div class="highlight">
+            <strong>What is Clear?</strong><br>
+            Clear stops elements from flowing around floated elements. It's like saying "I don't want to be next to any floated elements!"
+        </div>
+        
+        <h2>4. Clear Left Example</h2>
+        <div class="example-box">
+            <p>Blue box uses clear: left to avoid left-floated elements:</p>
+            <div class="demo-area">
+                <div class="float-left">I'm floating left</div>
+                <div class="normal-text">This text wraps around the floated element.</div>
+                <div class="clear-left">I use clear: left - I won't be next to left-floated elements!</div>
+            </div>
+        </div>
+        
+        <div class="code-example">
+.clear-left {
+    clear: left;
+}
+        </div>
+        
+        <h2>5. Clear Right Example</h2>
+        <div class="example-box">
+            <p>Purple box uses clear: right:</p>
+            <div class="demo-area">
+                <div class="float-right">I'm floating right</div>
+                <div class="normal-text">This text wraps around the right-floated element.</div>
+                <div class="clear-right">I use clear: right - I won't be next to right-floated elements!</div>
+            </div>
+        </div>
+        
+        <h2>6. Clear Both Example</h2>
+        <div class="example-box">
+            <p>Orange box uses clear: both (most common):</p>
+            <div class="demo-area">
+                <div class="float-left">Left float</div>
+                <div class="float-right">Right float</div>
+                <div class="normal-text">Text flows between both floated elements.</div>
+                <div class="clear-both">I use clear: both - I won't be next to ANY floated elements!</div>
+            </div>
+        </div>
+        
+        <div class="code-example">
+.clear-both {
+    clear: both;  /* This is the most commonly used */
+}
+        </div>
+        
+        <h2>🎮 Interactive Demo</h2>
+        <div class="control-panel">
+            <p>Click buttons to see different float and clear effects:</p>
+            <button onclick="showFloatLeft()">Float Left</button>
+            <button onclick="showFloatRight()">Float Right</button>
+            <button onclick="showFloatBoth()">Float Both</button>
+            <button onclick="showClearDemo()">Clear Demo</button>
+            <button onclick="resetDemo()" class="reset-btn">Reset</button>
+        </div>
+        
+        <div class="demo-area" id="interactive-demo">
+            <div id="demo-content">
+                <p>Click a button above to see different float and clear effects in action!</p>
+            </div>
+        </div>
+        
+        <div class="highlight">
+            <strong>Key Points to Remember:</strong><br>
+            • <strong>Float:</strong> Moves element left or right, other content flows around it<br>
+            • <strong>Clear:</strong> Stops flowing around floated elements<br>
+            • <strong>clear: both</strong> is most commonly used<br>
+            • Modern CSS uses Flexbox and Grid instead of float for layouts<br>
+            • Float is still useful for wrapping text around images
+        </div>
+        
+        <h2>Common Use Cases</h2>
+        <div class="example-box">
+            <p><strong>1. Image in text (like in newspapers):</strong></p>
+            <div class="demo-area">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzMzNzNkYyIvPgogIDx0ZXh0IHg9IjUwIiB5PSI1NSIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiPklNQUdFPC90ZXh0Pgo8L3N2Zz4=" style="float: left; margin: 0 15px 10px 0;">
+                <p>This is how you create magazine-style layouts where images float and text wraps around them naturally. The image floats left and the text flows around it beautifully.</p>
+            </div>
+        </div>
+        
+        <div class="example-box">
+            <p><strong>2. Simple two-column layout:</strong></p>
+            <div class="demo-area">
+                <div style="float: left; width: 48%; background: #e9ecef; padding: 15px; margin-right: 2%;">
+                    <h4>Left Column</h4>
+                    <p>This could be your main content area.</p>
+                </div>
+                <div style="float: right; width: 48%; background: #f8f9fa; padding: 15px; margin-left: 2%;">
+                    <h4>Right Column</h4>
+                    <p>This could be your sidebar with links and info.</p>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showFloatLeft() {
+            document.getElementById('demo-content').innerHTML = `
+                <div style="float: left; width: 120px; height: 80px; background: #28a745; color: white; padding: 10px; margin: 10px; text-align: center; border-radius: 5px;">
+                    Floating Left!
+                </div>
+                <p style="background: #ffc107; padding: 10px; margin: 5px 0; border-radius: 5px;">
+                    This text wraps around the left-floated green box. See how it flows naturally around it? This is the magic of float!
+                </p>
+            `;
+        }
+        
+        function showFloatRight() {
+            document.getElementById('demo-content').innerHTML = `
+                <div style="float: right; width: 120px; height: 80px; background: #dc3545; color: white; padding: 10px; margin: 10px; text-align: center; border-radius: 5px;">
+                    Floating Right!
+                </div>
+                <p style="background: #ffc107; padding: 10px; margin: 5px 0; border-radius: 5px;">
+                    This text wraps around the right-floated red box. Notice how the text starts from the left but gives space to the floated element on the right.
+                </p>
+            `;
+        }
+        
+        function showFloatBoth() {
+            document.getElementById('demo-content').innerHTML = `
+                <div style="float: left; width: 100px; height: 60px; background: #28a745; color: white; padding: 10px; margin: 10px; text-align: center; border-radius: 5px;">
+                    Left
+                </div>
+                <div style="float: right; width: 100px; height: 60px; background: #dc3545; color: white; padding: 10px; margin: 10px; text-align: center; border-radius: 5px;">
+                    Right
+                </div>
+                <p style="background: #ffc107; padding: 10px; margin: 5px 0; border-radius: 5px;">
+                    This text is squeezed between both floated elements. It flows in the middle space that's left!
+                </p>
+            `;
+        }
+        
+        function showClearDemo() {
+            document.getElementById('demo-content').innerHTML = `
+                <div style="float: left; width: 100px; height: 60px; background: #28a745; color: white; padding: 10px; margin: 10px; text-align: center; border-radius: 5px;">
+                    Floating Left
+                </div>
+                <p style="background: #ffc107; padding: 10px; margin: 5px 0; border-radius: 5px;">
+                    This text wraps around the floated element.
+                </p>
+                <div style="clear: both; background: #17a2b8; color: white; padding: 10px; margin: 10px 0; border-radius: 5px;">
+                    I use clear: both - I won't be next to any floated elements!
+                </div>
+            `;
+        }
+        
+        function resetDemo() {
+            document.getElementById('demo-content').innerHTML = `
+                <p>Click a button above to see different float and clear effects in action!</p>
+            `;
+        }
+    </script>
+</body>
+</html>

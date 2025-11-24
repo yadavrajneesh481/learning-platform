@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSX & Components - Interactive Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin: 25px 0 15px 0;
+            font-size: 1.4em;
+        }
+
+        .hinglish {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+
+        .code-block code {
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .keyword {
+            color: #c678dd;
+        }
+
+        .string {
+            color: #98c379;
+        }
+
+        .function {
+            color: #61afef;
+        }
+
+        .comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+
+        .interactive-demo {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .demo-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .component-box {
+            border: 2px dashed #667eea;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #f5f7ff;
+            transition: all 0.3s;
+        }
+
+        .component-box:hover {
+            background: #e8ecff;
+            transform: scale(1.02);
+        }
+
+        .output-area {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            min-height: 50px;
+            font-family: monospace;
+        }
+
+        .tab-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .comparison-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .lifecycle-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .lifecycle-step {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            position: relative;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-section {
+            background: #fff3e0;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 40px;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 5px solid #ff9800;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .question:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .question-number {
+            color: #ff9800;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .question-text {
+            margin: 10px 0;
+            font-weight: 600;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-top: 10px;
+        }
+
+        .easy {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .medium {
+            background: #fff9c4;
+            color: #f57f17;
+        }
+
+        .hard {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+
+        .answer {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            border-left: 3px solid #4caf50;
+        }
+
+        .answer.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 JSX & React Components</h1>
+            <p>Deep Dive into React's Core Building Blocks</p>
+        </header>
+
+        <div class="content">
+            <!-- Section 1: JSX Deep Understanding -->
+            <div class="section">
+                <h2>1. JSX - JavaScript XML</h2>
+                
+                <div class="hinglish">
+                    <strong>Kya hai JSX?</strong> JSX ek syntax extension hai JavaScript ka, jo aapko HTML jaisa code likhne deta hai JavaScript files mein. Yeh React ka ek powerful feature hai jo UI ko describe karna bahut easy banata hai.
+                </div>
+
+                <h3>Why JSX Exists?</h3>
+                <p>React mein JSX use karne ke main reasons:</p>
+                <ul style="margin-left: 30px; margin-top: 10px;">
+                    <li><strong>Readability:</strong> HTML-like syntax samajhna easy hai</li>
+                    <li><strong>Type Safety:</strong> Compile time pe errors catch kar sakte hain</li>
+                    <li><strong>JavaScript Power:</strong> Full JavaScript features use kar sakte hain</li>
+                    <li><strong>Performance:</strong> Babel compile karte waqt optimize kar deta hai</li>
+                </ul>
+
+                <div class="hinglish">
+                    <strong>Important:</strong> JSX optional hai, but React community mein yeh standard practice hai kyunki yeh code ko clean aur maintainable banata hai.
+                </div>
+
+                <h3>JSX Transformation</h3>
+                <div class="interactive-demo">
+                    <div class="demo-title">🔄 JSX to JavaScript Transformation</div>
+                    <div class="tab-container">
+                        <div class="tab active" onclick="switchTab(0)">JSX Code</div>
+                        <div class="tab" onclick="switchTab(1)">Compiled JavaScript</div>
+                    </div>
+                    <div class="tab-content active" id="tab0">
+                        <div class="code-block">
+<code><span class="keyword">const</span> element = (
+  &lt;<span class="function">div</span> className=<span class="string">"container"</span>&gt;
+    &lt;<span class="function">h1</span>&gt;Hello, React!&lt;/<span class="function">h1</span>&gt;
+    &lt;<span class="function">p</span>&gt;Welcome to JSX&lt;/<span class="function">p</span>&gt;
+  &lt;/<span class="function">div</span>&gt;
+);</code>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="tab1">
+                        <div class="code-block">
+<code><span class="keyword">const</span> element = React.<span class="function">createElement</span>(
+  <span class="string">'div'</span>,
+  { className: <span class="string">'container'</span> },
+  React.<span class="function">createElement</span>(<span class="string">'h1'</span>, <span class="keyword">null</span>, <span class="string">'Hello, React!'</span>),
+  React.<span class="function">createElement</span>(<span class="string">'p'</span>, <span class="keyword">null</span>, <span class="string">'Welcome to JSX'</span>)
+);</code>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>JSX Rules & Pitfalls</h3>
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>✅ Correct JSX</h4>
+                        <div class="code-block">
+<code><span class="comment">// Single parent element</span>
+<span class="keyword">return</span> (
+  &lt;<span class="function">div</span>&gt;
+    &lt;<span class="function">h1</span>&gt;Title&lt;/<span class="function">h1</span>&gt;
+    &lt;<span class="function">p</span>&gt;Content&lt;/<span class="function">p</span>&gt;
+  &lt;/<span class="function">div</span>&gt;
+);</code>
+                        </div>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>❌ Wrong JSX</h4>
+                        <div class="code-block">
+<code><span class="comment">// Multiple parent elements</span>
+<span class="keyword">return</span> (
+  &lt;<span class="function">h1</span>&gt;Title&lt;/<span class="function">h1</span>&gt;
+  &lt;<span class="function">p</span>&gt;Content&lt;/<span class="function">p</span>&gt;
+);</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hinglish">
+                    <strong>Important Rules:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><code>className</code> use karo, <code>class</code> nahi (JavaScript reserved word hai)</li>
+                        <li>All tags ko close karna zaroori hai: <code>&lt;img /&gt;</code>, <code>&lt;br /&gt;</code></li>
+                        <li>camelCase property names: <code>onClick</code>, <code>backgroundColor</code></li>
+                        <li>JavaScript expressions <code>{}</code> mein wrap karo</li>
+                        <li>Comments: <code>{/* yeh comment hai */}</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 2: Components -->
+            <div class="section">
+                <h2>2. React Components</h2>
+                
+                <div class="hinglish">
+                    <strong>Components kya hain?</strong> Components React applications ke building blocks hain. Yeh reusable, independent pieces hain jo apna khud ka logic aur UI maintain karte hain.
+                </div>
+
+                <h3>Functional vs Class Components</h3>
+                <div class="interactive-demo">
+                    <div class="demo-title">📊 Component Comparison</div>
+                    <button onclick="showComparison('functional')">Functional Component</button>
+                    <button onclick="showComparison('class')">Class Component</button>
+                    
+                    <div id="functional-example" class="component-box" style="display: none;">
+                        <h4>Functional Component (Modern Approach)</h4>
+                        <div class="code-block">
+<code><span class="keyword">import</span> React, { useState, useEffect } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">function</span> <span class="function">Welcome</span>(props) {
+  <span class="keyword">const</span> [count, setCount] = <span class="function">useState</span>(<span class="string">0</span>);
+  
+  <span class="function">useEffect</span>(() => {
+    <span class="comment">// Side effects yahan</span>
+    console.<span class="function">log</span>(<span class="string">'Component mounted'</span>);
+  }, []);
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="function">div</span>&gt;
+      &lt;<span class="function">h1</span>&gt;Hello, {props.name}!&lt;/<span class="function">h1</span>&gt;
+      &lt;<span class="function">p</span>&gt;Count: {count}&lt;/<span class="function">p</span>&gt;
+      &lt;<span class="function">button</span> onClick={() => <span class="function">setCount</span>(count + <span class="string">1</span>)}&gt;
+        Increment
+      &lt;/<span class="function">button</span>&gt;
+    &lt;/<span class="function">div</span>&gt;
+  );
+}</code>
+                        </div>
+                        <div class="hinglish">
+                            <strong>Modern approach:</strong> Functional components hooks ke saath bahut powerful hain. Aajkal yahi preferred method hai.
+                        </div>
+                    </div>
+
+                    <div id="class-example" class="component-box" style="display: none;">
+                        <h4>Class Component (Legacy Approach)</h4>
+                        <div class="code-block">
+<code><span class="keyword">import</span> React, { Component } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">class</span> <span class="function">Welcome</span> <span class="keyword">extends</span> Component {
+  <span class="function">constructor</span>(props) {
+    <span class="keyword">super</span>(props);
+    <span class="keyword">this</span>.state = { count: <span class="string">0</span> };
+  }
+  
+  <span class="function">componentDidMount</span>() {
+    console.<span class="function">log</span>(<span class="string">'Component mounted'</span>);
+  }
+  
+  <span class="function">handleClick</span> = () => {
+    <span class="keyword">this</span>.<span class="function">setState</span>({ count: <span class="keyword">this</span>.state.count + <span class="string">1</span> });
+  }
+  
+  <span class="function">render</span>() {
+    <span class="keyword">return</span> (
+      &lt;<span class="function">div</span>&gt;
+        &lt;<span class="function">h1</span>&gt;Hello, {<span class="keyword">this</span>.props.name}!&lt;/<span class="function">h1</span>&gt;
+        &lt;<span class="function">p</span>&gt;Count: {<span class="keyword">this</span>.state.count}&lt;/<span class="function">p</span>&gt;
+        &lt;<span class="function">button</span> onClick={<span class="keyword">this</span>.handleClick}&gt;
+          Increment
+        &lt;/<span class="function">button</span>&gt;
+      &lt;/<span class="function">div</span>&gt;
+    );
+  }
+}</code>
+                        </div>
+                        <div class="hinglish">
+                            <strong>Legacy approach:</strong> Class components purane codebase mein milenge. Naye projects mein functional components use karte hain.
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Why Functional Components Today?</h3>
+                <ul style="margin-left: 30px; margin-top: 10px;">
+                    <li><strong>Simplicity:</strong> Less boilerplate code</li>
+                    <li><strong>Hooks:</strong> State aur lifecycle features easily use kar sakte hain</li>
+                    <li><strong>Performance:</strong> Lightweight aur faster</li>
+                    <li><strong>Testing:</strong> Test karna easy hai</li>
+                    <li><strong>Future:</strong> React team ka focus functional components pe hai</li>
+                </ul>
+            </div>
+
+            <!-- Section 3: Component Re-rendering -->
+            <div class="section">
+                <h2>3. Component Re-rendering Cycle</h2>
+                
+                <div class="hinglish">
+                    <strong>Re-rendering kab hoti hai?</strong> Jab component ka state ya props change hote hain, tab React us component ko re-render karta hai.
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🔄 Live Re-rendering Demo</div>
+                    <div class="component-box">
+                        <p>Render Count: <span id="render-count">0</span></p>
+                        <button onclick="triggerRerender()">Trigger Re-render</button>
+                        <button onclick="resetRenderCount()">Reset</button>
+                        <div class="output-area" id="rerender-log"></div>
+                    </div>
+                </div>
+
+                <h3>Re-rendering Triggers</h3>
+                <div class="lifecycle-diagram">
+                    <div class="lifecycle-step">
+                        <strong>1. State Change:</strong> setState ya useState hook se state update
+                    </div>
+                    <div class="lifecycle-step">
+                        <strong>2. Props Change:</strong> Parent se nayi props milna
+                    </div>
+                    <div class="lifecycle-step">
+                        <strong>3. Parent Re-render:</strong> Parent component re-render hone pe child bhi
+                    </div>
+                    <div class="lifecycle-step">
+                        <strong>4. Context Change:</strong> Context value update hone pe
+                    </div>
+                    <div class="lifecycle-step">
+                        <strong>5. Force Update:</strong> forceUpdate() method (avoid karna chahiye)
+                    </div>
+                </div>
+
+                <div class="hinglish">
+                    <strong>Performance Tip:</strong> Unnecessary re-renders se bachne ke liye React.memo, useMemo, aur useCallback hooks use karo.
+                </div>
+            </div>
+
+            <!-- Section 4: Component Composition -->
+            <div class="section">
+                <h2>4. Component Composition</h2>
+                
+                <div class="hinglish">
+                    <strong>Composition ka matlab:</strong> Chhote components ko combine karke bade components banana. Yeh React ka ek fundamental pattern hai.
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🧩 Composition Example</div>
+                    <div class="code-block">
+<code><span class="comment">// Base Button Component</span>
+<span class="keyword">function</span> <span class="function">Button</span>({ children, onClick, type }) {
+  <span class="keyword">return</span> (
+    &lt;<span class="function">button</span> className={<span class="string">`btn btn-${type}`</span>} onClick={onClick}&gt;
+      {children}
+    &lt;/<span class="function">button</span>&gt;
+  );
+}
+
+<span class="comment">// Dialog Component using Button</span>
+<span class="keyword">function</span> <span class="function">Dialog</span>({ title, message, onConfirm, onCancel }) {
+  <span class="keyword">return</span> (
+    &lt;<span class="function">div</span> className=<span class="string">"dialog"</span>&gt;
+      &lt;<span class="function">h2</span>&gt;{title}&lt;/<span class="function">h2</span>&gt;
+      &lt;<span class="function">p</span>&gt;{message}&lt;/<span class="function">p</span>&gt;
+      &lt;<span class="function">Button</span> type=<span class="string">"primary"</span> onClick={onConfirm}&gt;
+        Confirm
+      &lt;/<span class="function">Button</span>&gt;
+      &lt;<span class="function">Button</span> type=<span class="string">"secondary"</span> onClick={onCancel}&gt;
+        Cancel
+      &lt;/<span class="function">Button</span>&gt;
+    &lt;/<span class="function">div</span>&gt;
+  );
+}</code>
+                    </div>
+                </div>
+
+                <div class="hinglish">
+                    <strong>Benefits of Composition:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Code reusability badhti hai</li>
+                        <li>Maintenance easy ho jata hai</li>
+                        <li>Testing individual components ki asaan hai</li>
+                        <li>Flexibility milti hai design changes ke liye</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 5: Props & Functions -->
+            <div class="section">
+                <h2>5. Passing Functions Between Components</h2>
+                
+                <div class="hinglish">
+                    <strong>Functions as Props:</strong> React mein parent component se child component ko functions pass kar sakte hain. Isse child parent ko update kar sakta hai.
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">📤 Parent-Child Communication Demo</div>
+                    <button onclick="demonstrateCallback()">Send Message from Child</button>
+                    <div class="output-area" id="callback-demo"></div>
+                </div>
+
+                <div class="code-block">
+<code><span class="comment">// Parent Component</span>
+<span class="keyword">function</span> <span class="function">Parent</span>() {
+  <span class="keyword">const</span> [message, setMessage] = <span class="function">useState</span>(<span class="string">''</span>);
+  
+  <span class="keyword">const</span> handleChildMessage = (msg) => {
+    <span class="function">setMessage</span>(msg);
+    console.<span class="function">log</span>(<span class="string">'Child ne bheja:'</span>, msg);
+  };
+  
+  <span class="keyword">return</span> (
+    &lt;<span class="function">div</span>&gt;
+      &lt;<span class="function">h2</span>&gt;Parent: {message}&lt;/<span class="function">h2</span>&gt;
+      &lt;<span class="function">Child</span> onSendMessage={handleChildMessage} /&gt;
+    &lt;/<span class="function">div</span>&gt;
+  );
+}
+
+<span class="comment">// Child Component</span>
+<span class="keyword">function</span> <span class="function">Child</span>({ onSendMessage }) {
+  <span class="keyword">return</span> (
+    &lt;<span class="function">button</span> onClick={() => <span class="function">onSendMessage</span>(<span class="string">'Hello Parent!'</span>)}&gt;
+      Send Message
+    &lt;/<span class="function">button</span>&gt;
+  );
+}</code>
+                </div>
+
+                <h3>Default Props & PropTypes</h3>
+                <div class="code-block">
+<code><span class="keyword">import</span> PropTypes <span class="keyword">from</span> <span class="string">'prop-types'</span>;
+
+<span class="keyword">function</span> <span class="function">UserCard</span>({ name, age, email, role }) {
+  <span class="keyword">return</span> (
+    &lt;<span class="function">div</span> className=<span class="string">"user-card"</span>&gt;
+      &lt;<span class="function">h3</span>&gt;{name}&lt;/<span class="function">h3</span>&gt;
+      &lt;<span class="function">p</span>&gt;Age: {age}&lt;/<span class="function">p</span>&gt;
+      &lt;<span class="function">p</span>&gt;Email: {email}&lt;/<span class="function">p</span>&gt;
+      &lt;<span class="function">p</span>&gt;Role: {role}&lt;/<span class="function">p</span>&gt;
+    &lt;/<span class="function">div</span>&gt;
+  );
+}
+
+<span class="comment">// PropTypes for type checking</span>
+UserCard.propTypes = {
+  name: PropTypes.<span class="function">string</span>.isRequired,
+  age: PropTypes.<span class="function">number</span>.isRequired,
+  email: PropTypes.<span class="function">string</span>,
+  role: PropTypes.<span class="function">oneOf</span>([<span class="string">'admin'</span>, <span class="string">'user'</span>, <span class="string">'guest'</span>])
+};
+
+<span class="comment">// Default props</span>
+UserCard.defaultProps = {
+  email: <span class="string">'Not provided'</span>,
+  role: <span class="string">'guest'</span>
+};</code>
+                </div>
+
+                <div class="hinglish">
+                    <strong>PropTypes ka fayda:</strong> Development mein wrong type ke props pass hone pe warning milti hai. Production mein yeh check nahi hota performance ke liye.
+                </div>
+            </div>
+
+            <!-- Interview Questions -->
+            <div class="question-section">
+                <h2 style="color: #ff9800; margin-bottom: 20px;">🎯 Interview Questions</h2>
+                
+                <div class="question" onclick="toggleAnswer(1)">
+                    <div class="question-number">Q1.</div>
+                    <div class="question-text">What is JSX and why do we use it in React? Can you write React code without JSX?</div>
+                    <span class="difficulty easy">Easy</span>
+                    <div class="answer" id="answer1">
+                        <strong>Answer:</strong><br>
+                        JSX (JavaScript XML) is a syntax extension for JavaScript that allows us to write HTML-like code in JavaScript files. 
+                        <br><br>
+                        <strong>Why we use JSX:</strong>
+                        <ul>
+                            <li>More readable and intuitive than React.createElement()</li>
+                            <li>Easier to visualize UI structure</li>
+                            <li>Compile-time error checking</li>
+                            <li>Better developer experience</li>
+                        </ul>
+                        <br>
+                        <strong>Yes, you can write React without JSX:</strong> You can use React.createElement() directly, but it's verbose and less readable.
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(2)">
+                    <div class="question-number">Q2.</div>
+                    <div class="question-text">Explain the difference between Functional and Class components. Why are Functional components preferred today?</div>
+                    <span class="difficulty easy">Easy</span>
+                    <div class="answer" id="answer2">
+                        <strong>Answer:</strong><br>
+                        <strong>Class Components:</strong>
+                        <ul>
+                            <li>Use ES6 class syntax</li>
+                            <li>Have lifecycle methods (componentDidMount, etc.)</li>
+                            <li>Use this.state and this.setState</li>
+                            <li>More boilerplate code</li>
+                        </ul>
+                        <br>
+                        <strong>Functional Components:</strong>
+                        <ul>
+                            <li>Simple JavaScript functions</li>
+                            <li>Use Hooks for state and lifecycle (useState, useEffect)</li>
+                            <li>No 'this' binding issues</li>
+                            <li>Cleaner and more concise</li>
+                        </ul>
+                        <br>
+                        <strong>Why Functional Components are preferred:</strong>
+                        <ul>
+                            <li>Easier to read, test, and debug</li>
+                            <li>Better performance (less overhead)</li>
+                            <li>Hooks provide more flexibility than lifecycle methods</li>
+                            <li>React team's official recommendation</li>
+                            <li>Easier to extract custom logic into custom hooks</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(3)">
+                    <div class="question-number">Q3.</div>
+                    <div class="question-text">What triggers a component to re-render in React? How can you optimize unnecessary re-renders?</div>
+                    <span class="difficulty medium">Medium</span>
+                    <div class="answer" id="answer3">
+                        <strong>Answer:</strong><br>
+                        <strong>Re-render Triggers:</strong>
+                        <ul>
+                            <li><strong>State change:</strong> When setState/useState updates state</li>
+                            <li><strong>Props change:</strong> When parent passes new props</li>
+                            <li><strong>Parent re-render:</strong> Child components re-render by default</li>
+                            <li><strong>Context change:</strong> When Context value updates</li>
+                            <li><strong>forceUpdate():</strong> Manual trigger (should be avoided)</li>
+                        </ul>
+                        <br>
+                        <strong>Optimization Techniques:</strong>
+                        <ul>
+                            <li><strong>React.memo():</strong> Memoize functional components</li>
+                            <li><strong>useMemo():</strong> Memoize expensive calculations</li>
+                            <li><strong>useCallback():</strong> Memoize functions</li>
+                            <li><strong>Key prop:</strong> Proper key usage in lists</li>
+                            <li><strong>Code splitting:</strong> Lazy loading with React.lazy()</li>
+                            <li><strong>Avoid inline functions:</strong> In JSX props</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(4)">
+                    <div class="question-number">Q4.</div>
+                    <div class="question-text">Explain component composition in React. How is it different from inheritance?</div>
+                    <span class="difficulty medium">Medium</span>
+                    <div class="answer" id="answer4">
+                        <strong>Answer:</strong><br>
+                        <strong>Component Composition:</strong> Building complex UIs by combining simpler, reusable components. React recommends composition over inheritance.
+                        <br><br>
+                        <strong>Composition Patterns:</strong>
+                        <ul>
+                            <li><strong>Containment:</strong> Using children prop to nest components</li>
+                            <li><strong>Specialization:</strong> Creating specific versions of generic components</li>
+                            <li><strong>Props-based composition:</strong> Passing components as props</li>
+                        </ul>
+                        <br>
+                        <strong>Why Composition over Inheritance:</strong>
+                        <ul>
+                            <li>More flexible and reusable</li>
+                            <li>Easier to understand and maintain</li>
+                            <li>Avoids deep inheritance hierarchies</li>
+                            <li>Better separation of concerns</li>
+                            <li>React doesn't recommend using inheritance for component reuse</li>
+                        </ul>
+                        <br>
+                        <strong>Example:</strong> Instead of creating ButtonBase class and extending it, create a Button component and compose it with different props and children.
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(5)">
+                    <div class="question-number">Q5.</div>
+                    <div class="question-text">How do you pass data from child component to parent component? Explain with an example.</div>
+                    <span class="difficulty medium">Medium</span>
+                    <div class="answer" id="answer5">
+                        <strong>Answer:</strong><br>
+                        In React, data flows from parent to child via props. To send data from child to parent, we pass a callback function from parent to child.
+                        <br><br>
+                        <strong>Pattern:</strong>
+                        <ol>
+                            <li>Parent creates a function</li>
+                            <li>Parent passes this function to child as a prop</li>
+                            <li>Child calls this function with data as argument</li>
+                            <li>Parent receives and processes the data</li>
+                        </ol>
+                        <br>
+                        <strong>Example:</strong>
+                        <div class="code-block">
+<code><span class="comment">// Parent</span>
+<span class="keyword">function</span> <span class="function">Parent</span>() {
+  <span class="keyword">const</span> handleData = (data) => {
+    console.<span class="function">log</span>(<span class="string">'Received from child:'</span>, data);
+  };
+  <span class="keyword">return</span> &lt;<span class="function">Child</span> onSendData={handleData} /&gt;;
+}
+
+<span class="comment">// Child</span>
+<span class="keyword">function</span> <span class="function">Child</span>({ onSendData }) {
+  <span class="keyword">return</span> (
+    &lt;<span class="function">button</span> onClick={() => <span class="function">onSendData</span>(<span class="string">'Hello Parent'</span>)}&gt;
+      Send to Parent
+    &lt;/<span class="function">button</span>&gt;
+  );
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(6)">
+                    <div class="question-number">Q6.</div>
+                    <div class="question-text">What are PropTypes and defaultProps? Why are they important? Are they still used in modern React?</div>
+                    <span class="difficulty medium">Medium</span>
+                    <div class="answer" id="answer6">
+                        <strong>Answer:</strong><br>
+                        <strong>PropTypes:</strong> A type-checking mechanism for component props. It validates that components receive props of the correct type.
+                        <br><br>
+                        <strong>defaultProps:</strong> Specifies default values for props when they're not provided by the parent.
+                        <br><br>
+                        <strong>Importance:</strong>
+                        <ul>
+                            <li>Catches bugs early in development</li>
+                            <li>Documents component API</li>
+                            <li>Improves code reliability</li>
+                            <li>Provides runtime warnings</li>
+                        </ul>
+                        <br>
+                        <strong>Modern Usage:</strong>
+                        <ul>
+                            <li>Still used but less common</li>
+                            <li>TypeScript is preferred for type checking</li>
+                            <li>PropTypes run only in development mode</li>
+                            <li>Default parameters in function components replace defaultProps</li>
+                        </ul>
+                        <br>
+                        <strong>Example:</strong>
+                        <div class="code-block">
+<code><span class="comment">// With PropTypes</span>
+Button.propTypes = {
+  text: PropTypes.<span class="function">string</span>.isRequired,
+  onClick: PropTypes.<span class="function">func</span>
+};
+
+Button.defaultProps = {
+  onClick: () => {}
+};
+
+<span class="comment">// Modern approach with default parameters</span>
+<span class="keyword">function</span> <span class="function">Button</span>({ text, onClick = () => {} }) {
+  <span class="keyword">return</span> &lt;<span class="function">button</span> onClick={onClick}&gt;{text}&lt;/<span class="function">button</span>&gt;;
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(7)">
+                    <div class="question-number">Q7.</div>
+                    <div class="question-text">Explain the Virtual DOM and how React's reconciliation algorithm works during re-rendering.</div>
+                    <span class="difficulty hard">Hard</span>
+                    <div class="answer" id="answer7">
+                        <strong>Answer:</strong><br>
+                        <strong>Virtual DOM:</strong> A lightweight JavaScript representation of the actual DOM. React maintains this in-memory copy for efficient updates.
+                        <br><br>
+                        <strong>Reconciliation Process:</strong>
+                        <ol>
+                            <li><strong>Render Phase:</strong> React creates a new Virtual DOM tree</li>
+                            <li><strong>Diffing:</strong> Compares new Virtual DOM with previous one</li>
+                            <li><strong>Commit Phase:</strong> Updates only changed parts in real DOM</li>
+                        </ol>
+                        <br>
+                        <strong>Diffing Algorithm:</strong>
+                        <ul>
+                            <li><strong>Element Type:</strong> If element type changes, entire subtree is replaced</li>
+                            <li><strong>Attributes:</strong> Only changed attributes are updated</li>
+                            <li><strong>Keys in Lists:</strong> Uses keys to identify which items changed</li>
+                            <li><strong>Component Type:</strong> Same type components maintain state across renders</li>
+                        </ul>
+                        <br>
+                        <strong>React Fiber (Modern Architecture):</strong>
+                        <ul>
+                            <li>Breaks rendering into chunks</li>
+                            <li>Can pause and resume work</li>
+                            <li>Prioritizes urgent updates</li>
+                            <li>Better performance for complex UIs</li>
+                        </ul>
+                        <br>
+                        <strong>Why it's efficient:</strong> Batch updates, minimal DOM manipulation, and intelligent diffing make React fast even for complex applications.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let renderCount = 0;
+
+        function switchTab(index) {
+            // Hide all tabs and content
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Show selected tab and content
+            document.querySelectorAll('.tab')[index].classList.add('active');
+            document.getElementById('tab' + index).classList.add('active');
+        }
+
+        function showComparison(type) {
+            const functionalExample = document.getElementById('functional-example');
+            const classExample = document.getElementById('class-example');
+            
+            if (type === 'functional') {
+                functionalExample.style.display = 'block';
+                classExample.style.display = 'none';
+            } else {
+                functionalExample.style.display = 'none';
+                classExample.style.display = 'block';
+            }
+        }
+
+        function triggerRerender() {
+            renderCount++;
+            document.getElementById('render-count').textContent = renderCount;
+            
+            const log = document.getElementById('rerender-log');
+            const timestamp = new Date().toLocaleTimeString();
+            log.innerHTML = `<strong>Render #${renderCount}</strong> at ${timestamp}<br>` + 
+                          `State updated → Virtual DOM created → Diff calculated → Real DOM updated` + 
+                          (log.innerHTML ? '<br><br>' + log.innerHTML : '');
+        }
+
+        function resetRenderCount() {
+            renderCount = 0;
+            document.getElementById('render-count').textContent = renderCount;
+            document.getElementById('rerender-log').innerHTML = 'Reset complete. Click "Trigger Re-render" to see the cycle again.';
+        }
+
+        function demonstrateCallback() {
+            const demo = document.getElementById('callback-demo');
+            const messages = [
+                '📤 Child: Sending message to parent...',
+                '📥 Parent: Message received from child!',
+                '✅ Parent: State updated with child data',
+                '🔄 Parent: Re-rendering with new state'
+            ];
+            
+            demo.innerHTML = '';
+            messages.forEach((msg, index) => {
+                setTimeout(() => {
+                    demo.innerHTML += msg + '<br>';
+                }, index * 800);
+            });
+        }
+
+        function toggleAnswer(questionNumber) {
+            const answer = document.getElementById('answer' + questionNumber);
+            answer.classList.toggle('show');
+        }
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

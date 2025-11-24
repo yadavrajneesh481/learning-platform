@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Easing Types Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .play-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a5a);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .individual-play-btn {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(79, 172, 254, 0.3);
+            transition: all 0.3s ease;
+            margin: 10px auto;
+            display: block;
+        }
+
+        .individual-play-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .individual-play-btn:active {
+            transform: translateY(0px);
+        }
+
+        .animation-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 5px;
+        }
+
+        .control-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 3px;
+            font-weight: 500;
+        }
+
+        .control-select, .control-input {
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            background: white;
+            min-width: 70px;
+        }
+
+        .control-input {
+            width: 50px;
+            text-align: center;
+        }
+
+        .direction-buttons {
+            display: flex;
+            gap: 4px;
+        }
+
+        .direction-btn {
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .direction-btn.active {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
+        }
+
+        .direction-btn:hover {
+            background: #e8f4fd;
+        }
+
+        .direction-btn.active:hover {
+            background: #3d8bfe;
+        }
+
+        .speed-control {
+            margin-left: 20px;
+        }
+
+        .speed-control select {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .easing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .easing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .easing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+
+        .easing-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #444;
+            text-align: center;
+        }
+
+        .animation-track {
+            height: 60px;
+            background: #f0f4f8;
+            border-radius: 30px;
+            position: relative;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .animation-ball {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            border-radius: 50%;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .curve-visualization {
+            height: 80px;
+            margin: 15px 0;
+            position: relative;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+
+        .curve-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .curve-path {
+            fill: none;
+            stroke: #6c5ce7;
+            stroke-width: 3;
+        }
+
+        .code-section {
+            margin-top: 15px;
+        }
+
+        .code-tabs {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .code-tab {
+            padding: 8px 16px;
+            background: #e9ecef;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px 5px 0 0;
+            margin-right: 2px;
+            font-size: 0.9rem;
+        }
+
+        .code-tab.active {
+            background: #2d3748;
+            color: white;
+        }
+
+        .code-content {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 0 8px 8px 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+
+        .code-content.hidden {
+            display: none;
+        }
+
+        .description {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .info-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .info-panel h2 {
+            color: #444;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .keyword {
+            color: #e74c3c;
+        }
+
+        .string {
+            color: #2ecc71;
+        }
+
+        .number {
+            color: #f39c12;
+        }
+
+        .comment {
+            color: #95a5a6;
+        }
+
+        @media (max-width: 768px) {
+            .easing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Animation Easing Types Guide</h1>
+        
+        <div class="controls">
+            <button class="play-btn" onclick="playAllAnimations()">▶️ Play All Animations</button>
+            <div class="speed-control">
+                <label for="speed" style="color: white; margin-right: 10px;">Speed:</label>
+                <select id="speed" onchange="updateSpeed()">
+                    <option value="0.5">0.5x</option>
+                    <option value="1" selected>1x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2x</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="easing-grid" id="easingGrid"></div>
+
+        <div class="info-panel">
+            <h2>📚 Understanding Animation Easing & Properties</h2>
+            <p><strong>Easing functions</strong> control the rate of change of an animation over time. They make animations feel more natural and engaging by mimicking real-world physics.</p>
+            <br>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div>
+                    <h3 style="color: #4facfe; margin-bottom: 10px;">📈 Easing Types</h3>
+                    <ul style="line-height: 1.6; margin-left: 15px;">
+                        <li><strong>Linear:</strong> Constant speed throughout</li>
+                        <li><strong>Ease-in:</strong> Starts slow, accelerates</li>
+                        <li><strong>Ease-out:</strong> Starts fast, decelerates</li>
+                        <li><strong>Ease-in-out:</strong> Slow start and end, fast middle</li>
+                        <li><strong>Cubic-bezier:</strong> Custom curves for precise control</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: #e74c3c; margin-bottom: 10px;">🔄 Animation Direction</h3>
+                    <ul style="line-height: 1.6; margin-left: 15px;">
+                        <li><strong>Normal:</strong> Animation runs forward</li>
+                        <li><strong>Reverse:</strong> Animation runs backward</li>
+                        <li><strong>Alternate:</strong> Forward, then backward</li>
+                        <li><strong>Alternate-reverse:</strong> Backward, then forward</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: #f39c12; margin-bottom: 10px;">🔢 Iterations & Fill Mode</h3>
+                    <ul style="line-height: 1.6; margin-left: 15px;">
+                        <li><strong>Iterations:</strong> How many times to repeat</li>
+                        <li><strong>None:</strong> No styling outside animation</li>
+                        <li><strong>Forwards:</strong> Keep final state</li>
+                        <li><strong>Backwards:</strong> Apply initial state immediately</li>
+                        <li><strong>Both:</strong> Apply both forwards and backwards</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Fill Mode Visual Demo -->
+            <div style="margin-top: 30px;">
+                <h2 style="color: #444; margin-bottom: 20px;">🎯 Fill Mode Visual Demo</h2>
+                <p style="margin-bottom: 20px;">Fill modes control what happens <strong>before</strong> and <strong>after</strong> the animation runs:</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border: 2px solid #e9ecef;">
+                        <h4 style="color: #6c757d; margin-bottom: 15px;">🔴 None (Default)</h4>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="width: 30px; height: 30px; background: #ff6b6b; border-radius: 50%; margin-right: 10px;"></div>
+                            <span style="font-size: 0.9rem;">Before: Original position</span>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="width: 30px; height: 30px; background: #4facfe; border-radius: 50%; margin-right: 10px; margin-left: 50px;"></div>
+                            <span style="font-size: 0.9rem;">During: Animates normally</span>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 30px; height: 30px; background: #ff6b6b; border-radius: 50%; margin-right: 10px;"></div>
+                            <span style="font-size: 0.9rem;">After: Returns to original</span>
+                        </div>
+                        <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 8px; font-size: 0.85rem; color: #6c757d;">
+                            <strong>Use case:</strong> Hover effects, temporary highlights
+                        </div>
+                    </div>
+
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border: 2px solid #27ae60;">
+                        <h4 style="color: #27ae60; margin-bottom: 15px;">🟢 Forwards</h4>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="width: 30px; height: 30px; background: #ff6b6b; border-radius: 50%; margin-right: 10px;"></div>
+                            <span style="font-size: 0.9rem;">Before: Original position</span>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="width: 30px; height: 30px; background: #4facfe; border-radius: 50%; margin-right: 10px; margin-left: 50px;"></div>
+                            <span style="font-size: 0.9rem;">During: Animates normally</span>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 30px; height: 30px; background: #27ae60; border-radius: 50%; margin-right: 10px; margin-left: 100px;"></div>
+                            <span style="font-size: 0.9rem;">After: Stays at final position</span>
+                        </div>
+                        <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 8px; font-size: 0.85rem; color: #6c757d;">
+                            <strong>Use case:</strong> Slide-in menus, expanding cards
+                        </div>
+                    </div>
+
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border: 2px solid #f39c12;">
+                        <h4 style="color: #f39c12; margin-bottom: 15px;">🟡 Backwards</h4>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="width: 30px; height: 30px; background: #f39c12; border-radius: 50%; margin-right: 10px; margin-left: 100px;"></div>
+                            <span style="font-size: 0.9rem;">Before: Starts at final position</span>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="width: 30px; height: 30px; background: #4facfe; border-radius: 50%; margin-right: 10px; margin-left: 50px;"></div>
+                            <span style="font-size: 0.9rem;">During: Animates normally</span>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 30px; height: 30px; background: #ff6b6b; border-radius: 50%; margin-right: 10px;"></div>
+                            <span style="font-size: 0.9rem;">After: Returns to original</span>
+                        </div>
+                        <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 8px; font-size: 0.85rem; color: #6c757d;">
+                            <strong>Use case:</strong> Pre-loading states, delayed reveals
+                        </div>
+                    </div>
+
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border: 2px solid #e74c3c;">
+                        <h4 style="color: #e74c3c; margin-bottom: 15px;">🔵 Both</h4>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="width: 30px; height: 30px; background: #e74c3c; border-radius: 50%; margin-right: 10px; margin-left: 100px;"></div>
+                            <span style="font-size: 0.9rem;">Before: Starts at final position</span>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="width: 30px; height: 30px; background: #4facfe; border-radius: 50%; margin-right: 10px; margin-left: 50px;"></div>
+                            <span style="font-size: 0.9rem;">During: Animates normally</span>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 30px; height: 30px; background: #e74c3c; border-radius: 50%; margin-right: 10px; margin-left: 100px;"></div>
+                            <span style="font-size: 0.9rem;">After: Stays at final position</span>
+                        </div>
+                        <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 8px; font-size: 0.85rem; color: #6c757d;">
+                            <strong>Use case:</strong> Complex sequences, smooth transitions
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 12px; margin-top: 20px; border-left: 4px solid #2196f3;">
+                    <h4 style="color: #1976d2; margin-bottom: 10px;">💡 Quick Tips for Fill Modes:</h4>
+                    <ul style="margin-left: 20px; line-height: 1.6; color: #424242;">
+                        <li><strong>None:</strong> Perfect for temporary effects (hover, pulse, shake)</li>
+                        <li><strong>Forwards:</strong> Great for reveal animations (slide-in, fade-in)</li>
+                        <li><strong>Backwards:</strong> Useful with delays to show end state early</li>
+                        <li><strong>Both:</strong> Best for complex multi-step animations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let animationSpeed = 1;
+
+        const easingTypes = [
+            {
+                name: 'Linear',
+                css: 'linear',
+                bezier: 'cubic-bezier(0, 0, 1, 1)',
+                description: 'Constant speed throughout the animation. No acceleration or deceleration.',
+                curve: 'M 10 70 L 290 10'
+            },
+            {
+                name: 'Ease',
+                css: 'ease',
+                bezier: 'cubic-bezier(0.25, 0.1, 0.25, 1)',
+                description: 'Default easing. Starts slow, speeds up, then slows down at the end.',
+                curve: 'M 10 70 C 80 70 80 10 290 10'
+            },
+            {
+                name: 'Ease-in',
+                css: 'ease-in',
+                bezier: 'cubic-bezier(0.42, 0, 1, 1)',
+                description: 'Starts slow and gradually accelerates. Like a car starting from rest.',
+                curve: 'M 10 70 C 10 70 100 70 290 10'
+            },
+            {
+                name: 'Ease-out',
+                css: 'ease-out',
+                bezier: 'cubic-bezier(0, 0, 0.58, 1)',
+                description: 'Starts fast and gradually decelerates. Like a car braking to a stop.',
+                curve: 'M 10 70 C 200 10 290 10 290 10'
+            },
+            {
+                name: 'Ease-in-out',
+                css: 'ease-in-out',
+                bezier: 'cubic-bezier(0.42, 0, 0.58, 1)',
+                description: 'Combines ease-in and ease-out. Slow start and end with fast middle.',
+                curve: 'M 10 70 C 10 70 50 70 150 40 C 250 10 290 10 290 10'
+            },
+            {
+                name: 'Ease-in-sine',
+                css: 'cubic-bezier(0.12, 0, 0.39, 0)',
+                bezier: 'cubic-bezier(0.12, 0, 0.39, 0)',
+                description: 'Gentle ease-in using sine curve. Very smooth acceleration.',
+                curve: 'M 10 70 C 36 70 117 50 290 10'
+            },
+            {
+                name: 'Ease-out-sine',
+                css: 'cubic-bezier(0.61, 1, 0.88, 1)',
+                bezier: 'cubic-bezier(0.61, 1, 0.88, 1)',
+                description: 'Gentle ease-out using sine curve. Very smooth deceleration.',
+                curve: 'M 10 70 C 183 30 264 10 290 10'
+            },
+            {
+                name: 'Ease-in-back',
+                css: 'cubic-bezier(0.36, 0, 0.66, -0.56)',
+                bezier: 'cubic-bezier(0.36, 0, 0.66, -0.56)',
+                description: 'Pulls back slightly before moving forward. Creates anticipation.',
+                curve: 'M 10 70 C 108 70 198 100 290 10'
+            },
+            {
+                name: 'Ease-out-back',
+                css: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+                bezier: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+                description: 'Overshoots target then settles back. Creates bounce effect.',
+                curve: 'M 10 70 C 102 -25 192 10 290 10'
+            },
+            {
+                name: 'Ease-in-quart',
+                css: 'cubic-bezier(0.5, 0, 0.75, 0)',
+                bezier: 'cubic-bezier(0.5, 0, 0.75, 0)',
+                description: 'Strong acceleration. Fourth power curve for dramatic speed increase.',
+                curve: 'M 10 70 C 150 70 225 50 290 10'
+            },
+            {
+                name: 'Ease-out-quart',
+                css: 'cubic-bezier(0.25, 1, 0.5, 1)',
+                bezier: 'cubic-bezier(0.25, 1, 0.5, 1)',
+                description: 'Strong deceleration. Fourth power curve for dramatic slowdown.',
+                curve: 'M 10 70 C 75 30 150 10 290 10'
+            },
+            {
+                name: 'Ease-in-out-quart',
+                css: 'cubic-bezier(0.76, 0, 0.24, 1)',
+                bezier: 'cubic-bezier(0.76, 0, 0.24, 1)',
+                description: 'Strong acceleration and deceleration with smooth middle.',
+                curve: 'M 10 70 C 228 70 72 10 290 10'
+            }
+        ];
+
+        function createEasingCard(easing) {
+            const easingId = easing.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return `
+                <div class="easing-card">
+                    <div class="easing-name">${easing.name}</div>
+                    <button class="individual-play-btn" onclick="playIndividualAnimation('${easingId}')">▶️ Play Animation</button>
+                    
+                    <div class="animation-controls">
+                        <div class="control-group">
+                            <div class="control-label">Direction</div>
+                            <div class="direction-buttons">
+                                <button class="direction-btn active" onclick="setDirection('${easingId}', 'normal', this)">Normal</button>
+                                <button class="direction-btn" onclick="setDirection('${easingId}', 'reverse', this)">Reverse</button>
+                                <button class="direction-btn" onclick="setDirection('${easingId}', 'alternate', this)">Alt</button>
+                                <button class="direction-btn" onclick="setDirection('${easingId}', 'alternate-reverse', this)">Alt-Rev</button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label">Iterations</div>
+                            <select class="control-select" id="iterations-${easingId}" onchange="setIterations('${easingId}')">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="5">5</option>
+                                <option value="infinite">∞</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-label">Fill Mode</div>
+                            <select class="control-select" id="fillmode-${easingId}">
+                                <option value="none">None</option>
+                                <option value="forwards">Forwards</option>
+                                <option value="backwards">Backwards</option>
+                                <option value="both">Both</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="animation-track">
+                        <div class="animation-ball" id="ball-${easingId}"></div>
+                    </div>
+                    <div class="curve-visualization">
+                        <svg class="curve-svg" viewBox="0 0 300 80">
+                            <path class="curve-path" d="${easing.curve}"/>
+                            <circle cx="10" cy="70" r="3" fill="#e74c3c"/>
+                            <circle cx="290" cy="10" r="3" fill="#27ae60"/>
+                        </svg>
+                    </div>
+                    <div class="description">${easing.description}</div>
+                    <div class="code-section">
+                        <div class="code-tabs">
+                            <button class="code-tab active" onclick="showCode('${easingId}', 'css')">CSS</button>
+                            <button class="code-tab" onclick="showCode('${easingId}', 'js')">JavaScript</button>
+                            <button class="code-tab" onclick="showCode('${easingId}', 'keyframes')">@keyframes</button>
+                        </div>
+                        <div class="code-content" id="css-${easingId}">
+<span class="comment">/* CSS Transition */</span>
+<span class="keyword">.element</span> {
+  <span class="keyword">transition</span>: <span class="string">transform 2s ${easing.css}</span>;
+}
+
+<span class="comment">/* CSS Animation with all properties */</span>
+<span class="keyword">.element</span> {
+  <span class="keyword">animation</span>: <span class="string">moveRight 2s ${easing.css}</span>;
+  <span class="keyword">animation-direction</span>: <span class="string">normal</span>;
+  <span class="keyword">animation-iteration-count</span>: <span class="string">1</span>;
+  <span class="keyword">animation-fill-mode</span>: <span class="string">none</span>;
+}
+                        </div>
+                        <div class="code-content hidden" id="js-${easingId}">
+<span class="comment">// JavaScript Web Animations API</span>
+<span class="keyword">const</span> animation = element.<span class="keyword">animate</span>([
+  { <span class="string">transform</span>: <span class="string">'translateX(0px)'</span> },
+  { <span class="string">transform</span>: <span class="string">'translateX(300px)'</span> }
+], {
+  <span class="string">duration</span>: <span class="number">2000</span>,
+  <span class="string">easing</span>: <span class="string">'${easing.bezier}'</span>,
+  <span class="string">direction</span>: <span class="string">'normal'</span>,
+  <span class="string">iterations</span>: <span class="number">1</span>,
+  <span class="string">fill</span>: <span class="string">'none'</span>
+});
+
+<span class="comment">// Control playback</span>
+animation.<span class="keyword">pause</span>();
+animation.<span class="keyword">play</span>();
+animation.<span class="keyword">reverse</span>();
+                        </div>
+                        <div class="code-content hidden" id="keyframes-${easingId}">
+<span class="comment">/* CSS Keyframes Animation */</span>
+<span class="keyword">@keyframes</span> moveRight {
+  <span class="keyword">0%</span> { <span class="string">transform</span>: <span class="string">translateX(0px)</span>; }
+  <span class="keyword">100%</span> { <span class="string">transform</span>: <span class="string">translateX(260px)</span>; }
+}
+
+<span class="keyword">.element</span> {
+  <span class="keyword">animation-name</span>: <span class="string">moveRight</span>;
+  <span class="keyword">animation-duration</span>: <span class="string">2s</span>;
+  <span class="keyword">animation-timing-function</span>: <span class="string">${easing.css}</span>;
+  <span class="keyword">animation-direction</span>: <span class="string">alternate</span>;
+  <span class="keyword">animation-iteration-count</span>: <span class="string">infinite</span>;
+  <span class="keyword">animation-fill-mode</span>: <span class="string">both</span>;
+}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showCode(easingId, type) {
+            const tabs = document.querySelectorAll(`[onclick*="${easingId}"]`);
+            const contents = [
+                document.getElementById(`css-${easingId}`),
+                document.getElementById(`js-${easingId}`)
+            ];
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.add('hidden'));
+
+            event.target.classList.add('active');
+            document.getElementById(`${type}-${easingId}`).classList.remove('hidden');
+        }
+
+        function playAllAnimations() {
+            easingTypes.forEach(easing => {
+                const easingId = easing.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+                const ball = document.getElementById(`ball-${easingId}`);
+                if (ball) {
+                    // Reset position
+                    ball.style.transform = 'translateX(0px)';
+                    ball.style.transition = 'none';
+                    
+                    // Force reflow
+                    ball.offsetHeight;
+                    
+                    // Apply animation
+                    ball.style.transition = `transform ${2000 / animationSpeed}ms ${easing.css}`;
+                    ball.style.transform = 'translateX(260px)';
+                }
+            });
+        }
+
+        let animationSettings = {};
+
+        function initializeSettings(easingId) {
+            if (!animationSettings[easingId]) {
+                animationSettings[easingId] = {
+                    direction: 'normal',
+                    iterations: 1,
+                    fillMode: 'none'
+                };
+            }
+        }
+
+        function setDirection(easingId, direction, buttonElement) {
+            initializeSettings(easingId);
+            animationSettings[easingId].direction = direction;
+            
+            // Update button states
+            const buttons = buttonElement.parentElement.querySelectorAll('.direction-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            buttonElement.classList.add('active');
+        }
+
+        function setIterations(easingId) {
+            initializeSettings(easingId);
+            const select = document.getElementById(`iterations-${easingId}`);
+            animationSettings[easingId].iterations = select.value;
+        }
+
+        function playIndividualAnimation(easingId) {
+            initializeSettings(easingId);
+            const ball = document.getElementById(`ball-${easingId}`);
+            const easing = easingTypes.find(e => e.name.toLowerCase().replace(/[^a-z0-9]/g, '') === easingId);
+            const fillModeSelect = document.getElementById(`fillmode-${easingId}`);
+            
+            if (ball && easing) {
+                const settings = animationSettings[easingId];
+                const fillMode = fillModeSelect.value;
+                const duration = 2000 / animationSpeed;
+                
+                // Clear any existing animation
+                ball.style.animation = 'none';
+                ball.style.transform = 'translateX(0px)';
+                
+                // Force reflow
+                ball.offsetHeight;
+                
+                // Create unique keyframe name
+                const keyframeName = `move-${easingId}-${Date.now()}`;
+                
+                // Create keyframes dynamically
+                const keyframes = `
+                    @keyframes ${keyframeName} {
+                        0% { transform: translateX(0px); }
+                        100% { transform: translateX(260px); }
+                    }
+                `;
+                
+                // Remove existing style element if exists
+                const existingStyle = document.getElementById(`style-${easingId}`);
+                if (existingStyle) {
+                    existingStyle.remove();
+                }
+                
+                // Add keyframes to page
+                const styleElement = document.createElement('style');
+                styleElement.id = `style-${easingId}`;
+                styleElement.textContent = keyframes;
+                document.head.appendChild(styleElement);
+                
+                // Apply animation
+                ball.style.animation = `${keyframeName} ${duration}ms ${easing.css} ${settings.direction} ${settings.iterations} ${fillMode}`;
+                
+                // Handle infinite animations - stop after 10 seconds for demo
+                if (settings.iterations === 'infinite') {
+                    setTimeout(() => {
+                        ball.style.animationPlayState = 'paused';
+                        setTimeout(() => {
+                            ball.style.animation = 'none';
+                            ball.style.transform = 'translateX(0px)';
+                        }, 500);
+                    }, 10000);
+                }
+            }
+        }
+
+        function updateSpeed() {
+            animationSpeed = parseFloat(document.getElementById('speed').value);
+        }
+
+        // Initialize the grid
+        document.getElementById('easingGrid').innerHTML = easingTypes.map(createEasingCard).join('');
+
+        // Auto-play animations on load
+        setTimeout(() => {
+            playAllAnimations();
+        }, 500);
+    </script>
+</body>
+</html>

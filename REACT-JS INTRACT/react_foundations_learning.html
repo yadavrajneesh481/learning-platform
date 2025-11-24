@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Foundations - Interactive Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+        }
+
+        .demo-box {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .interactive-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+        }
+
+        .interactive-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .interactive-btn:active {
+            transform: translateY(0);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .dom-visual {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .dom-box {
+            background: white;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            min-width: 200px;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+
+        .dom-box.active {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .arrow {
+            font-size: 2em;
+            color: #667eea;
+            margin: 0 10px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: #333;
+        }
+
+        .fiber-animation {
+            height: 200px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .fiber-node {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: all 0.5s ease;
+        }
+
+        .question-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .question-card:hover {
+            transform: translateX(10px);
+        }
+
+        .answer {
+            display: none;
+            background: white;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .easy { background: #4caf50; color: white; }
+        .medium { background: #ff9800; color: white; }
+        .hard { background: #f44336; color: white; }
+
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .feature-card {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .dom-visual {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .tree-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .tree-node {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 5px;
+            display: inline-block;
+        }
+
+        .tree-level {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 React Foundations</h1>
+            <p class="subtitle">Modern JavaScript aur React ke saath apni web development journey shuru karo!</p>
+        </header>
+
+        <!-- Section 1: What is React -->
+        <div class="section">
+            <h2>📚 React Kya Hai?</h2>
+            <p><strong>React</strong> ek JavaScript library hai jo <span class="highlight">user interfaces (UI)</span> banane ke liye use hoti hai. Facebook (Meta) ne isko 2013 mein create kiya tha.</p>
+            
+            <div class="demo-box">
+                <h3>🎯 React Ko Kyun Use Karein?</h3>
+                <ul style="margin-left: 20px;">
+                    <li><strong>Component-Based:</strong> Chhote chhote reusable pieces mein code likho</li>
+                    <li><strong>Virtual DOM:</strong> Fast aur efficient updates</li>
+                    <li><strong>Declarative:</strong> UI ko describe karo, React baaki sambhal lega</li>
+                    <li><strong>Learn Once, Write Anywhere:</strong> Web, Mobile (React Native), Desktop sab jagah</li>
+                    <li><strong>Huge Community:</strong> Lakhon developers ka support</li>
+                </ul>
+            </div>
+
+            <div class="interactive-btn" onclick="showReactExample()">React Example Dekho</div>
+            <div id="reactExampleOutput" style="margin-top: 20px;"></div>
+        </div>
+
+        <!-- Section 2: SPA vs MPA -->
+        <div class="section">
+            <h2>🌐 SPA vs MPA</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <h3>📄 SPA (Single Page Application)</h3>
+                    <p><strong>Definition:</strong> A web application that loads a single HTML page and dynamically updates content.</p>
+                    <br>
+                    <p><strong>Explanation:</strong> Ek hi page load hota hai initially, phir JavaScript dynamically content update karta hai. Page reload nahi hota!</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>✅ Fast navigation</li>
+                        <li>✅ Better UX</li>
+                        <li>✅ Less server load</li>
+                        <li>❌ Initial load time thoda zyada</li>
+                        <li>❌ SEO challenges</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-card">
+                    <h3>📑 MPA (Multi Page Application)</h3>
+                    <p><strong>Definition:</strong> A web application with multiple HTML pages that reload on navigation.</p>
+                    <br>
+                    <p><strong>Explanation:</strong> Har page ke liye alag HTML file. Jab navigate karo, pura page reload hota hai.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>✅ Better SEO naturally</li>
+                        <li>✅ Simpler architecture</li>
+                        <li>✅ Easier to start</li>
+                        <li>❌ Slower navigation</li>
+                        <li>❌ More server requests</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="toggle-group">
+                <button class="interactive-btn" onclick="simulateSPA()">SPA Simulate Karo</button>
+                <button class="interactive-btn" onclick="simulateMPA()">MPA Simulate Karo</button>
+            </div>
+            <div id="spaOutput" style="margin-top: 20px; min-height: 50px;"></div>
+        </div>
+
+        <!-- Section 3: Virtual DOM vs Real DOM -->
+        <div class="section">
+            <h2>🎨 Virtual DOM vs Real DOM</h2>
+            
+            <div class="dom-visual">
+                <div class="dom-box" id="realDom">
+                    <h3>🌳 Real DOM</h3>
+                    <p>Actual browser ka DOM tree</p>
+                    <p style="font-size: 0.9em; margin-top: 10px;">Heavy aur slow updates</p>
+                </div>
+                <span class="arrow">→</span>
+                <div class="dom-box" id="virtualDom">
+                    <h3>⚡ Virtual DOM</h3>
+                    <p>React ka lightweight copy</p>
+                    <p style="font-size: 0.9em; margin-top: 10px;">Fast aur efficient</p>
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>🔄 Kaise Kaam Karta Hai?</h3>
+                <ol style="margin-left: 20px;">
+                    <li><strong>Step 1:</strong> React Virtual DOM ka snapshot banata hai (memory mein)</li>
+                    <li><strong>Step 2:</strong> Jab state change hoti hai, naya Virtual DOM banta hai</li>
+                    <li><strong>Step 3:</strong> React dono ko compare karta hai (<span class="highlight">Diffing Algorithm</span>)</li>
+                    <li><strong>Step 4:</strong> Sirf changes ko Real DOM mein update karta hai (<span class="highlight">Reconciliation</span>)</li>
+                </ol>
+            </div>
+
+            <button class="interactive-btn" onclick="animateDOM()">DOM Update Animation Dekho</button>
+            <div id="domAnimation"></div>
+
+            <div class="code-block">
+// Real DOM - Slow
+document.getElementById('title').innerHTML = 'New Title';
+document.getElementById('text').innerHTML = 'New Text';
+// Har change pe browser repaint karta hai!
+
+// React Virtual DOM - Fast
+setState({ title: 'New Title', text: 'New Text' });
+// React smartly sirf zaruri changes apply karega!
+            </div>
+        </div>
+
+        <!-- Section 4: React Fiber -->
+        <div class="section">
+            <h2>🧵 React Fiber Architecture</h2>
+            
+            <p><strong>React Fiber</strong> React ki reimplementation hai jo React 16 mein introduce hui. Ye reconciliation algorithm ka naya implementation hai.</p>
+
+            <div class="demo-box">
+                <h3>🎯 Fiber Kya Solve Karta Hai?</h3>
+                <p><strong>Problem:</strong> Purane React mein, agar koi bada update ho raha ho, to browser freeze ho jata tha. User interactions (clicks, typing) block ho jate the.</p>
+                <br>
+                <p><strong>Solution:</strong> Fiber kaam ko chhote pieces mein tod deta hai aur priority ke according karta hai.</p>
+                
+                <h3 style="margin-top: 20px;">✨ Key Features:</h3>
+                <ul style="margin-left: 20px;">
+                    <li><strong>Incremental Rendering:</strong> Kaam ko pause kar sakte ho aur baad mein resume</li>
+                    <li><strong>Priority-based Updates:</strong> Important updates pehle (animations > data fetching)</li>
+                    <li><strong>Concurrency:</strong> Multiple tasks ek saath prepare ho sakte hain</li>
+                    <li><strong>Error Boundaries:</strong> Better error handling</li>
+                </ul>
+            </div>
+
+            <button class="interactive-btn" onclick="startFiberAnimation()">Fiber Animation Dekho</button>
+            <div class="fiber-animation" id="fiberAnimation"></div>
+
+            <div class="code-block">
+// Fiber ka internal structure (simplified)
+const fiber = {
+    type: 'div',              // Component type
+    key: 'unique-key',         // Unique identifier
+    props: { className: 'box' }, // Props
+    child: null,              // First child fiber
+    sibling: null,            // Next sibling fiber
+    return: null,             // Parent fiber
+    alternate: null,          // Previous version
+    effectTag: 'UPDATE'       // What to do (UPDATE/DELETE/PLACE)
+};
+            </div>
+        </div>
+
+        <!-- Section 5: React 18 Features -->
+        <div class="section">
+            <h2>🚀 React 18 Ke Naye Features</h2>
+
+            <div class="feature-card">
+                <h3>1️⃣ Concurrent Rendering</h3>
+                <p><strong>Definition:</strong> React can work on multiple tasks at once and prioritize them.</p>
+                <p>React ab multiple UI updates ko ek saath prepare kar sakta hai aur urgent updates ko priority de sakta hai.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>2️⃣ Automatic Batching</h3>
+                <p><strong>Definition:</strong> Multiple state updates are grouped together for a single re-render.</p>
+                <p>React 18 se pehle sirf event handlers mein batching hoti thi. Ab promises, setTimeout, native events mein bhi hoti hai!</p>
+                <div class="code-block" style="margin-top: 10px;">
+// React 18 - Automatically batched!
+setTimeout(() => {
+    setCount(c => c + 1);
+    setFlag(f => !f);
+    // Sirf ek re-render! 🎉
+}, 1000);
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>3️⃣ Transitions API</h3>
+                <p><strong>Definition:</strong> Mark certain updates as non-urgent transitions.</p>
+                <p>Kuch updates ko "non-urgent" mark kar sakte ho, taki user interaction smooth rahe.</p>
+                <div class="code-block" style="margin-top: 10px;">
+import { startTransition } from 'react';
+
+// Urgent: user input
+setInputValue(input);
+
+// Non-urgent: search results
+startTransition(() => {
+    setSearchResults(data);
+});
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>4️⃣ Suspense for Data Fetching</h3>
+                <p><strong>Definition:</strong> Declaratively specify loading states for components.</p>
+                <p>Ab data fetch karte waqt loading UI dikhana bahut easy hai!</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>5️⃣ New Root API</h3>
+                <div class="code-block" style="margin-top: 10px;">
+// React 17
+ReactDOM.render(&lt;App /&gt;, document.getElementById('root'));
+
+// React 18
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(&lt;App /&gt;);
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Component Architecture -->
+        <div class="section">
+            <h2>🧩 Component-Based Architecture</h2>
+            
+            <p><strong>Components</strong> are reusable, independent pieces of UI. Har component apna logic aur appearance manage karta hai.</p>
+
+            <div class="tree-visual">
+                <div class="tree-node">App Component</div>
+                <div class="tree-level">
+                    <div class="tree-node">Header</div>
+                    <div class="tree-node">Main Content</div>
+                    <div class="tree-node">Footer</div>
+                </div>
+                <div class="tree-level">
+                    <div class="tree-node">Nav</div>
+                    <div class="tree-node">Logo</div>
+                    <div class="tree-node">Article</div>
+                    <div class="tree-node">Sidebar</div>
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>🎁 Benefits:</h3>
+                <ul style="margin-left: 20px;">
+                    <li><strong>Reusability:</strong> Ek baar likho, kahin bhi use karo</li>
+                    <li><strong>Maintainability:</strong> Chhote pieces ko maintain karna easy hai</li>
+                    <li><strong>Testing:</strong> Individual components ko test karna simple</li>
+                    <li><strong>Collaboration:</strong> Team mein alag alag components pe kaam ho sakta hai</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+// Simple Component Example
+function Button({ text, onClick }) {
+    return (
+        &lt;button onClick={onClick}&gt;
+            {text}
+        &lt;/button&gt;
+    );
+}
+
+// Usage - Reusable hai!
+&lt;Button text="Submit" onClick={handleSubmit} /&gt;
+&lt;Button text="Cancel" onClick={handleCancel} /&gt;
+            </div>
+        </div>
+
+        <!-- Section 7: Setup Environment -->
+        <div class="section">
+            <h2>⚙️ Development Environment Setup</h2>
+
+            <div class="demo-box">
+                <h3>📦 Required Tools:</h3>
+                <ol style="margin-left: 20px;">
+                    <li><strong>Node.js & npm:</strong> JavaScript runtime aur package manager</li>
+                    <li><strong>Code Editor:</strong> VS Code (recommended)</li>
+                    <li><strong>Build Tool:</strong> Vite / Create React App / Next.js</li>
+                </ol>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <h3>⚡ Vite (Recommended)</h3>
+                    <p><strong>Extremely fast build tool</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Lightning fast HMR</li>
+                        <li>Instant server start</li>
+                        <li>Optimized builds</li>
+                    </ul>
+                    <div class="code-block" style="margin-top: 10px;">
+npm create vite@latest my-app -- --template react
+cd my-app
+npm install
+npm run dev
+                    </div>
+                </div>
+
+                <div class="comparison-card">
+                    <h3>📦 Create React App</h3>
+                    <p><strong>Traditional, zero-config setup</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>All-in-one solution</li>
+                        <li>Production-ready</li>
+                        <li>Slower than Vite</li>
+                    </ul>
+                    <div class="code-block" style="margin-top: 10px;">
+npx create-react-app my-app
+cd my-app
+npm start
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>🔌 VS Code Extensions:</h3>
+                <ul style="margin-left: 20px;">
+                    <li><strong>ES7+ React/Redux/React-Native snippets</strong> - Quick code snippets</li>
+                    <li><strong>Prettier</strong> - Code formatting</li>
+                    <li><strong>ESLint</strong> - Code quality</li>
+                    <li><strong>Auto Rename Tag</strong> - Rename paired tags</li>
+                    <li><strong>Bracket Pair Colorizer</strong> - Better code readability</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 8: Behind the Scenes -->
+        <div class="section">
+            <h2>🔍 Behind The Scenes - React Kaise Render Karta Hai?</h2>
+
+            <div class="demo-box">
+                <h3>📝 Rendering Process (Step by Step):</h3>
+                <ol style="margin-left: 20px;">
+                    <li><strong>Trigger:</strong> Initial render ya state/props change</li>
+                    <li><strong>Render Phase:</strong> React components ko call karta hai aur Virtual DOM tree banata hai</li>
+                    <li><strong>Reconciliation:</strong> Purane aur naye Virtual DOM ko compare karta hai</li>
+                    <li><strong>Commit Phase:</strong> Changes ko Real DOM mein apply karta hai</li>
+                    <li><strong>Browser Paint:</strong> Browser screen ko update karta hai</li>
+                </ol>
+            </div>
+
+            <button class="interactive-btn" onclick="demonstrateRendering()">Rendering Process Dekho</button>
+            <div id="renderDemo" style="margin-top: 20px;"></div>
+
+            <div class="code-block">
+// 1. Component function call hota hai
+function Counter() {
+    const [count, setCount] = useState(0);
+    
+    // 2. JSX return hota hai (React.createElement calls)
+    return &lt;div&gt;{count}&lt;/div&gt;;
+}
+
+// 3. React internally ye banata hai:
+React.createElement('div', null, count);
+
+// 4. Virtual DOM node banta hai:
+{ type: 'div', props: { children: 0 } }
+
+// 5. Reconciliation ke baad Real DOM update hota hai
+            </div>
+        </div>
+
+        <!-- Interview Questions -->
+        <div class="section">
+            <h2>💼 Interview Questions</h2>
+            <p style="margin-bottom: 20px;">Click on questions to see answers!</p>
+
+            <div class="question-card" onclick="toggleAnswer(1)">
+                <strong>Q1. React kya hai aur iske main features kya hain?</strong>
+                <span class="difficulty easy">Easy</span>
+                <div class="answer" id="answer1">
+                    <p><strong>Answer:</strong> React ek JavaScript library hai jo user interfaces banane ke liye use hoti hai. Main features:</p>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Component-Based:</strong> UI ko reusable pieces mein divide karte hain</li>
+                        <li><strong>Virtual DOM:</strong> Efficient updates ke liye</li>
+                        <li><strong>Declarative:</strong> UI ki final state describe karte hain, React baaki sambhal leta hai</li>
+                        <li><strong>JSX:</strong> HTML-like syntax JavaScript mein</li>
+                        <li><strong>One-way Data Flow:</strong> Data parent se child ki taraf flow hota hai</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer(2)">
+                <strong>Q2. Virtual DOM kya hai aur ye Real DOM se fast kyun hai?</strong>
+                <span class="difficulty easy">Easy</span>
+                <div class="answer" id="answer2">
+                    <p><strong>Answer:</strong> Virtual DOM React ka lightweight JavaScript representation hai Real DOM ka. Ye fast hai kyunki:</p>
+                    <ul style="margin-left: 20px;">
+                        <li>Ye memory mein rehta hai, browser paint nahi karta</li>
+                        <li>React diffing algorithm se sirf actual changes find karta hai</li>
+                        <li>Batch updates - multiple changes ko ek saath apply karta hai</li>
+                        <li>Real DOM manipulation expensive hai (reflow, repaint), Virtual DOM mein ye nahi hota</li>
+                        <li>Efficient reconciliation process se minimum DOM updates hote hain</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer(3)">
+                <strong>Q3. SPA aur MPA mein kya difference hai? React kis type ka application hai?</strong>
+                <span class="difficulty medium">Medium</span>
+                <div class="answer" id="answer3">
+                    <p><strong>Answer:</strong></p>
+                    <p><strong>SPA (Single Page Application):</strong> Ek hi HTML page load hota hai, content dynamically update hota hai JavaScript se. Page reload nahi hota. Better UX but SEO challenges.</p>
+                    <p><strong>MPA (Multi Page Application):</strong> Multiple HTML pages hain, har navigation pe new page load hota hai. Better SEO but slower navigation.</p>
+                    <p><strong>React primarily SPAs banane ke liye use hota hai,</strong> lekin Next.js jaise frameworks ke saath Server-Side Rendering bhi kar sakte hain jo SPA aur MPA ke benefits combine karta hai.</p>
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer(4)">
+                <strong>Q4. React Fiber kya hai aur isko introduce kyun kiya gaya?</strong>
+                <span class="difficulty medium">Medium</span>
+                <div class="answer" id="answer4">
+                    <p><strong>Answer:</strong> React Fiber React 16 mein introduce hua reimplementation hai reconciliation algorithm ka. Main goals:</p>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Incremental Rendering:</strong> Rendering work ko chunks mein split kar sakte hain aur pause/resume kar sakte hain</li>
+                        <li><strong>Priority-based Updates:</strong> Different updates ko different priority assign kar sakte hain (animations high priority, data fetching low)</li>
+                        <li><strong>Concurrency:</strong> Multiple versions of UI ko parallel prepare kar sakte hain</li>
+                        <li><strong>Better Error Handling:</strong> Error boundaries se graceful error handling</li>
+                    </ul>
+                    <p>Purane version mein long-running updates browser ko block kar dete the. Fiber ne ye problem solve kari.</p>
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer(5)">
+                <strong>Q5. React 18 ke main features kya hain? Concurrency kya hai?</strong>
+                <span class="difficulty hard">Hard</span>
+                <div class="answer" id="answer5">
+                    <p><strong>Answer:</strong> React 18 ke main features:</p>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Automatic Batching:</strong> Promises, setTimeout mein bhi automatic batching</li>
+                        <li><strong>Transitions API:</strong> Non-urgent updates ko mark kar sakte hain using startTransition</li>
+                        <li><strong>Suspense for Data Fetching:</strong> Declarative loading states</li>
+                        <li><strong>New Root API:</strong> createRoot for concurrent features</li>
+                        <li><strong>Streaming SSR:</strong> Server-side rendering improvements</li>
+                    </ul>
+                    <p><strong>Concurrency:</strong> React ka ability multiple UI versions ko ek saath prepare karna. Main thread ko block nahi karta, urgent updates ko priority deta hai. Example: typing (urgent) aur search results update (non-urgent) ko alag handle karta hai.</p>
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer(6)">
+                <strong>Q6. Component-based architecture ke kya benefits hain? Explain with example.</strong>
+                <span class="difficulty medium">Medium</span>
+                <div class="answer" id="answer6">
+                    <p><strong>Answer:</strong> Component-based architecture ke benefits:</p>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Reusability:</strong> Components ko multiple jagah use kar sakte hain</li>
+                        <li><strong>Maintainability:</strong> Isolated components ko maintain karna easy</li>
+                        <li><strong>Testability:</strong> Individual components ka testing simple</li>
+                        <li><strong>Scalability:</strong> Large applications ko organize karna easy</li>
+                        <li><strong>Separation of Concerns:</strong> Har component apni responsibility handle karta hai</li>
+                    </ul>
+                    <p><strong>Example:</strong> Ek Button component banao jo multiple forms mein reuse ho. Props se customization (color, size, text) control karo. Ek jagah change karo, sab jagah reflect ho.</p>
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer(7)">
+                <strong>Q7. React mein rendering process ko detail mein explain karo. Reconciliation kya hai?</strong>
+                <span class="difficulty hard">Hard</span>
+                <div class="answer" id="answer7">
+                    <p><strong>Answer:</strong> React Rendering Process:</p>
+                    <ol style="margin-left: 20px;">
+                        <li><strong>Trigger Phase:</strong> Initial mount ya setState/props change se render trigger hota hai</li>
+                        <li><strong>Render Phase:</strong> React component functions ko call karta hai, JSX ko React elements mein convert karta hai, aur Virtual DOM tree bana</li>
+                        <li><strong>Reconciliation Phase:</strong> Previous Virtual DOM aur new Virtual DOM ko compare karta hai (Diffing Algorithm). Ye phase pure hai aur side-effects nahi hote</li>
+                        <li><strong>Commit Phase:</strong> Actual DOM mutations apply hote hain. useEffect/useLayoutEffect yahan run hote hain</li>
+                        <li><strong>Browser Paint:</strong> Browser updated UI display karta hai</li>
+                    </ol>
+                    <p><strong>Reconciliation:</strong> Ye process hai jismein React efficiently determine karta hai ki DOM mein kya changes chahiye. React keys aur element types use karke optimize karta hai. Fiber architecture isko interruptible banata hai.</p>
+                </div>
+            </div>
+        </div>
+
+        <footer style="text-align: center; padding: 30px; color: white;">
+            <p>💡 Keep Learning, Keep Building with React!</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Practice regularly aur projects banao to solidify your understanding 🚀</p>
+        </footer>
+    </div>
+
+    <script>
+        // React Example Demo
+        function showReactExample() {
+            const output = document.getElementById('reactExampleOutput');
+            output.innerHTML = `
+                <div class="demo-box">
+                    <h3>Simple React Component:</h3>
+                    <div class="code-block">
+function Welcome({ name }) {
+    return &lt;h1&gt;Hello, {name}!&lt;/h1&gt;;
+}
+
+// Usage
+&lt;Welcome name="Rahul" /&gt;
+// Output: Hello, Rahul!
+                    </div>
+                    <div style="background: #667eea; color: white; padding: 20px; border-radius: 10px; margin-top: 10px; text-align: center;">
+                        <h2>Hello, Rahul!</h2>
+                    </div>
+                </div>
+            `;
+        }
+
+        // SPA Simulation
+        function simulateSPA() {
+            const output = document.getElementById('spaOutput');
+            output.innerHTML = '<div class="spinner"></div><p style="text-align: center;">SPA Loading...</p>';
+            
+            setTimeout(() => {
+                output.innerHTML = `
+                    <div class="demo-box">
+                        <h3>✅ SPA Loaded!</h3>
+                        <p>Notice: Page reload nahi hua! Content dynamically change ho gaya.</p>
+                        <p style="margin-top: 10px;">Navigation buttons:</p>
+                        <button class="interactive-btn" onclick="spaNavigate('home')">Home</button>
+                        <button class="interactive-btn" onclick="spaNavigate('about')">About</button>
+                        <button class="interactive-btn" onclick="spaNavigate('contact')">Contact</button>
+                        <div id="spaContent" style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 8px;">
+                            <strong>Home Page Content</strong>
+                        </div>
+                    </div>
+                `;
+            }, 1000);
+        }
+
+        function spaNavigate(page) {
+            const content = document.getElementById('spaContent');
+            content.innerHTML = `<strong>${page.charAt(0).toUpperCase() + page.slice(1)} Page Content</strong><p>Instantly loaded without page reload! 🚀</p>`;
+        }
+
+        // MPA Simulation
+        function simulateMPA() {
+            const output = document.getElementById('spaOutput');
+            output.innerHTML = '<div class="spinner"></div><p style="text-align: center;">Page Reloading...</p>';
+            
+            setTimeout(() => {
+                output.innerHTML = `
+                    <div class="demo-box">
+                        <h3>✅ MPA Page Loaded!</h3>
+                        <p>Traditional websites ki tarah, pura page reload hota hai har click pe.</p>
+                        <p style="margin-top: 10px; color: #666;">⚠️ Real MPA mein ye actually reload hota, yahan simulation hai.</p>
+                        <button class="interactive-btn" onclick="simulateMPA()">Navigate (Page Reload)</button>
+                    </div>
+                `;
+            }, 1500);
+        }
+
+        // DOM Animation
+        function animateDOM() {
+            const container = document.getElementById('domAnimation');
+            container.innerHTML = `
+                <div class="demo-box" style="text-align: center;">
+                    <h3>🔄 DOM Update Process</h3>
+                    <div id="domSteps" style="margin: 20px 0; font-size: 1.1em; min-height: 60px;"></div>
+                    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+                        <div style="padding: 15px; background: #f8f9fa; border-radius: 8px; flex: 1; max-width: 200px;" id="oldState">
+                            <strong>Old State</strong>
+                            <div style="margin-top: 10px;">Count: 5</div>
+                        </div>
+                        <div style="padding: 15px; background: #e8f5e9; border-radius: 8px; flex: 1; max-width: 200px;" id="newState">
+                            <strong>New State</strong>
+                            <div style="margin-top: 10px;">Count: 6</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const steps = [
+                '1️⃣ State Change Triggered...',
+                '2️⃣ Virtual DOM Created...',
+                '3️⃣ Diffing Algorithm Running...',
+                '4️⃣ Changes Detected!',
+                '5️⃣ Real DOM Updated! ✅'
+            ];
+
+            const domSteps = document.getElementById('domSteps');
+            let currentStep = 0;
+
+            const interval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    domSteps.innerHTML = `<div style="animation: fadeIn 0.5s;">${steps[currentStep]}</div>`;
+                    
+                    if (currentStep === 4) {
+                        document.getElementById('oldState').style.opacity = '0.5';
+                        document.getElementById('newState').style.background = '#4caf50';
+                        document.getElementById('newState').style.color = 'white';
+                        document.getElementById('newState').style.transform = 'scale(1.1)';
+                    }
+                    
+                    currentStep++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 800);
+        }
+
+        // Fiber Animation
+        let fiberAnimating = false;
+        function startFiberAnimation() {
+            if (fiberAnimating) return;
+            fiberAnimating = true;
+
+            const container = document.getElementById('fiberAnimation');
+            container.innerHTML = '';
+
+            const tasks = ['Component A', 'Component B', 'Component C', 'Component D', 'Component E'];
+            const priorities = ['High', 'Low', 'High', 'Low', 'Medium'];
+            
+            tasks.forEach((task, i) => {
+                const node = document.createElement('div');
+                node.className = 'fiber-node';
+                node.textContent = task;
+                node.style.left = '20px';
+                node.style.top = (20 + i * 35) + 'px';
+                node.style.fontSize = '0.8em';
+                
+                if (priorities[i] === 'High') {
+                    node.style.background = '#f44336';
+                } else if (priorities[i] === 'Medium') {
+                    node.style.background = '#ff9800';
+                }
+                
+                container.appendChild(node);
+
+                // Animate based on priority
+                setTimeout(() => {
+                    const delay = priorities[i] === 'High' ? 500 : priorities[i] === 'Medium' ? 1500 : 2500;
+                    setTimeout(() => {
+                        node.style.left = 'calc(100% - 80px)';
+                        node.style.background = '#4caf50';
+                    }, delay);
+                }, 500);
+            });
+
+            setTimeout(() => {
+                fiberAnimating = false;
+            }, 4000);
+        }
+
+        // Rendering Demo
+        function demonstrateRendering() {
+            const demo = document.getElementById('renderDemo');
+            demo.innerHTML = `
+                <div class="demo-box">
+                    <h3>🎬 Live Rendering Demo</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0;">
+                        <div style="padding: 15px; background: #e3f2fd; border-radius: 8px;">
+                            <strong>1. Trigger</strong>
+                            <p style="font-size: 0.9em; margin-top: 5px;">Button click ya state change</p>
+                        </div>
+                        <div style="padding: 15px; background: #f3e5f5; border-radius: 8px;">
+                            <strong>2. Render</strong>
+                            <p style="font-size: 0.9em; margin-top: 5px;">Component function execute</p>
+                        </div>
+                        <div style="padding: 15px; background: #fff3e0; border-radius: 8px;">
+                            <strong>3. Reconcile</strong>
+                            <p style="font-size: 0.9em; margin-top: 5px;">Virtual DOM comparison</p>
+                        </div>
+                        <div style="padding: 15px; background: #e8f5e9; border-radius: 8px;">
+                            <strong>4. Commit</strong>
+                            <p style="font-size: 0.9em; margin-top: 5px;">DOM update</p>
+                        </div>
+                    </div>
+                    <button class="interactive-btn" onclick="triggerRenderCycle()">Trigger Render Cycle</button>
+                    <div id="renderStatus" style="margin-top: 15px; padding: 15px; background: #f5f5f5; border-radius: 8px; min-height: 50px; text-align: center;">
+                        Click button to see render cycle
+                    </div>
+                </div>
+            `;
+        }
+
+        function triggerRenderCycle() {
+            const status = document.getElementById('renderStatus');
+            const phases = [
+                { text: '⚡ Trigger: State changed!', color: '#2196f3' },
+                { text: '🎨 Render: Creating Virtual DOM...', color: '#9c27b0' },
+                { text: '🔍 Reconciliation: Comparing trees...', color: '#ff9800' },
+                { text: '✅ Commit: DOM Updated!', color: '#4caf50' }
+            ];
+
+            let current = 0;
+            const interval = setInterval(() => {
+                if (current < phases.length) {
+                    status.style.background = phases[current].color;
+                    status.style.color = 'white';
+                    status.style.fontWeight = 'bold';
+                    status.innerHTML = phases[current].text;
+                    current++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        status.style.background = '#f5f5f5';
+                        status.style.color = '#333';
+                        status.innerHTML = '🎉 Render cycle complete! Click again to see it.';
+                    }, 1000);
+                }
+            }, 1000);
+        }
+
+        // Toggle Answer
+        function toggleAnswer(num) {
+            const answer = document.getElementById('answer' + num);
+            answer.classList.toggle('show');
+        }
+
+        // Smooth scroll for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Add fade-in animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initial page load animation
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.section').forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.animation = `fadeIn 0.6s ease forwards ${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

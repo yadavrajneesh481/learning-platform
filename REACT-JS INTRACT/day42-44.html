@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Testing - Interactive Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+            font-size: 1.5em;
+        }
+
+        .hinglish {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'CODE';
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 0.7em;
+        }
+
+        .interactive-demo {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .demo-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .test-simulator {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .test-panel {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #dee2e6;
+        }
+
+        .test-result {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .test-pass {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            color: #155724;
+        }
+
+        .test-fail {
+            background: #f8d7da;
+            border: 1px solid #dc3545;
+            color: #721c24;
+        }
+
+        .test-pending {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .testing-pyramid {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            margin: 30px 0;
+        }
+
+        .pyramid-layer {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 10px;
+        }
+
+        .pyramid-layer:hover {
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .layer-e2e {
+            width: 200px;
+            height: 80px;
+            background: #dc3545;
+            top: 0;
+            line-height: 80px;
+        }
+
+        .layer-integration {
+            width: 400px;
+            height: 100px;
+            background: #ffc107;
+            top: 100px;
+            line-height: 100px;
+        }
+
+        .layer-unit {
+            width: 600px;
+            height: 120px;
+            background: #28a745;
+            top: 220px;
+            line-height: 120px;
+        }
+
+        .layer-info {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 2px solid #667eea;
+            display: none;
+        }
+
+        .layer-info.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .mock-demo {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .mock-panel {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #dee2e6;
+        }
+
+        .api-status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .status-loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .interview-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            margin-top: 40px;
+            border-radius: 15px;
+        }
+
+        .question-card {
+            background: white;
+            color: #333;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #667eea;
+        }
+
+        .difficulty {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .difficulty-easy {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .difficulty-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .difficulty-hard {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .answer {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #e9ecef;
+            display: none;
+        }
+
+        .answer.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        .toggle-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s;
+        }
+
+        .toggle-icon.rotated {
+            transform: rotate(180deg);
+        }
+
+        .snapshot-demo {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+
+        .snapshot-diff {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .snapshot-panel {
+            background: #1e2127;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .snapshot-panel h4 {
+            color: #61dafb;
+            margin-bottom: 10px;
+        }
+
+        .line-added {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+
+        .line-removed {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .test-simulator, .mock-demo, .snapshot-diff {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .pyramid-layer {
+                font-size: 0.9em;
+            }
+
+            .layer-unit {
+                width: 90%;
+            }
+
+            .layer-integration {
+                width: 70%;
+            }
+
+            .layer-e2e {
+                width: 50%;
+            }
+        }
+
+        .key-concept {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .key-concept strong {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧪 React Testing Applications</h1>
+            <p>Jest, React Testing Library, Mocking, E2E Testing aur bahut kuch!</p>
+        </header>
+
+        <div class="content">
+            <!-- Introduction -->
+            <div class="section">
+                <h2>📚 Testing Kya Hai Aur Kyun Zaroori Hai?</h2>
+                <div class="hinglish">
+                    <p><strong>Testing</strong> matlab apne code ko verify karna ki wo expected tarike se kaam kar raha hai ya nahi. React applications mein testing bahut important hai kyunki:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>🐛 Bugs ko early catch kar sakte hain</li>
+                        <li>🔒 Code quality maintain hoti hai</li>
+                        <li>♻️ Refactoring safe ho jata hai</li>
+                        <li>📖 Tests documentation ka kaam bhi karte hain</li>
+                        <li>🚀 Deployment confidence badhta hai</li>
+                    </ul>
+                </div>
+
+                <div class="key-concept">
+                    <strong>Testing Pyramid:</strong> Ek concept hai jo batata hai ki different levels of testing ka ratio kya hona chahiye. Neeche click karke explore karo!
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🔺 Interactive Testing Pyramid - Click on Each Layer!</div>
+                    <div class="testing-pyramid">
+                        <div class="pyramid-layer layer-e2e" onclick="showLayerInfo('e2e')">
+                            E2E Tests (10%)
+                        </div>
+                        <div class="pyramid-layer layer-integration" onclick="showLayerInfo('integration')">
+                            Integration Tests (30%)
+                        </div>
+                        <div class="pyramid-layer layer-unit" onclick="showLayerInfo('unit')">
+                            Unit Tests (60%)
+                        </div>
+                    </div>
+                    <div id="layer-info-e2e" class="layer-info">
+                        <h3>🎯 End-to-End (E2E) Tests</h3>
+                        <p><strong>Kya hai:</strong> Pura application ko user ki tarah test karna</p>
+                        <p><strong>Tools:</strong> Cypress, Playwright, Selenium</p>
+                        <p><strong>Example:</strong> Login → Dashboard → Create Post → Logout</p>
+                        <p><strong>Pros:</strong> Real user experience test hota hai</p>
+                        <p><strong>Cons:</strong> Slow aur expensive, maintenance zyada</p>
+                    </div>
+                    <div id="layer-info-integration" class="layer-info">
+                        <h3>🔗 Integration Tests</h3>
+                        <p><strong>Kya hai:</strong> Multiple components/modules ko saath mein test karna</p>
+                        <p><strong>Tools:</strong> React Testing Library, Jest</p>
+                        <p><strong>Example:</strong> Form component + validation + API call</p>
+                        <p><strong>Pros:</strong> Components ki interaction verify hoti hai</p>
+                        <p><strong>Cons:</strong> Unit tests se slow, setup complex</p>
+                    </div>
+                    <div id="layer-info-unit" class="layer-info">
+                        <h3>⚡ Unit Tests</h3>
+                        <p><strong>Kya hai:</strong> Individual functions/components ko isolation mein test karna</p>
+                        <p><strong>Tools:</strong> Jest, Vitest</p>
+                        <p><strong>Example:</strong> Single function, single component</p>
+                        <p><strong>Pros:</strong> Fast, easy to write, pinpoint issues</p>
+                        <p><strong>Cons:</strong> Integration issues miss ho sakte hain</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jest Basics -->
+            <div class="section">
+                <h2>🃏 Jest Basics</h2>
+                <div class="hinglish">
+                    <p><strong>Jest</strong> ek JavaScript testing framework hai jo Facebook ne banaya. Ye React ke saath out-of-the-box kaam karta hai aur bahut powerful features provide karta hai.</p>
+                </div>
+
+                <div class="key-concept">
+                    <strong>Jest Features:</strong> Zero config, snapshot testing, mocking, code coverage, parallel test execution
+                </div>
+
+                <h3>Basic Test Structure</h3>
+                <div class="code-block">
+// sum.js
+export function sum(a, b) {
+  return a + b;
+}
+
+// sum.test.js
+import { sum } from './sum';
+
+describe('sum function', () => {
+  test('adds 1 + 2 to equal 3', () => {
+    expect(sum(1, 2)).toBe(3);
+  });
+
+  test('adds negative numbers', () => {
+    expect(sum(-1, -2)).toBe(-3);
+  });
+});
+                </div>
+
+                <div class="hinglish">
+                    <p><strong>describe:</strong> Test suite banane ke liye - related tests ko group karta hai</p>
+                    <p><strong>test/it:</strong> Individual test case define karne ke liye</p>
+                    <p><strong>expect:</strong> Assertion banane ke liye - kya expect kar rahe ho</p>
+                </div>
+
+                <h3>Common Matchers</h3>
+                <div class="code-block">
+// Equality
+expect(value).toBe(4);           // Strict equality (===)
+expect(value).toEqual(obj);      // Deep equality
+
+// Truthiness
+expect(value).toBeTruthy();
+expect(value).toBeFalsy();
+expect(value).toBeNull();
+expect(value).toBeUndefined();
+
+// Numbers
+expect(value).toBeGreaterThan(3);
+expect(value).toBeLessThanOrEqual(5);
+expect(0.1 + 0.2).toBeCloseTo(0.3);
+
+// Strings
+expect('team').toMatch(/tea/);
+expect('team').not.toMatch(/I/);
+
+// Arrays
+expect(['apple', 'banana']).toContain('apple');
+
+// Exceptions
+expect(() => throwError()).toThrow();
+expect(() => throwError()).toThrow('error message');
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Jest Test Simulator</div>
+                    <div class="test-simulator">
+                        <div class="test-panel">
+                            <h4>Test Code</h4>
+                            <select id="test-select" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px;">
+                                <option value="pass">Passing Test</option>
+                                <option value="fail">Failing Test</option>
+                                <option value="async">Async Test</option>
+                            </select>
+                            <button onclick="runTest()">▶️ Run Test</button>
+                        </div>
+                        <div class="test-panel">
+                            <h4>Test Results</h4>
+                            <div id="test-output"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- React Testing Library -->
+            <div class="section">
+                <h2>⚛️ React Testing Library</h2>
+                <div class="hinglish">
+                    <p><strong>React Testing Library (RTL)</strong> ek library hai jo React components ko test karne ke liye banayi gayi hai. Iska philosophy hai: "Test your components the way users interact with them"</p>
+                    <p>Matlab implementation details ko test karne ki jagah, user behavior ko test karo!</p>
+                </div>
+
+                <div class="key-concept">
+                    <strong>Core Principle:</strong> "The more your tests resemble the way your software is used, the more confidence they can give you."
+                </div>
+
+                <h3>Basic Component Testing</h3>
+                <div class="code-block">
+// Button.jsx
+export function Button({ onClick, children }) {
+  return (
+    &lt;button onClick={onClick}&gt;
+      {children}
+    &lt;/button&gt;
+  );
+}
+
+// Button.test.jsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import { Button } from './Button';
+
+describe('Button Component', () => {
+  test('renders button with text', () => {
+    render(&lt;Button&gt;Click Me&lt;/Button&gt;);
+    
+    const button = screen.getByText('Click Me');
+    expect(button).toBeInTheDocument();
+  });
+
+  test('calls onClick when clicked', () => {
+    const handleClick = jest.fn();
+    render(&lt;Button onClick={handleClick}&gt;Click&lt;/Button&gt;);
+    
+    const button = screen.getByText('Click');
+    fireEvent.click(button);
+    
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+});
+                </div>
+
+                <div class="hinglish">
+                    <p><strong>render:</strong> Component ko DOM mein render karta hai</p>
+                    <p><strong>screen:</strong> Rendered output ko query karne ke liye</p>
+                    <p><strong>fireEvent:</strong> User events simulate karne ke liye</p>
+                </div>
+
+                <h3>Query Methods</h3>
+                <div class="code-block">
+// getBy* - Element hona chahiye, nahi toh error
+screen.getByText('Submit');
+screen.getByRole('button');
+screen.getByLabelText('Email');
+screen.getByPlaceholderText('Enter name');
+screen.getByTestId('custom-element');
+
+// queryBy* - Element nahi hai toh null return karta
+screen.queryByText('Not Found'); // null if not found
+
+// findBy* - Async elements ke liye (returns Promise)
+await screen.findByText('Loaded Data');
+
+// getAllBy*, queryAllBy*, findAllBy* - Multiple elements
+screen.getAllByRole('listitem');
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎯 Query Method Selector</div>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                        <p><strong>Sample Component:</strong></p>
+                        <div style="background: white; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                            <h3>Login Form</h3>
+                            <input type="text" placeholder="Username" aria-label="Username" />
+                            <input type="password" placeholder="Password" aria-label="Password" />
+                            <button>Submit</button>
+                        </div>
+                        <p><strong>Select Query Method:</strong></p>
+                        <select id="query-select" onchange="showQueryExample()" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px;">
+                            <option value="role">getByRole</option>
+                            <option value="label">getByLabelText</option>
+                            <option value="placeholder">getByPlaceholderText</option>
+                            <option value="text">getByText</option>
+                        </select>
+                        <div id="query-output" style="background: #282c34; color: #61dafb; padding: 15px; border-radius: 8px; font-family: monospace;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit Testing -->
+            <div class="section">
+                <h2>🔬 Unit Testing</h2>
+                <div class="hinglish">
+                    <p><strong>Unit Testing</strong> mein hum individual functions aur components ko isolation mein test karte hain. Ye sabse chhote level ka testing hai aur sabse zyada tests bhi yahi hote hain.</p>
+                </div>
+
+                <h3>Testing Pure Functions</h3>
+                <div class="code-block">
+// utils.js
+export function formatCurrency(amount) {
+  return `₹${amount.toFixed(2)}`;
+}
+
+export function validateEmail(email) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+}
+
+// utils.test.js
+import { formatCurrency, validateEmail } from './utils';
+
+describe('formatCurrency', () => {
+  test('formats number to currency', () => {
+    expect(formatCurrency(100)).toBe('₹100.00');
+    expect(formatCurrency(99.5)).toBe('₹99.50');
+  });
+});
+
+describe('validateEmail', () => {
+  test('validates correct email', () => {
+    expect(validateEmail('test@example.com')).toBe(true);
+  });
+
+  test('rejects invalid email', () => {
+    expect(validateEmail('invalid')).toBe(false);
+    expect(validateEmail('test@')).toBe(false);
+  });
+});
+                </div>
+
+                <h3>Testing React Hooks</h3>
+                <div class="code-block">
+// useCounter.js
+import { useState } from 'react';
+
+export function useCounter(initialValue = 0) {
+  const [count, setCount] = useState(initialValue);
+  
+  const increment = () => setCount(c => c + 1);
+  const decrement = () => setCount(c => c - 1);
+  const reset = () => setCount(initialValue);
+  
+  return { count, increment, decrement, reset };
+}
+
+// useCounter.test.js
+import { renderHook, act } from '@testing-library/react';
+import { useCounter } from './useCounter';
+
+describe('useCounter', () => {
+  test('initializes with default value', () => {
+    const { result } = renderHook(() => useCounter());
+    expect(result.current.count).toBe(0);
+  });
+
+  test('increments counter', () => {
+    const { result } = renderHook(() => useCounter());
+    
+    act(() => {
+      result.current.increment();
+    });
+    
+    expect(result.current.count).toBe(1);
+  });
+
+  test('resets to initial value', () => {
+    const { result } = renderHook(() => useCounter(5));
+    
+    act(() => {
+      result.current.increment();
+      result.current.reset();
+    });
+    
+    expect(result.current.count).toBe(5);
+  });
+});
+                </div>
+            </div>
+
+            <!-- Integration Testing -->
+            <div class="section">
+                <h2>🔗 Integration Testing</h2>
+                <div class="hinglish">
+                    <p><strong>Integration Testing</strong> mein hum multiple components ya modules ko saath mein test karte hain. Ye verify karta hai ki different parts ek saath sahi se kaam kar rahe hain.</p>
+                </div>
+
+                <h3>Testing Component Integration</h3>
+                <div class="code-block">
+// TodoApp.jsx
+import { useState } from 'react';
+import TodoList from './TodoList';
+import TodoForm from './TodoForm';
+
+export function TodoApp() {
+  const [todos, setTodos] = useState([]);
+  
+  const addTodo = (text) => {
+    setTodos([...todos, { id: Date.now(), text, done: false }]);
+  };
+  
+  const toggleTodo = (id) => {
+    setTodos(todos.map(todo => 
+      todo.id === id ? { ...todo, done: !todo.done } : todo
+    ));
+  };
+  
+  return (
+    &lt;div&gt;
+      &lt;TodoForm onAdd={addTodo} /&gt;
+      &lt;TodoList todos={todos} onToggle={toggleTodo} /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// TodoApp.test.jsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { TodoApp } from './TodoApp';
+
+describe('TodoApp Integration', () => {
+  test('adds and displays new todo', async () => {
+    const user = userEvent.setup();
+    render(&lt;TodoApp /&gt;);
+    
+    const input = screen.getByPlaceholderText('Add todo');
+    const button = screen.getByText('Add');
+    
+    await user.type(input, 'Buy groceries');
+    await user.click(button);
+    
+    expect(screen.getByText('Buy groceries')).toBeInTheDocument();
+  });
+
+  test('toggles todo completion', async () => {
+    const user = userEvent.setup();
+    render(&lt;TodoApp /&gt;);
+    
+    // Add todo
+    await user.type(screen.getByPlaceholderText('Add todo'), 'Test task');
+    await user.click(screen.getByText('Add'));
+    
+    // Toggle todo
+    const checkbox = screen.getByRole('checkbox');
+    await user.click(checkbox);
+    
+    expect(checkbox).toBeChecked();
+  });
+});
+                </div>
+            </div>
+
+            <!-- Mocking APIs -->
+            <div class="section">
+                <h2>🎭 Mocking APIs</h2>
+                <div class="hinglish">
+                    <p><strong>Mocking</strong> ka matlab hai fake data ya functions create karna testing ke liye. API calls ko mock karna bahut important hai kyunki:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Tests fast chalte hain (no network calls)</li>
+                        <li>Tests reliable hote hain (no external dependencies)</li>
+                        <li>Different scenarios test kar sakte hain (success, error, loading)</li>
+                    </ul>
+                </div>
+
+                <h3>Mocking with Jest</h3>
+                <div class="code-block">
+// api.js
+export async function fetchUser(id) {
+  const response = await fetch(`/api/users/${id}`);
+  return response.json();
+}
+
+// UserProfile.jsx
+import { useState, useEffect } from 'react';
+import { fetchUser } from './api';
+
+export function UserProfile({ userId }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    fetchUser(userId)
+      .then(data => {
+        setUser(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [userId]);
+  
+  if (loading) return &lt;div&gt;Loading...&lt;/div&gt;;
+  if (error) return &lt;div&gt;Error: {error}&lt;/div&gt;;
+  return &lt;div&gt;{user.name}&lt;/div&gt;;
+}
+
+// UserProfile.test.jsx
+import { render, screen, waitFor } from '@testing-library/react';
+import { UserProfile } from './UserProfile';
+import * as api from './api';
+
+jest.mock('./api');
+
+describe('UserProfile', () => {
+  test('displays loading state', () => {
+    api.fetchUser.mockImplementation(() => new Promise(() => {}));
+    render(&lt;UserProfile userId={1} /&gt;);
+    
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+  });
+
+  test('displays user data on success', async () => {
+    api.fetchUser.mockResolvedValue({ name: 'John Doe' });
+    render(&lt;UserProfile userId={1} /&gt;);
+    
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+  });
+
+  test('displays error on failure', async () => {
+    api.fetchUser.mockRejectedValue(new Error('Failed to fetch'));
+    render(&lt;UserProfile userId={1} /&gt;);
+    
+    await waitFor(() => {
+      expect(screen.getByText(/Error:/)).toBeInTheDocument();
+    });
+  });
+});
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 API Mocking Simulator</div>
+                    <div class="mock-demo">
+                        <div class="mock-panel">
+                            <h4>Mock Configuration</h4>
+                            <select id="mock-type" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px;">
+                                <option value="success">Success Response</option>
+                                <option value="error">Error Response</option>
+                                <option value="loading">Loading State</option>
+                            </select>
+                            <button onclick="simulateApiCall()">🚀 Simulate API Call</button>
+                        </div>
+                        <div class="mock-panel">
+                            <h4>API Response</h4>
+                            <div id="api-output"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>MSW (Mock Service Worker)</h3>
+                <div class="code-block">
+// mocks/handlers.js
+import { rest } from 'msw';
+
+export const handlers = [
+  rest.get('/api/users/:id', (req, res, ctx) => {
+    const { id } = req.params;
+    
+    return res(
+      ctx.status(200),
+      ctx.json({
+        id,
+        name: 'John Doe',
+        email: 'john@example.com'
+      })
+    );
+  }),
+  
+  rest.post('/api/login', (req, res, ctx) => {
+    const { username, password } = req.body;
+    
+    if (username === 'admin' && password === 'password') {
+      return res(
+        ctx.status(200),
+        ctx.json({ token: 'fake-jwt-token' })
+      );
+    }
+    
+    return res(
+      ctx.status(401),
+      ctx.json({ message: 'Invalid credentials' })
+    );
+  })
+];
+
+// setupTests.js
+import { setupServer } from 'msw/node';
+import { handlers } from './mocks/handlers';
+
+const server = setupServer(...handlers);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+                </div>
+
+                <div class="hinglish">
+                    <p><strong>MSW</strong> ek powerful tool hai jo network level pe mocking karta hai. Ye actual HTTP requests ko intercept karke mock responses return karta hai. Development aur testing dono mein use ho sakta hai!</p>
+                </div>
+            </div>
+
+            <!-- Snapshot Testing -->
+            <div class="section">
+                <h2>📸 Snapshot Testing</h2>
+                <div class="hinglish">
+                    <p><strong>Snapshot Testing</strong> mein component ka rendered output save kar lete hain aur future tests mein compare karte hain. Agar output change hota hai toh test fail ho jata hai.</p>
+                    <p>Ye UI regressions catch karne ke liye bahut useful hai!</p>
+                </div>
+
+                <h3>Creating Snapshots</h3>
+                <div class="code-block">
+// Card.jsx
+export function Card({ title, description, image }) {
+  return (
+    &lt;div className="card"&gt;
+      {image && &lt;img src={image} alt={title} /&gt;}
+      &lt;h3&gt;{title}&lt;/h3&gt;
+      &lt;p&gt;{description}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Card.test.jsx
+import { render } from '@testing-library/react';
+import { Card } from './Card';
+
+describe('Card Component', () => {
+  test('matches snapshot', () => {
+    const { container } = render(
+      &lt;Card 
+        title="Test Card"
+        description="This is a test"
+        image="/test.jpg"
+      /&gt;
+    );
+    
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  test('matches snapshot without image', () => {
+    const { container } = render(
+      &lt;Card 
+        title="No Image Card"
+        description="Card without image"
+      /&gt;
+    );
+    
+    expect(container.firstChild).toMatchSnapshot();
+  });
+});
+                </div>
+
+                <div class="snapshot-demo">
+                    <div class="demo-title">📸 Snapshot Comparison</div>
+                    <div class="snapshot-diff">
+                        <div class="snapshot-panel">
+                            <h4>Original Snapshot</h4>
+                            <pre>
+&lt;div class="card"&gt;
+  &lt;img src="/test.jpg" alt="Test" /&gt;
+  &lt;h3&gt;Test Card&lt;/h3&gt;
+  &lt;p&gt;Description&lt;/p&gt;
+&lt;/div&gt;
+                            </pre>
+                        </div>
+                        <div class="snapshot-panel">
+                            <h4>New Snapshot</h4>
+                            <pre>
+&lt;div class="card"&gt;
+  &lt;img src="/test.jpg" alt="Test" /&gt;
+  <span class="line-added">&lt;span class="badge"&gt;New&lt;/span&gt;</span>
+  &lt;h3&gt;Test Card&lt;/h3&gt;
+  <span class="line-removed">&lt;p&gt;Description&lt;/p&gt;</span>
+  <span class="line-added">&lt;p class="desc"&gt;Description&lt;/p&gt;</span>
+&lt;/div&gt;
+                            </pre>
+                        </div>
+                    </div>
+                    <button onclick="updateSnapshot()">✅ Update Snapshot</button>
+                    <button onclick="rejectSnapshot()">❌ Reject Changes</button>
+                    <div id="snapshot-result" style="margin-top: 15px;"></div>
+                </div>
+
+                <div class="hinglish">
+                    <p><strong>Kab use karein:</strong> UI components jo frequently change nahi hote</p>
+                    <p><strong>Kab avoid karein:</strong> Dynamic content, timestamps, random data</p>
+                    <p><strong>Best Practice:</strong> Snapshots ko regularly review karo aur unnecessary changes ko avoid karo</p>
+                </div>
+            </div>
+
+            <!-- E2E Testing -->
+            <div class="section">
+                <h2>🎬 E2E Testing (Playwright / Cypress)</h2>
+                <div class="hinglish">
+                    <p><strong>End-to-End Testing</strong> mein pura application ko real user ki tarah test karte hain. Browser mein actual interactions simulate karte hain.</p>
+                </div>
+
+                <h3>Cypress Example</h3>
+                <div class="code-block">
+// cypress/e2e/login.cy.js
+describe('Login Flow', () => {
+  beforeEach(() => {
+    cy.visit('http://localhost:3000/login');
+  });
+
+  it('successfully logs in with valid credentials', () => {
+    // Type username
+    cy.get('[data-testid="username"]').type('testuser');
+    
+    // Type password
+    cy.get('[data-testid="password"]').type('password123');
+    
+    // Click login button
+    cy.get('[data-testid="login-btn"]').click();
+    
+    // Verify redirect to dashboard
+    cy.url().should('include', '/dashboard');
+    
+    // Verify welcome message
+    cy.contains('Welcome, testuser').should('be.visible');
+  });
+
+  it('shows error with invalid credentials', () => {
+    cy.get('[data-testid="username"]').type('wronguser');
+    cy.get('[data-testid="password"]').type('wrongpass');
+    cy.get('[data-testid="login-btn"]').click();
+    
+    cy.contains('Invalid credentials').should('be.visible');
+    cy.url().should('include', '/login');
+  });
+
+  it('validates required fields', () => {
+    cy.get('[data-testid="login-btn"]').click();
+    
+    cy.contains('Username is required').should('be.visible');
+    cy.contains('Password is required').should('be.visible');
+  });
+});
+                </div>
+
+                <h3>Playwright Example</h3>
+                <div class="code-block">
+// tests/login.spec.js
+import { test, expect } from '@playwright/test';
+
+test.describe('Login Flow', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:3000/login');
+  });
+
+  test('successful login', async ({ page }) => {
+    // Fill form
+    await page.fill('[data-testid="username"]', 'testuser');
+    await page.fill('[data-testid="password"]', 'password123');
+    
+    // Click login
+    await page.click('[data-testid="login-btn"]');
+    
+    // Wait for navigation
+    await page.waitForURL('**/dashboard');
+    
+    // Verify content
+    await expect(page.locator('text=Welcome, testuser')).toBeVisible();
+  });
+
+  test('handles network errors', async ({ page }) => {
+    // Simulate network failure
+    await page.route('**/api/login', route => route.abort());
+    
+    await page.fill('[data-testid="username"]', 'testuser');
+    await page.fill('[data-testid="password"]', 'password123');
+    await page.click('[data-testid="login-btn"]');
+    
+    await expect(page.locator('text=Network error')).toBeVisible();
+  });
+
+  test('works on mobile viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    
+    await page.fill('[data-testid="username"]', 'testuser');
+    await page.fill('[data-testid="password"]', 'password123');
+    await page.click('[data-testid="login-btn"]');
+    
+    await expect(page).toHaveURL(/.*dashboard/);
+  });
+});
+                </div>
+
+                <div class="hinglish">
+                    <h3>Cypress vs Playwright</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                        <div style="background: white; padding: 20px; border-radius: 10px;">
+                            <h4 style="color: #17202A;">🌲 Cypress</h4>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>Easy to setup aur use</li>
+                                <li>Great developer experience</li>
+                                <li>Time travel debugging</li>
+                                <li>Automatic waiting</li>
+                                <li>Real-time reloading</li>
+                                <li>Sirf Chromium browsers</li>
+                            </ul>
+                        </div>
+                        <div style="background: white; padding: 20px; border-radius: 10px;">
+                            <h4 style="color: #17202A;">🎭 Playwright</h4>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>Multiple browsers support</li>
+                                <li>Parallel execution</li>
+                                <li>Better performance</li>
+                                <li>Mobile emulation</li>
+                                <li>Network interception</li>
+                                <li>Auto-wait for elements</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Practices -->
+            <div class="section">
+                <h2>✨ Testing Best Practices</h2>
+                <div class="hinglish">
+                    <h3>1. Test Behavior, Not Implementation</h3>
+                    <p>❌ <strong>Bad:</strong> Component ki internal state check karna</p>
+                    <p>✅ <strong>Good:</strong> User ko kya dikhta hai wo check karna</p>
+                </div>
+
+                <div class="code-block">
+// ❌ Bad - Testing implementation
+test('counter state updates', () => {
+  const { result } = renderHook(() => useCounter());
+  expect(result.current.count).toBe(0); // Internal state
+});
+
+// ✅ Good - Testing behavior
+test('displays incremented count', () => {
+  render(&lt;Counter /&gt;);
+  const button = screen.getByText('Increment');
+  fireEvent.click(button);
+  expect(screen.getByText('Count: 1')).toBeInTheDocument();
+});
+                </div>
+
+                <div class="hinglish">
+                    <h3>2. Use Data-TestId Sparingly</h3>
+                    <p>Pehle accessible queries use karo (role, label, text), last resort mein testid</p>
+                </div>
+
+                <div class="code-block">
+// Priority order:
+1. getByRole('button', { name: 'Submit' })
+2. getByLabelText('Email')
+3. getByPlaceholderText('Enter email')
+4. getByText('Submit')
+5. getByTestId('submit-button') // Last resort
+                </div>
+
+                <div class="hinglish">
+                    <h3>3. Keep Tests Independent</h3>
+                    <p>Har test independent hona chahiye - ek test dusre pe depend nahi karna chahiye</p>
+                </div>
+
+                <div class="hinglish">
+                    <h3>4. Use Descriptive Test Names</h3>
+                    <p>Test name se hi samajh aana chahiye ki kya test ho raha hai</p>
+                </div>
+
+                <div class="code-block">
+// ❌ Bad
+test('button works', () => { ... });
+
+// ✅ Good
+test('submits form when submit button is clicked', () => { ... });
+test('shows validation error when email is invalid', () => { ... });
+                </div>
+
+                <div class="hinglish">
+                    <h3>5. Avoid Testing Third-Party Libraries</h3>
+                    <p>React, Redux, etc. already tested hain - apna code test karo</p>
+                </div>
+
+                <div class="hinglish">
+                    <h3>6. Mock External Dependencies</h3>
+                    <p>API calls, timers, random values - sab mock karo for consistent tests</p>
+                </div>
+
+                <div class="hinglish">
+                    <h3>7. Test Edge Cases</h3>
+                    <p>Sirf happy path nahi, error cases bhi test karo</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Empty states</li>
+                        <li>Loading states</li>
+                        <li>Error states</li>
+                        <li>Boundary values</li>
+                        <li>Network failures</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Interview Questions -->
+            <div class="interview-section">
+                <h2 style="color: white; text-align: center; margin-bottom: 30px;">🎯 Interview Questions</h2>
+                
+                <div class="question-card" onclick="toggleAnswer(1)">
+                    <div class="question-header">
+                        <span>1. Jest aur React Testing Library mein kya difference hai?</span>
+                        <div>
+                            <span class="difficulty difficulty-easy">Easy</span>
+                            <span class="toggle-icon" id="icon-1">▼</span>
+                        </div>
+                    </div>
+                    <div class="answer" id="answer-1">
+                        <p><strong>Answer:</strong></p>
+                        <p><strong>Jest</strong> ek testing framework hai jo test runner, assertion library, aur mocking capabilities provide karta hai. Ye kisi bhi JavaScript code ko test kar sakta hai.</p>
+                        <p><strong>React Testing Library</strong> ek library hai jo specifically React components ko test karne ke liye banayi gayi hai. Ye DOM queries aur user interactions simulate karne ke tools provide karta hai.</p>
+                        <p><strong>Relationship:</strong> RTL Jest ke saath use hota hai - Jest tests run karta hai aur RTL React components ko render aur query karta hai.</p>
+                        <div class="code-block" style="margin-top: 10px;">
+// Jest provides: describe, test, expect, mock
+// RTL provides: render, screen, fireEvent, waitFor
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(2)">
+                    <div class="question-header">
+                        <span>2. getBy, queryBy, aur findBy mein kya difference hai?</span>
+                        <div>
+                            <span class="difficulty difficulty-medium">Medium</span>
+                            <span class="toggle-icon" id="icon-2">▼</span>
+                        </div>
+                    </div>
+                    <div class="answer" id="answer-2">
+                        <p><strong>Answer:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>getBy*:</strong> Element immediately milna chahiye, nahi toh error throw karta hai. Synchronous hai.</li>
+                            <li><strong>queryBy*:</strong> Element nahi mila toh null return karta hai (no error). Negative assertions ke liye use hota hai.</li>
+                            <li><strong>findBy*:</strong> Async elements ke liye. Promise return karta hai aur element ke appear hone ka wait karta hai (default 1000ms timeout).</li>
+                        </ul>
+                        <div class="code-block" style="margin-top: 10px;">
+// Use getBy when element should be there
+const button = screen.getByRole('button');
+
+// Use queryBy to check element doesn't exist
+expect(screen.queryByText('Error')).not.toBeInTheDocument();
+
+// Use findBy for async elements
+const data = await screen.findByText('Loaded Data');
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(3)">
+                    <div class="question-header">
+                        <span>3. API calls ko test karte waqt kya approach use karni chahiye?</span>
+                        <div>
+                            <span class="difficulty difficulty-medium">Medium</span>
+                            <span class="toggle-icon" id="icon-3">▼</span>
+                        </div>
+                    </div>
+                    <div class="answer" id="answer-3">
+                        <p><strong>Answer:</strong></p>
+                        <p>API calls ko test karne ke liye mainly 3 approaches hain:</p>
+                        <ol style="margin-left: 20px;">
+                            <li><strong>Jest Mock Functions:</strong> API module ko mock kar do
+                                <div class="code-block" style="margin-top: 5px;">
+jest.mock('./api');
+api.fetchUser.mockResolvedValue({ name: 'John' });
+                                </div>
+                            </li>
+                            <li><strong>MSW (Mock Service Worker):</strong> Network level pe mock karo
+                                <div class="code-block" style="margin-top: 5px;">
+rest.get('/api/users', (req, res, ctx) => {
+  return res(ctx.json({ name: 'John' }));
+});
+                                </div>
+                            </li>
+                            <li><strong>Dependency Injection:</strong> API client ko prop ke through pass karo aur test mein mock version inject karo</li>
+                        </ol>
+                        <p><strong>Best Practice:</strong> MSW use karo kyunki ye most realistic hai aur development mein bhi use ho sakta hai.</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(4)">
+                    <div class="question-header">
+                        <span>4. Snapshot testing ke advantages aur disadvantages kya hain?</span>
+                        <div>
+                            <span class="difficulty difficulty-medium">Medium</span>
+                            <span class="toggle-icon" id="icon-4">▼</span>
+                        </div>
+                    </div>
+                    <div class="answer" id="answer-4">
+                        <p><strong>Advantages:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Quick to write - ek line mein test likh sakte ho</li>
+                            <li>UI regressions catch kar leta hai</li>
+                            <li>Component structure changes detect karta hai</li>
+                            <li>Documentation ka kaam bhi karta hai</li>
+                        </ul>
+                        <p><strong>Disadvantages:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>False positives - minor changes pe bhi fail ho jata hai</li>
+                            <li>Developers blindly update kar dete hain without reviewing</li>
+                            <li>Large snapshots maintain karna mushkil</li>
+                            <li>Dynamic content (dates, IDs) ke saath problem</li>
+                            <li>Actual behavior test nahi karta, sirf output compare karta hai</li>
+                        </ul>
+                        <p><strong>Best Practice:</strong> Snapshots ko supplement ki tarah use karo, main testing strategy nahi. Stable UI components ke liye best hai.</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(5)">
+                    <div class="question-header">
+                        <span>5. Integration tests aur E2E tests mein kya difference hai?</span>
+                        <div>
+                            <span class="difficulty difficulty-easy">Easy</span>
+                            <span class="toggle-icon" id="icon-5">▼</span>
+                        </div>
+                    </div>
+                    <div class="answer" id="answer-5">
+                        <p><strong>Integration Tests:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Multiple components/modules ko saath test karte hain</li>
+                            <li>Still in isolation - external dependencies mock hote hain</li>
+                            <li>Fast execution</li>
+                            <li>Jest + RTL se run hote hain</li>
+                            <li>Example: Form + validation + state management</li>
+                        </ul>
+                        <p><strong>E2E Tests:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Pura application flow test karte hain</li>
+                            <li>Real browser mein chalte hain</li>
+                            <li>Backend bhi involved hota hai (ya mocked backend)</li>
+                            <li>Slow execution</li>
+                            <li>Cypress/Playwright se run hote hain</li>
+                            <li>Example: Login → Dashboard → Create Post → Logout</li>
+                        </ul>
+                        <p><strong>Analogy:</strong> Integration test = ek room check karna, E2E test = pura ghar check karna</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(6)">
+                    <div class="question-header">
+                        <span>6. fireEvent aur userEvent mein kya difference hai?</span>
+                        <div>
+                            <span class="difficulty difficulty-medium">Medium</span>
+                            <span class="toggle-icon" id="icon-6">▼</span>
+                        </div>
+                    </div>
+                    <div class="answer" id="answer-6">
+                        <p><strong>fireEvent:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Low-level DOM events dispatch karta hai</li>
+                            <li>Ek single event fire karta hai</li>
+                            <li>Synchronous hai</li>
+                            <li>Example: fireEvent.click(button)</li>
+                        </ul>
+                        <p><strong>userEvent:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Real user interactions simulate karta hai</li>
+                            <li>Multiple events fire karta hai (realistic behavior)</li>
+                            <li>Asynchronous hai</li>
+                            <li>Example: await user.click(button)</li>
+                        </ul>
+                        <div class="code-block" style="margin-top: 10px;">
+// fireEvent - single click event
+fireEvent.click(button);
+
+// userEvent - hover + mousedown + focus + mouseup + click
+const user = userEvent.setup();
+await user.click(button);
+
+// userEvent.type triggers keydown, keypress, keyup for each character
+await user.type(input, 'Hello');
+                        </div>
+                        <p><strong>Recommendation:</strong> userEvent prefer karo kyunki ye more realistic hai.</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(7)">
+                    <div class="question-header">
+                        <span>7. Test coverage 100% hona chahiye? Explain.</span>
+                        <div>
+                            <span class="difficulty difficulty-hard">Hard</span>
+                            <span class="toggle-icon" id="icon-7">▼</span>
+                        </div>
+                    </div>
+                    <div class="answer" id="answer-7">
+                        <p><strong>Short Answer:</strong> Nahi, 100% coverage goal nahi hona chahiye.</p>
+                        <p><strong>Detailed Explanation:</strong></p>
+                        <p><strong>Coverage Metrics:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>Line Coverage:</strong> Kitni lines execute hui</li>
+                            <li><strong>Branch Coverage:</strong> Kitne if/else paths test hue</li>
+                            <li><strong>Function Coverage:</strong> Kitne functions call hue</li>
+                            <li><strong>Statement Coverage:</strong> Kitne statements execute hue</li>
+                        </ul>
+                        <p><strong>Problems with 100% Coverage:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Coverage ≠ Quality - sab lines cover ho sakti hain but edge cases miss ho sakte hain</li>
+                            <li>Time waste - trivial code ko test karne mein time lagta hai</li>
+                            <li>False confidence - high coverage se lagta hai sab theek hai</li>
+                            <li>Maintenance overhead - unnecessary tests maintain karne padte hain</li>
+                        </ul>
+                        <p><strong>Better Approach:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Critical business logic: 90-100% coverage</li>
+                            <li>UI components: 70-80% coverage</li>
+                            <li>Utility functions: 80-90% coverage</li>
+                            <li>Focus on meaningful tests, not numbers</li>
+                            <li>Test behavior and edge cases, not just lines</li>
+                        </ul>
+                        <p><strong>Quote:</strong> "Code coverage is a useful metric, but it's not a goal. The goal is confidence in your code."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                <h2 style="color: white;">🎓 Summary</h2>
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-top: 20px;">
+                    <h3 style="color: white;">Key Takeaways:</h3>
+                    <ul style="margin-left: 20px; margin-top: 15px; line-height: 2;">
+                        <li>✅ Testing Pyramid follow karo - zyada unit tests, kam E2E tests</li>
+                        <li>✅ Jest framework hai, RTL React components test karne ke liye</li>
+                        <li>✅ User behavior test karo, implementation details nahi</li>
+                        <li>✅ API calls ko mock karo for fast and reliable tests</li>
+                        <li>✅ Snapshots useful hain but blindly update mat karo</li>
+                        <li>✅ E2E tests critical user flows ke liye use karo</li>
+                        <li>✅ Coverage important hai but 100% goal nahi</li>
+                        <li>✅ Tests documentation aur confidence provide karte hain</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Testing Pyramid Layer Info
+        function showLayerInfo(layer) {
+            const allLayers = document.querySelectorAll('.layer-info');
+            allLayers.forEach(l => l.classList.remove('active'));
+            
+            const selectedLayer = document.getElementById(`layer-info-${layer}`);
+            selectedLayer.classList.add('active');
+        }
+
+        // Jest Test Simulator
+        function runTest() {
+            const testType = document.getElementById('test-select').value;
+            const output = document.getElementById('test-output');
+            
+            output.innerHTML = '<div class="test-result test-pending">⏳ Running tests...</div>';
+            
+            setTimeout(() => {
+                let result = '';
+                
+                if (testType === 'pass') {
+                    result = `
+                        <div class="test-result test-pass">
+                            ✓ sum function › adds 1 + 2 to equal 3 (5ms)<br>
+                            ✓ sum function › adds negative numbers (2ms)<br><br>
+                            <strong>Test Suites:</strong> 1 passed, 1 total<br>
+                            <strong>Tests:</strong> 2 passed, 2 total<br>
+                            <strong>Time:</strong> 0.847s
+                        </div>
+                    `;
+                } else if (testType === 'fail') {
+                    result = `
+                        <div class="test-result test-fail">
+                            ✓ sum function › adds 1 + 2 to equal 3 (5ms)<br>
+                            ✕ sum function › adds negative numbers (12ms)<br><br>
+                            <strong>Expected:</strong> -3<br>
+                            <strong>Received:</strong> 3<br><br>
+                            <strong>Test Suites:</strong> 1 failed, 1 total<br>
+                            <strong>Tests:</strong> 1 failed, 1 passed, 2 total
+                        </div>
+                    `;
+                } else {
+                    result = `
+                        <div class="test-result test-pass">
+                            ✓ fetchUser › returns user data (234ms)<br>
+                            ✓ fetchUser › handles errors (156ms)<br><br>
+                            <strong>Test Suites:</strong> 1 passed, 1 total<br>
+                            <strong>Tests:</strong> 2 passed, 2 total<br>
+                            <strong>Time:</strong> 1.234s
+                        </div>
+                    `;
+                }
+                
+                output.innerHTML = result;
+            }, 1500);
+        }
+
+        // Query Method Example
+        function showQueryExample() {
+            const queryType = document.getElementById('query-select').value;
+            const output = document.getElementById('query-output');
+            
+            const examples = {
+                role: `screen.getByRole('button', { name: 'Submit' })
+screen.getByRole('textbox', { name: 'Username' })`,
+                label: `screen.getByLabelText('Username')
+screen.getByLabelText('Password')`,
+                placeholder: `screen.getByPlaceholderText('Username')
+screen.getByPlaceholderText('Password')`,
+                text: `screen.getByText('Login Form')
+screen.getByText('Submit')`
+            };
+            
+            output.textContent = examples[queryType];
+        }
+
+        // Initialize query example
+        showQueryExample();
+
+        // API Mocking Simulator
+        function simulateApiCall() {
+            const mockType = document.getElementById('mock-type').value;
+            const output = document.getElementById('api-output');
+            
+            output.innerHTML = '<div class="api-status status-loading">⏳ Loading...</div>';
+            
+            setTimeout(() => {
+                let result = '';
+                
+                if (mockType === 'success') {
+                    result = `
+                        <div class="api-status status-success">✅ Success!</div>
+                        <div class="code-block" style="margin-top: 10px;">
+{
+  "id": 1,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "status": "active"
+}
+                        </div>
+                    `;
+                } else if (mockType === 'error') {
+                    result = `
+                        <div class="api-status status-error">❌ Error!</div>
+                        <div class="code-block" style="margin-top: 10px;">
+{
+  "error": "Failed to fetch",
+  "message": "Network request failed",
+  "status": 500
+}
+                        </div>
+                    `;
+                } else {
+                    result = '<div class="api-status status-loading">⏳ Still Loading...</div>';
+                }
+                
+                output.innerHTML = result;
+            }, 1000);
+        }
+
+        // Snapshot Testing
+        function updateSnapshot() {
+            const result = document.getElementById('snapshot-result');
+            result.innerHTML = '<div class="test-result test-pass">✅ Snapshot updated successfully!</div>';
+            setTimeout(() => result.innerHTML = '', 3000);
+        }
+
+        function rejectSnapshot() {
+            const result = document.getElementById('snapshot-result');
+            result.innerHTML = '<div class="test-result test-fail">❌ Changes rejected. Test will fail.</div>';
+            setTimeout(() => result.innerHTML = '', 3000);
+        }
+
+        // Interview Questions Toggle
+        function toggleAnswer(num) {
+            const answer = document.getElementById(`answer-${num}`);
+            const icon = document.getElementById(`icon-${num}`);
+            
+            answer.classList.toggle('show');
+            icon.classList.toggle('rotated');
+        }
+    </script>
+</body>
+</html>

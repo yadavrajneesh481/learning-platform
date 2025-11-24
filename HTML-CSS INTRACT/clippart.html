@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Clip-Path Examples</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .example {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .example:hover {
+            transform: translateY(-5px);
+        }
+
+        .example h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .shape {
+            width: 200px;
+            height: 120px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            margin: 20px auto;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .shape:hover {
+            transform: scale(1.05);
+        }
+
+        .code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin-top: 15px;
+            overflow-x: auto;
+            border-left: 4px solid #667eea;
+        }
+
+        .property {
+            color: #81e6d9;
+        }
+
+        .value {
+            color: #fbb6ce;
+        }
+
+        .description {
+            margin: 15px 0;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Clip-path examples */
+        .circle {
+            clip-path: circle(50% at 50% 50%);
+        }
+
+        .ellipse {
+            clip-path: ellipse(70% 50% at 50% 50%);
+        }
+
+        .triangle {
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+
+        .diamond {
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        .hexagon {
+            clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+        }
+
+        .star {
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+
+        .arrow-right {
+            clip-path: polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%);
+        }
+
+        .speech-bubble {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 75% 75%, 75% 100%, 50% 75%, 0% 75%);
+        }
+
+        .trapezoid {
+            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+        }
+
+        .parallelogram {
+            clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+        }
+
+        .house {
+            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+        }
+
+        .cross {
+            clip-path: polygon(40% 0%, 60% 0%, 60% 40%, 100% 40%, 100% 60%, 60% 60%, 60% 100%, 40% 100%, 40% 60%, 0% 60%, 0% 40%, 40% 40%);
+        }
+
+        .inset-square {
+            clip-path: inset(10px 20px 30px 10px);
+        }
+
+        .rounded-square {
+            clip-path: inset(10px 10px 10px 10px round 20px);
+        }
+
+        .your-example {
+            clip-path: polygon(16px 0, 100% 0, 100% 30px, calc(100% - 18px) 48px, calc(100% - 18px) 100%, 0 100%, 0 16px);
+            height: 80px;
+        }
+
+        .interactive-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .control-btn.active {
+            background: #ff6b6b;
+        }
+
+        #interactive-shape {
+            width: 250px;
+            height: 150px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            margin: 20px auto;
+            transition: clip-path 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CSS Clip-Path Property Examples</h1>
+
+        <div class="grid">
+            <!-- Circle -->
+            <div class="example">
+                <h3>Circle</h3>
+                <div class="shape circle"></div>
+                <div class="description">Creates a perfect circle. The first parameter is the radius, the second specifies the center position.</div>
+                <div class="code">
+<span class="property">clip-path:</span> <span class="value">circle(50% at 50% 50%);</span>
+/* circle(radius at x-position y-position) */</div>
+            </div>
+
+            <!-- Ellipse -->
+            <div class="example">
+                <h3>Ellipse</h3>
+                <div class="shape ellipse"></div>
+                <div class="description">Creates an oval shape. First two parameters define horizontal and vertical radius, last two define center position.</div>
+                <div class="code">
+<span class="property">clip-path:</span> <span class="value">ellipse(70% 50% at 50% 50%);</span>
+/* ellipse(rx ry at x-position y-position) */</div>
+            </div>
+
+            <!-- Triangle -->
+            <div class="example">
+                <h3>Triangle</h3>
+                <div class="shape triangle"></div>
+                <div class="description">Uses polygon() to create a triangle. Each coordinate pair represents a vertex of the shape.</div>
+                <div class="code">
+<span class="property">clip-path:</span> <span class="value">polygon(50% 0%, 0% 100%, 100% 100%);</span>
+/* Three points: top center, bottom left, bottom right */</div>
+            </div>
+
+            <!-- Diamond -->
+            <div class="example">
+                <h3>Diamond</h3>
+                <div class="shape diamond"></div>
+                <div class="description">A diamond shape created with four points positioned at the middle of each side.</div>
+                <div class="code">
+<span class="property">clip-path:</span> <span class="value">polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);</span>
+/* Four points: top, right, bottom, left */</div>
+            </div>
+
+            <!-- Hexagon -->
+            <div class="example">
+                <h3>Hexagon</h3>
+                <div class="shape hexagon"></div>
+                <div class="description">A six-sided polygon. Points are calculated to create equal angles between sides.</div>
+                <div class="code">
+<span class="property">clip-path:</span> <span class="value">polygon(30% 0%, 70% 0%, 100% 50%, 
+         70% 100%, 30% 100%, 0% 50%);</span>
+/* Six points creating equal sides */</div>
+            </div>
+
+            <!-- Star -->
+            <div class="example">
+                <h3>Star</h3>
+                <div class="shape star"></div>
+                <div class="description">A complex 5-pointed star using 10 coordinates - 5 for outer points and 5 for inner points.</div>
+                <div class="code">
+<span class="property">clip-path:</span> <span class="value">polygon(50% 0%, 61% 35%, 98% 35%, 
+         68% 57%, 79% 91%, 50% 70%, 
+         21% 91%, 32% 57%, 2% 35%, 39% 35%);</span></div>
+            </div>
+
+            <!-- Arrow Right -->
+            <div class="example">
+                <h3>Arrow Right</h3>
+                <div class="shape arrow-right"></div>
+                <div class="description">An arrow pointing to the right, created by cutting out the arrow shape from a rectangle.</div>
+                <div class="code">
+<span class="property">clip-path:</span> <span class="value">polygon(0% 0%, 75% 0%, 100% 50%, 
+         75% 100%, 0% 100%, 25% 50%);</span>
+/* Creates arrow pointing right */</div>
+            </div>
+
+            <!-- Speech Bubble -->
+            <div class="example">
+                <h3>Speech Bubble</h3>
+                <div class="shape speech-bubble"></div>
+                <div class="description">A speech bubble with a pointer at the bottom. Useful for chat interfaces and tooltips.</div>
+                <div class="code">
+<span class="property">clip-path:</span> <span class="value">polygon(0% 0%, 100% 0%, 100% 75%, 
+         75% 75%, 75% 100%, 50% 75%, 0% 75%);</span>
+/* Rectangle with bottom pointer */</div>
+            </div>
+
+            <!-- Inset Square -->
+            <div class="example">
+                <h3>Inset (Rectangle)</h3>
+                <div class="shape inset-square"></div>
+                <div class="description">Uses inset() to create a rectangle by cutting from each side. Values are: top, right, bottom, left.</div>
+                <div class="code">
+<span class="property">clip-path:</span> <span class="value">inset(10px 20px 30px 10px);</span>
+/* inset(top right bottom left) */</div>
+            </div>
+
+            <!-- Rounded Square -->
+            <div class="example">
+                <h3>Rounded Inset</h3>
+                <div class="shape rounded-square"></div>
+                <div class="description">Inset with rounded corners using the round keyword.</div>
+                <div class="code">
+<span class="property">clip-path:</span> <span class="value">inset(10px 10px 10px 10px round 20px);</span>
+/* inset(offsets) round border-radius */</div>
+            </div>
+
+            <!-- Trapezoid -->
+            <div class="example">
+                <h3>Trapezoid</h3>
+                <div class="shape trapezoid"></div>
+                <div class="description">A trapezoid shape where the top is narrower than the bottom.</div>
+                <div class="code">
+<span class="property">clip-path:</span> <span class="value">polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);</span>
+/* Narrower top, wider bottom */</div>
+            </div>
+
+            <!-- Parallelogram -->
+            <div class="example">
+                <h3>Parallelogram</h3>
+                <div class="shape parallelogram"></div>
+                <div class="description">A slanted rectangle where opposite sides are parallel and equal.</div>
+                <div class="code">
+<span class="property">clip-path:</span> <span class="value">polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);</span>
+/* Slanted rectangle */</div>
+            </div>
+
+            <!-- Your Example -->
+            <div class="example">
+                <h3>Your Custom Shape</h3>
+                <div class="shape your-example"></div>
+                <div class="description">Your original clip-path creates a custom shape with angled corners and calc() for responsive sizing.</div>
+                <div class="code">
+<span class="property">clip-path:</span> <span class="value">polygon(16px 0, 100% 0, 100% 30px, 
+         calc(100% - 18px) 48px, 
+         calc(100% - 18px) 100%, 
+         0 100%, 0 16px);</span>
+/* Custom shape with calc() values */</div>
+            </div>
+        </div>
+
+        <!-- Interactive Section -->
+        <div class="interactive-section">
+            <h3>Interactive Clip-Path Demo</h3>
+            <div class="controls">
+                <button class="control-btn active" onclick="changeShape('none')">No Clip</button>
+                <button class="control-btn" onclick="changeShape('circle(40%)')">Circle</button>
+                <button class="control-btn" onclick="changeShape('polygon(50% 0%, 0% 100%, 100% 100%)')">Triangle</button>
+                <button class="control-btn" onclick="changeShape('polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)')">Diamond</button>
+                <button class="control-btn" onclick="changeShape('polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)')">Star</button>
+            </div>
+            <div id="interactive-shape"></div>
+            <div class="description">Click the buttons above to see different clip-path values applied in real-time!</div>
+        </div>
+
+        <!-- Key Concepts -->
+        <div class="interactive-section">
+            <h3>Key Clip-Path Concepts</h3>
+            <div class="description">
+                <strong>Basic Shapes:</strong><br>
+                • <code>circle(radius at x y)</code> - Creates circular clips<br>
+                • <code>ellipse(rx ry at x y)</code> - Creates oval clips<br>
+                • <code>inset(top right bottom left)</code> - Creates rectangular clips<br><br>
+                
+                <strong>Polygon:</strong><br>
+                • <code>polygon(x1 y1, x2 y2, x3 y3, ...)</code> - Creates custom shapes<br>
+                • Coordinates can use px, %, em, or calc() values<br>
+                • Points are connected in order, last point connects to first<br><br>
+                
+                <strong>Coordinate System:</strong><br>
+                • (0% 0%) = top-left corner<br>
+                • (100% 0%) = top-right corner<br>
+                • (0% 100%) = bottom-left corner<br>
+                • (100% 100%) = bottom-right corner<br>
+                • (50% 50%) = center of element
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeShape(clipPath) {
+            const shape = document.getElementById('interactive-shape');
+            const buttons = document.querySelectorAll('.control-btn');
+            
+            // Remove active class from all buttons
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Apply clip-path
+            if (clipPath === 'none') {
+                shape.style.clipPath = 'none';
+            } else {
+                shape.style.clipPath = clipPath;
+            }
+        }
+
+        // Add hover effects to shapes
+        document.addEventListener('DOMContentLoaded', function() {
+            const shapes = document.querySelectorAll('.shape');
+            shapes.forEach(shape => {
+                shape.addEventListener('mouseenter', function() {
+                    this.style.filter = 'brightness(1.1) saturate(1.2)';
+                });
+                shape.addEventListener('mouseleave', function() {
+                    this.style.filter = 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

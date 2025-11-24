@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Styling - Interactive Learning Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #61dafb;
+            --secondary-color: #282c34;
+            --accent-color: #ff6b6b;
+            --text-color: #333;
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --code-bg: #f4f4f4;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode {
+            --text-color: #e0e0e0;
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --border-color: #404040;
+            --code-bg: #1e1e1e;
+            --secondary-color: #61dafb;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .section {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 2em;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: var(--accent-color);
+            margin: 25px 0 15px 0;
+            font-size: 1.5em;
+        }
+
+        .hinglish {
+            background: linear-gradient(to right, #fff3e0, #e3f2fd);
+            padding: 15px;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 5px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        body.dark-mode .hinglish {
+            background: linear-gradient(to right, #2d2410, #0d1b2a);
+        }
+
+        .definition {
+            background: var(--code-bg);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .definition strong {
+            color: var(--success-color);
+        }
+
+        code {
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+            color: white;
+        }
+
+        .demo-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            color: var(--text-color);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            background: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            color: var(--text-color);
+        }
+
+        .tab-button:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .comparison-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .pros-cons {
+            margin-top: 10px;
+        }
+
+        .pros-cons li {
+            margin: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .pros li::before {
+            content: "✓";
+            color: var(--success-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .cons li::before {
+            content: "✗";
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .live-demo {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px dashed var(--primary-color);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .demo-button {
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .demo-button:hover {
+            background: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .demo-output {
+            padding: 20px;
+            background: var(--code-bg);
+            border-radius: 5px;
+            min-height: 100px;
+            transition: all 0.3s ease;
+        }
+
+        .styled-box {
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .global-css-demo {
+            background: #ffeb3b;
+            color: #333;
+            border: 2px solid #fbc02d;
+        }
+
+        .css-module-demo {
+            background: #e1bee7;
+            color: #4a148c;
+            border: 2px solid #9c27b0;
+        }
+
+        .styled-component-demo {
+            background: #b2dfdb;
+            color: #004d40;
+            border: 2px solid #00796b;
+        }
+
+        .tailwind-demo {
+            background: #bbdefb;
+            color: #0d47a1;
+            border: 2px solid #1976d2;
+        }
+
+        .interview-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .question-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .difficulty {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .difficulty.easy {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .difficulty.medium {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .difficulty.hard {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .answer {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid var(--border-color);
+            animation: slideDown 0.3s ease;
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
+        }
+
+        .responsive-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .responsive-box {
+            padding: 20px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .responsive-box:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                width: 100%;
+            }
+
+            .dark-mode-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+            }
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px;
+            border-radius: 10px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .feature-card h4 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            width: 0%;
+            transition: width 1s ease;
+            animation: progressAnimation 2s ease-in-out infinite;
+        }
+
+        @keyframes progressAnimation {
+            0%, 100% { width: 0%; }
+            50% { width: 100%; }
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            border-bottom: 1px dotted var(--primary-color);
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--secondary-color);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+        <span id="mode-icon">🌙</span>
+        <span id="mode-text">Dark Mode</span>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>🎨 React Styling - Complete Guide</h1>
+            <p>Day 20-21: Master karo React mein styling ke saare tarike!</p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </header>
+
+        <!-- Introduction Section -->
+        <section class="section">
+            <h2>📚 Introduction - React Styling Kya Hai?</h2>
+            <div class="hinglish">
+                <p><strong>Dekho dosto,</strong> React mein styling karna matlab hai apne components ko sundar aur attractive banana. Jaise hum apne ghar ko decorate karte hain, waise hi React components ko bhi style karna padta hai. Lekin React mein styling ke bahut saare tarike hain - traditional CSS se lekar modern styled-components tak!</p>
+            </div>
+            
+            <div class="definition">
+                <strong>Definition:</strong> React Styling refers to the various methods and approaches used to apply CSS styles to React components, ranging from traditional CSS files to CSS-in-JS solutions.
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="icon">🎯</div>
+                    <h4>Multiple Approaches</h4>
+                    <p>Global CSS, CSS Modules, Styled Components, aur bahut kuch!</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">⚡</div>
+                    <h4>Performance</h4>
+                    <p>Optimized styling for faster load times</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🔧</div>
+                    <h4>Flexibility</h4>
+                    <p>Choose karo jo tumhare project ke liye best hai</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">📱</div>
+                    <h4>Responsive</h4>
+                    <p>Mobile se desktop tak perfect display</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Styling Methods Section -->
+        <section class="section">
+            <h2>🎨 Styling Methods - Sabhi Tarike</h2>
+            
+            <div class="tabs">
+                <button class="tab-button active" onclick="showTab('global-css')">Global CSS</button>
+                <button class="tab-button" onclick="showTab('css-modules')">CSS Modules</button>
+                <button class="tab-button" onclick="showTab('styled-components')">Styled Components</button>
+                <button class="tab-button" onclick="showTab('emotion')">Emotion</button>
+                <button class="tab-button" onclick="showTab('tailwind')">Tailwind CSS</button>
+                <button class="tab-button" onclick="showTab('ui-libraries')">UI Libraries</button>
+            </div>
+
+            <!-- Global CSS Tab -->
+            <div id="global-css" class="tab-content active">
+                <h3>1️⃣ Global CSS - Traditional Approach</h3>
+                <div class="hinglish">
+                    <p><strong>Ye sabse purana aur simple tarika hai!</strong> Isme hum normal CSS file banate hain aur use import kar lete hain. Jaise traditional websites mein karte the, waise hi. Lekin iska ek problem hai - saare styles global ho jate hain, matlab kisi bhi component mein apply ho sakte hain.</p>
+                </div>
+
+                <div class="definition">
+                    <strong>Global CSS:</strong> A traditional styling approach where CSS rules are defined in separate .css files and imported into components, making styles available globally across the application.
+                </div>
+
+                <div class="code-block">
+                    <pre>
+/* styles.css */
+.button {
+    background-color: #61dafb;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #4fa8c5;
+}
+
+/* App.js */
+import './styles.css';
+
+function App() {
+    return &lt;button className="button"&gt;Click Me&lt;/button&gt;;
+}</pre>
+                </div>
+
+                <div class="live-demo">
+                    <h4>🎮 Live Demo - Global CSS</h4>
+                    <div class="demo-output">
+                        <div class="styled-box global-css-demo">
+                            <h4>Global CSS Styled Box</h4>
+                            <p>Ye box global CSS se styled hai!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>✅ Advantages</h4>
+                        <ul class="pros-cons pros">
+                            <li>Simple aur easy to understand</li>
+                            <li>Traditional CSS knowledge use kar sakte ho</li>
+                            <li>Quick setup, no extra configuration</li>
+                            <li>Browser caching ka benefit</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>❌ Disadvantages</h4>
+                        <ul class="pros-cons cons">
+                            <li>Name collision ka risk</li>
+                            <li>Global scope issues</li>
+                            <li>Dead code elimination difficult</li>
+                            <li>Component-specific styling hard</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CSS Modules Tab -->
+            <div id="css-modules" class="tab-content">
+                <h3>2️⃣ CSS Modules - Scoped Styling</h3>
+                <div class="hinglish">
+                    <p><strong>CSS Modules ek game-changer hai!</strong> Isme har component ki apni CSS file hoti hai aur wo automatically scoped ho jati hai. Matlab ek component ki styling dusre component ko affect nahi karegi. Ye Create React App mein by default supported hai!</p>
+                </div>
+
+                <div class="definition">
+                    <strong>CSS Modules:</strong> A CSS file in which all class names and animation names are scoped locally by default, preventing naming conflicts and ensuring component-level encapsulation.
+                </div>
+
+                <div class="code-block">
+                    <pre>
+/* Button.module.css */
+.button {
+    background-color: #e1bee7;
+    color: #4a148c;
+    padding: 12px 24px;
+    border: 2px solid #9c27b0;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: #ce93d8;
+    transform: scale(1.05);
+}
+
+/* Button.js */
+import styles from './Button.module.css';
+
+function Button() {
+    return &lt;button className={styles.button}&gt;Click Me&lt;/button&gt;;
+}</pre>
+                </div>
+
+                <div class="live-demo">
+                    <h4>🎮 Live Demo - CSS Modules</h4>
+                    <div class="demo-output">
+                        <div class="styled-box css-module-demo">
+                            <h4>CSS Module Styled Box</h4>
+                            <p>Ye box CSS Modules se styled hai - completely scoped!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>✅ Advantages</h4>
+                        <ul class="pros-cons pros">
+                            <li>Local scope - no naming conflicts</li>
+                            <li>Component-specific styling</li>
+                            <li>Easy to maintain</li>
+                            <li>Works with existing CSS knowledge</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>❌ Disadvantages</h4>
+                        <ul class="pros-cons cons">
+                            <li>Extra file for each component</li>
+                            <li>Class name syntax thoda different</li>
+                            <li>Dynamic styling limited</li>
+                            <li>Build step required</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Styled Components Tab -->
+            <div id="styled-components" class="tab-content">
+                <h3>3️⃣ Styled Components - CSS-in-JS Magic</h3>
+                <div class="hinglish">
+                    <p><strong>Ye sabse popular CSS-in-JS library hai!</strong> Isme tum JavaScript ke andar hi CSS likh sakte ho. Bahut powerful hai kyunki tum props ke basis pe dynamic styling kar sakte ho. Tagged template literals ka use karte hain isme.</p>
+                </div>
+
+                <div class="definition">
+                    <strong>Styled Components:</strong> A CSS-in-JS library that allows you to write actual CSS code to style components using tagged template literals, enabling dynamic styling based on props and automatic critical CSS injection.
+                </div>
+
+                <div class="code-block">
+                    <pre>
+import styled from 'styled-components';
+
+// Styled component create karo
+const Button = styled.button`
+    background-color: ${props => props.primary ? '#61dafb' : '#gray'};
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+`;
+
+// Use karo
+function App() {
+    return (
+        &lt;&gt;
+            &lt;Button primary&gt;Primary Button&lt;/Button&gt;
+            &lt;Button&gt;Secondary Button&lt;/Button&gt;
+        &lt;/&gt;
+    );
+}</pre>
+                </div>
+
+                <div class="live-demo">
+                    <h4>🎮 Live Demo - Styled Components</h4>
+                    <div class="demo-controls">
+                        <button class="demo-button" onclick="toggleStyledDemo()">Toggle Style</button>
+                    </div>
+                    <div class="demo-output">
+                        <div class="styled-box styled-component-demo" id="styled-demo">
+                            <h4>Styled Component Box</h4>
+                            <p>Dynamic styling with props!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>✅ Advantages</h4>
+                        <ul class="pros-cons pros">
+                            <li>Dynamic styling with props</li>
+                            <li>Automatic critical CSS</li>
+                            <li>No class name bugs</li>
+                            <li>Easy theming support</li>
+                            <li>Server-side rendering ready</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>❌ Disadvantages</h4>
+                        <ul class="pros-cons cons">
+                            <li>Extra library dependency</li>
+                            <li>Learning curve for syntax</li>
+                            <li>Runtime overhead (small)</li>
+                            <li>Debugging can be tricky</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emotion Tab -->
+            <div id="emotion" class="tab-content">
+                <h3>4️⃣ Emotion - Performant CSS-in-JS</h3>
+                <div class="hinglish">
+                    <p><strong>Emotion bhi ek powerful CSS-in-JS library hai!</strong> Ye styled-components jaisi hai lekin thodi zyada flexible aur performant. Isme do tarike hain styling karne ke - styled API aur css prop. Bahut fast hai aur bundle size bhi chota hai!</p>
+                </div>
+
+                <div class="definition">
+                    <strong>Emotion:</strong> A performant and flexible CSS-in-JS library that provides both styled component API and css prop approach, with excellent performance characteristics and smaller bundle size compared to alternatives.
+                </div>
+
+                <div class="code-block">
+                    <pre>
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
+
+// Method 1: css prop
+const buttonStyle = css`
+    background-color: #b2dfdb;
+    color: #004d40;
+    padding: 12px 24px;
+    border: 2px solid #00796b;
+    border-radius: 8px;
+    cursor: pointer;
+    
+    &:hover {
+        background-color: #80cbc4;
+    }
+`;
+
+function App() {
+    return &lt;button css={buttonStyle}&gt;Click Me&lt;/button&gt;;
+}
+
+// Method 2: styled API
+const Button = styled.button`
+    background-color: #b2dfdb;
+    color: #004d40;
+    padding: 12px 24px;
+`;</pre>
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>✅ Advantages</h4>
+                        <ul class="pros-cons pros">
+                            <li>Excellent performance</li>
+                            <li>Smaller bundle size</li>
+                            <li>Multiple styling approaches</li>
+                            <li>Great TypeScript support</li>
+                            <li>Framework agnostic</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>❌ Disadvantages</h4>
+                        <ul class="pros-cons cons">
+                            <li>JSX pragma configuration needed</li>
+                            <li>Less popular than styled-components</li>
+                            <li>Documentation can be confusing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tailwind CSS Tab -->
+            <div id="tailwind" class="tab-content">
+                <h3>5️⃣ Tailwind CSS - Utility-First Framework</h3>
+                <div class="hinglish">
+                    <p><strong>Tailwind CSS ek revolutionary approach hai!</strong> Isme pre-defined utility classes hote hain jo tum directly HTML mein use karte ho. Custom CSS likhne ki zarurat nahi padti. Bahut fast development hoti hai isse aur consistent design bhi milta hai!</p>
+                </div>
+
+                <div class="definition">
+                    <strong>Tailwind CSS:</strong> A utility-first CSS framework that provides low-level utility classes to build custom designs without writing custom CSS, promoting rapid development and consistent design systems.
+                </div>
+
+                <div class="code-block">
+                    <pre>
+// Installation
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+
+// tailwind.config.js
+module.exports = {
+    content: ["./src/**/*.{js,jsx,ts,tsx}"],
+    theme: {
+        extend: {
+            colors: {
+                primary: '#61dafb',
+            }
+        },
+    },
+    plugins: [],
+}
+
+// Component usage
+function Button() {
+    return (
+        &lt;button className="bg-blue-500 hover:bg-blue-700 text-white 
+                          font-bold py-2 px-4 rounded 
+                          transition duration-300 ease-in-out
+                          transform hover:scale-105"&gt;
+            Click Me
+        &lt;/button&gt;
+    );
+}</pre>
+                </div>
+
+                <div class="live-demo">
+                    <h4>🎮 Live Demo - Tailwind-like Styling</h4>
+                    <div class="demo-output">
+                        <div class="styled-box tailwind-demo">
+                            <h4>Tailwind-Style Box</h4>
+                            <p>Utility classes se styled!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>✅ Advantages</h4>
+                        <ul class="pros-cons pros">
+                            <li>Rapid development</li>
+                            <li>Consistent design system</li>
+                            <li>No naming conventions needed</li>
+                            <li>Purge unused CSS automatically</li>
+                            <li>Responsive design easy</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>❌ Disadvantages</h4>
+                        <ul class="pros-cons cons">
+                            <li>HTML can look cluttered</li>
+                            <li>Learning curve for class names</li>
+                            <li>Build configuration required</li>
+                            <li>Custom designs need extension</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UI Libraries Tab -->
+            <div id="ui-libraries" class="tab-content">
+                <h3>6️⃣ UI Libraries - Ready-Made Components</h3>
+                <div class="hinglish">
+                    <p><strong>Agar tum jaldi kaam karna chahte ho,</strong> to UI libraries best hain! Material UI, Chakra UI, Ant Design - ye sab pre-built components dete hain jo already styled hote hain. Tum bas import karo aur use karo. Customization bhi kar sakte ho!</p>
+                </div>
+
+                <div class="definition">
+                    <strong>UI Component Libraries:</strong> Pre-built, customizable component libraries that provide ready-to-use styled components following specific design systems, significantly speeding up development time.
+                </div>
+
+                <div class="code-block">
+                    <pre>
+// Material UI Example
+import { Button, TextField, Card } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#61dafb',
+        },
+    },
+});
+
+function App() {
+    return (
+        &lt;ThemeProvider theme={theme}&gt;
+            &lt;Card&gt;
+                &lt;TextField label="Name" variant="outlined" /&gt;
+                &lt;Button variant="contained" color="primary"&gt;
+                    Submit
+                &lt;/Button&gt;
+            &lt;/Card&gt;
+        &lt;/ThemeProvider&gt;
+    );
+}
+
+// Chakra UI Example
+import { Button, Input, Box } from '@chakra-ui/react';
+
+function App() {
+    return (
+        &lt;Box p={4}&gt;
+            &lt;Input placeholder="Enter name" mb={3} /&gt;
+            &lt;Button colorScheme="blue"&gt;Submit&lt;/Button&gt;
+        &lt;/Box&gt;
+    );
+}</pre>
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>📦 Material UI</h4>
+                        <p><strong>Google's Material Design</strong></p>
+                        <ul class="pros-cons pros">
+                            <li>Comprehensive components</li>
+                            <li>Great documentation</li>
+                            <li>Large community</li>
+                            <li>Accessibility built-in</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>⚡ Chakra UI</h4>
+                        <p><strong>Simple & Modular</strong></p>
+                        <ul class="pros-cons pros">
+                            <li>Easy to customize</li>
+                            <li>Excellent DX</li>
+                            <li>Built-in dark mode</li>
+                            <li>Lightweight</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>🐜 Ant Design</h4>
+                        <p><strong>Enterprise-grade</strong></p>
+                        <ul class="pros-cons pros">
+                            <li>Rich component set</li>
+                            <li>Professional look</li>
+                            <li>i18n support</li>
+                            <li>TypeScript ready</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Responsive Design Section -->
+        <section class="section">
+            <h2>📱 Responsive UI Patterns</h2>
+            <div class="hinglish">
+                <p><strong>Aaj kal har device pe website chalti hai!</strong> Mobile, tablet, laptop, desktop - sabke liye responsive design banana bahut zaroori hai. Media queries, flexbox, aur grid ka use karke hum responsive layouts bana sakte hain.</p>
+            </div>
+
+            <div class="definition">
+                <strong>Responsive Design:</strong> An approach to web design that makes web pages render well on a variety of devices and window or screen sizes, using flexible layouts, images, and CSS media queries.
+            </div>
+
+            <div class="code-block">
+                <pre>
+// CSS Media Queries
+.container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 1024px) {
+    .container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+}
+
+// Tailwind Responsive Classes
+&lt;div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"&gt;
+    &lt;div&gt;Item 1&lt;/div&gt;
+    &lt;div&gt;Item 2&lt;/div&gt;
+&lt;/div&gt;</pre>
+            </div>
+
+            <div class="live-demo">
+                <h4>🎮 Responsive Grid Demo</h4>
+                <p>Window resize karo aur dekho kaise layout change hota hai!</p>
+                <div class="responsive-demo">
+                    <div class="responsive-box">Box 1</div>
+                    <div class="responsive-box">Box 2</div>
+                    <div class="responsive-box">Box 3</div>
+                    <div class="responsive-box">Box 4</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dark Mode Section -->
+        <section class="section">
+            <h2>🌙 Dark Mode Implementation</h2>
+            <div class="hinglish">
+                <p><strong>Dark mode ab har app mein hona chahiye!</strong> Users ko choice deni chahiye ki wo light ya dark theme use karein. CSS variables, context API, ya localStorage ka use karke implement kar sakte hain.</p>
+            </div>
+
+            <div class="definition">
+                <strong>Dark Mode:</strong> A color scheme that uses light-colored text and UI elements on dark backgrounds, reducing eye strain in low-light conditions and potentially saving battery on OLED screens.
+            </div>
+
+            <div class="code-block">
+                <pre>
+// CSS Variables Approach
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+}
+
+[data-theme="dark"] {
+    --bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+// React Implementation
+function App() {
+    const [theme, setTheme] = useState('light');
+    
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+    }, [theme]);
+    
+    const toggleTheme = () => {
+        setTheme(theme === 'light' ? 'dark' : 'light');
+    };
+    
+    return (
+        &lt;button onClick={toggleTheme}&gt;
+            Toggle {theme === 'light' ? '🌙' : '☀️'}
+        &lt;/button&gt;
+    );
+}</pre>
+            </div>
+
+            <div class="live-demo">
+                <h4>🎮 Dark Mode Demo</h4>
+                <p>Upar right corner mein button se dark mode toggle karo!</p>
+                <div class="demo-output">
+                    <p>Current theme automatically changes karta hai!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Best Practices Section -->
+        <section class="section">
+            <h2>✨ Best Practices - Pro Tips</h2>
+            <div class="hinglish">
+                <p><strong>Yahan kuch important tips hain</strong> jo tumhe production-ready apps banane mein help karengi:</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="icon">🎯</div>
+                    <h4>Consistent Naming</h4>
+                    <p>BEM methodology ya consistent naming convention follow karo</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🔄</div>
+                    <h4>Reusable Styles</h4>
+                    <p>Common styles ko variables ya mixins mein store karo</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">⚡</div>
+                    <h4>Performance</h4>
+                    <p>Unused CSS remove karo, critical CSS inline karo</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">♿</div>
+                    <h4>Accessibility</h4>
+                    <p>Color contrast, focus states, aur ARIA labels use karo</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">📦</div>
+                    <h4>Component Structure</h4>
+                    <p>Styles ko components ke saath co-locate karo</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🎨</div>
+                    <h4>Design System</h4>
+                    <p>Colors, spacing, typography ko standardize karo</p>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <pre>
+// Design Tokens Example
+const theme = {
+    colors: {
+        primary: '#61dafb',
+        secondary: '#282c34',
+        success: '#4caf50',
+        error: '#f44336',
+    },
+    spacing: {
+        xs: '4px',
+        sm: '8px',
+        md: '16px',
+        lg: '24px',
+        xl: '32px',
+    },
+    typography: {
+        fontFamily: "'Segoe UI', sans-serif",
+        fontSize: {
+            sm: '12px',
+            md: '16px',
+            lg: '20px',
+            xl: '24px',
+        },
+    },
+};</pre>
+            </div>
+        </section>
+
+        <!-- Interview Questions Section -->
+        <section class="section interview-section">
+            <h2>💼 Interview Questions - Practice Karo!</h2>
+            <div class="hinglish">
+                <p><strong>Yahan 7 important interview questions hain</strong> jo tumse puchhe ja sakte hain. Click karke answers dekho!</p>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer('q1')">
+                <h4>
+                    <span>Q1: What is the difference between CSS Modules and regular CSS?</span>
+                    <span class="difficulty easy">Easy</span>
+                </h4>
+                <div id="q1" class="answer">
+                    <p><strong>Answer:</strong></p>
+                    <p><strong>Regular CSS:</strong> Global scope mein hota hai, saare classes globally available hote hain, naming conflicts ho sakte hain.</p>
+                    <p><strong>CSS Modules:</strong> Local scope mein hota hai, har component ki apni scoped classes hoti hain, automatically unique class names generate hote hain.</p>
+                    <div class="code-block">
+                        <pre>
+// Regular CSS
+import './styles.css';
+&lt;div className="button"&gt;Click&lt;/div&gt;
+
+// CSS Modules
+import styles from './Button.module.css';
+&lt;div className={styles.button}&gt;Click&lt;/div&gt;</pre>
+                    </div>
+                    <p><strong>Key Point:</strong> CSS Modules prevent naming collisions and provide component-level encapsulation.</p>
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer('q2')">
+                <h4>
+                    <span>Q2: Explain CSS-in-JS and its advantages over traditional CSS.</span>
+                    <span class="difficulty medium">Medium</span>
+                </h4>
+                <div id="q2" class="answer">
+                    <p><strong>Answer:</strong></p>
+                    <p><strong>CSS-in-JS:</strong> JavaScript ke andar CSS likhne ka approach hai. Libraries like styled-components aur Emotion iska use karti hain.</p>
+                    <p><strong>Advantages:</strong></p>
+                    <ul>
+                        <li>✅ <strong>Dynamic Styling:</strong> Props ke basis pe styles change kar sakte ho</li>
+                        <li>✅ <strong>Scoped Styles:</strong> Automatically component-specific hote hain</li>
+                        <li>✅ <strong>No Class Name Bugs:</strong> Unique class names automatically generate hote hain</li>
+                        <li>✅ <strong>Dead Code Elimination:</strong> Unused styles automatically remove ho jate hain</li>
+                        <li>✅ <strong>Critical CSS:</strong> Only required CSS load hota hai</li>
+                    </ul>
+                    <div class="code-block">
+                        <pre>
+const Button = styled.button`
+    background: ${props => props.primary ? 'blue' : 'gray'};
+    color: white;
+    padding: 10px 20px;
+`;</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer('q3')">
+                <h4>
+                    <span>Q3: How would you implement dark mode in a React application?</span>
+                    <span class="difficulty medium">Medium</span>
+                </h4>
+                <div id="q3" class="answer">
+                    <p><strong>Answer:</strong></p>
+                    <p>Dark mode implement karne ke multiple approaches hain:</p>
+                    <p><strong>1. CSS Variables Approach:</strong></p>
+                    <div class="code-block">
+                        <pre>
+// Define CSS variables
+:root {
+    --bg-color: #fff;
+    --text-color: #333;
+}
+
+[data-theme="dark"] {
+    --bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+}
+
+// React component
+function App() {
+    const [theme, setTheme] = useState('light');
+    
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    }, [theme]);
+    
+    return (
+        &lt;button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}&gt;
+            Toggle Theme
+        &lt;/button&gt;
+    );
+}</pre>
+                    </div>
+                    <p><strong>2. Context API Approach:</strong> Global theme state manage karne ke liye</p>
+                    <p><strong>3. Styled Components ThemeProvider:</strong> Theme object pass karne ke liye</p>
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer('q4')">
+                <h4>
+                    <span>Q4: What are the performance implications of different styling approaches?</span>
+                    <span class="difficulty hard">Hard</span>
+                </h4>
+                <div id="q4" class="answer">
+                    <p><strong>Answer:</strong></p>
+                    <p><strong>Performance Comparison:</strong></p>
+                    <ul>
+                        <li><strong>Global CSS:</strong> Fastest - static files, browser caching, no runtime overhead</li>
+                        <li><strong>CSS Modules:</strong> Fast - compile-time processing, no runtime cost</li>
+                        <li><strong>Styled Components:</strong> Small runtime overhead - styles generate hote hain runtime pe, but critical CSS injection se optimize hota hai</li>
+                        <li><strong>Tailwind CSS:</strong> Fast after purging - unused classes remove ho jate hain build time pe</li>
+                    </ul>
+                    <p><strong>Optimization Tips:</strong></p>
+                    <ul>
+                        <li>✅ Code splitting use karo</li>
+                        <li>✅ Critical CSS inline karo</li>
+                        <li>✅ Unused styles purge karo</li>
+                        <li>✅ CSS minification enable karo</li>
+                        <li>✅ Server-side rendering consider karo</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer('q5')">
+                <h4>
+                    <span>Q5: Explain the concept of CSS-in-JS and compare styled-components with Emotion.</span>
+                    <span class="difficulty hard">Hard</span>
+                </h4>
+                <div id="q5" class="answer">
+                    <p><strong>Answer:</strong></p>
+                    <p><strong>Styled-Components:</strong></p>
+                    <ul>
+                        <li>✅ More popular, larger community</li>
+                        <li>✅ Better documentation</li>
+                        <li>✅ Tagged template literals syntax</li>
+                        <li>❌ Slightly larger bundle size</li>
+                    </ul>
+                    <p><strong>Emotion:</strong></p>
+                    <ul>
+                        <li>✅ Better performance</li>
+                        <li>✅ Smaller bundle size</li>
+                        <li>✅ Multiple styling approaches (css prop + styled API)</li>
+                        <li>✅ Framework agnostic</li>
+                        <li>❌ Less popular</li>
+                    </ul>
+                    <div class="code-block">
+                        <pre>
+// Styled-Components
+import styled from 'styled-components';
+const Button = styled.button`
+    color: blue;
+`;
+
+// Emotion - styled API
+import styled from '@emotion/styled';
+const Button = styled.button`
+    color: blue;
+`;
+
+// Emotion - css prop
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
+&lt;button css={css`color: blue;`}&gt;Click&lt;/button&gt;</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer('q6')">
+                <h4>
+                    <span>Q6: How do you handle responsive design in React applications?</span>
+                    <span class="difficulty medium">Medium</span>
+                </h4>
+                <div id="q6" class="answer">
+                    <p><strong>Answer:</strong></p>
+                    <p><strong>Multiple Approaches:</strong></p>
+                    <p><strong>1. CSS Media Queries:</strong></p>
+                    <div class="code-block">
+                        <pre>
+.container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+}</pre>
+                    </div>
+                    <p><strong>2. Tailwind Responsive Classes:</strong></p>
+                    <div class="code-block">
+                        <pre>
+&lt;div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4"&gt;
+    Content
+&lt;/div&gt;</pre>
+                    </div>
+                    <p><strong>3. JavaScript Window Resize:</strong></p>
+                    <div class="code-block">
+                        <pre>
+const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+useEffect(() => {
+    const handleResize = () => {
+        setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+}, []);</pre>
+                    </div>
+                    <p><strong>4. React Responsive Library:</strong> useMediaQuery hook use karo</p>
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer('q7')">
+                <h4>
+                    <span>Q7: What factors should you consider when choosing a styling solution for a React project?</span>
+                    <span class="difficulty hard">Hard</span>
+                </h4>
+                <div id="q7" class="answer">
+                    <p><strong>Answer:</strong></p>
+                    <p><strong>Key Factors to Consider:</strong></p>
+                    <ul>
+                        <li><strong>1. Project Size:</strong> Small projects ke liye simple CSS, large projects ke liye CSS-in-JS ya Tailwind</li>
+                        <li><strong>2. Team Experience:</strong> Team ko kya pata hai? Traditional CSS ya modern approaches?</li>
+                        <li><strong>3. Performance Requirements:</strong> Critical performance needs? Static CSS best hai</li>
+                        <li><strong>4. Dynamic Styling Needs:</strong> Bahut dynamic styling chahiye? CSS-in-JS use karo</li>
+                        <li><strong>5. Bundle Size:</strong> Bundle size important hai? Emotion ya Tailwind consider karo</li>
+                        <li><strong>6. Development Speed:</strong> Fast development? UI libraries ya Tailwind use karo</li>
+                        <li><strong>7. Maintenance:</strong> Long-term maintenance? CSS Modules ya styled-components</li>
+                        <li><strong>8. SSR Requirements:</strong> Server-side rendering? CSS-in-JS libraries SSR support karte hain</li>
+                    </ul>
+                    <p><strong>Decision Matrix:</strong></p>
+                    <ul>
+                        <li>🎯 <strong>Simple Project:</strong> Global CSS or CSS Modules</li>
+                        <li>🎯 <strong>Component Library:</strong> Styled-components or Emotion</li>
+                        <li>🎯 <strong>Rapid Development:</strong> Tailwind CSS or UI Library</li>
+                        <li>🎯 <strong>Enterprise App:</strong> CSS Modules + Design System</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summary Section -->
+        <section class="section">
+            <h2>📝 Summary - Quick Recap</h2>
+            <div class="hinglish">
+                <p><strong>Toh dosto, humne kya seekha?</strong></p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🎨 Multiple Approaches</h4>
+                    <p>Global CSS, CSS Modules, Styled Components, Emotion, Tailwind - har ek ka apna use case hai</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⚡ Performance Matters</h4>
+                    <p>Right approach choose karo project requirements ke according</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📱 Responsive Design</h4>
+                    <p>Media queries aur flexible layouts se har device pe perfect display</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🌙 Modern Features</h4>
+                    <p>Dark mode, theming, aur dynamic styling implement karna seekha</p>
+                </div>
+            </div>
+
+            <div class="hinglish">
+                <p><strong>Remember:</strong> Koi ek "best" approach nahi hai - project requirements, team experience, aur performance needs ke basis pe decision lo. Practice karo aur experiment karo different approaches ke saath!</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('mode-icon');
+            const text = document.getElementById('mode-text');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                icon.textContent = '☀️';
+                text.textContent = 'Light Mode';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.textContent = '🌙';
+                text.textContent = 'Dark Mode';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Load saved theme
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('mode-icon').textContent = '☀️';
+                document.getElementById('mode-text').textContent = 'Light Mode';
+            }
+        });
+
+        // Tab Switching
+        function showTab(tabId) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Toggle Interview Answers
+        function toggleAnswer(answerId) {
+            const answer = document.getElementById(answerId);
+            answer.classList.toggle('show');
+        }
+
+        // Styled Component Demo Toggle
+        function toggleStyledDemo() {
+            const demo = document.getElementById('styled-demo');
+            const colors = ['#b2dfdb', '#ffccbc', '#c5cae9', '#f8bbd0', '#dcedc8'];
+            const currentColor = demo.style.backgroundColor;
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            demo.style.backgroundColor = randomColor;
+            demo.style.transform = demo.style.transform === 'scale(1.05)' ? 'scale(1)' : 'scale(1.05)';
+        }
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.6s ease';
+            observer.observe(section);
+        });
+
+        // Interactive hover effects
+        document.querySelectorAll('.comparison-card, .feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Code block copy functionality
+        document.querySelectorAll('.code-block').forEach(block => {
+            const copyButton = document.createElement('button');
+            copyButton.textContent = '📋 Copy';
+            copyButton.style.cssText = `
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                padding: 5px 10px;
+                background: var(--primary-color);
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 0.8em;
+            `;
+            
+            block.style.position = 'relative';
+            block.appendChild(copyButton);
+            
+            copyButton.addEventListener('click', () => {
+                const code = block.querySelector('pre').textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    copyButton.textContent = '✅ Copied!';
+                    setTimeout(() => {
+                        copyButton.textContent = '📋 Copy';
+                    }, 2000);
+                });
+            });
+        });
+
+        // Progress bar animation
+        window.addEventListener('scroll', () => {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollPercentage = (scrollTop / (documentHeight - windowHeight)) * 100;
+            
+            const progressFill = document.querySelector('.progress-fill');
+            if (progressFill) {
+                progressFill.style.width = scrollPercentage + '%';
+            }
+        });
+
+        // Add keyboard navigation for tabs
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                const activeTab = document.querySelector('.tab-button.active');
+                const tabs = Array.from(document.querySelectorAll('.tab-button'));
+                const currentIndex = tabs.indexOf(activeTab);
+                
+                let nextIndex;
+                if (e.key === 'ArrowRight') {
+                    nextIndex = (currentIndex + 1) % tabs.length;
+                } else {
+                    nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+                }
+                
+                tabs[nextIndex].click();
+            }
+        });
+
+        // Console welcome message
+        console.log('%c🎨 React Styling Guide', 'color: #61dafb; font-size: 24px; font-weight: bold;');
+        console.log('%cWelcome to the interactive learning experience!', 'color: #4caf50; font-size: 14px;');
+        console.log('%cExplore different styling approaches and practice for interviews!', 'color: #ff6b6b; font-size: 12px;');
+    </script>
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Display Properties Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .section {
+            background: white;
+            margin: 20px 0;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: #3498db;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        
+        .explanation {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .demo-container {
+            border: 2px dashed #bdc3c7;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        
+        .demo-box {
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            margin: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .demo-box.blue { background: #3498db; }
+        .demo-box.green { background: #27ae60; }
+        .demo-box.orange { background: #f39c12; }
+        .demo-box.purple { background: #9b59b6; }
+        
+        /* Display examples */
+        .block-demo .demo-box { display: block; }
+        .inline-demo .demo-box { display: inline; }
+        .inline-block-demo .demo-box { display: inline-block; }
+        .flex-demo { display: flex; }
+        .grid-demo { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .table-demo { display: table; width: 100%; }
+        .table-row-demo { display: table-row; }
+        .table-cell-demo { display: table-cell; padding: 10px; border: 1px solid #bdc3c7; }
+        .none-demo .demo-box { display: none; }
+        .hidden-demo .demo-box { visibility: hidden; }
+        
+        .control-panel {
+            background: #34495e;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .control-panel h3 {
+            margin-bottom: 15px;
+            color: #ecf0f1;
+        }
+        
+        .control-group {
+            margin: 10px 0;
+        }
+        
+        .control-group label {
+            display: inline-block;
+            width: 120px;
+            margin-right: 10px;
+        }
+        
+        select, button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        button {
+            background: #3498db;
+            color: white;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        .interactive-demo {
+            min-height: 100px;
+            transition: all 0.3s ease;
+        }
+        
+        .code-example {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            background: #f1c40f;
+            padding: 2px 4px;
+            border-radius: 3px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSS Display Properties - Complete Guide</h1>
+    
+    <div class="section">
+        <h2>1. display: block</h2>
+        <div class="explanation">
+            <strong>What it does:</strong> Takes full width available and starts on a new line. Like a paragraph or heading.
+        </div>
+        <div class="code-example">display: block;</div>
+        <div class="demo-container block-demo">
+            <div class="demo-box">Block Element 1</div>
+            <div class="demo-box blue">Block Element 2</div>
+            <div class="demo-box green">Block Element 3</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>2. display: inline</h2>
+        <div class="explanation">
+            <strong>What it does:</strong> Elements sit side by side like words in a sentence. Cannot set width/height.
+        </div>
+        <div class="code-example">display: inline;</div>
+        <div class="demo-container inline-demo">
+            <div class="demo-box">Inline 1</div>
+            <div class="demo-box blue">Inline 2</div>
+            <div class="demo-box green">Inline 3</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>3. display: inline-block</h2>
+        <div class="explanation">
+            <strong>What it does:</strong> Like inline but you CAN set width and height. Best of both worlds!
+        </div>
+        <div class="code-example">display: inline-block;</div>
+        <div class="demo-container inline-block-demo">
+            <div class="demo-box">Inline-Block 1</div>
+            <div class="demo-box blue">Inline-Block 2</div>
+            <div class="demo-box green">Inline-Block 3</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>4. display: flex</h2>
+        <div class="explanation">
+            <strong>What it does:</strong> Modern way to arrange items in a row or column. Super flexible!
+        </div>
+        <div class="code-example">display: flex;</div>
+        <div class="demo-container flex-demo">
+            <div class="demo-box">Flex Item 1</div>
+            <div class="demo-box blue">Flex Item 2</div>
+            <div class="demo-box green">Flex Item 3</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>5. display: grid</h2>
+        <div class="explanation">
+            <strong>What it does:</strong> Creates a grid layout with rows and columns. Perfect for complex layouts!
+        </div>
+        <div class="code-example">display: grid;<br>grid-template-columns: repeat(2, 1fr);</div>
+        <div class="demo-container grid-demo">
+            <div class="demo-box">Grid Item 1</div>
+            <div class="demo-box blue">Grid Item 2</div>
+            <div class="demo-box green">Grid Item 3</div>
+            <div class="demo-box orange">Grid Item 4</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>6. display: table</h2>
+        <div class="explanation">
+            <strong>What it does:</strong> Makes elements behave like HTML tables. Old-school but still useful!
+        </div>
+        <div class="code-example">display: table; / table-row / table-cell;</div>
+        <div class="demo-container table-demo">
+            <div class="table-row-demo">
+                <div class="demo-box table-cell-demo">Cell 1</div>
+                <div class="demo-box blue table-cell-demo">Cell 2</div>
+            </div>
+            <div class="table-row-demo">
+                <div class="demo-box green table-cell-demo">Cell 3</div>
+                <div class="demo-box orange table-cell-demo">Cell 4</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>7. display: none</h2>
+        <div class="explanation">
+            <strong>What it does:</strong> Completely hides the element. It's like it doesn't exist at all!
+        </div>
+        <div class="code-example">display: none;</div>
+        <div class="demo-container">
+            <div class="demo-box">Visible Element</div>
+            <div class="demo-box none-demo">Hidden Element</div>
+            <div class="demo-box blue">Another Visible Element</div>
+            <p style="color: #e74c3c; font-weight: bold;">↑ Notice the middle element is completely gone!</p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>8. visibility: hidden (Bonus!)</h2>
+        <div class="explanation">
+            <strong>What it does:</strong> Hides element but keeps its space. Different from display: none!
+        </div>
+        <div class="code-example">visibility: hidden;</div>
+        <div class="demo-container">
+            <div class="demo-box">Visible Element</div>
+            <div class="demo-box hidden-demo">Hidden Element</div>
+            <div class="demo-box blue">Another Visible Element</div>
+            <p style="color: #e74c3c; font-weight: bold;">↑ Notice the space is still there!</p>
+        </div>
+    </div>
+    
+    <div class="control-panel">
+        <h3>🎮 Interactive Demo - Try Different Display Values!</h3>
+        <div class="control-group">
+            <label>Choose Display:</label>
+            <select id="displaySelect">
+                <option value="block">block</option>
+                <option value="inline">inline</option>
+                <option value="inline-block">inline-block</option>
+                <option value="flex">flex</option>
+                <option value="grid">grid</option>
+                <option value="none">none</option>
+            </select>
+            <button onclick="applyDisplay()">Apply Display</button>
+        </div>
+        
+        <div class="demo-container interactive-demo" id="interactiveDemo">
+            <div class="demo-box">Interactive Box 1</div>
+            <div class="demo-box blue">Interactive Box 2</div>
+            <div class="demo-box green">Interactive Box 3</div>
+        </div>
+        
+        <div style="margin-top: 15px;">
+            <button onclick="resetDemo()">Reset Demo</button>
+            <button onclick="addBox()">Add Box</button>
+            <button onclick="removeBox()">Remove Box</button>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>📝 Quick Summary</h2>
+        <div class="explanation">
+            <p><span class="highlight">block</span> = Full width, new line (like div, p, h1)</p>
+            <p><span class="highlight">inline</span> = Side by side, no width/height (like span, a, em)</p>
+            <p><span class="highlight">inline-block</span> = Side by side + width/height (like button, img)</p>
+            <p><span class="highlight">flex</span> = Modern flexible layout (great for navigation, cards)</p>
+            <p><span class="highlight">grid</span> = Grid system (perfect for complex layouts)</p>
+            <p><span class="highlight">none</span> = Completely hidden</p>
+        </div>
+    </div>
+    
+    <script>
+        let boxCount = 3;
+        
+        function applyDisplay() {
+            const select = document.getElementById('displaySelect');
+            const demo = document.getElementById('interactiveDemo');
+            const value = select.value;
+            
+            demo.style.display = value;
+            
+            if (value === 'grid') {
+                demo.style.gridTemplateColumns = 'repeat(2, 1fr)';
+                demo.style.gap = '10px';
+            } else {
+                demo.style.gridTemplateColumns = '';
+                demo.style.gap = '';
+            }
+        }
+        
+        function resetDemo() {
+            const demo = document.getElementById('interactiveDemo');
+            demo.style.display = 'block';
+            demo.style.gridTemplateColumns = '';
+            demo.style.gap = '';
+            document.getElementById('displaySelect').value = 'block';
+        }
+        
+        function addBox() {
+            const demo = document.getElementById('interactiveDemo');
+            const colors = ['', 'blue', 'green', 'orange', 'purple'];
+            const newBox = document.createElement('div');
+            newBox.className = 'demo-box ' + colors[boxCount % colors.length];
+            newBox.textContent = 'Interactive Box ' + (boxCount + 1);
+            demo.appendChild(newBox);
+            boxCount++;
+        }
+        
+        function removeBox() {
+            const demo = document.getElementById('interactiveDemo');
+            if (demo.children.length > 1) {
+                demo.removeChild(demo.lastChild);
+                boxCount--;
+            }
+        }
+    </script>
+</body>
+</html>

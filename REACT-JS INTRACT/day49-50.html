@@ -1,0 +1,2329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Uploads, Forms & Error Systems - Interactive Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        nav {
+            background: #f8f9fa;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.95rem;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        .hinglish-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            border-left: 5px solid #f39c12;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            border-left: 5px solid #17a2b8;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .code-block {
+            background: #2d3436;
+            color: #dfe6e9;
+            padding: 1.5rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .code-block::before {
+            content: 'CODE';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .interactive-demo {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 3px solid #667eea;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .demo-title {
+            font-size: 1.3rem;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .upload-zone {
+            border: 3px dashed #667eea;
+            border-radius: 10px;
+            padding: 3rem;
+            text-align: center;
+            background: white;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .upload-zone:hover {
+            background: #f0f4ff;
+            border-color: #764ba2;
+        }
+
+        .upload-zone.dragover {
+            background: #e8f0fe;
+            border-color: #4285f4;
+            transform: scale(1.02);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .file-list {
+            margin-top: 1.5rem;
+        }
+
+        .file-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .file-icon {
+            font-size: 1.5rem;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .remove-btn:hover {
+            background: #c82333;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-control.error {
+            border-color: #dc3545;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #28a745;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.3s;
+        }
+
+        .error-boundary {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 5px solid #dc3545;
+        }
+
+        .error-boundary h3 {
+            color: #721c24;
+            margin-bottom: 1rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .quiz-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .quiz-section h2 {
+            color: white;
+            border-bottom: 3px solid white;
+        }
+
+        .question-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .difficulty-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .easy {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .hard {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .answer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #eee;
+            display: none;
+            color: #555;
+        }
+
+        .answer.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        .toggle-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .toggle-icon.rotated {
+            transform: rotate(180deg);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .validation-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .validation-rules {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .rule-item {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rule-item.valid {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .rule-item.invalid {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .rule-item.pending {
+            background: #e9ecef;
+            color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .validation-demo {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-container {
+                flex-direction: column;
+            }
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            border-left: 5px solid #2196F3;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            border-left: 5px solid #ffc107;
+        }
+
+        .error-demo-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .error-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .error-card h4 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📁 File Uploads, Forms & Error Systems</h1>
+            <p>Complete Guide with Interactive Examples</p>
+        </header>
+
+        <nav>
+            <div class="nav-container">
+                <button class="nav-btn active" onclick="showSection('intro')">Introduction</button>
+                <button class="nav-btn" onclick="showSection('file-upload')">File Upload</button>
+                <button class="nav-btn" onclick="showSection('drag-drop')">Drag & Drop</button>
+                <button class="nav-btn" onclick="showSection('validation')">Validation</button>
+                <button class="nav-btn" onclick="showSection('error-handling')">Error Handling</button>
+                <button class="nav-btn" onclick="showSection('quiz')">Interview Questions</button>
+            </div>
+        </nav>
+
+        <div class="content">
+            <!-- Introduction Section -->
+            <div id="intro" class="section active">
+                <h2>🎯 Introduction</h2>
+                
+                <div class="hinglish-box">
+                    <p><strong>File uploads, forms aur error handling</strong> modern web applications ke essential parts hain. Ye features user experience ko better banate hain aur application ko robust banate hain.</p>
+                    <p style="margin-top: 1rem;">Is guide mein hum seekhenge:</p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>Single aur multiple file uploads kaise implement karein</li>
+                        <li>Drag-and-drop functionality kaise add karein</li>
+                        <li>Client-side validation architecture</li>
+                        <li>Error boundaries aur error handling best practices</li>
+                    </ul>
+                </div>
+
+                <div class="definition-box">
+                    <h3>Key Concepts</h3>
+                    <p><strong>File Upload:</strong> The process of transferring files from a client device to a server through a web application.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Form Validation:</strong> The process of ensuring that user input meets specified criteria before submission.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Error Boundary:</strong> A React component that catches JavaScript errors anywhere in the child component tree and displays a fallback UI.</p>
+                </div>
+
+                <h3>Why These Topics Matter</h3>
+                <div class="info-box">
+                    <ul style="margin-left: 2rem;">
+                        <li><strong>User Experience:</strong> Smooth file uploads aur clear error messages user satisfaction improve karte hain</li>
+                        <li><strong>Data Integrity:</strong> Proper validation ensures ki only valid data server tak pahunche</li>
+                        <li><strong>Security:</strong> Client-side validation first line of defense hai malicious inputs ke against</li>
+                        <li><strong>Performance:</strong> Client-side validation unnecessary server requests reduce karta hai</li>
+                        <li><strong>Reliability:</strong> Error boundaries application crashes prevent karte hain</li>
+                    </ul>
+                </div>
+
+                <h3>Common Use Cases</h3>
+                <div class="error-demo-container">
+                    <div class="error-card">
+                        <h4>📸 Profile Pictures</h4>
+                        <p>User profile images upload karna with preview</p>
+                    </div>
+                    <div class="error-card">
+                        <h4>📄 Document Upload</h4>
+                        <p>PDFs, resumes, certificates upload karna</p>
+                    </div>
+                    <div class="error-card">
+                        <h4>🖼️ Gallery Upload</h4>
+                        <p>Multiple images ek saath upload karna</p>
+                    </div>
+                    <div class="error-card">
+                        <h4>📊 Data Import</h4>
+                        <p>CSV, Excel files import karna</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Upload Section -->
+            <div id="file-upload" class="section">
+                <h2>📤 File Upload Implementation</h2>
+
+                <div class="hinglish-box">
+                    <p><strong>File upload</strong> implement karna HTML5 ke saath bahut easy ho gaya hai. Hum <span class="highlight">input type="file"</span> use karte hain aur JavaScript se files ko handle karte hain.</p>
+                </div>
+
+                <h3>Single File Upload</h3>
+                <div class="code-block">
+<code>// HTML
+&lt;input type="file" id="fileInput" accept="image/*" /&gt;
+&lt;button onclick="uploadFile()"&gt;Upload&lt;/button&gt;
+
+// JavaScript
+function uploadFile() {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        alert('Please select a file');
+        return;
+    }
+    
+    // File validation
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+        alert('File size should be less than 5MB');
+        return;
+    }
+    
+    // Create FormData
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    // Upload to server
+    fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Upload successful:', data);
+    })
+    .catch(error => {
+        console.error('Upload failed:', error);
+    });
+}</code>
+                </div>
+
+                <h3>Multiple File Upload</h3>
+                <div class="code-block">
+<code>// HTML
+&lt;input type="file" id="multiFileInput" multiple accept="image/*" /&gt;
+
+// JavaScript
+function uploadMultipleFiles() {
+    const fileInput = document.getElementById('multiFileInput');
+    const files = Array.from(fileInput.files);
+    
+    if (files.length === 0) {
+        alert('Please select files');
+        return;
+    }
+    
+    const formData = new FormData();
+    
+    // Append all files
+    files.forEach((file, index) => {
+        formData.append(`file${index}`, file);
+    });
+    
+    // Upload with progress tracking
+    const xhr = new XMLHttpRequest();
+    
+    xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+            const percentComplete = (e.loaded / e.total) * 100;
+            console.log(`Upload progress: ${percentComplete}%`);
+        }
+    });
+    
+    xhr.addEventListener('load', () => {
+        if (xhr.status === 200) {
+            console.log('Upload successful');
+        }
+    });
+    
+    xhr.open('POST', '/api/upload-multiple');
+    xhr.send(formData);
+}</code>
+                </div>
+
+                <h3>Interactive Demo: File Upload</h3>
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Try File Upload</div>
+                    
+                    <div class="form-group">
+                        <label>Select Files (Max 5MB each):</label>
+                        <input type="file" id="demoFileInput" class="form-control" multiple accept="image/*,.pdf,.doc,.docx">
+                    </div>
+                    
+                    <button class="btn" onclick="handleDemoUpload()">📤 Upload Files</button>
+                    <button class="btn btn-secondary" onclick="clearDemoFiles()">🗑️ Clear</button>
+                    
+                    <div class="progress-bar" id="uploadProgress" style="display: none;">
+                        <div class="progress-fill" id="progressFill">0%</div>
+                    </div>
+                    
+                    <div class="file-list" id="fileList"></div>
+                    <div class="success-message" id="uploadSuccess">✅ Files uploaded successfully!</div>
+                </div>
+
+                <div class="warning-box">
+                    <h4>⚠️ Important Points</h4>
+                    <ul style="margin-left: 2rem;">
+                        <li><strong>File Size Limits:</strong> Always validate file size client-side aur server-side dono pe</li>
+                        <li><strong>File Types:</strong> Accept attribute se allowed file types specify karein</li>
+                        <li><strong>Security:</strong> Server-side validation mandatory hai, client-side bypass ho sakta hai</li>
+                        <li><strong>Progress Tracking:</strong> Large files ke liye progress indicator show karein</li>
+                    </ul>
+                </div>
+
+                <h3>React Implementation</h3>
+                <div class="code-block">
+<code>import { useState } from 'react';
+
+function FileUpload() {
+    const [files, setFiles] = useState([]);
+    const [uploading, setUploading] = useState(false);
+    const [progress, setProgress] = useState(0);
+    
+    const handleFileChange = (e) => {
+        const selectedFiles = Array.from(e.target.files);
+        
+        // Validate files
+        const validFiles = selectedFiles.filter(file => {
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            if (file.size > maxSize) {
+                alert(`${file.name} is too large`);
+                return false;
+            }
+            return true;
+        });
+        
+        setFiles(validFiles);
+    };
+    
+    const uploadFiles = async () => {
+        if (files.length === 0) return;
+        
+        setUploading(true);
+        const formData = new FormData();
+        
+        files.forEach((file, index) => {
+            formData.append(`file${index}`, file);
+        });
+        
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                    setProgress(percentCompleted);
+                }
+            });
+            
+            if (response.ok) {
+                alert('Upload successful!');
+                setFiles([]);
+            }
+        } catch (error) {
+            console.error('Upload failed:', error);
+        } finally {
+            setUploading(false);
+            setProgress(0);
+        }
+    };
+    
+    return (
+        &lt;div&gt;
+            &lt;input 
+                type="file" 
+                multiple 
+                onChange={handleFileChange}
+                disabled={uploading}
+            /&gt;
+            
+            {files.length > 0 && (
+                &lt;div&gt;
+                    &lt;h3&gt;Selected Files:&lt;/h3&gt;
+                    &lt;ul&gt;
+                        {files.map((file, index) => (
+                            &lt;li key={index}&gt;
+                                {file.name} - {(file.size / 1024).toFixed(2)} KB
+                            &lt;/li&gt;
+                        ))}
+                    &lt;/ul&gt;
+                &lt;/div&gt;
+            )}
+            
+            {uploading && (
+                &lt;div&gt;
+                    &lt;progress value={progress} max="100" /&gt;
+                    &lt;span&gt;{progress}%&lt;/span&gt;
+                &lt;/div&gt;
+            )}
+            
+            &lt;button onClick={uploadFiles} disabled={uploading || files.length === 0}&gt;
+                {uploading ? 'Uploading...' : 'Upload'}
+            &lt;/button&gt;
+        &lt;/div&gt;
+    );
+}</code>
+                </div>
+            </div>
+
+            <!-- Drag and Drop Section -->
+            <div id="drag-drop" class="section">
+                <h2>🎯 Drag & Drop Upload</h2>
+
+                <div class="hinglish-box">
+                    <p><strong>Drag-and-drop</strong> functionality user experience ko bahut better banati hai. Users directly files ko drag karke upload kar sakte hain.</p>
+                </div>
+
+                <div class="definition-box">
+                    <h3>Drag and Drop API</h3>
+                    <p><strong>HTML5 Drag and Drop API</strong> allows users to drag files from their file system and drop them into a designated area on a web page.</p>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+<code>// HTML
+&lt;div id="dropZone" class="drop-zone"&gt;
+    &lt;p&gt;Drag & Drop files here or click to select&lt;/p&gt;
+&lt;/div&gt;
+
+// JavaScript
+const dropZone = document.getElementById('dropZone');
+
+// Prevent default drag behaviors
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, preventDefaults, false);
+    document.body.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+// Highlight drop zone when item is dragged over it
+['dragenter', 'dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight(e) {
+    dropZone.classList.add('highlight');
+}
+
+function unhighlight(e) {
+    dropZone.classList.remove('highlight');
+}
+
+// Handle dropped files
+dropZone.addEventListener('drop', handleDrop, false);
+
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    
+    handleFiles(files);
+}
+
+function handleFiles(files) {
+    [...files].forEach(uploadFile);
+}
+
+function uploadFile(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => console.log('Success:', data))
+    .catch(error => console.error('Error:', error));
+}</code>
+                </div>
+
+                <h3>Interactive Demo: Drag & Drop</h3>
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Try Drag & Drop</div>
+                    
+                    <div class="upload-zone" id="dragDropZone">
+                        <div class="upload-icon">📁</div>
+                        <h3>Drag & Drop Files Here</h3>
+                        <p>or click to select files</p>
+                        <input type="file" id="dragDropInput" class="file-input" multiple>
+                    </div>
+                    
+                    <div class="file-list" id="dragDropFileList"></div>
+                </div>
+
+                <h3>React Implementation with Preview</h3>
+                <div class="code-block">
+<code>import { useState, useCallback } from 'react';
+
+function DragDropUpload() {
+    const [files, setFiles] = useState([]);
+    const [previews, setPreviews] = useState([]);
+    const [isDragging, setIsDragging] = useState(false);
+    
+    const handleDragEnter = useCallback((e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(true);
+    }, []);
+    
+    const handleDragLeave = useCallback((e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+    }, []);
+    
+    const handleDragOver = useCallback((e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    }, []);
+    
+    const handleDrop = useCallback((e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+        
+        const droppedFiles = Array.from(e.dataTransfer.files);
+        handleFiles(droppedFiles);
+    }, []);
+    
+    const handleFiles = (newFiles) => {
+        setFiles(prev => [...prev, ...newFiles]);
+        
+        // Generate previews for images
+        newFiles.forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setPreviews(prev => [...prev, {
+                        name: file.name,
+                        url: reader.result
+                    }]);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    };
+    
+    const removeFile = (index) => {
+        setFiles(prev => prev.filter((_, i) => i !== index));
+        setPreviews(prev => prev.filter((_, i) => i !== index));
+    };
+    
+    return (
+        &lt;div&gt;
+            &lt;div
+                className={`drop-zone ${isDragging ? 'dragging' : ''}`}
+                onDragEnter={handleDragEnter}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+            &gt;
+                &lt;p&gt;Drag & Drop files here&lt;/p&gt;
+            &lt;/div&gt;
+            
+            {previews.length > 0 && (
+                &lt;div className="preview-grid"&gt;
+                    {previews.map((preview, index) => (
+                        &lt;div key={index} className="preview-item"&gt;
+                            &lt;img src={preview.url} alt={preview.name} /&gt;
+                            &lt;button onClick={() => removeFile(index)}&gt;
+                                Remove
+                            &lt;/button&gt;
+                        &lt;/div&gt;
+                    ))}
+                &lt;/div&gt;
+            )}
+        &lt;/div&gt;
+    );
+}</code>
+                </div>
+
+                <div class="info-box">
+                    <h4>💡 Best Practices</h4>
+                    <ul style="margin-left: 2rem;">
+                        <li><strong>Visual Feedback:</strong> Drag karte waqt clear indication do ki drop zone active hai</li>
+                        <li><strong>File Preview:</strong> Images ke liye thumbnail preview show karein</li>
+                        <li><strong>Multiple Files:</strong> Multiple files ek saath handle karne ki facility do</li>
+                        <li><strong>Error Handling:</strong> Invalid files ke liye clear error messages show karein</li>
+                        <li><strong>Accessibility:</strong> Keyboard navigation aur screen reader support add karein</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Validation Section -->
+            <div id="validation" class="section">
+                <h2>✅ Client-Side Validation Architecture</h2>
+
+                <div class="hinglish-box">
+                    <p><strong>Client-side validation</strong> user experience improve karta hai aur unnecessary server requests reduce karta hai. Lekin yaad rakhein, <span class="highlight">server-side validation bhi mandatory hai</span> security ke liye.</p>
+                </div>
+
+                <div class="definition-box">
+                    <h3>Form Validation</h3>
+                    <p><strong>Client-side validation</strong> is the process of checking user input in the browser before sending it to the server. It provides immediate feedback and reduces server load.</p>
+                </div>
+
+                <h3>Validation Types</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Validation Type</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Required</strong></td>
+                            <td>Field must not be empty</td>
+                            <td>Name, Email</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Format</strong></td>
+                            <td>Input must match pattern</td>
+                            <td>Email, Phone, URL</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Length</strong></td>
+                            <td>Min/Max character limit</td>
+                            <td>Password (8-20 chars)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Range</strong></td>
+                            <td>Numeric value range</td>
+                            <td>Age (18-100)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Custom</strong></td>
+                            <td>Business logic validation</td>
+                            <td>Password strength</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Validation Implementation</h3>
+                <div class="code-block">
+<code>// Validation Rules
+const validationRules = {
+    email: {
+        required: true,
+        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        message: 'Please enter a valid email'
+    },
+    password: {
+        required: true,
+        minLength: 8,
+        pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/,
+        message: 'Password must contain uppercase, lowercase, number and special character'
+    },
+    phone: {
+        required: true,
+        pattern: /^\d{10}$/,
+        message: 'Please enter a valid 10-digit phone number'
+    }
+};
+
+// Validation Function
+function validateField(fieldName, value) {
+    const rules = validationRules[fieldName];
+    if (!rules) return { valid: true };
+    
+    // Required check
+    if (rules.required && !value.trim()) {
+        return {
+            valid: false,
+            message: `${fieldName} is required`
+        };
+    }
+    
+    // Pattern check
+    if (rules.pattern && !rules.pattern.test(value)) {
+        return {
+            valid: false,
+            message: rules.message
+        };
+    }
+    
+    // Length check
+    if (rules.minLength && value.length < rules.minLength) {
+        return {
+            valid: false,
+            message: `${fieldName} must be at least ${rules.minLength} characters`
+        };
+    }
+    
+    return { valid: true };
+}
+
+// Form Validation
+function validateForm(formData) {
+    const errors = {};
+    
+    Object.keys(formData).forEach(field => {
+        const result = validateField(field, formData[field]);
+        if (!result.valid) {
+            errors[field] = result.message;
+        }
+    });
+    
+    return {
+        valid: Object.keys(errors).length === 0,
+        errors
+    };
+}</code>
+                </div>
+
+                <h3>Interactive Demo: Form Validation</h3>
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Try Form Validation</div>
+                    
+                    <div class="validation-demo">
+                        <div>
+                            <form id="validationForm" onsubmit="handleValidationSubmit(event)">
+                                <div class="form-group">
+                                    <label>Email *</label>
+                                    <input 
+                                        type="email" 
+                                        id="emailInput" 
+                                        class="form-control"
+                                        oninput="validateEmailField()"
+                                        placeholder="Enter your email"
+                                    >
+                                    <div class="error-message" id="emailError"></div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Password *</label>
+                                    <input 
+                                        type="password" 
+                                        id="passwordInput" 
+                                        class="form-control"
+                                        oninput="validatePasswordField()"
+                                        placeholder="Enter password"
+                                    >
+                                    <div class="error-message" id="passwordError"></div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Phone Number *</label>
+                                    <input 
+                                        type="tel" 
+                                        id="phoneInput" 
+                                        class="form-control"
+                                        oninput="validatePhoneField()"
+                                        placeholder="10-digit number"
+                                    >
+                                    <div class="error-message" id="phoneError"></div>
+                                </div>
+                                
+                                <button type="submit" class="btn">Submit</button>
+                            </form>
+                        </div>
+                        
+                        <div class="validation-rules">
+                            <h4>Validation Rules</h4>
+                            <div class="rule-item pending" id="emailRule">
+                                <span>📧</span> Valid email format
+                            </div>
+                            <div class="rule-item pending" id="passwordLengthRule">
+                                <span>🔒</span> Min 8 characters
+                            </div>
+                            <div class="rule-item pending" id="passwordUpperRule">
+                                <span>🔠</span> One uppercase letter
+                            </div>
+                            <div class="rule-item pending" id="passwordLowerRule">
+                                <span>🔡</span> One lowercase letter
+                            </div>
+                            <div class="rule-item pending" id="passwordNumberRule">
+                                <span>🔢</span> One number
+                            </div>
+                            <div class="rule-item pending" id="passwordSpecialRule">
+                                <span>✨</span> One special character
+                            </div>
+                            <div class="rule-item pending" id="phoneRule">
+                                <span>📱</span> 10-digit phone number
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="success-message" id="validationSuccess">
+                        ✅ Form validated successfully!
+                    </div>
+                </div>
+
+                <h3>React Hook Form Example</h3>
+                <div class="code-block">
+<code>import { useForm } from 'react-hook-form';
+
+function RegistrationForm() {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        watch
+    } = useForm();
+    
+    const onSubmit = (data) => {
+        console.log('Form data:', data);
+        // Submit to server
+    };
+    
+    return (
+        &lt;form onSubmit={handleSubmit(onSubmit)}&gt;
+            &lt;div&gt;
+                &lt;label&gt;Email&lt;/label&gt;
+                &lt;input
+                    {...register('email', {
+                        required: 'Email is required',
+                        pattern: {
+                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            message: 'Invalid email format'
+                        }
+                    })}
+                /&gt;
+                {errors.email && &lt;span&gt;{errors.email.message}&lt;/span&gt;}
+            &lt;/div&gt;
+            
+            &lt;div&gt;
+                &lt;label&gt;Password&lt;/label&gt;
+                &lt;input
+                    type="password"
+                    {...register('password', {
+                        required: 'Password is required',
+                        minLength: {
+                            value: 8,
+                            message: 'Password must be at least 8 characters'
+                        },
+                        pattern: {
+                            value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/,
+                            message: 'Password must contain uppercase, lowercase, number and special character'
+                        }
+                    })}
+                /&gt;
+                {errors.password && &lt;span&gt;{errors.password.message}&lt;/span&gt;}
+            &lt;/div&gt;
+            
+            &lt;button type="submit"&gt;Register&lt;/button&gt;
+        &lt;/form&gt;
+    );
+}</code>
+                </div>
+
+                <div class="warning-box">
+                    <h4>⚠️ Important Notes</h4>
+                    <ul style="margin-left: 2rem;">
+                        <li><strong>Never Trust Client-Side:</strong> Client-side validation bypass ho sakta hai, always server-side validate karein</li>
+                        <li><strong>User Feedback:</strong> Real-time validation feedback provide karein</li>
+                        <li><strong>Accessibility:</strong> Error messages screen readers ke liye accessible hone chahiye</li>
+                        <li><strong>Performance:</strong> Debounce validation for better performance</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Error Handling Section -->
+            <div id="error-handling" class="section">
+                <h2>🚨 Error Handling & Error Boundaries</h2>
+
+                <div class="hinglish-box">
+                    <p><strong>Error handling</strong> ek robust application ka essential part hai. Proper error handling se application crash nahi hota aur user ko clear feedback milta hai.</p>
+                </div>
+
+                <div class="definition-box">
+                    <h3>Error Boundary</h3>
+                    <p><strong>Error Boundary</strong> is a React component that catches JavaScript errors anywhere in its child component tree, logs those errors, and displays a fallback UI instead of crashing the entire application.</p>
+                </div>
+
+                <h3>Error Boundary Implementation</h3>
+                <div class="code-block">
+<code>import React from 'react';
+
+class ErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            hasError: false,
+            error: null,
+            errorInfo: null
+        };
+    }
+    
+    static getDerivedStateFromError(error) {
+        // Update state so next render shows fallback UI
+        return { hasError: true };
+    }
+    
+    componentDidCatch(error, errorInfo) {
+        // Log error to error reporting service
+        console.error('Error caught by boundary:', error, errorInfo);
+        
+        this.setState({
+            error: error,
+            errorInfo: errorInfo
+        });
+        
+        // Send to error tracking service (e.g., Sentry)
+        // logErrorToService(error, errorInfo);
+    }
+    
+    render() {
+        if (this.state.hasError) {
+            // Fallback UI
+            return (
+                &lt;div className="error-boundary"&gt;
+                    &lt;h2&gt;😔 Something went wrong&lt;/h2&gt;
+                    &lt;p&gt;We're sorry for the inconvenience. Please try refreshing the page.&lt;/p&gt;
+                    
+                    {process.env.NODE_ENV === 'development' && (
+                        &lt;details style={{ whiteSpace: 'pre-wrap' }}&gt;
+                            &lt;summary&gt;Error Details&lt;/summary&gt;
+                            {this.state.error && this.state.error.toString()}
+                            &lt;br /&gt;
+                            {this.state.errorInfo.componentStack}
+                        &lt;/details&gt;
+                    )}
+                    
+                    &lt;button onClick={() => window.location.reload()}&gt;
+                        Refresh Page
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            );
+        }
+        
+        return this.props.children;
+    }
+}
+
+// Usage
+function App() {
+    return (
+        &lt;ErrorBoundary&gt;
+            &lt;YourApp /&gt;
+        &lt;/ErrorBoundary&gt;
+    );
+}</code>
+                </div>
+
+                <h3>Global Error Handler</h3>
+                <div class="code-block">
+<code>// Global error handler setup
+class GlobalErrorHandler {
+    constructor() {
+        this.errors = [];
+        this.setupHandlers();
+    }
+    
+    setupHandlers() {
+        // Catch unhandled promise rejections
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('Unhandled promise rejection:', event.reason);
+            this.handleError({
+                type: 'unhandledRejection',
+                message: event.reason.message || 'Promise rejection',
+                stack: event.reason.stack
+            });
+        });
+        
+        // Catch global errors
+        window.addEventListener('error', (event) => {
+            console.error('Global error:', event.error);
+            this.handleError({
+                type: 'globalError',
+                message: event.message,
+                filename: event.filename,
+                lineno: event.lineno,
+                colno: event.colno,
+                stack: event.error?.stack
+            });
+        });
+    }
+    
+    handleError(error) {
+        this.errors.push({
+            ...error,
+            timestamp: new Date().toISOString()
+        });
+        
+        // Send to error tracking service
+        this.reportError(error);
+        
+        // Show user-friendly message
+        this.showErrorNotification(error);
+    }
+    
+    reportError(error) {
+        // Send to backend or error tracking service
+        fetch('/api/log-error', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(error)
+        }).catch(err => console.error('Failed to report error:', err));
+    }
+    
+    showErrorNotification(error) {
+        // Show toast notification or modal
+        const notification = document.createElement('div');
+        notification.className = 'error-notification';
+        notification.textContent = 'An error occurred. Our team has been notified.';
+        document.body.appendChild(notification);
+        
+        setTimeout(() => notification.remove(), 5000);
+    }
+}
+
+// Initialize
+const errorHandler = new GlobalErrorHandler();</code>
+                </div>
+
+                <h3>Reusable Error UI Components</h3>
+                <div class="code-block">
+<code>// Error Alert Component
+function ErrorAlert({ error, onClose }) {
+    return (
+        &lt;div className="error-alert"&gt;
+            &lt;div className="error-icon"&gt;⚠️&lt;/div&gt;
+            &lt;div className="error-content"&gt;
+                &lt;h4&gt;{error.title || 'Error'}&lt;/h4&gt;
+                &lt;p&gt;{error.message}&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;button onClick={onClose}&gt;✕&lt;/button&gt;
+        &lt;/div&gt;
+    );
+}
+
+// Error Page Component
+function ErrorPage({ error, resetError }) {
+    return (
+        &lt;div className="error-page"&gt;
+            &lt;h1&gt;Oops! Something went wrong&lt;/h1&gt;
+            &lt;p&gt;{error?.message || 'An unexpected error occurred'}&lt;/p&gt;
+            
+            &lt;div className="error-actions"&gt;
+                &lt;button onClick={resetError}&gt;Try Again&lt;/button&gt;
+                &lt;button onClick={() => window.location.href = '/'}&gt;
+                    Go Home
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    );
+}
+
+// Loading Error Component
+function LoadingError({ retry }) {
+    return (
+        &lt;div className="loading-error"&gt;
+            &lt;p&gt;Failed to load data&lt;/p&gt;
+            &lt;button onClick={retry}&gt;Retry&lt;/button&gt;
+        &lt;/div&gt;
+    );
+}
+
+// Form Error Component
+function FormError({ errors }) {
+    if (!errors || Object.keys(errors).length === 0) return null;
+    
+    return (
+        &lt;div className="form-errors"&gt;
+            &lt;h4&gt;Please fix the following errors:&lt;/h4&gt;
+            &lt;ul&gt;
+                {Object.entries(errors).map(([field, message]) => (
+                    &lt;li key={field}&gt;{message}&lt;/li&gt;
+                ))}
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    );
+}</code>
+                </div>
+
+                <h3>Error Types & Handling Strategy</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Error Type</th>
+                            <th>Handling Strategy</th>
+                            <th>User Experience</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Network Error</strong></td>
+                            <td>Retry mechanism, offline mode</td>
+                            <td>Show retry button, cache data</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Validation Error</strong></td>
+                            <td>Inline error messages</td>
+                            <td>Highlight fields, show specific errors</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Authentication Error</strong></td>
+                            <td>Redirect to login, refresh token</td>
+                            <td>Clear message, preserve form data</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Server Error (5xx)</strong></td>
+                            <td>Log error, show fallback UI</td>
+                            <td>Generic error message, contact support</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Client Error (4xx)</strong></td>
+                            <td>Show specific error message</td>
+                            <td>Actionable feedback, guide user</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Runtime Error</strong></td>
+                            <td>Error boundary, log to service</td>
+                            <td>Fallback UI, refresh option</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Interactive Demo: Error Handling</h3>
+                <div class="interactive-demo">
+                    <div class="demo-title">🎮 Try Error Scenarios</div>
+                    
+                    <div class="error-demo-container">
+                        <div class="error-card">
+                            <h4>Network Error</h4>
+                            <button class="btn" onclick="simulateNetworkError()">Trigger</button>
+                        </div>
+                        <div class="error-card">
+                            <h4>Validation Error</h4>
+                            <button class="btn" onclick="simulateValidationError()">Trigger</button>
+                        </div>
+                        <div class="error-card">
+                            <h4>Server Error</h4>
+                            <button class="btn" onclick="simulateServerError()">Trigger</button>
+                        </div>
+                    </div>
+                    
+                    <div id="errorDisplay"></div>
+                </div>
+
+                <div class="info-box">
+                    <h4>💡 Error Handling Best Practices</h4>
+                    <ul style="margin-left: 2rem;">
+                        <li><strong>User-Friendly Messages:</strong> Technical details hide karein, simple language use karein</li>
+                        <li><strong>Actionable Feedback:</strong> User ko next steps batayein (retry, contact support)</li>
+                        <li><strong>Error Logging:</strong> Sab errors log karein for debugging</li>
+                        <li><strong>Graceful Degradation:</strong> Partial functionality provide karein if possible</li>
+                        <li><strong>Error Recovery:</strong> Automatic retry mechanisms implement karein</li>
+                        <li><strong>Context Preservation:</strong> User ka data/state preserve karein</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div id="quiz" class="section">
+                <div class="quiz-section">
+                    <h2>🎯 Interview Questions</h2>
+
+                    <!-- Question 1 -->
+                    <div class="question-card" onclick="toggleAnswer(1)">
+                        <div class="question-header">
+                            <span>1. File upload mein FormData ka kya role hai aur isse kaise use karte hain?</span>
+                            <div>
+                                <span class="difficulty-badge easy">Easy</span>
+                                <span class="toggle-icon" id="icon-1">▼</span>
+                            </div>
+                        </div>
+                        <div class="answer" id="answer-1">
+                            <p><strong>Answer:</strong></p>
+                            <p><strong>FormData</strong> ek JavaScript object hai jo form data ko key-value pairs mein encode karta hai, especially file uploads ke liye.</p>
+                            
+                            <p style="margin-top: 1rem;"><strong>Key Points:</strong></p>
+                            <ul style="margin-left: 2rem;">
+                                <li>Files ko binary format mein send karne ke liye use hota hai</li>
+                                <li>Multiple files aur additional data ek saath bhej sakte hain</li>
+                                <li>Automatically correct Content-Type header set karta hai</li>
+                                <li>XMLHttpRequest ya Fetch API ke saath use hota hai</li>
+                            </ul>
+                            
+                            <div class="code-block" style="margin-top: 1rem;">
+<code>// Example
+const formData = new FormData();
+formData.append('file', fileInput.files[0]);
+formData.append('username', 'john');
+formData.append('description', 'Profile picture');
+
+fetch('/api/upload', {
+    method: 'POST',
+    body: formData // No need to set Content-Type
+});</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="question-card" onclick="toggleAnswer(2)">
+                        <div class="question-header">
+                            <span>2. Drag and Drop API mein kaunse events important hain aur unka sequence kya hai?</span>
+                            <div>
+                                <span class="difficulty-badge medium">Medium</span>
+                                <span class="toggle-icon" id="icon-2">▼</span>
+                            </div>
+                        </div>
+                        <div class="answer" id="answer-2">
+                            <p><strong>Answer:</strong></p>
+                            <p><strong>Drag and Drop Events Sequence:</strong></p>
+                            
+                            <ol style="margin-left: 2rem; margin-top: 1rem;">
+                                <li><strong>dragstart:</strong> Jab user dragging start karta hai</li>
+                                <li><strong>drag:</strong> Dragging ke dauran continuously fire hota hai</li>
+                                <li><strong>dragenter:</strong> Jab dragged item drop zone mein enter karta hai</li>
+                                <li><strong>dragover:</strong> Jab dragged item drop zone ke upar hover karta hai</li>
+                                <li><strong>dragleave:</strong> Jab dragged item drop zone se bahar jata hai</li>
+                                <li><strong>drop:</strong> Jab item drop hota hai</li>
+                                <li><strong>dragend:</strong> Jab drag operation complete hota hai</li>
+                            </ol>
+                            
+                            <p style="margin-top: 1rem;"><strong>Important Points:</strong></p>
+                            <ul style="margin-left: 2rem;">
+                                <li>preventDefault() call karna zaroori hai dragover aur drop events mein</li>
+                                <li>dataTransfer object se files access karte hain</li>
+                                <li>Visual feedback ke liye CSS classes add/remove karein</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="question-card" onclick="toggleAnswer(3)">
+                        <div class="question-header">
+                            <span>3. Client-side validation aur server-side validation mein kya difference hai? Dono kyun zaroori hain?</span>
+                            <div>
+                                <span class="difficulty-badge medium">Medium</span>
+                                <span class="toggle-icon" id="icon-3">▼</span>
+                            </div>
+                        </div>
+                        <div class="answer" id="answer-3">
+                            <p><strong>Answer:</strong></p>
+                            
+                            <table class="comparison-table" style="margin-top: 1rem;">
+                                <thead>
+                                    <tr>
+                                        <th>Aspect</th>
+                                        <th>Client-Side</th>
+                                        <th>Server-Side</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Location</strong></td>
+                                        <td>Browser mein</td>
+                                        <td>Server pe</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Speed</strong></td>
+                                        <td>Instant feedback</td>
+                                        <td>Network delay</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Security</strong></td>
+                                        <td>Bypass ho sakta hai</td>
+                                        <td>Secure, bypass nahi ho sakta</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Purpose</strong></td>
+                                        <td>UX improvement</td>
+                                        <td>Data integrity & security</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <p style="margin-top: 1rem;"><strong>Dono Kyun Zaroori Hain:</strong></p>
+                            <ul style="margin-left: 2rem;">
+                                <li><strong>Client-side:</strong> Better UX, instant feedback, reduced server load</li>
+                                <li><strong>Server-side:</strong> Security, data integrity, business logic enforcement</li>
+                                <li>Client-side validation ko JavaScript disable karke bypass kiya ja sakta hai</li>
+                                <li>Server-side validation final line of defense hai</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="question-card" onclick="toggleAnswer(4)">
+                        <div class="question-header">
+                            <span>4. React mein Error Boundary kya hai aur isse kaise implement karte hain?</span>
+                            <div>
+                                <span class="difficulty-badge hard">Hard</span>
+                                <span class="toggle-icon" id="icon-4">▼</span>
+                            </div>
+                        </div>
+                        <div class="answer" id="answer-4">
+                            <p><strong>Answer:</strong></p>
+                            <p><strong>Error Boundary</strong> ek React component hai jo child component tree mein hone wale JavaScript errors ko catch karta hai aur fallback UI display karta hai.</p>
+                            
+                            <p style="margin-top: 1rem;"><strong>Implementation:</strong></p>
+                            <ul style="margin-left: 2rem;">
+                                <li>Class component hona chahiye (functional components mein nahi ban sakta)</li>
+                                <li><code>getDerivedStateFromError()</code> - Fallback UI render karne ke liye</li>
+                                <li><code>componentDidCatch()</code> - Error logging ke liye</li>
+                            </ul>
+                            
+                            <p style="margin-top: 1rem;"><strong>Kya Catch Nahi Hota:</strong></p>
+                            <ul style="margin-left: 2rem;">
+                                <li>Event handlers mein errors</li>
+                                <li>Asynchronous code (setTimeout, promises)</li>
+                                <li>Server-side rendering errors</li>
+                                <li>Error boundary khud mein errors</li>
+                            </ul>
+                            
+                            <p style="margin-top: 1rem;"><strong>Best Practices:</strong></p>
+                            <ul style="margin-left: 2rem;">
+                                <li>Multiple error boundaries use karein different parts ke liye</li>
+                                <li>Error logging service integrate karein (Sentry, LogRocket)</li>
+                                <li>User-friendly fallback UI provide karein</li>
+                                <li>Development mein detailed error info show karein</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Question 5 -->
+                    <div class="question-card" onclick="toggleAnswer(5)">
+                        <div class="question-header">
+                            <span>5. File upload mein progress tracking kaise implement karein?</span>
+                            <div>
+                                <span class="difficulty-badge medium">Medium</span>
+                                <span class="toggle-icon" id="icon-5">▼</span>
+                            </div>
+                        </div>
+                        <div class="answer" id="answer-5">
+                            <p><strong>Answer:</strong></p>
+                            <p>File upload progress track karne ke liye <strong>XMLHttpRequest</strong> ka upload.progress event use karte hain.</p>
+                            
+                            <div class="code-block" style="margin-top: 1rem;">
+<code>function uploadWithProgress(file) {
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    // Progress event listener
+    xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+            const percentComplete = (e.loaded / e.total) * 100;
+            updateProgressBar(percentComplete);
+        }
+    });
+    
+    // Load event listener
+    xhr.addEventListener('load', () => {
+        if (xhr.status === 200) {
+            console.log('Upload complete');
+        }
+    });
+    
+    // Error event listener
+    xhr.addEventListener('error', () => {
+        console.error('Upload failed');
+    });
+    
+    xhr.open('POST', '/api/upload');
+    xhr.send(formData);
+}
+
+// With Axios
+axios.post('/api/upload', formData, {
+    onUploadProgress: (progressEvent) => {
+        const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+        );
+        setProgress(percentCompleted);
+    }
+});</code>
+                            </div>
+                            
+                            <p style="margin-top: 1rem;"><strong>Key Points:</strong></p>
+                            <ul style="margin-left: 2rem;">
+                                <li>lengthComputable check karna zaroori hai</li>
+                                <li>e.loaded aur e.total se percentage calculate karein</li>
+                                <li>UI mein progress bar update karein</li>
+                                <li>Large files ke liye chunked upload consider karein</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Question 6 -->
+                    <div class="question-card" onclick="toggleAnswer(6)">
+                        <div class="question-header">
+                            <span>6. File upload security considerations kya hain?</span>
+                            <div>
+                                <span class="difficulty-badge hard">Hard</span>
+                                <span class="toggle-icon" id="icon-6">▼</span>
+                            </div>
+                        </div>
+                        <div class="answer" id="answer-6">
+                            <p><strong>Answer:</strong></p>
+                            <p><strong>File Upload Security Considerations:</strong></p>
+                            
+                            <ol style="margin-left: 2rem; margin-top: 1rem;">
+                                <li>
+                                    <strong>File Type Validation:</strong>
+                                    <ul style="margin-left: 1rem;">
+                                        <li>MIME type check karein (client aur server dono pe)</li>
+                                        <li>File extension validate karein</li>
+                                        <li>Magic bytes check karein (actual file content)</li>
+                                    </ul>
+                                </li>
+                                
+                                <li style="margin-top: 0.5rem;">
+                                    <strong>File Size Limits:</strong>
+                                    <ul style="margin-left: 1rem;">
+                                        <li>Maximum file size enforce karein</li>
+                                        <li>DoS attacks prevent karne ke liye</li>
+                                    </ul>
+                                </li>
+                                
+                                <li style="margin-top: 0.5rem;">
+                                    <strong>File Name Sanitization:</strong>
+                                    <ul style="margin-left: 1rem;">
+                                        <li>Special characters remove karein</li>
+                                        <li>Path traversal attacks prevent karein (../, etc.)</li>
+                                        <li>Unique file names generate karein</li>
+                                    </ul>
+                                </li>
+                                
+                                <li style="margin-top: 0.5rem;">
+                                    <strong>Storage Security:</strong>
+                                    <ul style="margin-left: 1rem;">
+                                        <li>Files ko web root ke bahar store karein</li>
+                                        <li>Direct access prevent karein</li>
+                                        <li>Virus scanning implement karein</li>
+                                    </ul>
+                                </li>
+                                
+                                <li style="margin-top: 0.5rem;">
+                                    <strong>Authentication & Authorization:</strong>
+                                    <ul style="margin-left: 1rem;">
+                                        <li>User authentication verify karein</li>
+                                        <li>Upload permissions check karein</li>
+                                        <li>Rate limiting implement karein</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Question 7 -->
+                    <div class="question-card" onclick="toggleAnswer(7)">
+                        <div class="question-header">
+                            <span>7. Global error handling strategy kya honi chahiye ek production application mein?</span>
+                            <div>
+                                <span class="difficulty-badge hard">Hard</span>
+                                <span class="toggle-icon" id="icon-7">▼</span>
+                            </div>
+                        </div>
+                        <div class="answer" id="answer-7">
+                            <p><strong>Answer:</strong></p>
+                            <p><strong>Comprehensive Error Handling Strategy:</strong></p>
+                            
+                            <ol style="margin-left: 2rem; margin-top: 1rem;">
+                                <li>
+                                    <strong>Error Boundaries (React):</strong>
+                                    <ul style="margin-left: 1rem;">
+                                        <li>Multiple levels pe error boundaries</li>
+                                        <li>Component-specific fallback UIs</li>
+                                        <li>Error recovery mechanisms</li>
+                                    </ul>
+                                </li>
+                                
+                                <li style="margin-top: 0.5rem;">
+                                    <strong>Global Error Handlers:</strong>
+                                    <ul style="margin-left: 1rem;">
+                                        <li>window.onerror for global errors</li>
+                                        <li>unhandledrejection for promise rejections</li>
+                                        <li>Network error interceptors</li>
+                                    </ul>
+                                </li>
+                                
+                                <li style="margin-top: 0.5rem;">
+                                    <strong>Error Logging & Monitoring:</strong>
+                                    <ul style="margin-left: 1rem;">
+                                        <li>Sentry, LogRocket, Bugsnag integration</li>
+                                        <li>Error context capture (user info, browser, etc.)</li>
+                                        <li>Source maps for production debugging</li>
+                                    </ul>
+                                </li>
+                                
+                                <li style="margin-top: 0.5rem;">
+                                    <strong>User Communication:</strong>
+                                    <ul style="margin-left: 1rem;">
+                                        <li>User-friendly error messages</li>
+                                        <li>Actionable feedback (retry, contact support)</li>
+                                        <li>Toast notifications for non-critical errors</li>
+                                    </ul>
+                                </li>
+                                
+                                <li style="margin-top: 0.5rem;">
+                                    <strong>Error Recovery:</strong>
+                                    <ul style="margin-left: 1rem;">
+                                        <li>Automatic retry mechanisms</li>
+                                        <li>Offline mode support</li>
+                                        <li>State preservation</li>
+                                    </ul>
+                                </li>
+                                
+                                <li style="margin-top: 0.5rem;">
+                                    <strong>Performance Monitoring:</strong>
+                                    <ul style="margin-left: 1rem;">
+                                        <li>Error rate tracking</li>
+                                        <li>Performance metrics</li>
+                                        <li>User impact analysis</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // File Upload Demo
+        let selectedFiles = [];
+
+        function handleDemoUpload() {
+            const fileInput = document.getElementById('demoFileInput');
+            const files = Array.from(fileInput.files);
+            
+            if (files.length === 0) {
+                alert('Please select files first!');
+                return;
+            }
+            
+            // Validate files
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            const validFiles = files.filter(file => {
+                if (file.size > maxSize) {
+                    alert(`${file.name} is too large (max 5MB)`);
+                    return false;
+                }
+                return true;
+            });
+            
+            if (validFiles.length === 0) return;
+            
+            selectedFiles = validFiles;
+            displayFiles();
+            simulateUpload();
+        }
+
+        function displayFiles() {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '<h4 style="margin-top: 1rem;">Selected Files:</h4>';
+            
+            selectedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <span class="file-icon">📄</span>
+                        <div>
+                            <strong>${file.name}</strong>
+                            <div style="font-size: 0.85rem; color: #666;">
+                                ${(file.size / 1024).toFixed(2)} KB
+                            </div>
+                        </div>
+                    </div>
+                    <button class="remove-btn" onclick="removeFile(${index})">Remove</button>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displayFiles();
+        }
+
+        function clearDemoFiles() {
+            selectedFiles = [];
+            document.getElementById('demoFileInput').value = '';
+            document.getElementById('fileList').innerHTML = '';
+            document.getElementById('uploadProgress').style.display = 'none';
+            document.getElementById('uploadSuccess').classList.remove('show');
+        }
+
+        function simulateUpload() {
+            const progressBar = document.getElementById('uploadProgress');
+            const progressFill = document.getElementById('progressFill');
+            const successMsg = document.getElementById('uploadSuccess');
+            
+            progressBar.style.display = 'block';
+            successMsg.classList.remove('show');
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressFill.style.width = progress + '%';
+                progressFill.textContent = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressBar.style.display = 'none';
+                        successMsg.classList.add('show');
+                    }, 500);
+                }
+            }, 200);
+        }
+
+        // Drag and Drop Demo
+        const dragDropZone = document.getElementById('dragDropZone');
+        const dragDropInput = document.getElementById('dragDropInput');
+        const dragDropFileList = document.getElementById('dragDropFileList');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dragDropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dragDropZone.addEventListener(eventName, () => {
+                dragDropZone.classList.add('dragover');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dragDropZone.addEventListener(eventName, () => {
+                dragDropZone.classList.remove('dragover');
+            });
+        });
+
+        dragDropZone.addEventListener('drop', handleDrop);
+        dragDropZone.addEventListener('click', () => dragDropInput.click());
+        dragDropInput.addEventListener('change', (e) => {
+            handleFiles(Array.from(e.target.files));
+        });
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = Array.from(dt.files);
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            dragDropFileList.innerHTML = '<h4>Dropped Files:</h4>';
+            
+            files.forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <span class="file-icon">${getFileIcon(file.type)}</span>
+                        <div>
+                            <strong>${file.name}</strong>
+                            <div style="font-size: 0.85rem; color: #666;">
+                                ${(file.size / 1024).toFixed(2)} KB - ${file.type || 'Unknown type'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                dragDropFileList.appendChild(fileItem);
+            });
+        }
+
+        function getFileIcon(type) {
+            if (type.startsWith('image/')) return '🖼️';
+            if (type.startsWith('video/')) return '🎥';
+            if (type.startsWith('audio/')) return '🎵';
+            if (type.includes('pdf')) return '📕';
+            if (type.includes('word')) return '📘';
+            if (type.includes('excel') || type.includes('spreadsheet')) return '📊';
+            return '📄';
+        }
+
+        // Validation Demo
+        function validateEmailField() {
+            const input = document.getElementById('emailInput');
+            const error = document.getElementById('emailError');
+            const rule = document.getElementById('emailRule');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (emailRegex.test(input.value)) {
+                input.classList.remove('error');
+                error.classList.remove('show');
+                rule.className = 'rule-item valid';
+            } else {
+                input.classList.add('error');
+                error.textContent = 'Please enter a valid email address';
+                error.classList.add('show');
+                rule.className = 'rule-item invalid';
+            }
+        }
+
+        function validatePasswordField() {
+            const input = document.getElementById('passwordInput');
+            const error = document.getElementById('passwordError');
+            const password = input.value;
+            
+            const rules = {
+                length: password.length >= 8,
+                upper: /[A-Z]/.test(password),
+                lower: /[a-z]/.test(password),
+                number: /\d/.test(password),
+                special: /[@$!%*?&]/.test(password)
+            };
+            
+            document.getElementById('passwordLengthRule').className = 
+                `rule-item ${rules.length ? 'valid' : 'invalid'}`;
+            document.getElementById('passwordUpperRule').className = 
+                `rule-item ${rules.upper ? 'valid' : 'invalid'}`;
+            document.getElementById('passwordLowerRule').className = 
+                `rule-item ${rules.lower ? 'valid' : 'invalid'}`;
+            document.getElementById('passwordNumberRule').className = 
+                `rule-item ${rules.number ? 'valid' : 'invalid'}`;
+            document.getElementById('passwordSpecialRule').className = 
+                `rule-item ${rules.special ? 'valid' : 'invalid'}`;
+            
+            const allValid = Object.values(rules).every(v => v);
+            
+            if (allValid) {
+                input.classList.remove('error');
+                error.classList.remove('show');
+            } else {
+                input.classList.add('error');
+                error.textContent = 'Password must meet all requirements';
+                error.classList.add('show');
+            }
+        }
+
+        function validatePhoneField() {
+            const input = document.getElementById('phoneInput');
+            const error = document.getElementById('phoneError');
+            const rule = document.getElementById('phoneRule');
+            const phoneRegex = /^\d{10}$/;
+            
+            if (phoneRegex.test(input.value)) {
+                input.classList.remove('error');
+                error.classList.remove('show');
+                rule.className = 'rule-item valid';
+            } else {
+                input.classList.add('error');
+                error.textContent = 'Please enter a valid 10-digit phone number';
+                error.classList.add('show');
+                rule.className = 'rule-item invalid';
+            }
+        }
+
+        function handleValidationSubmit(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            const phone = document.getElementById('phoneInput').value;
+            
+            const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            const passwordValid = password.length >= 8 && 
+                /[A-Z]/.test(password) && 
+                /[a-z]/.test(password) && 
+                /\d/.test(password) && 
+                /[@$!%*?&]/.test(password);
+            const phoneValid = /^\d{10}$/.test(phone);
+            
+            if (emailValid && passwordValid && phoneValid) {
+                document.getElementById('validationSuccess').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('validationSuccess').classList.remove('show');
+                }, 3000);
+            } else {
+                alert('Please fix all validation errors before submitting');
+            }
+        }
+
+        // Error Handling Demo
+        function simulateNetworkError() {
+            const display = document.getElementById('errorDisplay');
+            display.innerHTML = `
+                <div class="error-boundary">
+                    <h3>🌐 Network Error</h3>
+                    <p>Unable to connect to the server. Please check your internet connection.</p>
+                    <button class="btn" onclick="this.parentElement.remove()">Retry</button>
+                </div>
+            `;
+        }
+
+        function simulateValidationError() {
+            const display = document.getElementById('errorDisplay');
+            display.innerHTML = `
+                <div class="error-boundary" style="background: #fff3cd; color: #856404; border-left-color: #ffc107;">
+                    <h3>⚠️ Validation Error</h3>
+                    <ul style="margin-left: 2rem; margin-top: 1rem;">
+                        <li>Email is required</li>
+                        <li>Password must be at least 8 characters</li>
+                        <li>Phone number is invalid</li>
+                    </ul>
+                    <button class="btn" onclick="this.parentElement.remove()">Close</button>
+                </div>
+            `;
+        }
+
+        function simulateServerError() {
+            const display = document.getElementById('errorDisplay');
+            display.innerHTML = `
+                <div class="error-boundary">
+                    <h3>🚨 Server Error (500)</h3>
+                    <p>Something went wrong on our end. Our team has been notified.</p>
+                    <p style="margin-top: 0.5rem;">Error ID: ERR-${Math.random().toString(36).substr(2, 9).toUpperCase()}</p>
+                    <button class="btn" onclick="this.parentElement.remove()">Close</button>
+                </div>
+            `;
+        }
+
+        // Quiz Toggle
+        function toggleAnswer(num) {
+            const answer = document.getElementById(`answer-${num}`);
+            const icon = document.getElementById(`icon-${num}`);
+            
+            answer.classList.toggle('show');
+            icon.classList.toggle('rotated');
+        }
+    </script>
+</body>
+</html>
