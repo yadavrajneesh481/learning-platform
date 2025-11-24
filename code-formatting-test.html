@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Formatting Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #0f1724;
+            color: #e6eef6;
+        }
+        
+        h1 {
+            color: #6ee7b7;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #60a5fa;
+            margin-bottom: 15px;
+        }
+        
+        /* Code Block Formatting - Universal Styles */
+        pre {
+            background: #282c34 !important;
+            color: #abb2bf !important;
+            padding: 20px !important;
+            border-radius: 8px !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+            margin: 15px 0 !important;
+            font-family: 'Courier New', 'Consolas', 'Monaco', monospace !important;
+            font-size: 14px !important;
+            line-height: 1.6 !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+            white-space: pre !important;
+            word-wrap: normal !important;
+            tab-size: 4 !important;
+        }
+
+        code {
+            font-family: 'Courier New', 'Consolas', 'Monaco', monospace !important;
+            font-size: 14px;
+            color: #e06c75;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        pre code {
+            background: transparent !important;
+            padding: 0 !important;
+            color: #abb2bf !important;
+            display: block !important;
+            white-space: pre !important;
+            word-wrap: normal !important;
+            overflow-wrap: normal !important;
+        }
+
+        /* Syntax Highlighting Classes */
+        .syntax-keyword { color: #c678dd; font-weight: bold; }
+        .syntax-tag { color: #e06c75; }
+        .syntax-attr { color: #d19a66; }
+        .syntax-string { color: #98c379; }
+        .syntax-comment { color: #5c6370; font-style: italic; }
+        .syntax-number { color: #d19a66; }
+        .syntax-function { color: #61afef; }
+        .syntax-operator { color: #56b6c2; }
+        .syntax-variable { color: #e5c07b; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Code Formatting Test Page</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Basic JavaScript Code</h2>
+        <p>This should display with proper line breaks and indentation:</p>
+        <pre><code>// Sample JavaScript function
+function greet(name) {
+    console.log("Hello, " + name);
+    return true;
+}
+
+// Call the function
+greet("World");</code></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Multi-line Code with Indentation</h2>
+        <p>Testing proper indentation preservation:</p>
+        <pre><code>describe('math utils', () => {
+  test('sum adds numbers', () => {
+    expect(sum(2,3)).toBe(5);
+  });
+  
+  test('works with negatives', () => {
+    expect(sum(-1,1)).toBe(0);
+  });
+});</code></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: HTML Code with Entities</h2>
+        <p>Testing HTML entity rendering:</p>
+        <pre><code>&lt;div class="container"&gt;
+  &lt;h1&gt;Hello World&lt;/h1&gt;
+  &lt;p&gt;This is a paragraph.&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Code with Syntax Highlighting</h2>
+        <p>Testing syntax highlighting classes:</p>
+        <pre><code><span class="syntax-keyword">function</span> <span class="syntax-function">calculateSum</span>(<span class="syntax-variable">a</span>, <span class="syntax-variable">b</span>) {
+    <span class="syntax-comment">// Add two numbers</span>
+    <span class="syntax-keyword">return</span> <span class="syntax-variable">a</span> <span class="syntax-operator">+</span> <span class="syntax-variable">b</span>;
+}
+
+<span class="syntax-keyword">const</span> <span class="syntax-variable">result</span> <span class="syntax-operator">=</span> <span class="syntax-function">calculateSum</span>(<span class="syntax-number">5</span>, <span class="syntax-number">10</span>);
+console.<span class="syntax-function">log</span>(<span class="syntax-string">"Result:"</span>, <span class="syntax-variable">result</span>);</code></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 5: Inline Code</h2>
+        <p>This is a paragraph with <code>inline code</code> that should have a different background than the <code>pre code</code> blocks above.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>✅ Expected Results</h2>
+        <ul>
+            <li>All code blocks should have a dark background (#282c34)</li>
+            <li>Code should use monospace font (Courier New/Consolas/Monaco)</li>
+            <li>Line breaks and indentation should be preserved</li>
+            <li>Syntax highlighting colors should be visible (Test 4)</li>
+            <li>Inline code should have a lighter background</li>
+            <li>Code should be readable with proper spacing</li>
+        </ul>
+    </div>
+
+    <script>
+        console.log("✓ Test page loaded successfully");
+        console.log("Check if all code blocks are properly formatted");
+    </script>
+</body>
+</html>
