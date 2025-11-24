@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Day 29 — Testing JavaScript (Interactive)</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#9aa4b2;--accent:#6ee7b7;--glass:rgba(255,255,255,0.04)}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{background:linear-gradient(180deg,#071025 0%, #071827 60%);color:#e6eef6;display:flex;align-items:flex-start;justify-content:center;padding:28px}
+    .wrap{max-width:1100px;width:100%}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    .logo{background:linear-gradient(90deg,var(--accent),#60a5fa);padding:10px;border-radius:10px;color:#042029;font-weight:700}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:4px 0 0;color:var(--muted)}
+    main{display:grid;grid-template-columns:360px 1fr;gap:18px}
+    /* sidebar */
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:12px;padding:16px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    nav .section{margin-bottom:12px}
+    nav button{width:100%;text-align:left;padding:10px;border-radius:8px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+    nav button.active{color:#e6eef6;background:var(--glass)}
+    .toggle{display:flex;gap:8px;align-items:center}
+    .badge{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);color:var(--muted)}
+    /* content */
+    .content{min-height:600px}
+    .panel{display:none}
+    .panel.active{display:block}
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:12px}
+    .box{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:14px;border-radius:10px}
+    .small{font-size:13px;color:var(--muted)}
+    .home-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 10px 15px;
+        background: #28a745;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    .home-link:hover {
+        background: #218838;
+        transform: translateY(-1px);
+    }
+    .home-link:focus {
+        outline: 2px solid #ffc107;
+        outline-offset: 2px;
+    }
+    pre{background:rgba(0,0,0,0.25);padding:10px;border-radius:8px;overflow:auto}
+    code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,monospace;font-size:13px}
+    /* diagram */
+    .diagram{display:flex;align-items:center;justify-content:center;padding:10px}
+    svg{max-width:100%;height:auto}
+    /* test runner */
+    .runner{max-height:320px;overflow:auto}
+    .test-pass{color:var(--accent)}
+    .test-fail{color:#ff8a8a}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:8px;color:#e6eef6;cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,#10b981,#06b6d4);color:#042029;border:0}
+    /* responsive */
+    @media(max-width:980px){main{grid-template-columns:1fr} .grid{grid-template-columns:1fr}}
+    /* interview list */
+    ol.interview{padding-left:20px}
+    footer{margin-top:12px;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+    <header>
+      <div class="logo">Day29</div>
+      <div>
+        <h1>Testing JavaScript — Unit, Integration, E2E (Hinglish + English defs)</h1>
+        <p class="lead">Interactive explainer + simulated Jest runner — Hindi-English mix for explanations, technical defs in English.</p>
+      </div>
+    </header>
+
+    <main>
+      <aside>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <div>
+              <div style="font-weight:700">Contents</div>
+              <div class="small">Explore sections and try the test runner</div>
+            </div>
+            <div class="badge">Practice: Simulated Jest</div>
+          </div>
+
+          <nav>
+            <div class="section"><button class="navbtn active" data-target="intro">Introduction</button></div>
+            <div class="section"><button class="navbtn" data-target="types">Testing Types</button></div>
+            <div class="section"><button class="navbtn" data-target="jest">Jest Basics</button></div>
+            <div class="section"><button class="navbtn" data-target="practice">Practice Runner</button></div>
+            <div class="section"><button class="navbtn" data-target="interview">Interview Qs</button></div>
+          </nav>
+
+          <div style="margin-top:12px;border-top:1px dashed rgba(255,255,255,0.02);padding-top:12px">
+            <div class="small">View Mode</div>
+            <div class="toggle" style="margin-top:8px">
+              <label style="font-size:13px;color:var(--muted)">Show technical definitions in English</label>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="content">
+        <!-- INTRO -->
+        <div id="intro" class="panel active card">
+          <h2 style="margin-top:0">Intro (Hinglish explanation)</h2>
+          <p class="small">Yeh page aapko testing basics sikhaayega — hum simple language (Hinglish) mein samjhayenge magar jo formal technical definitions hain, woh <strong>English</strong> mein rahengi taaki interview ke liye bhi perfect ho.</p>
+          <div class="grid" style="margin-top:12px">
+            <div class="box">
+              <h3 style="margin:0">Why test?</h3>
+              <p class="small">Application bug kam karne ke liye, refactor safe karne ke liye aur confidence banaye rakhne ke liye hum tests likhte hain. Imagine agar kisi ne code badal diya aur kuch break hua — tests turant batayenge.</p>
+              <ul class="small">
+                <li>Reliable codebase</li>
+                <li>Faster debugging</li>
+                <li>Documentation of expected behaviour</li>
+              </ul>
+            </div>
+
+            <div class="box">
+              <h3 style="margin:0">When to test?</h3>
+              <p class="small">Jab logic complex ho, edge-cases ho, ya jab refactor frequent ho. Har function ke liye unit tests zaroori nahi par critical functions ke liye hona chahiye.</p>
+            </div>
+          </div>
+
+          <h3 style="margin-top:14px">Small glossary (technical definitions — English)</h3>
+          <ul class="small">
+            <li><strong>Unit Test</strong>: Tests a single unit of code in isolation, typically one function or class method.</li>
+            <li><strong>Integration Test</strong>: Tests interactions between multiple modules or components to ensure they work together.</li>
+            <li><strong>End-to-End (E2E) Test</strong>: Tests the full application flow from user interface to backend, simulating real user scenarios.</li>
+            <li><strong>Mock</strong>: A fake implementation to isolate the unit under test.</li>
+            <li><strong>Assertion</strong>: A statement that checks if a test expectation is met (e.g., expect(x).toBe(y)).</li>
+          </ul>
+        </div>
+
+        <!-- TYPES -->
+        <div id="types" class="panel card">
+          <h2>Testing Types — Visual + Hinglish</h2>
+          <p class="small">Neeche ek simple diagram aur short Hinglish notes — diagram pe hover karke part highlight karein.</p>
+
+          <div style="display:flex;gap:12px;flex-direction:column">
+            <div class="diagram box" id="diagramBox">
+              <!-- SVG diagram -->
+              <svg viewBox="0 0 800 240">
+                <defs>
+                  <filter id="glow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                </defs>
+                <!-- Unit -->
+                <rect id="unitRect" x="20" y="40" width="220" height="160" rx="12" fill="#05202b" stroke="#114b5f"/>
+                <text x="130" y="70" text-anchor="middle" fill="#8ee7c9" font-weight="700">Unit Test</text>
+                <text x="130" y="96" text-anchor="middle" fill="#9fbfc9" font-size="12">Isolate one function</text>
+
+                <!-- Integration -->
+                <rect id="intRect" x="290" y="20" width="220" height="200" rx="12" fill="#081427" stroke="#7fb3ff"/>
+                <text x="400" y="60" text-anchor="middle" fill="#7fb3ff" font-weight="700">Integration Test</text>
+                <text x="400" y="86" text-anchor="middle" fill="#9fbfc9" font-size="12">Multiple modules together</text>
+
+                <!-- E2E -->
+                <rect id="e2eRect" x="560" y="0" width="220" height="240" rx="12" fill="#120a2b" stroke="#d1a8ff"/>
+                <text x="670" y="60" text-anchor="middle" fill="#d1a8ff" font-weight="700">End-to-End (E2E)</text>
+                <text x="670" y="86" text-anchor="middle" fill="#9fbfc9" font-size="12">Full user flow (UI→API→DB)</text>
+
+                <!-- Arrows -->
+                <line x1="240" y1="120" x2="290" y2="120" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
+                <line x1="510" y1="120" x2="560" y2="120" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
+              </svg>
+            </div>
+
+            <div class="box small">
+              <h4 style="margin:6px 0">Hinglish notes</h4>
+              <p class="small">Unit test matlab chhota test — ek function ko isolate karke check karte ho. Integration test uss waqt jab do ya zyada parts saath aake kaam karte hain. E2E matlab user ke perspective se end-to-end flow test karna — jaise login -> create item -> view item.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- JEST BASICS -->
+        <div id="jest" class="panel card">
+          <h2>Jest Basics (English defs, Hinglish tips)</h2>
+          <p class="small">We will keep formal syntax and API names in English so it's interview-friendly.</p>
+
+          <div class="grid" style="margin-top:12px">
+            <div class="box">
+              <h4 style="margin:0">Core Concepts</h4>
+              <ul class="small">
+                <li><strong>describe()</strong>: Groups related tests.</li>
+                <li><strong>it() / test()</strong>: Individual test case.</li>
+                <li><strong>expect()</strong>: Make assertions.</li>
+                <li><strong>toBe(), toEqual()</strong>: Matchers to compare values.</li>
+                <li><strong>beforeEach / afterEach</strong>: Setup/teardown hooks.</li>
+                <li><strong>jest.mock()</strong>: Create mocks for modules.</li>
+              </ul>
+            </div>
+
+            <div class="box">
+              <h4 style="margin:0">Hinglish tips</h4>
+              <p class="small">Jest local environment mein chala ke dekho. Browser mein direct Jest nahi chalega (Jest Node.js pe run hota hai). Is page pe hum ek small simulated runner banayenge jo concept samjhayega.</p>
+            </div>
+          </div>
+
+          <h4 style="margin-top:12px">Example (what Jest test looks like)</h4>
+          <pre><code>// sample.test.js
+describe('math utils', () =&gt; {
+  test('sum adds numbers', () =&gt; {
+    expect(sum(2,3)).toBe(5);
+  });
+});
+</code></pre>
+
+        </div>
+
+        <!-- PRACTICE -->
+        <div id="practice" class="panel card">
+          <h2>Practice — Simulated Jest Runner</h2>
+          <p class="small">Neeche kuch utility functions hain aur inke tests. Click <strong>Run Tests</strong> to execute in-browser simulation (not actual Jest) — purpose: understand assertions, passing/failing tests, and test grouping.</p>
+
+          <div class="grid" style="margin-top:12px">
+            <div>
+              <div class="box">
+                <h4 style="margin:6px 0">Utility functions</h4>
+                <pre><code id="utilsCode">// Utilities to test
+function sum(a,b){return a+b}
+function isPrime(n){if(n&lt;2) return false;for(let i=2;i*i<=n;i++) if(n%i===0) return false;return true}
+function capitalize(s){if(typeof s!=="string") return '';return s.charAt(0).toUpperCase()+s.slice(1)}</code></pre>
+
+                <div style="margin-top:8px" class="small">You can edit functions above — try breaking something and re-run tests!</div>
+              </div>
+
+              <div class="box" style="margin-top:12px">
+                <h4 style="margin:6px 0">Tests (written with simulated API)</h4>
+                <pre><code id="testsCode">describe('sum', () =&gt; {
+  test('adds positive numbers', () =&gt; { expect(sum(2,3)).toBe(5) })
+  test('works with negatives', () =&gt; { expect(sum(-1,1)).toBe(0) })
+})
+
+describe('isPrime', () =&gt; {
+  test('2 is prime', () =&gt; { expect(isPrime(2)).toBeTruthy() })
+  test('9 is not prime', () =&gt; { expect(isPrime(9)).toBeFalsy() })
+})
+
+describe('capitalize', () =&gt; {
+  test('capitalizes word', () =&gt; { expect(capitalize('hello')).toBe('Hello') })
+  test('handles non-string', () =&gt; { expect(capitalize(null)).toBe('') })
+})</code></pre>
+
+                <div class="controls">
+                  <button class="btn" id="editBtn">Edit Utils</button>
+                  <button class="btn primary" id="runBtn">Run Tests</button>
+                  <button class="btn" id="resetBtn">Reset Code</button>
+                </div>
+              </div>
+
+              <div class="box" style="margin-top:12px">
+                <h4 style="margin:6px 0">Runner Output</h4>
+                <div class="runner small" id="runner"></div>
+              </div>
+
+            </div>
+
+            <div>
+              <div class="box">
+                <h4 style="margin:6px 0">How this simulation works</h4>
+                <ol class="small">
+                  <li>Parse the tests (tiny parser in JS).</li>
+                  <li>Execute test functions safely using try/catch.</li>
+                  <li>Show green/red result per assertion.</li>
+                </ol>
+                <p class="small">Remember: Real Jest runs in Node, provides richer matchers, snapshots, mocking, and coverage reports.</p>
+              </div>
+
+              <div class="box" style="margin-top:12px">
+                <h4 style="margin:6px 0">Tips for writing tests</h4>
+                <ul class="small">
+                  <li>Test one behaviour per test.</li>
+                  <li>Use descriptive test names.</li>
+                  <li>Mock external services (APIs, DB) in unit tests.</li>
+                  <li>Use integration tests for module boundaries.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERVIEW -->
+        <div id="interview" class="panel card">
+          <h2>Interview Questions</h2>
+          <p class="small">5–7 questions ranging basic→advanced. Answer these in English for interviews; you can practice answering in Hinglish too.</p>
+          <ol class="interview small">
+            <li>What is the difference between unit tests and integration tests? Give an example scenario for each.</li>
+            <li>Explain "mocking" and when you would use mocks in tests.</li>
+            <li>How does test-driven development (TDD) change the way you design functions?</li>
+            <li>What are some common pitfalls of writing flaky tests and how do you avoid them?</li>
+            <li>Describe how you'd test an API endpoint that returns paginated data (unit + integration approach).</li>
+            <li>How do Jest's snapshot tests work and when should you use them?</li>
+            <li>Explain how you would set up CI to run your test suite for a Node.js project.</li>
+          </ol>
+
+          <footer>
+            <div>Made for your Day 29 — Testing JavaScript practice. Want this as a downloadable HTML file or want added examples (mocking, setup/teardown), tell me which one and I'll update.</div>
+          </footer>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Navigation
+    document.querySelectorAll('.navbtn').forEach(btn=>btn.addEventListener('click',e=>{
+      document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const t = btn.dataset.target;
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      document.getElementById(t).classList.add('active');
+    }));
+
+    // Diagram interactivity
+    const map = {unitRect:{desc:'Unit Test — isolate single function.'},intRect:{desc:'Integration Test — module interactions.'},e2eRect:{desc:'E2E — full application flow.'}};
+    Object.keys(map).forEach(id=>{
+      const el = document.getElementById(id);
+      el.style.cursor='pointer';
+      el.addEventListener('mouseenter',()=>{el.style.filter='url(#glow)';document.querySelector('#diagramBox .boxdesc')?.remove();const d=document.createElement('div');d.className='boxdesc';d.style.position='absolute';d.style.background='rgba(0,0,0,0.5)';d.style.padding='8px';d.style.borderRadius='8px';d.style.left='20px';d.style.top='10px';d.innerText=map[id].desc;document.getElementById('diagramBox').appendChild(d)});
+      el.addEventListener('mouseleave',()=>{el.style.filter='none';document.querySelector('#diagramBox .boxdesc')?.remove()});
+    });
+
+    // Simulated test runner
+    // Provide modifiable utils & tests (from elements)
+    const runnerEl = document.getElementById('runner');
+    const utilsCodeEl = document.getElementById('utilsCode');
+    const testsCodeEl = document.getElementById('testsCode');
+
+    const defaultUtils = utilsCodeEl.textContent;
+    const defaultTests = testsCodeEl.textContent;
+
+    document.getElementById('resetBtn').addEventListener('click',()=>{utilsCodeEl.textContent=defaultUtils;testsCodeEl.textContent=defaultTests;runnerEl.innerHTML='';});
+
+    document.getElementById('editBtn').addEventListener('click',()=>{
+      // Turn utils into editable textarea modal
+      const ta = document.createElement('textarea');ta.style.width='100%';ta.style.height='220px';ta.value=utilsCodeEl.textContent;ta.style.background='rgba(0,0,0,0.5)';ta.style.color='#e6eef6';ta.style.border='1px solid rgba(255,255,255,0.04)';
+      const modal = document.createElement('div');modal.style.position='fixed';modal.style.left='50%';modal.style.top='50%';modal.style.transform='translate(-50%,-50%)';modal.style.zIndex=9999;modal.style.width='90%';modal.style.maxWidth='720px';modal.style.background='#071627';modal.style.padding='12px';modal.style.borderRadius='10px';
+      const ok = document.createElement('button');ok.innerText='Save';ok.className='btn primary';ok.style.marginTop='8px';
+      const cancel = document.createElement('button');cancel.innerText='Cancel';cancel.className='btn';cancel.style.marginLeft='8px';
+      modal.appendChild(ta);modal.appendChild(ok);modal.appendChild(cancel);document.body.appendChild(modal);
+      cancel.addEventListener('click',()=>modal.remove());
+      ok.addEventListener('click',()=>{utilsCodeEl.textContent=ta.value;modal.remove();});
+    });
+
+    function clearRunner(){runnerEl.innerHTML='';}
+
+    function appendLine(html){const d=document.createElement('div');d.innerHTML=html;runnerEl.appendChild(d);}
+
+    function simpleParser(testStr){
+      // Extremely tiny parser: extracts describes and tests using regex. Not robust but works for our sample.
+      const describeRe = /describe\s*\(\s*['\"]([\s\S]*?)['\"]\s*,\s*\(\)\s*=>\s*\{([\s\S]*?)\}\s*\)\s*/g;
+      const testRe = /test\s*\(\s*['\"]([\s\S]*?)['\"]\s*,\s*\(\)\s*=>\s*\{([\s\S]*?)\}\s*\)\s*/g;
+      const groups=[];
+      let m;
+      while((m=describeRe.exec(testStr))!==null){
+        const gname=m[1].trim();const body=m[2];
+        const tests=[];let t;
+        while((t=testRe.exec(body))!==null){tests.push({name:t[1].trim(),fn:t[2]});}
+        groups.push({name:gname,tests});
+      }
+      return groups;
+    }
+
+    function runTests(){
+      clearRunner();
+      appendLine('<div style="font-weight:700;margin-bottom:6px">Running tests...</div>');
+      // create a fresh function context
+      const userUtils = utilsCodeEl.textContent;
+      try{
+        // Evaluate utils first in safe Function
+        const utilsFunc = new Function(userUtils + '\n return { sum, isPrime, capitalize };');
+        const utils = utilsFunc();
+        // attach to window for tests
+        window.sum = utils.sum; window.isPrime = utils.isPrime; window.capitalize = utils.capitalize;
+      }catch(err){appendLine('<div class="test-fail">Error evaluating utils: '+(err.message||err)+'</div>');return}
+
+      // parse tests
+      const testStr = testsCodeEl.textContent;
+      const groups = simpleParser(testStr);
+      if(groups.length===0){appendLine('<div class="small">No tests found or parser could not understand test format.</div>');return}
+
+      let total=0,passed=0;
+      groups.forEach(g=>{
+        appendLine('<div style="margin-top:8px;font-weight:700">'+g.name+'</div>');
+        g.tests.forEach(t=>{
+          total++;
+          // build a function wrapper to execute the test body which contains expect(...) calls
+          try{
+            // Provide a tiny expect implementation available during test eval
+            const expect = function(actual){
+              return {
+                toBe: function(expected){ if(Object.is(actual,expected)) return true; throw new Error('Expected '+JSON.stringify(actual)+' to be '+JSON.stringify(expected)); },
+                toEqual: function(expected){ const a=JSON.stringify(actual);const b=JSON.stringify(expected); if(a===b) return true; throw new Error('Expected '+a+' to equal '+b)},
+                toBeTruthy: function(){ if(actual) return true; throw new Error('Expected '+JSON.stringify(actual)+' to be truthy')},
+                toBeFalsy: function(){ if(!actual) return true; throw new Error('Expected '+JSON.stringify(actual)+' to be falsy')}
+              }
+            };
+
+            // eslint-disable-next-line no-new-func
+            const fn = new Function('expect','sum','isPrime','capitalize', t.fn);
+            fn(expect, window.sum, window.isPrime, window.capitalize);
+            appendLine('<div class="test-pass">✔ '+t.name+'</div>'); passed++;
+          }catch(err){appendLine('<div class="test-fail">✖ '+t.name+' — '+(err.message||err)+'</div>');}
+        });
+      });
+      appendLine('<div style="margin-top:10px;font-weight:700">Summary: '+passed+' / '+total+' passed</div>');
+    }
+
+    document.getElementById('runBtn').addEventListener('click',runTests);
+
+    // Initialize runner empty
+    clearRunner();
+
+    // Small UX: allow editing code areas by double click
+    [utilsCodeEl,testsCodeEl].forEach(el=>{
+      el.addEventListener('dblclick',()=>{
+        const ta = document.createElement('textarea');ta.style.width='100%';ta.style.height='200px';ta.value=el.textContent;ta.style.background='rgba(0,0,0,0.6)';ta.style.color='#e6eef6';ta.style.border='1px solid rgba(255,255,255,0.04)';
+        el.parentNode.replaceChild(ta,el);
+        const save = document.createElement('div');save.style.display='flex';save.style.gap='8px';save.style.marginTop='6px';
+        const sbtn=document.createElement('button');sbtn.className='btn primary';sbtn.innerText='Save';
+        const cbtn=document.createElement('button');cbtn.className='btn';cbtn.innerText='Cancel';
+        save.appendChild(sbtn);save.appendChild(cbtn);
+        ta.parentNode.appendChild(save);
+        sbtn.addEventListener('click',()=>{el.textContent=ta.value;ta.parentNode.replaceChild(el,ta);save.remove();});
+        cbtn.addEventListener('click',()=>{ta.parentNode.replaceChild(el,ta);save.remove();});
+      });
+    });
+
+  </script>
+</body>
+</html>

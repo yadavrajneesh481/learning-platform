@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 6: Functions in JavaScript</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #007bff;
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background: #f9f9f9;
+        }
+        .demo {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .function-card {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: all 0.3s;
+        }
+        .function-card:hover {
+            border-color: #007bff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .function-card h4 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .calc-function {
+            background: white;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .calc-function input {
+            width: 80px;
+            margin: 5px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .home-link:hover {
+            background: #218838;
+        }
+        .interview-section {
+            background: #e9ecef;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+        input, select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .function-library {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .calculator-grid, .function-library {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        
+        <header>
+            <h1>Day 6: Functions in JavaScript</h1>
+            <p><em>Function declarations, expressions, arrow functions, parameters, return values</em></p>
+        </header>
+
+        <section id="function-basics">
+            <h2>Functions Kya Hain? - Complete Deep Dive</h2>
+            <p>Functions JavaScript mein first-class citizens hain - matlab yeh values ki tarah treat hote hain. Functions reusable code blocks hain jo specific tasks perform karte hain, parameters accept kar sakte hain, aur values return kar sakte hain. Yeh code organization, reusability, aur modularity ke liye essential hain.</p>
+            
+            <h3>Function Fundamentals aur Concepts:</h3>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;">
+                <h4>🧠 Core Function Concepts:</h4>
+                <ul>
+                    <li><strong>First-Class Functions:</strong> Variables mein store kar sakte hain, parameters mein pass kar sakte hain</li>
+                    <li><strong>Higher-Order Functions:</strong> Functions jo dusre functions ko accept ya return karte hain</li>
+                    <li><strong>Pure Functions:</strong> Same input ke liye same output, no side effects</li>
+                    <li><strong>Function Scope:</strong> Functions apna local scope create karte hain</li>
+                    <li><strong>Closures:</strong> Inner functions outer function ke variables access kar sakte hain</li>
+                </ul>
+            </div>
+            
+            <h3>Function Declaration Methods - Detailed Comparison:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; border: 1px solid #007bff;">
+                    <h4>🔵 Function Declaration</h4>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; font-size: 12px; margin: 10px 0;">
+function functionName(parameters) {<br>
+&nbsp;&nbsp;// function body<br>
+&nbsp;&nbsp;return value;<br>
+}
+                    </div>
+                    <p><strong>Hoisting:</strong> ✅ Fully hoisted</p>
+                    <p><strong>this Binding:</strong> Dynamic</p>
+                    <p><strong>Constructor:</strong> ✅ Can be used with 'new'</p>
+                    <p><strong>Use Case:</strong> Main functions, methods</p>
+                </div>
+                <div style="background: #f0f8e7; padding: 15px; border-radius: 8px; border: 1px solid #28a745;">
+                    <h4>🟢 Function Expression</h4>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; font-size: 12px; margin: 10px 0;">
+const functionName = function(parameters) {<br>
+&nbsp;&nbsp;// function body<br>
+&nbsp;&nbsp;return value;<br>
+};
+                    </div>
+                    <p><strong>Hoisting:</strong> ❌ Variable hoisted, function not</p>
+                    <p><strong>this Binding:</strong> Dynamic</p>
+                    <p><strong>Constructor:</strong> ✅ Can be used with 'new'</p>
+                    <p><strong>Use Case:</strong> Conditional functions, callbacks</p>
+                </div>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffc107;">
+                    <h4>🟡 Arrow Function (ES6)</h4>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; font-size: 12px; margin: 10px 0;">
+const functionName = (parameters) => {<br>
+&nbsp;&nbsp;// function body<br>
+&nbsp;&nbsp;return value;<br>
+};<br>
+// Short: const fn = x => x * 2;
+                    </div>
+                    <p><strong>Hoisting:</strong> ❌ Not hoisted</p>
+                    <p><strong>this Binding:</strong> Lexical (inherited)</p>
+                    <p><strong>Constructor:</strong> ❌ Cannot use with 'new'</p>
+                    <p><strong>Use Case:</strong> Callbacks, short functions</p>
+                </div>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border: 1px solid #dc3545;">
+                    <h4>🔴 IIFE (Immediately Invoked)</h4>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; font-size: 12px; margin: 10px 0;">
+(function(parameters) {<br>
+&nbsp;&nbsp;// function body<br>
+&nbsp;&nbsp;// executes immediately<br>
+})(arguments);<br>
+// Arrow IIFE: (() => {})();
+                    </div>
+                    <p><strong>Hoisting:</strong> N/A (executes immediately)</p>
+                    <p><strong>this Binding:</strong> Depends on type</p>
+                    <p><strong>Constructor:</strong> ❌ Cannot use</p>
+                    <p><strong>Use Case:</strong> Module pattern, avoid pollution</p>
+                </div>
+            </div>
+            
+            <div class="demo">
+                <h3>Interactive Function Types Comparison</h3>
+                <div class="function-card">
+                    <h4>1. Function Declaration</h4>
+                    <div class="code-example">function greet(name) {
+    return "Hello " + name + "!";
+}</div>
+                    <button onclick="testFunctionDeclaration()">Test Declaration</button>
+                </div>
+                
+                <div class="function-card">
+                    <h4>2. Function Expression</h4>
+                    <div class="code-example">const greet = function(name) {
+    return "Hello " + name + "!";
+};</div>
+                    <button onclick="testFunctionExpression()">Test Expression</button>
+                </div>
+                
+                <div class="function-card">
+                    <h4>3. Arrow Function</h4>
+                    <div class="code-example">const greet = (name) => {
+    return "Hello " + name + "!";
+};
+// Or shorter: const greet = name => "Hello " + name + "!";</div>
+                    <button onclick="testArrowFunction()">Test Arrow Function</button>
+                </div>
+                
+                <div class="function-card">
+                    <h4>4. IIFE (Immediately Invoked Function Expression)</h4>
+                    <div class="code-example">(function(name) {
+    console.log("IIFE executed with:", name);
+})("World");</div>
+                    <button onclick="testIIFE()">Test IIFE</button>
+                </div>
+                
+                <div id="function-test-output"></div>
+                
+                <h3>Advanced Function Concepts</h3>
+                <div style="margin: 15px 0;">
+                    <button onclick="demonstrateHoisting()">⬆️ Function Hoisting</button>
+                    <button onclick="demonstrateThisBinding()">🎯 'this' Binding</button>
+                    <button onclick="demonstrateClosures()">🔒 Closures</button>
+                    <button onclick="demonstrateHigherOrder()">🔝 Higher-Order Functions</button>
+                </div>
+                <div id="advanced-function-result"></div>
+            </div>
+        </section>
+
+        <section id="function-advanced-concepts">
+            <h2>Advanced Function Concepts</h2>
+            <p>JavaScript functions mein kuch advanced concepts hain jo powerful programming patterns enable karte hain:</p>
+            
+            <h3>Function Composition aur Currying:</h3>
+            <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;">
+                <h4>🔗 Function Composition:</h4>
+                <p>Multiple functions ko combine karke complex operations banana:</p>
+                <div style="background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; margin: 10px 0;">
+const add = x => y => x + y;<br>
+const multiply = x => y => x * y;<br>
+const compose = (f, g) => x => f(g(x));<br><br>
+const addThenMultiply = compose(multiply(2), add(3));<br>
+console.log(addThenMultiply(5)); // (5 + 3) * 2 = 16
+                </div>
+            </div>
+            
+            <h3>Callback Functions aur Event Handling:</h3>
+            <div style="background: #f0f8e7; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #28a745;">
+                <h4>📞 Callback Patterns:</h4>
+                <ul>
+                    <li><strong>Synchronous Callbacks:</strong> Array methods (map, filter, reduce)</li>
+                    <li><strong>Asynchronous Callbacks:</strong> setTimeout, event listeners</li>
+                    <li><strong>Error-First Callbacks:</strong> Node.js style (err, data) => {}</li>
+                    <li><strong>Event Callbacks:</strong> DOM event handling</li>
+                </ul>
+            </div>
+            
+            <div class="demo">
+                <h3>Advanced Function Patterns Demo</h3>
+                <div style="margin: 15px 0;">
+                    <button onclick="demonstrateCurrying()">🍛 Currying</button>
+                    <button onclick="demonstrateComposition()">🔗 Function Composition</button>
+                    <button onclick="demonstrateCallbacks()">📞 Callback Patterns</button>
+                    <button onclick="demonstrateRecursion()">🔄 Recursion</button>
+                </div>
+                <div id="advanced-patterns-result"></div>
+            </div>
+        </section>
+
+        <section id="parameters">
+            <h2>Parameters aur Arguments</h2>
+            <p>Functions mein data pass karne ke different ways:</p>
+            
+            <div class="demo">
+                <h3>Parameter Types Demo</h3>
+                <div>
+                    <label>Name: <input type="text" id="param-name" value="Rahul"></label>
+                    <label>Age: <input type="number" id="param-age" value="25"></label>
+                    <label>City: <input type="text" id="param-city" value="Mumbai"></label>
+                </div>
+                <div style="margin: 10px 0;">
+                    <button onclick="testDefaultParams()">Default Parameters</button>
+                    <button onclick="testRestParams()">Rest Parameters</button>
+                    <button onclick="testDestructuring()">Destructuring</button>
+                </div>
+                <div id="parameters-output"></div>
+            </div>
+        </section>
+
+        <section id="return-values">
+            <h2>Return Values</h2>
+            <p>Functions se data wapas kaise laayein:</p>
+            
+            <div class="demo">
+                <h3>Return Examples</h3>
+                <button onclick="testReturnTypes()">Test Different Returns</button>
+                <div id="return-output"></div>
+            </div>
+        </section>
+
+        <section id="arrow-functions">
+            <h2>Arrow Functions Deep Dive</h2>
+            <p>ES6 ka modern syntax, shorter aur cleaner:</p>
+            
+            <div class="demo">
+                <h3>Arrow Function Variations</h3>
+                <div class="code-example">// Different arrow function syntaxes
+const add = (a, b) => a + b;                    // Implicit return
+const square = x => x * x;                      // Single parameter
+const greet = () => "Hello World!";             // No parameters
+const complex = (a, b) => {                     // Multiple statements
+    const sum = a + b;
+    return sum * 2;
+};</div>
+                <button onclick="demonstrateArrowVariations()">Test All Variations</button>
+                <div id="arrow-output"></div>
+            </div>
+        </section>
+
+        <section id="calculator-functions">
+            <h2>Practice: Math Utility Library</h2>
+            <p>Different types ke functions use karke calculator banayenge:</p>
+            
+            <div class="demo">
+                <h3>Interactive Calculator Functions</h3>
+                <div class="calculator-grid">
+                    <div class="calc-function">
+                        <h4>Addition</h4>
+                        <input type="number" id="add-a" placeholder="a" value="5">
+                        <input type="number" id="add-b" placeholder="b" value="3">
+                        <button onclick="calculateAdd()">Add</button>
+                        <div id="add-result"></div>
+                    </div>
+                    
+                    <div class="calc-function">
+                        <h4>Power</h4>
+                        <input type="number" id="pow-base" placeholder="base" value="2">
+                        <input type="number" id="pow-exp" placeholder="exp" value="3">
+                        <button onclick="calculatePower()">Power</button>
+                        <div id="pow-result"></div>
+                    </div>
+                    
+                    <div class="calc-function">
+                        <h4>Factorial</h4>
+                        <input type="number" id="fact-n" placeholder="n" value="5">
+                        <button onclick="calculateFactorial()">Factorial</button>
+                        <div id="fact-result"></div>
+                    </div>
+                    
+                    <div class="calc-function">
+                        <h4>Average</h4>
+                        <input type="text" id="avg-numbers" placeholder="1,2,3,4,5" value="1,2,3,4,5">
+                        <button onclick="calculateAverage()">Average</button>
+                        <div id="avg-result"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="function-library">
+            <h2>Practice: Complete Function Library</h2>
+            <p>Real-world utility functions ka collection:</p>
+            
+            <div class="demo">
+                <h3>Utility Functions</h3>
+                <div class="function-library">
+                    <div class="function-card">
+                        <h4>String Utils</h4>
+                        <input type="text" id="string-input" placeholder="Enter text" value="hello world">
+                        <div>
+                            <button onclick="testCapitalize()">Capitalize</button>
+                            <button onclick="testReverse()">Reverse</button>
+                            <button onclick="testWordCount()">Word Count</button>
+                        </div>
+                        <div id="string-output"></div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <h4>Array Utils</h4>
+                        <input type="text" id="array-input" placeholder="1,2,3,4,5" value="1,2,3,4,5">
+                        <div>
+                            <button onclick="testArrayMax()">Find Max</button>
+                            <button onclick="testArraySum()">Sum All</button>
+                            <button onclick="testArrayUnique()">Remove Duplicates</button>
+                        </div>
+                        <div id="array-output"></div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <h4>Validation Utils</h4>
+                        <input type="text" id="validation-input" placeholder="test@email.com" value="test@email.com">
+                        <div>
+                            <button onclick="testEmailValidation()">Validate Email</button>
+                            <button onclick="testPhoneValidation()">Validate Phone</button>
+                            <button onclick="testPasswordStrength()">Password Strength</button>
+                        </div>
+                        <div id="validation-output"></div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <h4>Date Utils</h4>
+                        <div>
+                            <button onclick="testDateFormatting()">Format Date</button>
+                            <button onclick="testAgeCalculator()">Calculate Age</button>
+                            <button onclick="testDaysDifference()">Days Difference</button>
+                        </div>
+                        <div id="date-output"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="interview-section">
+            <h2>Interview Questions</h2>
+            <div class="question">
+                <h3>1. Basic: Function declaration aur function expression mein kya difference hai?</h3>
+                <p>Answer: Declaration hoisted hoti hai (pehle use kar sakte hain), expression nahi. Declaration: function name() {}, Expression: const name = function() {}</p>
+            </div>
+            <div class="question">
+                <h3>2. Basic: Arrow function kya hai aur regular function se kya different hai?</h3>
+                <p>Answer: ES6 syntax, shorter hai. Main difference: 'this' binding different hai, hoisting nahi hoti, constructor nahi ban sakta.</p>
+            </div>
+            <div class="question">
+                <h3>3. Intermediate: Default parameters kya hain? Example do.</h3>
+                <p>Answer: Function parameters ki default values. Example: function greet(name = "Guest") { return "Hello " + name; }</p>
+            </div>
+            <div class="question">
+                <h3>4. Intermediate: Rest parameters (...args) kya karte hain?</h3>
+                <p>Answer: Variable number of arguments ko array mein collect karte hain. function sum(...numbers) { return numbers.reduce((a,b) => a+b); }</p>
+            </div>
+            <div class="question">
+                <h3>5. Advanced: Function hoisting kya hai? Arrow functions hoist hote hain?</h3>
+                <p>Answer: Function declarations top pe move ho jaati hain. Arrow functions hoist nahi hote kyunki yeh variables mein store hote hain.</p>
+            </div>
+            <div class="question">
+                <h3>6. Advanced: Higher-order functions kya hain? Example do.</h3>
+                <p>Answer: Functions jo dusre functions ko parameter mein lete hain ya return karte hain. Example: map, filter, reduce.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Function declarations (hoisted)
+        function greetDeclaration(name) {
+            return `Hello ${name}! (from declaration)`;
+        }
+
+        // Function expressions (not hoisted)
+        const greetExpression = function(name) {
+            return `Hello ${name}! (from expression)`;
+        };
+
+        // Arrow functions (not hoisted)
+        const greetArrow = (name) => `Hello ${name}! (from arrow function)`;
+
+        function testFunctionDeclaration() {
+            const output = document.getElementById('function-test-output');
+            const result = greetDeclaration('Rahul');
+            output.innerHTML = `<p><strong>Declaration Result:</strong> ${result}</p>`;
+        }
+
+        function testFunctionExpression() {
+            const output = document.getElementById('function-test-output');
+            const result = greetExpression('Priya');
+            output.innerHTML += `<p><strong>Expression Result:</strong> ${result}</p>`;
+        }
+
+        function testArrowFunction() {
+            const output = document.getElementById('function-test-output');
+            const result = greetArrow('Amit');
+            output.innerHTML += `<p><strong>Arrow Function Result:</strong> ${result}</p>`;
+        }
+
+        // Parameter examples
+        function greetWithDefaults(name = "Guest", age = 0, city = "Unknown") {
+            return `Hello ${name}, age ${age}, from ${city}`;
+        }
+
+        function greetWithRest(greeting, ...names) {
+            return `${greeting} ${names.join(', ')}!`;
+        }
+
+        function greetWithDestructuring({name, age, city}) {
+            return `Hello ${name}, age ${age}, from ${city}`;
+        }
+
+        function testDefaultParams() {
+            const name = document.getElementById('param-name').value || undefined;
+            const age = parseInt(document.getElementById('param-age').value) || undefined;
+            const city = document.getElementById('param-city').value || undefined;
+            
+            const result1 = greetWithDefaults();
+            const result2 = greetWithDefaults(name, age, city);
+            
+            document.getElementById('parameters-output').innerHTML = `
+                <h4>Default Parameters:</h4>
+                <p><strong>No params:</strong> ${result1}</p>
+                <p><strong>With params:</strong> ${result2}</p>
+            `;
+        }
+
+        function testRestParams() {
+            const names = ['Rahul', 'Priya', 'Amit', 'Sneha'];
+            const result = greetWithRest('Namaste', ...names);
+            
+            document.getElementById('parameters-output').innerHTML += `
+                <h4>Rest Parameters:</h4>
+                <p><strong>Result:</strong> ${result}</p>
+                <p><em>Used spread operator to pass array as individual arguments</em></p>
+            `;
+        }
+
+        function testDestructuring() {
+            const name = document.getElementById('param-name').value;
+            const age = parseInt(document.getElementById('param-age').value);
+            const city = document.getElementById('param-city').value;
+            
+            const person = { name, age, city };
+            const result = greetWithDestructuring(person);
+            
+            document.getElementById('parameters-output').innerHTML += `
+                <h4>Destructuring Parameters:</h4>
+                <p><strong>Object:</strong> ${JSON.stringify(person)}</p>
+                <p><strong>Result:</strong> ${result}</p>
+            `;
+        }
+
+        function testReturnTypes() {
+            // Different return types
+            const returnString = () => "I'm a string";
+            const returnNumber = () => 42;
+            const returnBoolean = () => true;
+            const returnArray = () => [1, 2, 3];
+            const returnObject = () => ({name: "Rahul", age: 25});
+            const returnNothing = () => { console.log("No return"); };
+            
+            const output = document.getElementById('return-output');
+            output.innerHTML = `
+                <h4>Different Return Types:</h4>
+                <p><strong>String:</strong> ${returnString()} (${typeof returnString()})</p>
+                <p><strong>Number:</strong> ${returnNumber()} (${typeof returnNumber()})</p>
+                <p><strong>Boolean:</strong> ${returnBoolean()} (${typeof returnBoolean()})</p>
+                <p><strong>Array:</strong> [${returnArray()}] (${typeof returnArray()})</p>
+                <p><strong>Object:</strong> ${JSON.stringify(returnObject())} (${typeof returnObject()})</p>
+                <p><strong>Undefined:</strong> ${returnNothing()} (${typeof returnNothing()})</p>
+            `;
+        }
+
+        function demonstrateArrowVariations() {
+            const add = (a, b) => a + b;
+            const square = x => x * x;
+            const greet = () => "Hello World!";
+            const complex = (a, b) => {
+                const sum = a + b;
+                return sum * 2;
+            };
+            
+            const output = document.getElementById('arrow-output');
+            output.innerHTML = `
+                <h4>Arrow Function Variations:</h4>
+                <p><strong>Two params:</strong> add(5, 3) = ${add(5, 3)}</p>
+                <p><strong>Single param:</strong> square(4) = ${square(4)}</p>
+                <p><strong>No params:</strong> greet() = ${greet()}</p>
+                <p><strong>Complex:</strong> complex(3, 7) = ${complex(3, 7)}</p>
+            `;
+        }
+
+        // Calculator functions
+        const mathUtils = {
+            add: (a, b) => a + b,
+            power: (base, exp) => Math.pow(base, exp),
+            factorial: (n) => {
+                if (n <= 1) return 1;
+                return n * mathUtils.factorial(n - 1);
+            },
+            average: (...numbers) => {
+                const sum = numbers.reduce((acc, num) => acc + num, 0);
+                return sum / numbers.length;
+            }
+        };
+
+        function calculateAdd() {
+            const a = parseFloat(document.getElementById('add-a').value) || 0;
+            const b = parseFloat(document.getElementById('add-b').value) || 0;
+            const result = mathUtils.add(a, b);
+            document.getElementById('add-result').innerHTML = `<strong>${result}</strong>`;
+        }
+
+        function calculatePower() {
+            const base = parseFloat(document.getElementById('pow-base').value) || 0;
+            const exp = parseFloat(document.getElementById('pow-exp').value) || 0;
+            const result = mathUtils.power(base, exp);
+            document.getElementById('pow-result').innerHTML = `<strong>${result}</strong>`;
+        }
+
+        function calculateFactorial() {
+            const n = parseInt(document.getElementById('fact-n').value) || 0;
+            if (n < 0 || n > 20) {
+                document.getElementById('fact-result').innerHTML = '<span style="color: #dc3545;">0-20 range mein enter karo</span>';
+                return;
+            }
+            const result = mathUtils.factorial(n);
+            document.getElementById('fact-result').innerHTML = `<strong>${result}</strong>`;
+        }
+
+        function calculateAverage() {
+            const input = document.getElementById('avg-numbers').value;
+            const numbers = input.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+            if (numbers.length === 0) {
+                document.getElementById('avg-result').innerHTML = '<span style="color: #dc3545;">Valid numbers enter karo</span>';
+                return;
+            }
+            const result = mathUtils.average(...numbers);
+            document.getElementById('avg-result').innerHTML = `<strong>${result.toFixed(2)}</strong>`;
+        }
+
+        // Utility functions
+        const stringUtils = {
+            capitalize: str => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(),
+            reverse: str => str.split('').reverse().join(''),
+            wordCount: str => str.trim().split(/\s+/).length
+        };
+
+        const arrayUtils = {
+            max: arr => Math.max(...arr),
+            sum: arr => arr.reduce((acc, num) => acc + num, 0),
+            unique: arr => [...new Set(arr)]
+        };
+
+        const validationUtils = {
+            isEmail: email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+            isPhone: phone => /^[\+]?[1-9][\d]{0,15}$/.test(phone.replace(/\s/g, '')),
+            passwordStrength: password => {
+                let strength = 0;
+                if (password.length >= 8) strength++;
+                if (/[a-z]/.test(password)) strength++;
+                if (/[A-Z]/.test(password)) strength++;
+                if (/[0-9]/.test(password)) strength++;
+                if (/[^A-Za-z0-9]/.test(password)) strength++;
+                return ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'][strength];
+            }
+        };
+
+        const dateUtils = {
+            formatDate: date => date.toLocaleDateString('en-IN'),
+            calculateAge: birthDate => {
+                const today = new Date();
+                const birth = new Date(birthDate);
+                let age = today.getFullYear() - birth.getFullYear();
+                const monthDiff = today.getMonth() - birth.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                    age--;
+                }
+                return age;
+            },
+            daysDifference: (date1, date2) => {
+                const diffTime = Math.abs(date2 - date1);
+                return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            }
+        };
+
+        function testCapitalize() {
+            const input = document.getElementById('string-input').value;
+            const result = stringUtils.capitalize(input);
+            document.getElementById('string-output').innerHTML = `<p><strong>Capitalized:</strong> ${result}</p>`;
+        }
+
+        function testReverse() {
+            const input = document.getElementById('string-input').value;
+            const result = stringUtils.reverse(input);
+            document.getElementById('string-output').innerHTML += `<p><strong>Reversed:</strong> ${result}</p>`;
+        }
+
+        function testWordCount() {
+            const input = document.getElementById('string-input').value;
+            const result = stringUtils.wordCount(input);
+            document.getElementById('string-output').innerHTML += `<p><strong>Word Count:</strong> ${result}</p>`;
+        }
+
+        function testArrayMax() {
+            const input = document.getElementById('array-input').value;
+            const numbers = input.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+            const result = arrayUtils.max(numbers);
+            document.getElementById('array-output').innerHTML = `<p><strong>Max:</strong> ${result}</p>`;
+        }
+
+        function testArraySum() {
+            const input = document.getElementById('array-input').value;
+            const numbers = input.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+            const result = arrayUtils.sum(numbers);
+            document.getElementById('array-output').innerHTML += `<p><strong>Sum:</strong> ${result}</p>`;
+        }
+
+        function testArrayUnique() {
+            const input = document.getElementById('array-input').value;
+            const items = input.split(',').map(item => item.trim());
+            const result = arrayUtils.unique(items);
+            document.getElementById('array-output').innerHTML += `<p><strong>Unique:</strong> [${result.join(', ')}]</p>`;
+        }
+
+        function testEmailValidation() {
+            const input = document.getElementById('validation-input').value;
+            const result = validationUtils.isEmail(input);
+            const color = result ? '#28a745' : '#dc3545';
+            document.getElementById('validation-output').innerHTML = `<p style="color: ${color};"><strong>Email Valid:</strong> ${result}</p>`;
+        }
+
+        function testPhoneValidation() {
+            const input = document.getElementById('validation-input').value;
+            const result = validationUtils.isPhone(input);
+            const color = result ? '#28a745' : '#dc3545';
+            document.getElementById('validation-output').innerHTML += `<p style="color: ${color};"><strong>Phone Valid:</strong> ${result}</p>`;
+        }
+
+        function testPasswordStrength() {
+            const input = document.getElementById('validation-input').value;
+            const result = validationUtils.passwordStrength(input);
+            const colors = {
+                'Very Weak': '#dc3545',
+                'Weak': '#fd7e14',
+                'Fair': '#ffc107',
+                'Good': '#17a2b8',
+                'Strong': '#28a745'
+            };
+            document.getElementById('validation-output').innerHTML += `<p style="color: ${colors[result]};"><strong>Password Strength:</strong> ${result}</p>`;
+        }
+
+        function testDateFormatting() {
+            const today = new Date();
+            const result = dateUtils.formatDate(today);
+            document.getElementById('date-output').innerHTML = `<p><strong>Today:</strong> ${result}</p>`;
+        }
+
+        function testAgeCalculator() {
+            const birthDate = '1998-05-15'; // Example birth date
+            const result = dateUtils.calculateAge(birthDate);
+            document.getElementById('date-output').innerHTML += `<p><strong>Age (for ${birthDate}):</strong> ${result} years</p>`;
+        }
+
+        function testDaysDifference() {
+            const date1 = new Date('2024-01-01');
+            const date2 = new Date();
+            const result = dateUtils.daysDifference(date1, date2);
+            document.getElementById('date-output').innerHTML += `<p><strong>Days since New Year:</strong> ${result} days</p>`;
+        }
+    </script>
+</body>
+</html>

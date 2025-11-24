@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Array Methods - Day 12</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .home-link:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        .home-link:focus {
+            outline: 2px solid #ffc107;
+            outline-offset: 2px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .method-card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .method-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .method-title {
+            font-size: 1.5em;
+            color: #764ba2;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .method-badge {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.7em;
+        }
+
+        .explanation {
+            background: #e8eaf6;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+
+        .demo-section {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px dashed #ffc107;
+        }
+
+        .demo-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .output {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            min-height: 50px;
+            border: 2px solid #4caf50;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        input, select {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            margin: 5px;
+            width: calc(100% - 10px);
+            max-width: 300px;
+        }
+
+        .project-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 40px 0;
+        }
+
+        .project-section h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .project-card {
+            background: white;
+            color: #333;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .student-item, .cart-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .interview-section {
+            background: #fff8e1;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+        }
+
+        .question-card {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #ff9800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            background: #fff3e0;
+            transform: translateX(5px);
+        }
+
+        .question-number {
+            background: #ff9800;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .answer {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            border-left: 3px solid #4caf50;
+        }
+
+        .answer.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        <div class="header">
+            <h1>🚀 Advanced Array Methods</h1>
+            <p>JavaScript ke powerful array methods ko samajhte hain!</p>
+        </div>
+
+        <div class="content">
+            <!-- Introduction -->
+            <div class="section">
+                <h2>📚 Introduction</h2>
+                <p><strong>Array methods</strong> JavaScript mein arrays ke saath kaam karne ke liye powerful tools hain. Ye methods aapko data ko transform, filter, aur analyze karne ki capability dete hain bina traditional loops likhe. Yeh functional programming paradigm ka core part hain.</p>
+                <div class="explanation">
+                    <strong>Kyu important hain?</strong><br>
+                    • Code ko readable aur concise banate hain<br>
+                    • Functional programming approach promote karte hain<br>
+                    • Common operations ko simplify karte hain<br>
+                    • Method chaining se complex operations easily perform ho jaate hain<br>
+                    • Immutable operations - original array safe rehta hai<br>
+                    • Performance optimizations built-in hote hain<br>
+                    • Debugging aur testing easier ho jaata hai
+                </div>
+                
+                <h3>🧠 Array Methods Categories:</h3>
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-value">🔄</div>
+                        <div class="stat-label">Transformation<br>(map, flatMap)</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">🔍</div>
+                        <div class="stat-label">Filtering<br>(filter, find)</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">📊</div>
+                        <div class="stat-label">Aggregation<br>(reduce, some, every)</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">🔗</div>
+                        <div class="stat-label">Iteration<br>(forEach, map)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Method -->
+            <div class="section">
+                <div class="method-card">
+                    <div class="method-title">
+                        <span>map()</span>
+                        <span class="method-badge">Transform</span>
+                    </div>
+                    <p><strong>Definition:</strong> Creates a new array by transforming each element using a callback function.</p>
+                    <div class="explanation">
+                        <strong>Hinglish:</strong> Map method har element ko transform karke ek naya array banata hai. Original array change nahi hota.<br>
+                        <strong>Use case:</strong> Jab aapko har element par koi operation perform karke naya array chahiye.
+                    </div>
+                    <div class="code-block">const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map(num => num * 2);
+// Result: [2, 4, 6, 8, 10]</div>
+                    
+                    <div class="demo-section">
+                        <div class="demo-title">🎮 Live Demo - Map Method</div>
+                        <button onclick="runMapDemo()">Numbers ko Double karo</button>
+                        <button onclick="runMapDemo2()">Names ko Uppercase banao</button>
+                        <div class="output" id="mapOutput"></div>
+                    </div>
+                </div>
+
+                <!-- Filter Method -->
+                <div class="method-card">
+                    <div class="method-title">
+                        <span>filter()</span>
+                        <span class="method-badge">Select</span>
+                    </div>
+                    <p><strong>Definition:</strong> Creates a new array with elements that pass a test condition.</p>
+                    <div class="explanation">
+                        <strong>Hinglish:</strong> Filter method condition ke basis par elements ko select karta hai. Jo elements condition pass karte hain, wahi naye array mein aate hain.
+                    </div>
+                    <div class="code-block">const ages = [15, 22, 18, 30, 16];
+const adults = ages.filter(age => age >= 18);
+// Result: [22, 18, 30]</div>
+                    
+                    <div class="demo-section">
+                        <div class="demo-title">🎮 Live Demo - Filter Method</div>
+                        <button onclick="runFilterDemo()">Even Numbers nikalo</button>
+                        <button onclick="runFilterDemo2()">Long Names select karo</button>
+                        <div class="output" id="filterOutput"></div>
+                    </div>
+                </div>
+
+                <!-- Reduce Method -->
+                <div class="method-card">
+                    <div class="method-title">
+                        <span>reduce()</span>
+                        <span class="method-badge">Accumulate</span>
+                    </div>
+                    <p><strong>Definition:</strong> Reduces an array to a single value by executing a reducer function.</p>
+                    <div class="explanation">
+                        <strong>Hinglish:</strong> Reduce sabse powerful method hai jo puri array ko ek single value mein convert kar deta hai. Ye accumulator use karta hai.<br>
+                        <strong>Parameters:</strong> accumulator (result store karta hai), currentValue, index, array
+                    </div>
+                    <div class="code-block">const prices = [100, 200, 300];
+const total = prices.reduce((acc, price) => acc + price, 0);
+// Result: 600</div>
+                    
+                    <div class="demo-section">
+                        <div class="demo-title">🎮 Live Demo - Reduce Method</div>
+                        <button onclick="runReduceDemo()">Sum calculate karo</button>
+                        <button onclick="runReduceDemo2()">Maximum find karo</button>
+                        <div class="output" id="reduceOutput"></div>
+                    </div>
+                </div>
+
+                <!-- Find Method -->
+                <div class="method-card">
+                    <div class="method-title">
+                        <span>find()</span>
+                        <span class="method-badge">Search</span>
+                    </div>
+                    <p><strong>Definition:</strong> Returns the first element that satisfies the condition.</p>
+                    <div class="explanation">
+                        <strong>Hinglish:</strong> Find method pehla element return karta hai jo condition match karta hai. Agar koi nahi mila to undefined return hota hai.
+                    </div>
+                    <div class="code-block">const users = [{id: 1, name: 'Raj'}, {id: 2, name: 'Priya'}];
+const user = users.find(u => u.id === 2);
+// Result: {id: 2, name: 'Priya'}</div>
+                    
+                    <div class="demo-section">
+                        <div class="demo-title">🎮 Live Demo - Find Method</div>
+                        <button onclick="runFindDemo()">First Even Number find karo</button>
+                        <button onclick="runFindDemo2()">Student by ID search karo</button>
+                        <div class="output" id="findOutput"></div>
+                    </div>
+                </div>
+
+                <!-- Some & Every Methods -->
+                <div class="method-card">
+                    <div class="method-title">
+                        <span>some() & every()</span>
+                        <span class="method-badge">Test</span>
+                    </div>
+                    <p><strong>Definition:</strong> <code>some()</code> returns true if at least one element passes the test. <code>every()</code> returns true if all elements pass.</p>
+                    <div class="explanation">
+                        <strong>Hinglish:</strong><br>
+                        • <strong>some():</strong> Agar koi bhi ek element condition pass kare to true<br>
+                        • <strong>every():</strong> Sabhi elements condition pass karein tabhi true
+                    </div>
+                    <div class="code-block">const scores = [65, 75, 85, 90];
+const hasHighScore = scores.some(s => s > 80); // true
+const allPassed = scores.every(s => s >= 60); // true</div>
+                    
+                    <div class="demo-section">
+                        <div class="demo-title">🎮 Live Demo - Some & Every</div>
+                        <button onclick="runSomeEveryDemo()">Test karo</button>
+                        <div class="output" id="someEveryOutput"></div>
+                    </div>
+                </div>
+
+                <!-- Sort Method -->
+                <div class="method-card">
+                    <div class="method-title">
+                        <span>sort()</span>
+                        <span class="method-badge">Arrange</span>
+                    </div>
+                    <p><strong>Definition:</strong> Sorts elements in place and returns the sorted array.</p>
+                    <div class="explanation">
+                        <strong>Hinglish:</strong> Sort method array ko arrange karta hai. Default mein alphabetically sort hota hai. Numbers ke liye compare function chahiye.<br>
+                        <strong>⚠️ Warning:</strong> Ye original array ko modify karta hai!
+                    </div>
+                    <div class="code-block">const nums = [3, 1, 4, 1, 5];
+nums.sort((a, b) => a - b); // Ascending: [1, 1, 3, 4, 5]
+nums.sort((a, b) => b - a); // Descending: [5, 4, 3, 1, 1]</div>
+                    
+                    <div class="demo-section">
+                        <div class="demo-title">🎮 Live Demo - Sort Method</div>
+                        <button onclick="runSortDemo('asc')">Ascending Sort</button>
+                        <button onclick="runSortDemo('desc')">Descending Sort</button>
+                        <button onclick="runSortDemo('name')">Sort by Name</button>
+                        <div class="output" id="sortOutput"></div>
+                    </div>
+                </div>
+
+                <!-- Method Chaining -->
+                <div class="method-card">
+                    <div class="method-title">
+                        <span>Method Chaining ⛓️</span>
+                        <span class="method-badge">Combine</span>
+                    </div>
+                    <p><strong>Definition:</strong> Combining multiple array methods in a sequence to perform complex operations.</p>
+                    <div class="explanation">
+                        <strong>Hinglish:</strong> Method chaining mein ek method ka result directly dusre method ko pass hota hai. Ye code ko bahut readable aur concise banata hai.
+                    </div>
+                    <div class="code-block">const products = [
+  {name: 'Laptop', price: 50000, category: 'Electronics'},
+  {name: 'Phone', price: 20000, category: 'Electronics'},
+  {name: 'Shirt', price: 500, category: 'Clothing'}
+];
+
+const expensiveElectronics = products
+  .filter(p => p.category === 'Electronics')
+  .filter(p => p.price > 25000)
+  .map(p => p.name);
+// Result: ['Laptop']</div>
+                    
+                    <div class="demo-section">
+                        <div class="demo-title">🎮 Live Demo - Method Chaining</div>
+                        <button onclick="runChainingDemo()">Complex Operation Run karo</button>
+                        <div class="output" id="chainingOutput"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Practice Projects -->
+            <div class="project-section">
+                <h2>💼 Practice Projects</h2>
+                
+                <!-- Student Grade Analyzer -->
+                <div class="project-card">
+                    <h3>📊 Student Grade Analyzer</h3>
+                    <p>Students ke grades analyze karne ka complete system</p>
+                    
+                    <div class="input-group">
+                        <input type="text" id="studentName" placeholder="Student Name">
+                        <input type="number" id="studentGrade" placeholder="Grade (0-100)">
+                        <button onclick="addStudent()">➕ Add Student</button>
+                    </div>
+                    
+                    <div id="studentsList"></div>
+                    
+                    <div class="stats" id="studentStats"></div>
+                    
+                    <button onclick="analyzeGrades()">📈 Analyze All</button>
+                    <button onclick="clearStudents()">🗑️ Clear All</button>
+                    
+                    <div class="output" id="gradeAnalysis"></div>
+                </div>
+
+                <!-- Shopping Cart Summary -->
+                <div class="project-card">
+                    <h3>🛒 Shopping Cart Summary</h3>
+                    <p>Cart items ka complete summary with calculations</p>
+                    
+                    <div class="input-group">
+                        <input type="text" id="itemName" placeholder="Item Name">
+                        <input type="number" id="itemPrice" placeholder="Price">
+                        <input type="number" id="itemQty" placeholder="Quantity">
+                        <button onclick="addToCart()">🛒 Add to Cart</button>
+                    </div>
+                    
+                    <div id="cartItems"></div>
+                    
+                    <div class="stats" id="cartStats"></div>
+                    
+                    <button onclick="calculateCart()">💰 Calculate Total</button>
+                    <button onclick="applyDiscount()">🎉 Apply 10% Discount</button>
+                    <button onclick="clearCart()">🗑️ Clear Cart</button>
+                    
+                    <div class="output" id="cartSummary"></div>
+                </div>
+            </div>
+
+            <!-- Interview Questions -->
+            <div class="interview-section">
+                <h2>💡 Interview Questions</h2>
+                <p style="margin-bottom: 20px;"><em>Click on questions to reveal answers</em></p>
+
+                <div class="question-card" onclick="toggleAnswer(1)">
+                    <div>
+                        <span class="question-number">1</span>
+                        <strong>map() aur forEach() mein kya difference hai?</strong>
+                    </div>
+                    <div class="answer" id="answer1">
+                        <strong>Answer:</strong><br>
+                        • <strong>map():</strong> Naya array return karta hai with transformed values. Original array change nahi hota.<br>
+                        • <strong>forEach():</strong> Kuch return nahi karta, bas har element par callback execute karta hai. Side effects ke liye use hota hai.<br><br>
+                        <strong>Example:</strong><br>
+                        <code>const nums = [1,2,3];<br>
+                        const doubled = nums.map(n => n * 2); // [2,4,6]<br>
+                        nums.forEach(n => console.log(n)); // undefined return</code>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(2)">
+                    <div>
+                        <span class="question-number">2</span>
+                        <strong>reduce() method ki complexity kya hai aur iske real-world use cases?</strong>
+                    </div>
+                    <div class="answer" id="answer2">
+                        <strong>Answer:</strong><br>
+                        • <strong>Time Complexity:</strong> O(n) - har element ko ek baar process karta hai<br>
+                        • <strong>Real-world use cases:</strong><br>
+                        1. Sum/Average calculation<br>
+                        2. Flattening arrays<br>
+                        3. Grouping objects by property<br>
+                        4. Counting occurrences<br>
+                        5. Object transformation<br><br>
+                        <strong>Example - Grouping:</strong><br>
+                        <code>const students = [{name: 'Raj', grade: 'A'}, {name: 'Priya', grade: 'A'}];<br>
+                        const grouped = students.reduce((acc, s) => {<br>
+                        &nbsp;&nbsp;acc[s.grade] = acc[s.grade] || [];<br>
+                        &nbsp;&nbsp;acc[s.grade].push(s.name);<br>
+                        &nbsp;&nbsp;return acc;<br>
+                        }, {});</code>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(3)">
+                    <div>
+                        <span class="question-number">3</span>
+                        <strong>find() aur filter() mein difference explain karo with examples.</strong>
+                    </div>
+                    <div class="answer" id="answer3">
+                        <strong>Answer:</strong><br>
+                        • <strong>find():</strong> Sirf pehla matching element return karta hai ya undefined. Ek hi value chahiye to use karo.<br>
+                        • <strong>filter():</strong> Sabhi matching elements ka array return karta hai. Multiple values chahiye to use karo.<br><br>
+                        <strong>Example:</strong><br>
+                        <code>const users = [{id: 1, name: 'Raj', age: 25}, {id: 2, name: 'Priya', age: 30}];<br><br>
+                        // find() - single result<br>
+                        const user = users.find(u => u.age > 20); // {id: 1, name: 'Raj', age: 25}<br><br>
+                        // filter() - multiple results<br>
+                        const adults = users.filter(u => u.age > 20); // [{id: 1...}, {id: 2...}]</code>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(4)">
+                    <div>
+                        <span class="question-number">4</span>
+                        <strong>sort() method original array ko mutate karta hai. Isko immutable kaise banayein?</strong>
+                    </div>
+                    <div class="answer" id="answer4">
+                        <strong>Answer:</strong><br>
+                        Original array ko preserve karne ke liye pehle copy banana padega. 3 ways hain:<br><br>
+                        <strong>1. Spread Operator:</strong><br>
+                        <code>const original = [3, 1, 4, 2];<br>
+                        const sorted = [...original].sort((a,b) => a-b);</code><br><br>
+                        <strong>2. Array.from():</strong><br>
+                        <code>const sorted = Array.from(original).sort((a,b) => a-b);</code><br><br>
+                        <strong>3. slice():</strong><br>
+                        <code>const sorted = original.slice().sort((a,b) => a-b);</code><br><br>
+                        Ye best practice hai kyunki original data safe rehta hai.
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(5)">
+                    <div>
+                        <span class="question-number">5</span>
+                        <strong>Method chaining mein performance considerations kya hain?</strong>
+                    </div>
+                    <div class="answer" id="answer5">
+                        <strong>Answer:</strong><br>
+                        <strong>Performance Concerns:</strong><br>
+                        • Har method puri array ko traverse karta hai (O(n))<br>
+                        • Multiple chains = multiple iterations<br>
+                        • Memory overhead - har method naya array create karta hai<br><br>
+                        <strong>Optimization Tips:</strong><br>
+                        1. <strong>Combine operations:</strong> Multiple filters ko ek mein merge karo<br>
+                        2. <strong>Order matters:</strong> Pehle filter karo (reduce size), phir map<br>
+                        3. <strong>Use reduce:</strong> Complex chains ko single reduce mein convert karo<br><br>
+                        <strong>Example:</strong><br>
+                        <code>// Bad - 3 iterations<br>
+                        arr.filter(x => x > 0).map(x => x * 2).filter(x => x < 100)<br><br>
+                        // Better - 2 iterations<br>
+                        arr.filter(x => x > 0 && x * 2 < 100).map(x => x * 2)</code>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(6)">
+                    <div>
+                        <span class="question-number">6</span>
+                        <strong>some() aur every() ka practical use case scenario batao.</strong>
+                    </div>
+                    <div class="answer" id="answer6">
+                        <strong>Answer:</strong><br>
+                        <strong>some() - "Koi bhi ek" validation:</strong><br>
+                        • Form validation: Koi bhi field empty hai?<br>
+                        • Permission check: User ke paas koi bhi admin role hai?<br>
+                        • Search: Array mein koi keyword present hai?<br><br>
+                        <strong>every() - "Sabhi" validation:</strong><br>
+                        • Form validation: Sabhi required fields filled hain?<br>
+                        • Age verification: Sabhi users adult hain?<br>
+                        • Quality check: Sabhi products stock mein hain?<br><br>
+                        <strong>Real Example:</strong><br>
+                        <code>const cart = [{name: 'Laptop', inStock: true}, {name: 'Mouse', inStock: false}];<br><br>
+                        // Check if any item out of stock<br>
+                        const hasOutOfStock = cart.some(item => !item.inStock); // true<br><br>
+                        // Check if all items in stock<br>
+                        const allInStock = cart.every(item => item.inStock); // false</code>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(7)">
+                    <div>
+                        <span class="question-number">7</span>
+                        <strong>Complex nested data ko flatten karne ke liye array methods kaise use karein?</strong>
+                    </div>
+                    <div class="answer" id="answer7">
+                        <strong>Answer:</strong><br>
+                        Nested arrays ko flatten karne ke multiple ways hain:<br><br>
+                        <strong>1. flat() method (ES2019):</strong><br>
+                        <code>const nested = [1, [2, 3], [4, [5, 6]]];<br>
+                        const flat = nested.flat(2); // [1, 2, 3, 4, 5, 6]</code><br><br>
+                        <strong>2. reduce() with recursion:</strong><br>
+                        <code>function flatten(arr) {<br>
+                        &nbsp;&nbsp;return arr.reduce((acc, item) => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return acc.concat(Array.isArray(item) ? flatten(item) : item);<br>
+                        &nbsp;&nbsp;}, []);<br>
+                        }</code><br><br>
+                        <strong>3. flatMap() for one level:</strong><br>
+                        <code>const users = [{id: 1, tags: ['js', 'react']}, {id: 2, tags: ['node']}];<br>
+                        const allTags = users.flatMap(u => u.tags); // ['js', 'react', 'node']</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Student Grade Analyzer Data
+        let students = [];
+        
+        // Shopping Cart Data
+        let cart = [];
+
+        // Map Demo Functions
+        function runMapDemo() {
+            const numbers = [1, 2, 3, 4, 5];
+            const doubled = numbers.map(num => num * 2);
+            document.getElementById('mapOutput').innerHTML = `
+                <strong>Original:</strong> [${numbers.join(', ')}]<br>
+                <strong>Doubled:</strong> [${doubled.join(', ')}]<br>
+                <em>Har number ko 2 se multiply kar diya!</em>
+            `;
+        }
+
+        function runMapDemo2() {
+            const names = ['raj', 'priya', 'amit', 'sneha'];
+            const uppercase = names.map(name => name.toUpperCase());
+            document.getElementById('mapOutput').innerHTML = `
+                <strong>Original:</strong> [${names.join(', ')}]<br>
+                <strong>Uppercase:</strong> [${uppercase.join(', ')}]<br>
+                <em>Sabhi names uppercase mein convert ho gaye!</em>
+            `;
+        }
+
+        // Filter Demo Functions
+        function runFilterDemo() {
+            const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+            const evens = numbers.filter(num => num % 2 === 0);
+            document.getElementById('filterOutput').innerHTML = `
+                <strong>Original:</strong> [${numbers.join(', ')}]<br>
+                <strong>Even Numbers:</strong> [${evens.join(', ')}]<br>
+                <em>Sirf even numbers select ho gaye! (${evens.length} items)</em>
+            `;
+        }
+
+        function runFilterDemo2() {
+            const names = ['Raj', 'Priya', 'Alexander', 'Om', 'Anastasia'];
+            const longNames = names.filter(name => name.length > 5);
+            document.getElementById('filterOutput').innerHTML = `
+                <strong>Original:</strong> [${names.join(', ')}]<br>
+                <strong>Long Names (>5 chars):</strong> [${longNames.join(', ')}]<br>
+                <em>Jo names 5 characters se bade hain, wo select hue!</em>
+            `;
+        }
+
+        // Reduce Demo Functions
+        function runReduceDemo() {
+            const prices = [100, 250, 450, 300, 150];
+            const total = prices.reduce((acc, price) => acc + price, 0);
+            const average = total / prices.length;
+            document.getElementById('reduceOutput').innerHTML = `
+                <strong>Prices:</strong> [₹${prices.join(', ₹')}]<br>
+                <strong>Total:</strong> ₹${total}<br>
+                <strong>Average:</strong> ₹${average.toFixed(2)}<br>
+                <em>Sabhi prices ko add karke total aur average nikala!</em>
+            `;
+        }
+
+        function runReduceDemo2() {
+            const numbers = [45, 23, 89, 12, 67, 34];
+            const max = numbers.reduce((acc, num) => num > acc ? num : acc, numbers[0]);
+            const min = numbers.reduce((acc, num) => num < acc ? num : acc, numbers[0]);
+            document.getElementById('reduceOutput').innerHTML = `
+                <strong>Numbers:</strong> [${numbers.join(', ')}]<br>
+                <strong>Maximum:</strong> ${max}<br>
+                <strong>Minimum:</strong> ${min}<br>
+                <em>Reduce se maximum aur minimum find kar liye!</em>
+            `;
+        }
+
+        // Find Demo Functions
+        function runFindDemo() {
+            const numbers = [1, 3, 5, 8, 9, 11];
+            const firstEven = numbers.find(num => num % 2 === 0);
+            document.getElementById('findOutput').innerHTML = `
+                <strong>Numbers:</strong> [${numbers.join(', ')}]<br>
+                <strong>First Even:</strong> ${firstEven}<br>
+                <em>Pehla even number mil gaya at index ${numbers.indexOf(firstEven)}!</em>
+            `;
+        }
+
+        function runFindDemo2() {
+            const students = [
+                {id: 101, name: 'Raj', grade: 85},
+                {id: 102, name: 'Priya', grade: 92},
+                {id: 103, name: 'Amit', grade: 78}
+            ];
+            const student = students.find(s => s.id === 102);
+            document.getElementById('findOutput').innerHTML = `
+                <strong>Searching for ID: 102</strong><br>
+                <strong>Found:</strong> ${student.name} (Grade: ${student.grade})<br>
+                <em>Student successfully mila!</em>
+            `;
+        }
+
+        // Some & Every Demo
+        function runSomeEveryDemo() {
+            const scores = [45, 67, 82, 55, 73];
+            const hasHighScore = scores.some(s => s >= 80);
+            const allPassed = scores.every(s => s >= 40);
+            const allDistinction = scores.every(s => s >= 75);
+            
+            document.getElementById('someEveryOutput').innerHTML = `
+                <strong>Scores:</strong> [${scores.join(', ')}]<br><br>
+                <strong>some() Tests:</strong><br>
+                • Koi score 80+ hai? ${hasHighScore ? '✅ Haan' : '❌ Nahi'}<br><br>
+                <strong>every() Tests:</strong><br>
+                • Sabhi pass hue (40+)? ${allPassed ? '✅ Haan' : '❌ Nahi'}<br>
+                • Sabhi distinction (75+)? ${allDistinction ? '✅ Haan' : '❌ Nahi'}<br>
+                <em>some() kisi ek ko check karta hai, every() sabhi ko!</em>
+            `;
+        }
+
+        // Sort Demo Functions
+        function runSortDemo(type) {
+            if (type === 'asc') {
+                const numbers = [64, 34, 25, 12, 22, 11, 90];
+                const sorted = [...numbers].sort((a, b) => a - b);
+                document.getElementById('sortOutput').innerHTML = `
+                    <strong>Original:</strong> [${numbers.join(', ')}]<br>
+                    <strong>Ascending:</strong> [${sorted.join(', ')}]<br>
+                    <em>Chote se bade number mein sort ho gaye!</em>
+                `;
+            } else if (type === 'desc') {
+                const numbers = [64, 34, 25, 12, 22, 11, 90];
+                const sorted = [...numbers].sort((a, b) => b - a);
+                document.getElementById('sortOutput').innerHTML = `
+                    <strong>Original:</strong> [${numbers.join(', ')}]<br>
+                    <strong>Descending:</strong> [${sorted.join(', ')}]<br>
+                    <em>Bade se chote number mein sort ho gaye!</em>
+                `;
+            } else if (type === 'name') {
+                const people = [
+                    {name: 'Zara', age: 25},
+                    {name: 'Amit', age: 30},
+                    {name: 'Priya', age: 22}
+                ];
+                const sorted = [...people].sort((a, b) => a.name.localeCompare(b.name));
+                document.getElementById('sortOutput').innerHTML = `
+                    <strong>Sorted by Name:</strong><br>
+                    ${sorted.map(p => `• ${p.name} (${p.age} years)`).join('<br>')}
+                    <br><em>Names alphabetically sort ho gaye!</em>
+                `;
+            }
+        }
+
+        // Chaining Demo
+        function runChainingDemo() {
+            const products = [
+                {name: 'Laptop', price: 50000, category: 'Electronics', stock: 5},
+                {name: 'Phone', price: 20000, category: 'Electronics', stock: 10},
+                {name: 'Shirt', price: 500, category: 'Clothing', stock: 20},
+                {name: 'Tablet', price: 15000, category: 'Electronics', stock: 3},
+                {name: 'Headphones', price: 3000, category: 'Electronics', stock: 15}
+            ];
+
+            const result = products
+                .filter(p => p.category === 'Electronics')
+                .filter(p => p.price < 25000)
+                .map(p => ({name: p.name, discountPrice: p.price * 0.9}))
+                .sort((a, b) => a.discountPrice - b.discountPrice);
+
+            document.getElementById('chainingOutput').innerHTML = `
+                <strong>Operation Steps:</strong><br>
+                1️⃣ Filter: Electronics category<br>
+                2️⃣ Filter: Price < ₹25,000<br>
+                3️⃣ Map: Apply 10% discount<br>
+                4️⃣ Sort: By discounted price<br><br>
+                <strong>Final Result:</strong><br>
+                ${result.map(p => `• ${p.name}: ₹${p.discountPrice.toFixed(0)}`).join('<br>')}
+                <br><br><em>4 methods chain karke complex operation complete kiya! 🎉</em>
+            `;
+        }
+
+        // Student Grade Analyzer Functions
+        function addStudent() {
+            const name = document.getElementById('studentName').value.trim();
+            const grade = parseInt(document.getElementById('studentGrade').value);
+
+            if (!name || isNaN(grade) || grade < 0 || grade > 100) {
+                alert('Valid name aur grade (0-100) enter karo!');
+                return;
+            }
+
+            students.push({name, grade});
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentGrade').value = '';
+            updateStudentsList();
+        }
+
+        function updateStudentsList() {
+            const list = document.getElementById('studentsList');
+            list.innerHTML = students.map((s, i) => `
+                <div class="student-item">
+                    <div>
+                        <strong>${s.name}</strong> - Grade: ${s.grade}
+                        <span style="background: ${getGradeColor(s.grade)}; padding: 3px 10px; border-radius: 5px; margin-left: 10px; color: white;">
+                            ${getLetterGrade(s.grade)}
+                        </span>
+                    </div>
+                    <button onclick="removeStudent(${i})" style="background: #f44336;">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function removeStudent(index) {
+            students.splice(index, 1);
+            updateStudentsList();
+            if (students.length === 0) {
+                document.getElementById('studentStats').innerHTML = '';
+                document.getElementById('gradeAnalysis').innerHTML = '';
+            }
+        }
+
+        function getGradeColor(grade) {
+            if (grade >= 90) return '#4caf50';
+            if (grade >= 75) return '#2196f3';
+            if (grade >= 60) return '#ff9800';
+            return '#f44336';
+        }
+
+        function getLetterGrade(grade) {
+            if (grade >= 90) return 'A';
+            if (grade >= 75) return 'B';
+            if (grade >= 60) return 'C';
+            if (grade >= 40) return 'D';
+            return 'F';
+        }
+
+        function analyzeGrades() {
+            if (students.length === 0) {
+                alert('Pehle students add karo!');
+                return;
+            }
+
+            const total = students.reduce((sum, s) => sum + s.grade, 0);
+            const average = total / students.length;
+            const highest = students.reduce((max, s) => s.grade > max.grade ? s : max);
+            const lowest = students.reduce((min, s) => s.grade < min.grade ? s : min);
+            const passed = students.filter(s => s.grade >= 40).length;
+            const failed = students.filter(s => s.grade < 40).length;
+            const distinction = students.filter(s => s.grade >= 75).length;
+
+            document.getElementById('studentStats').innerHTML = `
+                <div class="stat-box">
+                    <div class="stat-value">${students.length}</div>
+                    <div class="stat-label">Total Students</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">${average.toFixed(1)}</div>
+                    <div class="stat-label">Average Grade</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">${passed}</div>
+                    <div class="stat-label">Passed</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">${distinction}</div>
+                    <div class="stat-label">Distinction</div>
+                </div>
+            `;
+
+            document.getElementById('gradeAnalysis').innerHTML = `
+                <strong>📊 Complete Analysis:</strong><br><br>
+                <strong>Highest Score:</strong> ${highest.name} - ${highest.grade} 🏆<br>
+                <strong>Lowest Score:</strong> ${lowest.name} - ${lowest.grade}<br>
+                <strong>Pass Rate:</strong> ${((passed/students.length)*100).toFixed(1)}%<br>
+                <strong>Fail Rate:</strong> ${((failed/students.length)*100).toFixed(1)}%<br>
+                <strong>Distinction Rate:</strong> ${((distinction/students.length)*100).toFixed(1)}%<br><br>
+                <em>All array methods use karke complete analysis kiya! 🎯</em>
+            `;
+        }
+
+        function clearStudents() {
+            if (confirm('Sabhi students remove karne hain?')) {
+                students = [];
+                updateStudentsList();
+                document.getElementById('studentStats').innerHTML = '';
+                document.getElementById('gradeAnalysis').innerHTML = '';
+            }
+        }
+
+        // Shopping Cart Functions
+        function addToCart() {
+            const name = document.getElementById('itemName').value.trim();
+            const price = parseFloat(document.getElementById('itemPrice').value);
+            const qty = parseInt(document.getElementById('itemQty').value);
+
+            if (!name || isNaN(price) || isNaN(qty) || price <= 0 || qty <= 0) {
+                alert('Valid item details enter karo!');
+                return;
+            }
+
+            cart.push({name, price, qty, total: price * qty});
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemPrice').value = '';
+            document.getElementById('itemQty').value = '';
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const list = document.getElementById('cartItems');
+            list.innerHTML = cart.map((item, i) => `
+                <div class="cart-item">
+                    <div>
+                        <strong>${item.name}</strong><br>
+                        <small>₹${item.price} × ${item.qty} = ₹${item.total}</small>
+                    </div>
+                    <button onclick="removeFromCart(${i})" style="background: #f44336;">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartDisplay();
+            if (cart.length === 0) {
+                document.getElementById('cartStats').innerHTML = '';
+                document.getElementById('cartSummary').innerHTML = '';
+            }
+        }
+
+        function calculateCart() {
+            if (cart.length === 0) {
+                alert('Cart empty hai! Items add karo.');
+                return;
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + item.total, 0);
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            const avgPrice = subtotal / totalItems;
+            const mostExpensive = cart.reduce((max, item) => item.total > max.total ? item : max);
+
+            document.getElementById('cartStats').innerHTML = `
+                <div class="stat-box">
+                    <div class="stat-value">${cart.length}</div>
+                    <div class="stat-label">Unique Items</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">${totalItems}</div>
+                    <div class="stat-label">Total Quantity</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">₹${subtotal}</div>
+                    <div class="stat-label">Subtotal</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">₹${avgPrice.toFixed(0)}</div>
+                    <div class="stat-label">Avg per Item</div>
+                </div>
+            `;
+
+            document.getElementById('cartSummary').innerHTML = `
+                <strong>💰 Cart Summary:</strong><br><br>
+                <strong>Subtotal:</strong> ₹${subtotal}<br>
+                <strong>Tax (18%):</strong> ₹${(subtotal * 0.18).toFixed(2)}<br>
+                <strong>Grand Total:</strong> ₹${(subtotal * 1.18).toFixed(2)} 🎉<br><br>
+                <strong>Most Expensive:</strong> ${mostExpensive.name} (₹${mostExpensive.total})<br>
+                <em>reduce() method se total calculate kiya!</em>
+            `;
+        }
+
+        function applyDiscount() {
+            if (cart.length === 0) {
+                alert('Cart empty hai!');
+                return;
+            }
+
+            cart = cart.map(item => ({
+                ...item,
+                price: item.price * 0.9,
+                total: item.price * 0.9 * item.qty
+            }));
+
+            updateCartDisplay();
+            document.getElementById('cartSummary').innerHTML = `
+                <strong>🎉 10% Discount Applied!</strong><br>
+                <em>map() method se sabhi prices update ho gayi!</em><br>
+                Ab calculate button click karo for new total.
+            `;
+        }
+
+        function clearCart() {
+            if (confirm('Cart clear karna hai?')) {
+                cart = [];
+                updateCartDisplay();
+                document.getElementById('cartStats').innerHTML = '';
+                document.getElementById('cartSummary').innerHTML = '';
+            }
+        }
+
+        // Interview Question Toggle
+        function toggleAnswer(num) {
+            const answer = document.getElementById('answer' + num);
+            answer.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

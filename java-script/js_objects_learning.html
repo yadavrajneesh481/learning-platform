@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 9: JavaScript Objects</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .home-link:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        .home-link:focus {
+            outline: 2px solid #ffc107;
+            outline-offset: 2px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        .explanation {
+            background: #f8f9fa;
+            padding: 20px;
+            border-left: 5px solid #667eea;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .code-box {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .object-visual {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .property-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .property-key {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .property-value {
+            color: #764ba2;
+            margin-top: 10px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 10px 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        input, select {
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            margin: 5px;
+            font-size: 1em;
+        }
+
+        .output {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            min-height: 60px;
+            border: 2px dashed #667eea;
+        }
+
+        .interview-section {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 40px;
+            border-radius: 15px;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .question-number {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .answer {
+            display: none;
+            background: #f8f9fa;
+            padding: 15px;
+            margin-top: 10px;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+
+        .toggle-answer {
+            background: #764ba2;
+            font-size: 0.9em;
+            padding: 8px 20px;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        <header>
+            <h1>🎯 Day 9: JavaScript Objects</h1>
+            <p>Interactive Learning with Hinglish Explanations</p>
+        </header>
+
+        <div class="content">
+            <!-- Section 1: Introduction -->
+            <div class="section">
+                <h2>📚 Objects Kya Hote Hain?</h2>
+                <div class="explanation">
+                    <p><strong>Objects</strong> JavaScript mein ek <span class="highlight">fundamental data structure</span> hai jo related data aur functionality ko ek saath store karta hai. Yeh real-world entities ko represent karne ka best tareeka hai. JavaScript mein almost everything ek object hai!</p>
+                    <p><strong>Example:</strong> Ek student ko represent karne ke liye - uska name, age, rollNumber sab ek jagah store kar sakte hain.</p>
+                    
+                    <h3>🧠 Object Deep Concepts:</h3>
+                    <ul>
+                        <li><strong>Key-Value Pairs:</strong> Objects properties (keys) aur unki values store karte hain</li>
+                        <li><strong>Reference Type:</strong> Objects memory mein reference store karte hain, values nahi</li>
+                        <li><strong>Mutable:</strong> Object properties ko runtime pe change kar sakte hain</li>
+                        <li><strong>Prototype Chain:</strong> Objects inherit properties from prototype</li>
+                        <li><strong>Dynamic Properties:</strong> Runtime pe properties add/remove kar sakte hain</li>
+                        <li><strong>Methods:</strong> Objects mein functions bhi store kar sakte hain</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 2: Object Literals -->
+            <div class="section">
+                <h2>🔷 Object Literals</h2>
+                <div class="explanation">
+                    <p>Object literal sabse simple way hai object create karne ka. Curly braces <code>{}</code> use karte hain aur key-value pairs likhte hain.</p>
+                </div>
+                
+                <div class="code-box">
+// Object Literal Syntax
+const student = {
+    name: "Rahul Kumar",
+    age: 21,
+    course: "Computer Science",
+    isEnrolled: true,
+    grades: [85, 90, 78]
+};</div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo: Create Your Object</h3>
+                    <input type="text" id="objKey" placeholder="Property name (e.g., name)">
+                    <input type="text" id="objValue" placeholder="Property value (e.g., Raj)">
+                    <button onclick="addProperty()">Add Property</button>
+                    <button onclick="clearObject()">Clear Object</button>
+                    
+                    <div id="objectDisplay" class="object-visual"></div>
+                    <div class="output" id="objectOutput">Your object will appear here...</div>
+                </div>
+            </div>
+
+            <!-- Section 3: Constructor Functions -->
+            <div class="section">
+                <h2>🏗️ Constructor Functions</h2>
+                <div class="explanation">
+                    <p>Constructor functions ek <span class="highlight">blueprint</span> ki tarah kaam karte hain. Jab aapko multiple similar objects banana ho, tab yeh use karte hain. Convention ke hisaab se, constructor function ka naam capital letter se start hota hai.</p>
+                </div>
+                
+                <div class="code-box">
+// Constructor Function
+function Student(name, age, course) {
+    this.name = name;
+    this.age = age;
+    this.course = course;
+    this.study = function() {
+        return this.name + " is studying " + this.course;
+    };
+}
+
+// Creating instances
+const student1 = new Student("Priya", 20, "Engineering");
+const student2 = new Student("Amit", 22, "Medicine");</div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo: Create Students</h3>
+                    <input type="text" id="stuName" placeholder="Student Name">
+                    <input type="number" id="stuAge" placeholder="Age">
+                    <input type="text" id="stuCourse" placeholder="Course">
+                    <button onclick="createStudent()">Create Student</button>
+                    <button onclick="clearStudents()">Clear All</button>
+                    
+                    <div id="studentsList" class="object-visual"></div>
+                </div>
+            </div>
+
+            <!-- Section 4: Adding, Accessing, Deleting -->
+            <div class="section">
+                <h2>⚙️ Properties Ko Add, Access, Aur Delete Karna</h2>
+                
+                <h3>1. Accessing Properties (Properties ko access karna)</h3>
+                <div class="code-box">
+// Dot notation
+console.log(student.name);
+
+// Bracket notation
+console.log(student["age"]);</div>
+
+                <h3>2. Adding Properties (Properties add karna)</h3>
+                <div class="code-box">
+// Naya property add karna
+student.email = "rahul@example.com";
+student["phoneNumber"] = "9876543210";</div>
+
+                <h3>3. Deleting Properties (Properties delete karna)</h3>
+                <div class="code-box">
+// Property delete karna
+delete student.phoneNumber;</div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo: Modify Object</h3>
+                    <button onclick="demoAccess()">Access Property</button>
+                    <button onclick="demoAdd()">Add Property</button>
+                    <button onclick="demoDelete()">Delete Property</button>
+                    <button onclick="resetDemoObj()">Reset</button>
+                    
+                    <div class="output" id="modifyOutput"></div>
+                    <div id="demoObjDisplay" class="object-visual"></div>
+                </div>
+            </div>
+
+            <!-- Section 5: The this Keyword -->
+            <div class="section">
+                <h2>🎯 The "this" Keyword</h2>
+                <div class="explanation">
+                    <p><span class="highlight">"this"</span> keyword current object ko refer karta hai. Yeh context-dependent hai - matlab different situations mein different values refer kar sakta hai.</p>
+                    <p><strong>Object method mein:</strong> "this" us object ko point karta hai jis object ka method call ho raha hai.</p>
+                </div>
+                
+                <div class="code-box">
+const person = {
+    name: "Sneha",
+    age: 25,
+    greet: function() {
+        // 'this' person object ko refer karega
+        return "Hello, I am " + this.name + " and I am " + this.age + " years old";
+    }
+};
+
+console.log(person.greet());</div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo: Understanding "this"</h3>
+                    <button onclick="demonstrateThis()">Run "this" Example</button>
+                    <div class="output" id="thisOutput"></div>
+                </div>
+            </div>
+
+            <!-- Section 6: Object Methods -->
+            <div class="section">
+                <h2>🔧 Object.keys(), Object.values(), Object.entries()</h2>
+                
+                <div class="explanation">
+                    <p>Yeh teen built-in methods hain jo objects ke saath kaam karne mein madad karte hain:</p>
+                </div>
+
+                <h3>Object.keys()</h3>
+                <div class="explanation">
+                    <p>Object ke saare property names (keys) ka array return karta hai.</p>
+                </div>
+                <div class="code-box">
+const car = { brand: "Honda", model: "City", year: 2023 };
+console.log(Object.keys(car)); 
+// Output: ["brand", "model", "year"]</div>
+
+                <h3>Object.values()</h3>
+                <div class="explanation">
+                    <p>Object ke saare property values ka array return karta hai.</p>
+                </div>
+                <div class="code-box">
+console.log(Object.values(car)); 
+// Output: ["Honda", "City", 2023]</div>
+
+                <h3>Object.entries()</h3>
+                <div class="explanation">
+                    <p>Har property ke liye [key, value] pairs ka array return karta hai.</p>
+                </div>
+                <div class="code-box">
+console.log(Object.entries(car)); 
+// Output: [["brand", "Honda"], ["model", "City"], ["year", 2023]]</div>
+
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Demo: Object Methods</h3>
+                    <button onclick="showKeys()">Show Keys</button>
+                    <button onclick="showValues()">Show Values</button>
+                    <button onclick="showEntries()">Show Entries</button>
+                    
+                    <div class="output" id="methodsOutput"></div>
+                </div>
+            </div>
+
+            <!-- Section 7: Practice -->
+            <div class="section">
+                <h2>💻 Practice: Product Object Model</h2>
+                <div class="explanation">
+                    <p>Chalo ek real-world example banate hain - ek e-commerce product object!</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>Create Your Product</h3>
+                    <input type="text" id="prodName" placeholder="Product Name">
+                    <input type="number" id="prodPrice" placeholder="Price">
+                    <input type="text" id="prodCategory" placeholder="Category">
+                    <input type="number" id="prodStock" placeholder="Stock">
+                    <button onclick="createProduct()">Create Product</button>
+                    
+                    <div id="productDisplay"></div>
+                    <div class="output" id="productOutput"></div>
+                </div>
+            </div>
+
+            <!-- Interview Questions -->
+            <div class="section interview-section">
+                <h2>🎤 Interview Questions</h2>
+                
+                <div class="question">
+                    <span class="question-number">Q1</span>
+                    <strong>What is the difference between dot notation and bracket notation for accessing object properties?</strong>
+                    <button class="toggle-answer" onclick="toggleAnswer(1)">Show Answer</button>
+                    <div class="answer" id="answer1">
+                        <p><strong>Dot Notation:</strong> Used when property name is a valid identifier (no spaces, doesn't start with number). Example: <code>obj.name</code></p>
+                        <p><strong>Bracket Notation:</strong> Used when property name has spaces, starts with number, or is stored in a variable. Example: <code>obj["first name"]</code> or <code>obj[variable]</code></p>
+                        <p><strong>Hinglish:</strong> Dot notation simple cases ke liye use hota hai jab property name straightforward ho. Bracket notation flexible hai aur dynamic property access ke liye useful hai.</p>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <span class="question-number">Q2</span>
+                    <strong>Explain the "this" keyword in JavaScript objects.</strong>
+                    <button class="toggle-answer" onclick="toggleAnswer(2)">Show Answer</button>
+                    <div class="answer" id="answer2">
+                        <p><strong>"this"</strong> refers to the object that is executing the current function. In object methods, "this" refers to the object that owns the method.</p>
+                        <p><strong>Example:</strong> If <code>person.greet()</code> is called, "this" inside greet() refers to the person object.</p>
+                        <p><strong>Important:</strong> Arrow functions don't have their own "this" - they inherit from parent scope.</p>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <span class="question-number">Q3</span>
+                    <strong>What is the difference between Object.keys(), Object.values(), and Object.entries()?</strong>
+                    <button class="toggle-answer" onclick="toggleAnswer(3)">Show Answer</button>
+                    <div class="answer" id="answer3">
+                        <p><strong>Object.keys():</strong> Returns array of property names (keys)</p>
+                        <p><strong>Object.values():</strong> Returns array of property values</p>
+                        <p><strong>Object.entries():</strong> Returns array of [key, value] pairs</p>
+                        <p><strong>Use case:</strong> Keys for checking property existence, values for processing data, entries for complete iteration with both key and value.</p>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <span class="question-number">Q4</span>
+                    <strong>How do you create multiple similar objects efficiently?</strong>
+                    <button class="toggle-answer" onclick="toggleAnswer(4)">Show Answer</button>
+                    <div class="answer" id="answer4">
+                        <p><strong>Method 1: Constructor Functions</strong></p>
+                        <pre>function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+const person1 = new Person("Raj", 25);</pre>
+                        <p><strong>Method 2: ES6 Classes (preferred modern approach)</strong></p>
+                        <pre>class Person {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+}</pre>
+                        <p><strong>Method 3: Factory Functions</strong></p>
+                        <pre>function createPerson(name, age) {
+    return { name, age };
+}</pre>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <span class="question-number">Q5</span>
+                    <strong>How do you check if a property exists in an object?</strong>
+                    <button class="toggle-answer" onclick="toggleAnswer(5)">Show Answer</button>
+                    <div class="answer" id="answer5">
+                        <p><strong>Method 1: "in" operator</strong></p>
+                        <code>'name' in person // returns true if exists</code>
+                        <p><strong>Method 2: hasOwnProperty()</strong></p>
+                        <code>person.hasOwnProperty('name') // checks own properties only</code>
+                        <p><strong>Method 3: Direct check</strong></p>
+                        <code>person.name !== undefined</code>
+                        <p><strong>Difference:</strong> "in" checks inherited properties too, hasOwnProperty checks only own properties.</p>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <span class="question-number">Q6</span>
+                    <strong>What happens when you use "delete" on an object property?</strong>
+                    <button class="toggle-answer" onclick="toggleAnswer(6)">Show Answer</button>
+                    <div class="answer" id="answer6">
+                        <p><strong>delete</strong> operator removes a property from an object completely (both key and value).</p>
+                        <p><strong>Returns:</strong> true if deletion is successful, false if property can't be deleted</p>
+                        <p><strong>Important:</strong> delete only works on object properties, not variables. Can't delete properties from prototype chain.</p>
+                        <pre>const obj = { name: "Raj", age: 25 };
+delete obj.age; // Returns true
+console.log(obj); // { name: "Raj" }</pre>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <span class="question-number">Q7</span>
+                    <strong>Explain shallow copy vs deep copy of objects.</strong>
+                    <button class="toggle-answer" onclick="toggleAnswer(7)">Show Answer</button>
+                    <div class="answer" id="answer7">
+                        <p><strong>Shallow Copy:</strong> Copies only first level properties. Nested objects are still referenced.</p>
+                        <pre>const shallow = Object.assign({}, original);
+// or
+const shallow = {...original};</pre>
+                        <p><strong>Deep Copy:</strong> Copies all levels recursively. Nested objects are also cloned.</p>
+                        <pre>const deep = JSON.parse(JSON.stringify(original));
+// Note: This doesn't work with functions, dates, undefined</pre>
+                        <p><strong>Hinglish:</strong> Shallow copy surface level copy hai, deep copy complete copy hai jismein nested objects bhi alag se copy ho jaate hain.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global object for demos
+        let myObject = {};
+        let students = [];
+        let demoObj = { name: "Demo", age: 25, city: "Mumbai" };
+        const productTemplate = { name: "", price: 0, category: "", stock: 0, inStock: true };
+
+        // Function to display object as cards
+        function displayObject(obj, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (Object.keys(obj).length === 0) {
+                container.innerHTML = '<p style="color: #666;">Object is empty</p>';
+                return;
+            }
+            
+            Object.entries(obj).forEach(([key, value]) => {
+                const card = document.createElement('div');
+                card.className = 'property-card';
+                card.innerHTML = `
+                    <div class="property-key">${key}:</div>
+                    <div class="property-value">${JSON.stringify(value)}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Add property to object
+        function addProperty() {
+            const key = document.getElementById('objKey').value.trim();
+            const value = document.getElementById('objValue').value.trim();
+            
+            if (!key) {
+                alert('Please enter a property name!');
+                return;
+            }
+            
+            // Try to parse as number or boolean
+            let parsedValue = value;
+            if (!isNaN(value) && value !== '') {
+                parsedValue = Number(value);
+            } else if (value === 'true' || value === 'false') {
+                parsedValue = value === 'true';
+            }
+            
+            myObject[key] = parsedValue;
+            displayObject(myObject, 'objectDisplay');
+            document.getElementById('objectOutput').innerHTML = 
+                `<strong>Current Object:</strong><br><pre>${JSON.stringify(myObject, null, 2)}</pre>`;
+            
+            document.getElementById('objKey').value = '';
+            document.getElementById('objValue').value = '';
+        }
+
+        function clearObject() {
+            myObject = {};
+            displayObject(myObject, 'objectDisplay');
+            document.getElementById('objectOutput').innerHTML = 'Object cleared!';
+        }
+
+        // Constructor function demo
+        function Student(name, age, course) {
+            this.name = name;
+            this.age = age;
+            this.course = course;
+            this.study = function() {
+                return `${this.name} is studying ${this.course}`;
+            };
+        }
+
+        function createStudent() {
+            const name = document.getElementById('stuName').value.trim();
+            const age = document.getElementById('stuAge').value;
+            const course = document.getElementById('stuCourse').value.trim();
+            
+            if (!name || !age || !course) {
+                alert('Please fill all fields!');
+                return;
+            }
+            
+            const student = new Student(name, age, course);
+            students.push(student);
+            
+            const container = document.getElementById('studentsList');
+            const card = document.createElement('div');
+            card.className = 'property-card';
+            card.innerHTML = `
+                <div class="property-key">${student.name}</div>
+                <div class="property-value">
+                    Age: ${student.age}<br>
+                    Course: ${student.course}<br>
+                    <em>${student.study()}</em>
+                </div>
+            `;
+            container.appendChild(card);
+            
+            document.getElementById('stuName').value = '';
+            document.getElementById('stuAge').value = '';
+            document.getElementById('stuCourse').value = '';
+        }
+
+        function clearStudents() {
+            students = [];
+            document.getElementById('studentsList').innerHTML = '';
+        }
+
+        // Modify object demo
+        function demoAccess() {
+            const output = document.getElementById('modifyOutput');
+            output.innerHTML = `
+                <strong>Accessing Properties:</strong><br>
+                Name: ${demoObj.name}<br>
+                Age: ${demoObj['age']}<br>
+                City: ${demoObj.city}
+            `;
+        }
+
+        function demoAdd() {
+            demoObj.email = "demo@example.com";
+            demoObj['phone'] = "9876543210";
+            displayObject(demoObj, 'demoObjDisplay');
+            document.getElementById('modifyOutput').innerHTML = 
+                '<strong>Added:</strong> email and phone properties!';
+        }
+
+        function demoDelete() {
+            if (demoObj.email) {
+                delete demoObj.email;
+                displayObject(demoObj, 'demoObjDisplay');
+                document.getElementById('modifyOutput').innerHTML = 
+                    '<strong>Deleted:</strong> email property!';
+            } else {
+                document.getElementById('modifyOutput').innerHTML = 
+                    '<strong>No email property to delete!</strong>';
+            }
+        }
+
+        function resetDemoObj() {
+            demoObj = { name: "Demo", age: 25, city: "Mumbai" };
+            displayObject(demoObj, 'demoObjDisplay');
+            document.getElementById('modifyOutput').innerHTML = 'Object reset to original state!';
+        }
+
+        // This keyword demo
+        function demonstrateThis() {
+            const car = {
+                brand: "Toyota",
+                model: "Fortuner",
+                year: 2024,
+                getInfo: function() {
+                    return `This car is a ${this.year} ${this.brand} ${this.model}`;
+                },
+                getAge: function() {
+                    const currentYear = new Date().getFullYear();
+                    return `This car is ${currentYear - this.year} years old`;
+                }
+            };
+            
+            const output = document.getElementById('thisOutput');
+            output.innerHTML = `
+                <strong>Understanding "this" keyword:</strong><br><br>
+                ${car.getInfo()}<br>
+                ${car.getAge()}<br><br>
+                <em>In methods, "this" refers to the car object itself!</em>
+            `;
+        }
+
+        // Object methods demo
+        const sampleObj = {
+            name: "Rohan",
+            age: 28,
+            city: "Delhi",
+            profession: "Developer"
+        };
+
+        function showKeys() {
+            const keys = Object.keys(sampleObj);
+            document.getElementById('methodsOutput').innerHTML = `
+                <strong>Object.keys():</strong><br>
+                ${JSON.stringify(keys)}<br>
+                <em>Returns array of property names</em>
+            `;
+        }
+
+        function showValues() {
+            const values = Object.values(sampleObj);
+            document.getElementById('methodsOutput').innerHTML = `
+                <strong>Object.values():</strong><br>
+                ${JSON.stringify(values)}<br>
+                <em>Returns array of property values</em>
+            `;
+        }
+
+        function showEntries() {
+            const entries = Object.entries(sampleObj);
+            document.getElementById('methodsOutput').innerHTML = `
+                <strong>Object.entries():</strong><br>
+                ${JSON.stringify(entries, null, 2)}<br>
+                <em>Returns array of [key, value] pairs</em>
+            `;
+        }
+
+        // Product demo
+        function createProduct() {
+            const name = document.getElementById('prodName').value.trim();
+            const price = document.getElementById('prodPrice').value;
+            const category = document.getElementById('prodCategory').value.trim();
+            const stock = document.getElementById('prodStock').value;
+            
+            if (!name || !price || !category || !stock) {
+                alert('Please fill all fields!');
+                return;
+            }
+            
+            const product = {
+                name: name,
+                price: parseFloat(price),
+                category: category,
+                stock: parseInt(stock),
+                inStock: parseInt(stock) > 0,
+                addStock: function(qty) {
+                    this.stock += qty;
+                    this.inStock = this.stock > 0;
+                    return `Added ${qty} items. New stock: ${this.stock}`;
+                },
+                getDetails: function() {
+                    return `${this.name} - ₹${this.price} (${this.category}) - ${this.inStock ? 'Available' : 'Out of Stock'}`;
+                }
+            };
+            
+            const display = document.getElementById('productDisplay');
+            display.innerHTML = `
+                <div class="property-card">
+                    <h3>📦 Product Created!</h3>
+                    <div class="property-key">Name:</div>
+                    <div class="property-value">${product.name}</div>
+                    <div class="property-key">Price:</div>
+                    <div class="property-value">₹${product.price}</div>
+                    <div class="property-key">Category:</div>
+                    <div class="property-value">${product.category}</div>
+                    <div class="property-key">Stock:</div>
+                    <div class="property-value">${product.stock} units</div>
+                    <div class="property-key">Status:</div>
+                    <div class="property-value" style="color: ${product.inStock ? 'green' : 'red'}">
+                        ${product.inStock ? '✅ In Stock' : '❌ Out of Stock'}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('productOutput').innerHTML = `
+                <strong>Complete Object:</strong><br>
+                <pre>${JSON.stringify(product, null, 2)}</pre>
+                <br>
+                <strong>Method call:</strong> ${product.getDetails()}
+            `;
+            
+            // Clear inputs
+            document.getElementById('prodName').value = '';
+            document.getElementById('prodPrice').value = '';
+            document.getElementById('prodCategory').value = '';
+            document.getElementById('prodStock').value = '';
+        }
+
+        // Toggle interview answers
+        function toggleAnswer(num) {
+            const answer = document.getElementById('answer' + num);
+            const button = answer.previousElementSibling;
+            
+            if (answer.style.display === 'none' || answer.style.display === '') {
+                answer.style.display = 'block';
+                button.textContent = 'Hide Answer';
+            } else {
+                answer.style.display = 'none';
+                button.textContent = 'Show Answer';
+            }
+        }
+
+        // Initialize demos on load
+        window.onload = function() {
+            displayObject(demoObj, 'demoObjDisplay');
+        };
+    </script>
+</body>
+</html>

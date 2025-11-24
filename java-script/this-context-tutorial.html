@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 25: Understanding this & Context</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .home-link:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        .home-link:focus {
+            outline: 2px solid #ffc107;
+            outline-offset: 2px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin: 25px 0 15px 0;
+            font-size: 1.5em;
+        }
+
+        .explanation {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .demo-box {
+            background: #2d3748;
+            color: #68d391;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .demo-box pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            color: white;
+        }
+
+        button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .output {
+            background: white;
+            color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            min-height: 50px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .comparison-card h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .questions {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .question:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .question-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .answer {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        .visual-demo {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .context-box {
+            border: 3px solid #667eea;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .context-box.active {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .arrow {
+            font-size: 2em;
+            color: #667eea;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        <header>
+            <h1>🎯 Day 25: Understanding this & Context</h1>
+            <p class="subtitle">JavaScript mein 'this' keyword ko samjho - Visual aur Interactive tarike se</p>
+        </header>
+
+        <div class="content">
+            <!-- Introduction Section -->
+            <div class="section">
+                <h2>📚 Introduction - 'this' Kya Hai?</h2>
+                <div class="explanation">
+                    <p><strong>Technical Definition:</strong> The <span class="highlight">this</span> keyword refers to the object that is executing the current function.</p>
+                    <p style="margin-top: 15px;"><strong>Simple Explanation (Hinglish):</strong> JavaScript mein <span class="highlight">this</span> ek special keyword hai jo batata hai ki current function kis context mein run ho raha hai. Iska value depend karta hai ki function ko <strong>kaise</strong> call kiya gaya hai, na ki <strong>kahan</strong> define kiya gaya hai.</p>
+                </div>
+
+                <div class="visual-demo">
+                    <h3>Visual Representation</h3>
+                    <div class="context-box" id="globalBox">
+                        <strong>Global Context</strong>
+                        <p>this = window (browser mein)</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="context-box" id="objectBox">
+                        <strong>Object Method</strong>
+                        <p>this = calling object</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="context-box" id="constructorBox">
+                        <strong>Constructor</strong>
+                        <p>this = new instance</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Different Contexts Section -->
+            <div class="section">
+                <h2>🔄 'this' in Different Contexts</h2>
+                
+                <h3>1. Global Context</h3>
+                <div class="explanation">
+                    <p><strong>Explanation:</strong> Jab aap global scope mein <span class="highlight">this</span> use karte ho (kisi function ke bahar), toh ye window object ko refer karta hai browser mein.</p>
+                </div>
+                <div class="demo-box">
+<pre>console.log(this); // Window object (browser mein)
+console.log(this === window); // true</pre>
+                </div>
+
+                <h3>2. Object Method Context</h3>
+                <div class="explanation">
+                    <p><strong>Explanation:</strong> Jab function kisi object ke andar method ke taur pe call hota hai, toh <span class="highlight">this</span> us object ko point karta hai.</p>
+                </div>
+                <div class="interactive-demo">
+                    <h4>Interactive Demo: Object Method</h4>
+                    <button onclick="demonstrateObjectMethod()">Run Object Method Demo</button>
+                    <div class="output" id="objectOutput">Click button to see output...</div>
+                </div>
+                <div class="demo-box">
+<pre>const person = {
+    name: "Rahul",
+    age: 25,
+    greet: function() {
+        console.log(`Mera naam ${this.name} hai`);
+        console.log(`Meri age ${this.age} hai`);
+    }
+};
+person.greet(); // this = person object</pre>
+                </div>
+
+                <h3>3. Constructor Function Context</h3>
+                <div class="explanation">
+                    <p><strong>Explanation:</strong> Jab aap <span class="highlight">new</span> keyword ke saath function call karte ho, toh ek naya object create hota hai aur <span class="highlight">this</span> us naye object ko refer karta hai.</p>
+                </div>
+                <div class="interactive-demo">
+                    <h4>Interactive Demo: Constructor</h4>
+                    <button onclick="demonstrateConstructor()">Create New Object</button>
+                    <div class="output" id="constructorOutput">Click button to see output...</div>
+                </div>
+                <div class="demo-box">
+<pre>function Car(brand, model) {
+    this.brand = brand;
+    this.model = model;
+    this.display = function() {
+        console.log(`${this.brand} ${this.model}`);
+    };
+}
+const myCar = new Car("Honda", "City");
+myCar.display(); // this = myCar object</pre>
+                </div>
+
+                <h3>4. Event Handler Context</h3>
+                <div class="explanation">
+                    <p><strong>Explanation:</strong> DOM events mein <span class="highlight">this</span> usually us element ko refer karta hai jis pe event trigger hua hai.</p>
+                </div>
+                <div class="interactive-demo">
+                    <h4>Interactive Demo: Event Handler</h4>
+                    <button onclick="demonstrateEventHandler(this)" id="eventBtn">Click Me - Check 'this'</button>
+                    <div class="output" id="eventOutput">Click button to see 'this' context...</div>
+                </div>
+            </div>
+
+            <!-- call, apply, bind Section -->
+            <div class="section">
+                <h2>🎮 call(), apply(), aur bind() Methods</h2>
+                <div class="explanation">
+                    <p><strong>Explanation:</strong> Ye teen methods hume manually control dete hain ki function mein <span class="highlight">this</span> kya hoga. Inka use karke hum explicitly set kar sakte hain ki function kis context mein run ho.</p>
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>call() Method</h4>
+                        <p><strong>Kya karta hai:</strong> Function ko turant call karta hai aur arguments ko individually pass karta hai.</p>
+                        <div class="demo-box" style="margin-top: 10px;">
+<pre>function.call(thisArg, arg1, arg2, ...)</pre>
+                        </div>
+                    </div>
+
+                    <div class="comparison-card">
+                        <h4>apply() Method</h4>
+                        <p><strong>Kya karta hai:</strong> Function ko turant call karta hai lekin arguments ko array ke form mein pass karta hai.</p>
+                        <div class="demo-box" style="margin-top: 10px;">
+<pre>function.apply(thisArg, [arg1, arg2, ...])</pre>
+                        </div>
+                    </div>
+
+                    <div class="comparison-card">
+                        <h4>bind() Method</h4>
+                        <p><strong>Kya karta hai:</strong> Ek naya function return karta hai jisme 'this' permanently set ho jaata hai. Function ko immediately call nahi karta.</p>
+                        <div class="demo-box" style="margin-top: 10px;">
+<pre>const newFunc = function.bind(thisArg, arg1, arg2, ...)</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="interactive-demo">
+                    <h4>Interactive Comparison Demo</h4>
+                    <button onclick="demonstrateCall()">Test call()</button>
+                    <button onclick="demonstrateApply()">Test apply()</button>
+                    <button onclick="demonstrateBind()">Test bind()</button>
+                    <div class="output" id="methodOutput">Click any button to see the difference...</div>
+                </div>
+
+                <div class="demo-box">
+<pre>const person1 = { name: "Amit" };
+const person2 = { name: "Priya" };
+
+function greet(greeting, punctuation) {
+    return `${greeting}, main ${this.name} hoon${punctuation}`;
+}
+
+// call() - arguments individually
+console.log(greet.call(person1, "Namaste", "!"));
+// Output: "Namaste, main Amit hoon!"
+
+// apply() - arguments as array
+console.log(greet.apply(person2, ["Hello", "."]));
+// Output: "Hello, main Priya hoon."
+
+// bind() - returns new function
+const greetAmit = greet.bind(person1, "Hi");
+console.log(greetAmit("!!"));
+// Output: "Hi, main Amit hoon!!"</pre>
+                </div>
+            </div>
+
+            <!-- Arrow Functions Section -->
+            <div class="section">
+                <h2>🏹 Lexical 'this' in Arrow Functions</h2>
+                <div class="explanation">
+                    <p><strong>Key Concept:</strong> Arrow functions apna khud ka <span class="highlight">this</span> binding nahi create karte. Ye apne surrounding (lexical) scope se <span class="highlight">this</span> inherit karte hain.</p>
+                    <p style="margin-top: 15px;"><strong>Simple Terms:</strong> Arrow function mein <span class="highlight">this</span> ka value wohi hota hai jo uske parent scope mein tha jab function define hua tha. Ye call, apply, ya bind se change nahi hota!</p>
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>Regular Function</h4>
+                        <div class="demo-box" style="margin-top: 10px;">
+<pre>const obj = {
+    name: "Regular",
+    regularFunc: function() {
+        console.log(this.name);
+    }
+};
+obj.regularFunc(); 
+// "Regular" (this = obj)</pre>
+                        </div>
+                        <p style="margin-top: 10px;">✅ 'this' is dynamic - depends on how function is called</p>
+                    </div>
+
+                    <div class="comparison-card">
+                        <h4>Arrow Function</h4>
+                        <div class="demo-box" style="margin-top: 10px;">
+<pre>const obj = {
+    name: "Arrow",
+    arrowFunc: () => {
+        console.log(this.name);
+    }
+};
+obj.arrowFunc(); 
+// undefined (this = window)</pre>
+                        </div>
+                        <p style="margin-top: 10px;">✅ 'this' is lexical - fixed to surrounding scope</p>
+                    </div>
+                </div>
+
+                <div class="interactive-demo">
+                    <h4>Interactive Demo: Regular vs Arrow Function</h4>
+                    <button onclick="compareRegularVsArrow()">Compare Both</button>
+                    <div class="output" id="arrowOutput">Click to see the difference...</div>
+                </div>
+
+                <h3>Common Use Case: Callbacks</h3>
+                <div class="explanation">
+                    <p><strong>Problem:</strong> Regular functions mein callbacks ke andar <span class="highlight">this</span> lose ho jata hai.</p>
+                    <p><strong>Solution:</strong> Arrow functions perfect hain kyunki ye lexical <span class="highlight">this</span> use karte hain.</p>
+                </div>
+                <div class="demo-box">
+<pre>// ❌ Problem with regular function
+const counter = {
+    count: 0,
+    start: function() {
+        setInterval(function() {
+            this.count++; // 'this' is window, not counter!
+            console.log(this.count); // NaN
+        }, 1000);
+    }
+};
+
+// ✅ Solution with arrow function
+const counter = {
+    count: 0,
+    start: function() {
+        setInterval(() => {
+            this.count++; // 'this' is counter object
+            console.log(this.count); // 1, 2, 3, ...
+        }, 1000);
+    }
+};</pre>
+                </div>
+            </div>
+
+            <!-- Debug Practice Section -->
+            <div class="section">
+                <h2>🐛 Practice: Debug and Fix Incorrect 'this' Behavior</h2>
+                
+                <h3>Bug #1: Lost Context in Callback</h3>
+                <div class="demo-box">
+<pre>// ❌ Buggy Code
+const user = {
+    name: "Sakshi",
+    friends: ["Neha", "Pooja"],
+    printFriends: function() {
+        this.friends.forEach(function(friend) {
+            console.log(this.name + " knows " + friend);
+            // Error: Cannot read property 'name' of undefined
+        });
+    }
+};
+
+// ✅ Fix 1: Arrow Function
+printFriends: function() {
+    this.friends.forEach((friend) => {
+        console.log(this.name + " knows " + friend);
+    });
+}
+
+// ✅ Fix 2: bind()
+printFriends: function() {
+    this.friends.forEach(function(friend) {
+        console.log(this.name + " knows " + friend);
+    }.bind(this));
+}</pre>
+                </div>
+
+                <h3>Bug #2: Event Handler Issue</h3>
+                <div class="interactive-demo">
+                    <h4>Try Both Approaches</h4>
+                    <button onclick="buggyEventHandler()">Buggy Version</button>
+                    <button onclick="fixedEventHandler()">Fixed Version</button>
+                    <div class="output" id="debugOutput">Click to test...</div>
+                </div>
+                <div class="demo-box">
+<pre>// ❌ Buggy Code
+class Button {
+    constructor(label) {
+        this.label = label;
+        this.clicks = 0;
+    }
+    
+    handleClick() {
+        this.clicks++;
+        console.log(`${this.label} clicked ${this.clicks} times`);
+    }
+}
+
+const btn = new Button("Submit");
+document.querySelector('#btn').addEventListener('click', btn.handleClick);
+// Error: Cannot read property 'clicks' of undefined
+
+// ✅ Fix: Bind in constructor or use arrow function
+constructor(label) {
+    this.label = label;
+    this.clicks = 0;
+    this.handleClick = this.handleClick.bind(this);
+}</pre>
+                </div>
+            </div>
+
+            <!-- Interview Questions Section -->
+            <div class="section questions">
+                <h2>💼 Interview Questions & Answers</h2>
+                
+                <div class="question" onclick="toggleAnswer(1)">
+                    <span class="question-number">1</span>
+                    <strong>What is the 'this' keyword in JavaScript and how is its value determined?</strong>
+                    <div class="answer" id="answer1">
+                        <p><strong>Answer:</strong> The 'this' keyword refers to the object that is executing the current function. Its value is determined by how the function is called (execution context), not where it's defined:</p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li><strong>Method call:</strong> this = object that owns the method</li>
+                            <li><strong>Regular function call:</strong> this = global object (window in browser, global in Node.js) or undefined in strict mode</li>
+                            <li><strong>Constructor call (with new):</strong> this = newly created object</li>
+                            <li><strong>Arrow function:</strong> this = lexically inherited from surrounding scope</li>
+                            <li><strong>Event handler:</strong> this = element that triggered the event</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(2)">
+                    <span class="question-number">2</span>
+                    <strong>Explain the difference between call(), apply(), and bind() methods.</strong>
+                    <div class="answer" id="answer2">
+                        <p><strong>Answer:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>call():</strong> Immediately invokes the function with specified 'this' value. Arguments are passed individually: <code>func.call(thisArg, arg1, arg2)</code></li>
+                            <li><strong>apply():</strong> Immediately invokes the function with specified 'this' value. Arguments are passed as an array: <code>func.apply(thisArg, [arg1, arg2])</code></li>
+                            <li><strong>bind():</strong> Returns a new function with permanently bound 'this' value. Doesn't invoke immediately: <code>const newFunc = func.bind(thisArg)</code></li>
+                        </ul>
+                        <p style="margin-top: 10px;"><strong>Key difference:</strong> call() and apply() execute immediately, bind() returns a new function for later use.</p>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(3)">
+                    <span class="question-number">3</span>
+                    <strong>How do arrow functions handle 'this' differently from regular functions?</strong>
+                    <div class="answer" id="answer3">
+                        <p><strong>Answer:</strong> Arrow functions don't have their own 'this' binding. They use lexical scoping, meaning they inherit 'this' from the surrounding scope where they were defined.</p>
+                        <p style="margin-top: 10px;"><strong>Key differences:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Arrow functions cannot be used as constructors (no 'new' keyword)</li>
+                            <li>'this' in arrow functions cannot be changed by call(), apply(), or bind()</li>
+                            <li>Arrow functions don't have their own 'arguments' object</li>
+                            <li>Perfect for callbacks where you want to preserve outer 'this' context</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><strong>Example:</strong> In event handlers or array methods like forEach(), arrow functions maintain the 'this' of the enclosing scope.</p>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(4)">
+                    <span class="question-number">4</span>
+                    <strong>What happens to 'this' in nested functions? How can you fix 'this' context loss?</strong>
+                    <div class="answer" id="answer4">
+                        <p><strong>Answer:</strong> In nested regular functions, 'this' context is lost because each function has its own 'this' binding. The inner function's 'this' defaults to the global object (or undefined in strict mode).</p>
+                        <p style="margin-top: 10px;"><strong>Solutions to fix 'this' loss:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>Arrow functions:</strong> Use arrow function for nested function (most common)</li>
+                            <li><strong>Store reference:</strong> <code>const self = this;</code> before nested function</li>
+                            <li><strong>bind():</strong> Bind 'this' to the nested function</li>
+                            <li><strong>Pass as parameter:</strong> Explicitly pass 'this' to callback (like forEach's second parameter)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(5)">
+                    <span class="question-number">5</span>
+                    <strong>Can you change the 'this' context of an arrow function? Explain with example.</strong>
+                    <div class="answer" id="answer5">
+                        <p><strong>Answer:</strong> No, you cannot change the 'this' context of an arrow function using call(), apply(), or bind(). Arrow functions permanently capture 'this' from their lexical scope at the time they're defined.</p>
+                        <div class="demo-box" style="margin-top: 10px;">
+<pre>const obj1 = { name: "Object 1" };
+const obj2 = { name: "Object 2" };
+
+const arrowFunc = () => {
+    console.log(this.name);
+};
+
+// These won't change 'this' in arrow function
+arrowFunc.call(obj1);    // undefined
+arrowFunc.apply(obj2);   // undefined
+const bound = arrowFunc.bind(obj1);
+bound();                  // undefined
+
+// 'this' remains the same (window/global)</pre>
+                        </div>
+                        <p style="margin-top: 10px;"><strong>Reason:</strong> This is by design - arrow functions are meant for situations where you want to preserve the outer context.</p>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(6)">
+                    <span class="question-number">6</span>
+                    <strong>What is 'this' in a class constructor and class methods?</strong>
+                    <div class="answer" id="answer6">
+                        <p><strong>Answer:</strong> In ES6 classes:</p>
+                        <ul style="margin-left: 20px;">
+                            <li><strong>Constructor:</strong> 'this' refers to the newly created instance of the class</li>
+                            <li><strong>Class methods:</strong> 'this' refers to the instance that called the method</li>
+                            <li><strong>Static methods:</strong> 'this' refers to the class itself, not instances</li>
+                        </ul>
+                        <div class="demo-box" style="margin-top: 10px;">
+<pre>class Person {
+    constructor(name) {
+        this.name = name; // 'this' = new instance
+    }
+    
+    greet() {
+        console.log(this.name); // 'this' = calling instance
+    }
+    
+    static species() {
+        console.log(this); // 'this' = Person class
+    }
+}</pre>
+                        </div>
+                        <p style="margin-top: 10px;"><strong>Common issue:</strong> When passing class methods as callbacks, 'this' context is lost. Fix by binding in constructor or using arrow functions.</p>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(7)">
+                    <span class="question-number">7</span>
+                    <strong>Explain the 'this' behavior in setTimeout and setInterval callbacks.</strong>
+                    <div class="answer" id="answer7">
+                        <p><strong>Answer:</strong> In setTimeout and setInterval, regular function callbacks lose their 'this' context and default to the global object (window in browsers) or undefined in strict mode.</p>
+                        <div class="demo-box" style="margin-top: 10px;">
+<pre>const obj = {
+    name: "MyObject",
+    delayedGreet: function() {
+        setTimeout(function() {
+            console.log(this.name); // undefined - 'this' is window
+        }, 1000);
+    }
+};
+
+// Solutions:
+// 1. Arrow function (best)
+delayedGreet: function() {
+    setTimeout(() => {
+        console.log(this.name); // "MyObject"
+    }, 1000);
+}
+
+// 2. bind()
+setTimeout(function() {
+    console.log(this.name);
+}.bind(this), 1000);
+
+// 3. Store reference
+const self = this;
+setTimeout(function() {
+    console.log(self.name);
+}, 1000);</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Object Method Demo
+        function demonstrateObjectMethod() {
+            const person = {
+                name: "Rahul Kumar",
+                age: 25,
+                city: "Mumbai",
+                greet: function() {
+                    return `Namaste! Mera naam ${this.name} hai. Main ${this.age} saal ka hoon aur ${this.city} se hoon.`;
+                }
+            };
+            
+            const output = person.greet();
+            document.getElementById('objectOutput').innerHTML = `
+                <strong>Output:</strong><br>
+                ${output}<br><br>
+                <strong>Explanation:</strong> 'this' refers to the person object, so this.name = "${person.name}", this.age = ${person.age}, this.city = "${person.city}"
+            `;
+        }
+
+        // Constructor Demo
+        function demonstrateConstructor() {
+            function Car(brand, model, year) {
+                this.brand = brand;
+                this.model = model;
+                this.year = year;
+                this.display = function() {
+                    return `${this.brand} ${this.model} (${this.year})`;
+                };
+            }
+            
+            const myCar = new Car("Honda", "City", 2023);
+            const output = myCar.display();
+            
+            document.getElementById('constructorOutput').innerHTML = `
+                <strong>New Object Created:</strong><br>
+                Brand: ${myCar.brand}<br>
+                Model: ${myCar.model}<br>
+                Year: ${myCar.year}<br><br>
+                <strong>Method Output:</strong> ${output}<br><br>
+                <strong>Explanation:</strong> 'new' keyword creates a new object and 'this' refers to that new instance.
+            `;
+        }
+
+        // Event Handler Demo
+        function demonstrateEventHandler(element) {
+            const elementInfo = {
+                tagName: element.tagName,
+                id: element.id || 'No ID',
+                className: element.className || 'No class',
+                textContent: element.textContent
+            };
+            
+            document.getElementById('eventOutput').innerHTML = `
+                <strong>Event Handler 'this' Context:</strong><br>
+                Tag Name: ${elementInfo.tagName}<br>
+                ID: ${elementInfo.id}<br>
+                Class: ${elementInfo.className}<br>
+                Text: ${elementInfo.textContent}<br><br>
+                <strong>Explanation:</strong> In event handlers, 'this' refers to the element that triggered the event.
+            `;
+        }
+
+        // call(), apply(), bind() Demos
+        function demonstrateCall() {
+            const person1 = { name: "Amit Kumar", city: "Delhi" };
+            const person2 = { name: "Priya Sharma", city: "Mumbai" };
+            
+            function introduce(greeting, profession) {
+                return `${greeting}! Main ${this.name} hoon, ${this.city} se hoon aur main ek ${profession} hoon.`;
+            }
+            
+            const result = introduce.call(person1, "Namaste", "Developer");
+            
+            document.getElementById('methodOutput').innerHTML = `
+                <strong>call() Method Result:</strong><br>
+                ${result}<br><br>
+                <strong>Explanation:</strong> call() immediately executes the function with person1 as 'this' context and passes arguments individually.
+            `;
+        }
+
+        function demonstrateApply() {
+            const person1 = { name: "Amit Kumar", city: "Delhi" };
+            
+            function introduce(greeting, profession, experience) {
+                return `${greeting}! Main ${this.name} hoon, ${this.city} se hoon. Main ek ${profession} hoon with ${experience} years experience.`;
+            }
+            
+            const result = introduce.apply(person1, ["Hello", "Software Engineer", "5"]);
+            
+            document.getElementById('methodOutput').innerHTML = `
+                <strong>apply() Method Result:</strong><br>
+                ${result}<br><br>
+                <strong>Explanation:</strong> apply() immediately executes the function with person1 as 'this' context and passes arguments as an array.
+            `;
+        }
+
+        function demonstrateBind() {
+            const person1 = { name: "Amit Kumar", city: "Delhi" };
+            
+            function introduce(greeting, profession) {
+                return `${greeting}! Main ${this.name} hoon, ${this.city} se hoon aur main ek ${profession} hoon.`;
+            }
+            
+            const boundFunction = introduce.bind(person1, "Hi");
+            const result = boundFunction("Full Stack Developer");
+            
+            document.getElementById('methodOutput').innerHTML = `
+                <strong>bind() Method Result:</strong><br>
+                ${result}<br><br>
+                <strong>Explanation:</strong> bind() returns a new function with permanently bound 'this' context. It doesn't execute immediately - we call it later.
+            `;
+        }
+
+        // Arrow Function Comparison
+        function compareRegularVsArrow() {
+            // Regular function example
+            const objRegular = {
+                name: "Regular Function Object",
+                regularMethod: function() {
+                    return `Regular: this.name = ${this.name}`;
+                }
+            };
+            
+            // Arrow function example
+            const objArrow = {
+                name: "Arrow Function Object",
+                arrowMethod: () => {
+                    return `Arrow: this.name = ${this.name} (this refers to window/global)`;
+                }
+            };
+            
+            const regularResult = objRegular.regularMethod();
+            const arrowResult = objArrow.arrowMethod();
+            
+            document.getElementById('arrowOutput').innerHTML = `
+                <strong>Regular Function:</strong><br>
+                ${regularResult}<br><br>
+                <strong>Arrow Function:</strong><br>
+                ${arrowResult}<br><br>
+                <strong>Key Difference:</strong> Arrow functions don't have their own 'this' - they inherit it from the surrounding scope (window in this case).
+            `;
+        }
+
+        // Debug Practice Functions
+        function buggyEventHandler() {
+            class Button {
+                constructor(label) {
+                    this.label = label;
+                    this.clicks = 0;
+                }
+                
+                handleClick() {
+                    this.clicks++;
+                    return `${this.label} clicked ${this.clicks} times`;
+                }
+            }
+            
+            const btn = new Button("Submit Button");
+            
+            // Simulate the buggy behavior
+            const handler = btn.handleClick; // Lost context!
+            
+            try {
+                const result = handler(); // This will cause error
+                document.getElementById('debugOutput').innerHTML = result;
+            } catch (error) {
+                document.getElementById('debugOutput').innerHTML = `
+                    <strong>❌ Error (Buggy Version):</strong><br>
+                    ${error.message}<br><br>
+                    <strong>Problem:</strong> When we assign btn.handleClick to a variable, it loses its 'this' context.
+                `;
+            }
+        }
+
+        function fixedEventHandler() {
+            class Button {
+                constructor(label) {
+                    this.label = label;
+                    this.clicks = 0;
+                    // Fix: Bind in constructor
+                    this.handleClick = this.handleClick.bind(this);
+                }
+                
+                handleClick() {
+                    this.clicks++;
+                    return `${this.label} clicked ${this.clicks} times`;
+                }
+            }
+            
+            const btn = new Button("Submit Button");
+            const handler = btn.handleClick; // Context preserved!
+            
+            const result1 = handler();
+            const result2 = handler();
+            
+            document.getElementById('debugOutput').innerHTML = `
+                <strong>✅ Fixed Version:</strong><br>
+                First call: ${result1}<br>
+                Second call: ${result2}<br><br>
+                <strong>Solution:</strong> We bound 'this' in the constructor, so the context is preserved even when the method is assigned to a variable.
+            `;
+        }
+
+        // Toggle Answer Function
+        function toggleAnswer(questionNumber) {
+            const answer = document.getElementById(`answer${questionNumber}`);
+            const isVisible = answer.classList.contains('show');
+            
+            // Hide all answers first
+            document.querySelectorAll('.answer').forEach(ans => {
+                ans.classList.remove('show');
+            });
+            
+            // Show the clicked answer if it wasn't visible
+            if (!isVisible) {
+                answer.classList.add('show');
+            }
+        }
+
+        // Visual Demo Animation
+        function animateContextBoxes() {
+            const boxes = ['globalBox', 'objectBox', 'constructorBox'];
+            let currentIndex = 0;
+            
+            setInterval(() => {
+                // Remove active class from all boxes
+                boxes.forEach(boxId => {
+                    document.getElementById(boxId).classList.remove('active');
+                });
+                
+                // Add active class to current box
+                document.getElementById(boxes[currentIndex]).classList.add('active');
+                
+                // Move to next box
+                currentIndex = (currentIndex + 1) % boxes.length;
+            }, 2000);
+        }
+
+        // Initialize animations when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            animateContextBoxes();
+        });
+    </script>
+</body>
+</html>

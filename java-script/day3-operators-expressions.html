@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 3: Operators & Expressions</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #007bff;
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background: #f9f9f9;
+        }
+        .demo {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 300px;
+            margin: 20px auto;
+        }
+        .calculator button {
+            height: 50px;
+            font-size: 18px;
+        }
+        .calculator .display {
+            grid-column: span 4;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: right;
+            font-size: 20px;
+            font-family: monospace;
+        }
+        .operator-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .operator-card {
+            padding: 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .operator-card:hover {
+            border-color: #007bff;
+            transform: scale(1.05);
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .home-link:hover {
+            background: #218838;
+        }
+        .interview-section {
+            background: #e9ecef;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        
+        <header>
+            <h1>Day 3: Operators & Expressions</h1>
+            <p><em>Arithmetic, assignment, logical operators, comparison operators, aur operator precedence</em></p>
+        </header>
+
+        <section id="arithmetic">
+            <h2>Arithmetic Operators - Complete Deep Dive</h2>
+            <p>Arithmetic operators mathematical calculations perform karte hain. JavaScript mein yeh operators numbers ke saath kaam karte hain aur automatic type conversion bhi karte hain jab zaroorat ho.</p>
+            
+            <h3>Operator Types aur Unka Behavior:</h3>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;">
+                <h4>📊 Mathematical Operations:</h4>
+                <ul>
+                    <li><strong>Binary Operators:</strong> Do operands chahiye (a + b)</li>
+                    <li><strong>Unary Operators:</strong> Ek operand chahiye (+a, -a)</li>
+                    <li><strong>Type Coercion:</strong> Strings ko numbers mein convert kar dete hain</li>
+                    <li><strong>Special Values:</strong> Infinity, -Infinity, NaN handle karte hain</li>
+                </ul>
+            </div>
+            
+            <h3>Detailed Operator Analysis:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; border: 1px solid #007bff;">
+                    <h4>➕ Addition (+)</h4>
+                    <p><strong>Numbers:</strong> 5 + 3 = 8</p>
+                    <p><strong>Strings:</strong> "Hello" + " World" = "Hello World"</p>
+                    <p><strong>Mixed:</strong> "5" + 3 = "53" (string concatenation)</p>
+                    <p><strong>Special:</strong> true + 1 = 2</p>
+                </div>
+                <div style="background: #f0f8e7; padding: 15px; border-radius: 8px; border: 1px solid #28a745;">
+                    <h4>➖ Subtraction (-)</h4>
+                    <p><strong>Numbers:</strong> 10 - 3 = 7</p>
+                    <p><strong>Strings:</strong> "10" - "3" = 7 (converts to numbers)</p>
+                    <p><strong>Special:</strong> "hello" - 5 = NaN</p>
+                    <p><strong>Unary:</strong> -5 (negation)</p>
+                </div>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffc107;">
+                    <h4>✖️ Multiplication (*)</h4>
+                    <p><strong>Numbers:</strong> 4 * 5 = 20</p>
+                    <p><strong>Strings:</strong> "4" * "5" = 20</p>
+                    <p><strong>Special:</strong> Infinity * 0 = NaN</p>
+                    <p><strong>Boolean:</strong> true * 5 = 5</p>
+                </div>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border: 1px solid #dc3545;">
+                    <h4>➗ Division (/)</h4>
+                    <p><strong>Numbers:</strong> 15 / 3 = 5</p>
+                    <p><strong>Zero:</strong> 5 / 0 = Infinity</p>
+                    <p><strong>Zero by Zero:</strong> 0 / 0 = NaN</p>
+                    <p><strong>Negative:</strong> -10 / 2 = -5</p>
+                </div>
+                <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; border: 1px solid #17a2b8;">
+                    <h4>📐 Modulus (%)</h4>
+                    <p><strong>Remainder:</strong> 10 % 3 = 1</p>
+                    <p><strong>Even/Odd:</strong> n % 2 === 0 (even check)</p>
+                    <p><strong>Negative:</strong> -10 % 3 = -1</p>
+                    <p><strong>Float:</strong> 5.5 % 2 = 1.5</p>
+                </div>
+                <div style="background: #e2e3e5; padding: 15px; border-radius: 8px; border: 1px solid #6c757d;">
+                    <h4>🔢 Exponentiation (**)</h4>
+                    <p><strong>Power:</strong> 2 ** 3 = 8</p>
+                    <p><strong>Square Root:</strong> 9 ** 0.5 = 3</p>
+                    <p><strong>Negative:</strong> 2 ** -2 = 0.25</p>
+                    <p><strong>ES2016:</strong> Modern alternative to Math.pow()</p>
+                </div>
+            </div>
+            
+            <div class="demo">
+                <h3>Interactive Arithmetic Operator Explorer</h3>
+                <div class="operator-grid">
+                    <div class="operator-card" onclick="demonstrateOperator('+')">
+                        <h4>+ (Addition)</h4>
+                        <p>Numbers & Strings</p>
+                    </div>
+                    <div class="operator-card" onclick="demonstrateOperator('-')">
+                        <h4>- (Subtraction)</h4>
+                        <p>Always converts to numbers</p>
+                    </div>
+                    <div class="operator-card" onclick="demonstrateOperator('*')">
+                        <h4>* (Multiplication)</h4>
+                        <p>Type coercion to numbers</p>
+                    </div>
+                    <div class="operator-card" onclick="demonstrateOperator('/')">
+                        <h4>/ (Division)</h4>
+                        <p>Can result in Infinity</p>
+                    </div>
+                    <div class="operator-card" onclick="demonstrateOperator('%')">
+                        <h4>% (Modulus)</h4>
+                        <p>Remainder operation</p>
+                    </div>
+                    <div class="operator-card" onclick="demonstrateOperator('**')">
+                        <h4>** (Exponent)</h4>
+                        <p>Power calculation</p>
+                    </div>
+                </div>
+                <div id="arithmetic-result" style="margin-top: 15px; padding: 10px; background: #e7f3ff; border-radius: 5px;">
+                    Koi operator click karo detailed examples dekhne ke liye...
+                </div>
+                
+                <h3>Advanced Arithmetic Operations</h3>
+                <div style="margin: 15px 0;">
+                    <button onclick="demonstrateUnaryOperators()">🔢 Unary Operators</button>
+                    <button onclick="demonstrateIncrementDecrement()">⬆️⬇️ Increment/Decrement</button>
+                    <button onclick="demonstrateSpecialCases()">⚠️ Special Cases & Edge Cases</button>
+                    <button onclick="demonstrateMathObject()">🧮 Math Object Methods</button>
+                </div>
+                <div id="advanced-arithmetic-result"></div>
+            </div>
+        </section>
+
+        <section id="operator-precedence-detailed">
+            <h2>Operator Precedence aur Associativity - Deep Understanding</h2>
+            <p>JavaScript mein operators ka ek specific order hai jismein yeh execute hote hain. Yeh mathematical BODMAS/PEMDAS rules follow karta hai lekin kuch additional rules bhi hain.</p>
+            
+            <h3>Precedence Table (High to Low):</h3>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="background: #007bff; color: white;">
+                        <th style="padding: 10px; border: 1px solid #ddd;">Precedence</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Operator</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Description</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Associativity</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">19</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">( )</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Grouping</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">N/A</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">16</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">**</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Exponentiation</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Right-to-left</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">15</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">++, --</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Increment/Decrement</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">N/A</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">14</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">*, /, %</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Multiplication, Division, Modulus</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Left-to-right</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">13</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">+, -</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Addition, Subtraction</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Left-to-right</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="demo">
+                <h3>Precedence & Associativity Tester</h3>
+                <input type="text" id="precedence-expression" placeholder="Enter expression like: 2 + 3 * 4" value="2 + 3 * 4">
+                <button onclick="analyzePrecedence()">🔍 Analyze Expression</button>
+                <div id="precedence-analysis"></div>
+            </div>
+        </section>
+
+        <section id="assignment">
+            <h2>Assignment Operators</h2>
+            <p>Values assign karne aur modify karne ke liye:</p>
+            
+            <div class="demo">
+                <h3>Assignment Demo</h3>
+                <div>
+                    <label>Initial Value: <input type="number" id="assign-value" value="10"></label>
+                    <button onclick="testAssignment('=')">= (Assign)</button>
+                    <button onclick="testAssignment('+=')">+= (Add & Assign)</button>
+                    <button onclick="testAssignment('-=')">=- (Subtract & Assign)</button>
+                    <button onclick="testAssignment('*=')">=* (Multiply & Assign)</button>
+                    <button onclick="testAssignment('/=')">/= (Divide & Assign)</button>
+                </div>
+                <div id="assignment-result"></div>
+            </div>
+        </section>
+
+        <section id="comparison">
+            <h2>Comparison Operators</h2>
+            <p>Values compare karne ke liye, true/false return karte hain:</p>
+            
+            <div class="demo">
+                <h3>Comparison Tester</h3>
+                <div>
+                    <input type="text" id="comp-val1" placeholder="Value 1" value="5">
+                    <select id="comp-operator">
+                        <option value="==">== (Equal)</option>
+                        <option value="===">=== (Strict Equal)</option>
+                        <option value="!=">!= (Not Equal)</option>
+                        <option value="!==">!== (Strict Not Equal)</option>
+                        <option value=">">> (Greater Than)</option>
+                        <option value="<">< (Less Than)</option>
+                        <option value=">=">>= (Greater Equal)</option>
+                        <option value="<=">>= (Less Equal)</option>
+                    </select>
+                    <input type="text" id="comp-val2" placeholder="Value 2" value="5">
+                    <button onclick="testComparison()">Compare</button>
+                </div>
+                <div id="comparison-result"></div>
+            </div>
+        </section>
+
+        <section id="logical">
+            <h2>Logical Operators</h2>
+            <p>Boolean values combine karne ke liye:</p>
+            
+            <div class="demo">
+                <h3>Logical Operations</h3>
+                <div>
+                    <label>Value A: <select id="logical-a">
+                        <option value="true">true</option>
+                        <option value="false">false</option>
+                    </select></label>
+                    <label>Value B: <select id="logical-b">
+                        <option value="true">true</option>
+                        <option value="false">false</option>
+                    </select></label>
+                </div>
+                <div style="margin: 10px 0;">
+                    <button onclick="testLogical('&&')">A && B (AND)</button>
+                    <button onclick="testLogical('||')">A || B (OR)</button>
+                    <button onclick="testLogical('!')">!A (NOT)</button>
+                </div>
+                <div id="logical-result"></div>
+            </div>
+        </section>
+
+        <section id="precedence">
+            <h2>Operator Precedence</h2>
+            <p>Jab multiple operators hain, kaun sa pehle execute hoga:</p>
+            
+            <div class="demo">
+                <h3>Precedence Examples</h3>
+                <button onclick="testPrecedence('2 + 3 * 4')">2 + 3 * 4</button>
+                <button onclick="testPrecedence('(2 + 3) * 4')">(2 + 3) * 4</button>
+                <button onclick="testPrecedence('10 / 2 + 3')">10 / 2 + 3</button>
+                <button onclick="testPrecedence('2 ** 3 ** 2')">2 ** 3 ** 2</button>
+                <div id="precedence-result"></div>
+            </div>
+        </section>
+
+        <section id="calculator">
+            <h2>Practice: Simple Calculator</h2>
+            <p>Operators use karke ek working calculator banaya hai:</p>
+            
+            <div class="demo">
+                <div class="calculator">
+                    <div class="display" id="calc-display">0</div>
+                    <button onclick="clearCalc()">C</button>
+                    <button onclick="appendToCalc('/')">/</button>
+                    <button onclick="appendToCalc('*')">*</button>
+                    <button onclick="deleteLast()">⌫</button>
+                    
+                    <button onclick="appendToCalc('7')">7</button>
+                    <button onclick="appendToCalc('8')">8</button>
+                    <button onclick="appendToCalc('9')">9</button>
+                    <button onclick="appendToCalc('-')">-</button>
+                    
+                    <button onclick="appendToCalc('4')">4</button>
+                    <button onclick="appendToCalc('5')">5</button>
+                    <button onclick="appendToCalc('6')">6</button>
+                    <button onclick="appendToCalc('+')">+</button>
+                    
+                    <button onclick="appendToCalc('1')">1</button>
+                    <button onclick="appendToCalc('2')">2</button>
+                    <button onclick="appendToCalc('3')">3</button>
+                    <button onclick="calculate()" style="grid-row: span 2; background: #28a745;">=</button>
+                    
+                    <button onclick="appendToCalc('0')" style="grid-column: span 2;">0</button>
+                    <button onclick="appendToCalc('.')">.</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="interview-section">
+            <h2>Interview Questions</h2>
+            <div class="question">
+                <h3>1. Basic: == aur === mein kya difference hai?</h3>
+                <p>Answer: == type coercion karta hai, === strict comparison karta hai bina type conversion ke.</p>
+            </div>
+            <div class="question">
+                <h3>2. Basic: Modulus operator (%) kya karta hai?</h3>
+                <p>Answer: Division ka remainder return karta hai. Example: 7 % 3 = 1.</p>
+            </div>
+            <div class="question">
+                <h3>3. Intermediate: 2 + 3 * 4 ka result kya hoga aur kyun?</h3>
+                <p>Answer: 14, kyunki multiplication ka precedence addition se higher hai. Pehle 3*4=12, phir 2+12=14.</p>
+            </div>
+            <div class="question">
+                <h3>4. Intermediate: Logical operators mein short-circuit evaluation kya hai?</h3>
+                <p>Answer: && mein agar pehla false hai to dusra check nahi karta, || mein agar pehla true hai to dusra check nahi karta.</p>
+            </div>
+            <div class="question">
+                <h3>5. Advanced: typeof null kya return karta hai aur yeh bug kyun hai?</h3>
+                <p>Answer: "object" return karta hai. Yeh JavaScript ka historical bug hai jo backward compatibility ke liye fix nahi kiya gaya.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        let calcDisplay = '0';
+        let shouldResetDisplay = false;
+
+        function demonstrateOperator(op) {
+            const examples = {
+                '+': { expr: '5 + 3', result: 5 + 3, desc: 'Addition - numbers ko add karta hai' },
+                '-': { expr: '5 - 3', result: 5 - 3, desc: 'Subtraction - pehle number se dusra subtract karta hai' },
+                '*': { expr: '5 * 3', result: 5 * 3, desc: 'Multiplication - numbers ko multiply karta hai' },
+                '/': { expr: '6 / 3', result: 6 / 3, desc: 'Division - pehle number ko dusre se divide karta hai' },
+                '%': { expr: '5 % 3', result: 5 % 3, desc: 'Modulus - division ka remainder return karta hai' },
+                '**': { expr: '2 ** 3', result: 2 ** 3, desc: 'Exponentiation - power calculate karta hai' }
+            };
+            
+            const example = examples[op];
+            document.getElementById('arithmetic-result').innerHTML = `
+                <h4>${example.expr} = ${example.result}</h4>
+                <p><strong>Explanation:</strong> ${example.desc}</p>
+                <p><em>Console mein bhi result dekho!</em>
+            `;
+            
+            console.log(`${example.expr} = ${example.result}`);
+        }
+
+        function testAssignment(op) {
+            let value = parseInt(document.getElementById('assign-value').value) || 10;
+            const original = value;
+            
+            switch(op) {
+                case '=':
+                    value = 20;
+                    break;
+                case '+=':
+                    value += 5;
+                    break;
+                case '-=':
+                    value -= 3;
+                    break;
+                case '*=':
+                    value *= 2;
+                    break;
+                case '/=':
+                    value /= 2;
+                    break;
+            }
+            
+            document.getElementById('assignment-result').innerHTML = `
+                <h4>Assignment Result:</h4>
+                <p><strong>Original:</strong> ${original}</p>
+                <p><strong>Operation:</strong> value ${op} ${op === '=' ? '20' : op.charAt(0) === '+' ? '5' : op.charAt(0) === '-' ? '3' : '2'}</p>
+                <p><strong>Result:</strong> ${value}</p>
+            `;
+        }
+
+        function testComparison() {
+            const val1 = document.getElementById('comp-val1').value;
+            const val2 = document.getElementById('comp-val2').value;
+            const operator = document.getElementById('comp-operator').value;
+            
+            let result;
+            let explanation = '';
+            
+            // Convert values for comparison
+            const num1 = isNaN(val1) ? val1 : Number(val1);
+            const num2 = isNaN(val2) ? val2 : Number(val2);
+            
+            switch(operator) {
+                case '==':
+                    result = num1 == num2;
+                    explanation = 'Type coercion ke saath comparison';
+                    break;
+                case '===':
+                    result = val1 === val2;
+                    explanation = 'Strict comparison (type aur value dono check)';
+                    break;
+                case '!=':
+                    result = num1 != num2;
+                    explanation = 'Not equal with type coercion';
+                    break;
+                case '!==':
+                    result = val1 !== val2;
+                    explanation = 'Strict not equal';
+                    break;
+                case '>':
+                    result = num1 > num2;
+                    explanation = 'Greater than comparison';
+                    break;
+                case '<':
+                    result = num1 < num2;
+                    explanation = 'Less than comparison';
+                    break;
+                case '>=':
+                    result = num1 >= num2;
+                    explanation = 'Greater than or equal';
+                    break;
+                case '<=':
+                    result = num1 <= num2;
+                    explanation = 'Less than or equal';
+                    break;
+            }
+            
+            document.getElementById('comparison-result').innerHTML = `
+                <h4>Comparison Result:</h4>
+                <p><strong>Expression:</strong> ${val1} ${operator} ${val2}</p>
+                <p><strong>Result:</strong> ${result}</p>
+                <p><strong>Explanation:</strong> ${explanation}</p>
+            `;
+        }
+
+        function testLogical(op) {
+            const a = document.getElementById('logical-a').value === 'true';
+            const b = document.getElementById('logical-b').value === 'true';
+            
+            let result, expression, explanation;
+            
+            switch(op) {
+                case '&&':
+                    result = a && b;
+                    expression = `${a} && ${b}`;
+                    explanation = 'AND - dono true hone chahiye';
+                    break;
+                case '||':
+                    result = a || b;
+                    expression = `${a} || ${b}`;
+                    explanation = 'OR - koi ek true ho to result true';
+                    break;
+                case '!':
+                    result = !a;
+                    expression = `!${a}`;
+                    explanation = 'NOT - opposite value return karta hai';
+                    break;
+            }
+            
+            document.getElementById('logical-result').innerHTML = `
+                <h4>Logical Result:</h4>
+                <p><strong>Expression:</strong> ${expression}</p>
+                <p><strong>Result:</strong> ${result}</p>
+                <p><strong>Explanation:</strong> ${explanation}</p>
+            `;
+        }
+
+        function testPrecedence(expr) {
+            const result = eval(expr);
+            document.getElementById('precedence-result').innerHTML = `
+                <h4>Precedence Example:</h4>
+                <p><strong>Expression:</strong> ${expr}</p>
+                <p><strong>Result:</strong> ${result}</p>
+                <p><em>Operator precedence ke according calculate hua!</em></p>
+            `;
+        }
+
+        // Calculator functions
+        function appendToCalc(value) {
+            if (shouldResetDisplay) {
+                calcDisplay = '';
+                shouldResetDisplay = false;
+            }
+            
+            if (calcDisplay === '0' && value !== '.') {
+                calcDisplay = value;
+            } else {
+                calcDisplay += value;
+            }
+            
+            document.getElementById('calc-display').textContent = calcDisplay;
+        }
+
+        function clearCalc() {
+            calcDisplay = '0';
+            document.getElementById('calc-display').textContent = calcDisplay;
+        }
+
+        function deleteLast() {
+            if (calcDisplay.length > 1) {
+                calcDisplay = calcDisplay.slice(0, -1);
+            } else {
+                calcDisplay = '0';
+            }
+            document.getElementById('calc-display').textContent = calcDisplay;
+        }
+
+        function calculate() {
+            try {
+                const result = eval(calcDisplay);
+                calcDisplay = result.toString();
+                document.getElementById('calc-display').textContent = calcDisplay;
+                shouldResetDisplay = true;
+            } catch (error) {
+                document.getElementById('calc-display').textContent = 'Error';
+                calcDisplay = '0';
+            }
+        }
+
+        // Advanced arithmetic functions
+        function demonstrateUnaryOperators() {
+            const output = document.getElementById('advanced-arithmetic-result');
+            
+            output.innerHTML = `
+                <h4>🔢 Unary Operators Deep Dive:</h4>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; font-family: monospace;">
+                    <p><strong>Unary Plus (+):</strong></p>
+                    <p>+"5" = ${+"5"} (converts string to number)</p>
+                    <p>+true = ${+true} (converts boolean to number)</p>
+                    <p>+null = ${+null} (converts null to 0)</p>
+                    <p>+undefined = ${+undefined} (converts to NaN)</p>
+                    <br>
+                    <p><strong>Unary Minus (-):</strong></p>
+                    <p>-"5" = ${-"5"} (converts and negates)</p>
+                    <p>-true = ${-true} (converts boolean and negates)</p>
+                    <p>-(-10) = ${-(-10)} (double negation)</p>
+                    <br>
+                    <p><strong>typeof Operator:</strong></p>
+                    <p>typeof 42 = "${typeof 42}"</p>
+                    <p>typeof "hello" = "${typeof "hello"}"</p>
+                    <p>typeof undefined = "${typeof undefined}"</p>
+                </div>
+            `;
+            
+            console.log("=== Unary Operators Demo ===");
+            console.log("Unary plus examples:", +"5", +true, +null, +undefined);
+            console.log("Unary minus examples:", -"5", -true, -(-10));
+        }
+
+        function demonstrateIncrementDecrement() {
+            const output = document.getElementById('advanced-arithmetic-result');
+            
+            let a = 5, b = 5, c = 5, d = 5;
+            
+            output.innerHTML = `
+                <h4>⬆️⬇️ Increment/Decrement Operators:</h4>
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 5px;">
+                    <p><strong>Pre-increment (++a):</strong></p>
+                    <p>a = 5; ++a = ${++a} (a is now ${a})</p>
+                    <p><em>Increment first, then return value</em></p>
+                    <br>
+                    <p><strong>Post-increment (b++):</strong></p>
+                    <p>b = 5; b++ = ${b++} (b is now ${b})</p>
+                    <p><em>Return value first, then increment</em></p>
+                    <br>
+                    <p><strong>Pre-decrement (--c):</strong></p>
+                    <p>c = 5; --c = ${--c} (c is now ${c})</p>
+                    <p><em>Decrement first, then return value</em></p>
+                    <br>
+                    <p><strong>Post-decrement (d--):</strong></p>
+                    <p>d = 5; d-- = ${d--} (d is now ${d})</p>
+                    <p><em>Return value first, then decrement</em></p>
+                </div>
+                <div style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                    <p><strong>⚠️ Important:</strong> Pre/post difference matters in expressions!</p>
+                    <p>let x = 5; console.log(x++ + ++x); // 5 + 7 = 12</p>
+                </div>
+            `;
+        }
+
+        function demonstrateSpecialCases() {
+            const output = document.getElementById('advanced-arithmetic-result');
+            
+            output.innerHTML = `
+                <h4>⚠️ Special Cases & Edge Cases:</h4>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 5px;">
+                    <p><strong>Division by Zero:</strong></p>
+                    <p>5 / 0 = ${5 / 0} (Positive Infinity)</p>
+                    <p>-5 / 0 = ${-5 / 0} (Negative Infinity)</p>
+                    <p>0 / 0 = ${0 / 0} (Not a Number)</p>
+                    <br>
+                    <p><strong>NaN Behavior:</strong></p>
+                    <p>NaN + 5 = ${NaN + 5}</p>
+                    <p>NaN === NaN = ${NaN === NaN} (always false!)</p>
+                    <p>isNaN("hello") = ${isNaN("hello")}</p>
+                    <p>Number.isNaN("hello") = ${Number.isNaN("hello")}</p>
+                    <br>
+                    <p><strong>Infinity Operations:</strong></p>
+                    <p>Infinity + 1 = ${Infinity + 1}</p>
+                    <p>Infinity - Infinity = ${Infinity - Infinity}</p>
+                    <p>Infinity * 0 = ${Infinity * 0}</p>
+                    <br>
+                    <p><strong>Type Coercion Surprises:</strong></p>
+                    <p>"5" - "2" = ${"5" - "2"} (converts to numbers)</p>
+                    <p>"5" + "2" = ${"5" + "2"} (string concatenation)</p>
+                    <p>true + true = ${true + true} (booleans to numbers)</p>
+                    <p>[] + [] = "${[] + []}" (empty string)</p>
+                    <p>[] + {} = "${[] + {}}" (object string)</p>
+                </div>
+            `;
+            
+            console.log("=== Special Cases Demo ===");
+            console.log("Division by zero:", 5/0, -5/0, 0/0);
+            console.log("NaN checks:", NaN === NaN, isNaN("hello"), Number.isNaN("hello"));
+            console.log("Type coercion:", "5" - "2", "5" + "2", true + true);
+        }
+
+        function demonstrateMathObject() {
+            const output = document.getElementById('advanced-arithmetic-result');
+            
+            const randomNum = Math.random() * 100;
+            
+            output.innerHTML = `
+                <h4>🧮 Math Object Methods:</h4>
+                <div style="background: #d4edda; padding: 15px; border-radius: 5px;">
+                    <p><strong>Rounding Methods:</strong></p>
+                    <p>Math.round(4.7) = ${Math.round(4.7)}</p>
+                    <p>Math.floor(4.7) = ${Math.floor(4.7)}</p>
+                    <p>Math.ceil(4.1) = ${Math.ceil(4.1)}</p>
+                    <p>Math.trunc(4.9) = ${Math.trunc(4.9)}</p>
+                    <br>
+                    <p><strong>Min/Max:</strong></p>
+                    <p>Math.min(5, 3, 9, 1) = ${Math.min(5, 3, 9, 1)}</p>
+                    <p>Math.max(5, 3, 9, 1) = ${Math.max(5, 3, 9, 1)}</p>
+                    <br>
+                    <p><strong>Power & Roots:</strong></p>
+                    <p>Math.pow(2, 3) = ${Math.pow(2, 3)} (same as 2 ** 3)</p>
+                    <p>Math.sqrt(16) = ${Math.sqrt(16)}</p>
+                    <p>Math.cbrt(27) = ${Math.cbrt(27)} (cube root)</p>
+                    <br>
+                    <p><strong>Random & Constants:</strong></p>
+                    <p>Math.random() = ${randomNum.toFixed(4)} (0 to 1)</p>
+                    <p>Math.PI = ${Math.PI.toFixed(6)}</p>
+                    <p>Math.E = ${Math.E.toFixed(6)}</p>
+                    <br>
+                    <p><strong>Trigonometry:</strong></p>
+                    <p>Math.sin(Math.PI/2) = ${Math.sin(Math.PI/2).toFixed(4)}</p>
+                    <p>Math.cos(0) = ${Math.cos(0)}</p>
+                </div>
+            `;
+        }
+
+        function analyzePrecedence() {
+            const expression = document.getElementById('precedence-expression').value;
+            const output = document.getElementById('precedence-analysis');
+            
+            if (!expression.trim()) {
+                output.innerHTML = '<p style="color: #dc3545;">Please enter an expression!</p>';
+                return;
+            }
+            
+            try {
+                const result = eval(expression);
+                
+                // Analyze the expression
+                let analysis = '';
+                if (expression.includes('**')) {
+                    analysis += '1. Exponentiation (**) - Highest precedence, right-to-left<br>';
+                }
+                if (expression.includes('*') || expression.includes('/') || expression.includes('%')) {
+                    analysis += '2. Multiplication (*), Division (/), Modulus (%) - High precedence, left-to-right<br>';
+                }
+                if (expression.includes('+') || expression.includes('-')) {
+                    analysis += '3. Addition (+), Subtraction (-) - Lower precedence, left-to-right<br>';
+                }
+                if (expression.includes('(')) {
+                    analysis += '0. Parentheses () - Override natural precedence<br>';
+                }
+                
+                output.innerHTML = `
+                    <div style="background: #e7f3ff; padding: 15px; border-radius: 5px; margin-top: 10px;">
+                        <h4>🔍 Expression Analysis:</h4>
+                        <p><strong>Expression:</strong> <code>${expression}</code></p>
+                        <p><strong>Result:</strong> ${result}</p>
+                        <br>
+                        <p><strong>Execution Order:</strong></p>
+                        <div style="font-family: monospace; background: #f8f9fa; padding: 10px; border-radius: 3px;">
+                            ${analysis || 'Simple expression with single operator'}
+                        </div>
+                        <br>
+                        <p><strong>💡 Tip:</strong> Use parentheses to make precedence explicit!</p>
+                        <p><strong>Example:</strong> ${expression} could be written as (${expression}) for clarity</p>
+                    </div>
+                `;
+                
+                console.log(`Expression: ${expression} = ${result}`);
+                
+            } catch (error) {
+                output.innerHTML = `
+                    <div style="background: #f8d7da; padding: 15px; border-radius: 5px; margin-top: 10px;">
+                        <h4>❌ Invalid Expression</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p><strong>Tip:</strong> Check for syntax errors, missing operators, or invalid characters</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Day 3: Operators & Expressions loaded!');
+            console.log('🧮 Try the interactive calculator and operator demos!');
+            console.log('💡 Tip: Check the precedence analyzer for complex expressions!');
+        });
+    </script>
+</body>
+</html>

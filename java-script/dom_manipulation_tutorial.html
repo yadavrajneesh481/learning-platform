@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Manipulation - Day 18</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .home-link:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        .home-link:focus {
+            outline: 2px solid #ffc107;
+            outline-offset: 2px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .explanation {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .demo-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #667eea;
+        }
+
+        .demo-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        input[type="text"] {
+            padding: 12px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-size: 1em;
+            width: 250px;
+            margin: 5px;
+        }
+
+        .dom-tree {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+            font-family: monospace;
+            margin: 20px 0;
+        }
+
+        .tree-node {
+            margin-left: 20px;
+            padding: 8px;
+            border-left: 2px solid #ccc;
+            margin-top: 5px;
+            transition: all 0.3s;
+        }
+
+        .tree-node:hover {
+            background: #f0f0f0;
+            border-left-color: #667eea;
+        }
+
+        .highlight {
+            background: yellow;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .quote-generator {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .quote-text {
+            font-size: 1.5em;
+            font-style: italic;
+            color: #333;
+            margin: 20px 0;
+            min-height: 60px;
+        }
+
+        .quote-author {
+            font-size: 1.2em;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .interview-section {
+            background: #f8f9ff;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .question:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .question h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        #demo-element {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            transition: all 0.3s;
+        }
+
+        .created-element {
+            background: #4caf50;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            animation: slideIn 0.5s;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            input[type="text"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        <header>
+            <h1>🌐 DOM Manipulation - Part 1</h1>
+            <p>Day 18: Interactive Learning Experience</p>
+        </header>
+
+        <div class="content">
+            <!-- DOM Tree Overview -->
+            <div class="section">
+                <h2>📊 DOM Tree Overview</h2>
+                <div class="explanation">
+                    <strong>DOM (Document Object Model)</strong> ek tree structure hai jo aapke HTML document ko represent karta hai. 
+                    Jab browser aapka webpage load karta hai, toh woh HTML ko ek tree mein convert kar deta hai jahan har element ek 
+                    <strong>node</strong> hota hai. Is tree ke through hum JavaScript se HTML elements ko access aur modify kar sakte hain.
+                    <br><br>
+                    <span class="badge">Document</span> → <span class="badge">HTML</span> → <span class="badge">Body</span> → <span class="badge">Elements</span>
+                </div>
+
+                <div class="demo-box">
+                    <div class="demo-title">Interactive DOM Tree Visualization</div>
+                    <div class="dom-tree" id="domTree">
+                        <div><strong>📄 document</strong></div>
+                        <div class="tree-node">
+                            <strong>&lt;html&gt;</strong>
+                            <div class="tree-node">
+                                <strong>&lt;head&gt;</strong>
+                                <div class="tree-node">&lt;title&gt; My Page &lt;/title&gt;</div>
+                            </div>
+                            <div class="tree-node">
+                                <strong>&lt;body&gt;</strong>
+                                <div class="tree-node">&lt;h1&gt; Hello World &lt;/h1&gt;</div>
+                                <div class="tree-node">&lt;p&gt; This is a paragraph &lt;/p&gt;</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Selecting Elements -->
+            <div class="section">
+                <h2>🎯 Selecting Elements</h2>
+                <div class="explanation">
+                    JavaScript mein elements ko select karne ke liye mainly do methods use hote hain:
+                    <br><br>
+                    <strong>1. querySelector:</strong> CSS selector use karke kisi bhi element ko select karta hai. Yeh pehla matching element return karta hai.
+                    <br>
+                    <strong>2. getElementById:</strong> Element ko uske ID se select karta hai. Yeh bahut fast hai aur specific element ke liye best hai.
+                    <br><br>
+                    Bonus: <strong>querySelectorAll</strong> sabhi matching elements ko select karta hai (NodeList return karta hai).
+                </div>
+
+                <div class="code-block">
+// querySelector - CSS selector use karta hai<br>
+const element = document.querySelector('.myClass');<br>
+const button = document.querySelector('#myButton');<br>
+<br>
+// getElementById - ID se select karta hai<br>
+const heading = document.getElementById('mainHeading');<br>
+<br>
+// querySelectorAll - sabhi matching elements<br>
+const allButtons = document.querySelectorAll('button');
+                </div>
+
+                <div class="demo-box">
+                    <div class="demo-title">Live Demo: Element Selection</div>
+                    <div id="demo-element">
+                        Main ek demo element hoon! 🎨
+                    </div>
+                    <button onclick="selectAndHighlight()">Select & Highlight Element</button>
+                    <button onclick="resetElement()">Reset</button>
+                    <p id="selection-output" style="margin-top: 15px; color: #667eea; font-weight: bold;"></p>
+                </div>
+            </div>
+
+            <!-- Modifying Content -->
+            <div class="section">
+                <h2>✏️ Modifying Content, Attributes & Styles</h2>
+                <div class="explanation">
+                    Jab aap element select kar lete ho, toh usko modify karna bahut easy hai:
+                    <br><br>
+                    <strong>Content:</strong> <code>textContent</code> aur <code>innerHTML</code> se text ya HTML change kar sakte hain.
+                    <br>
+                    <strong>Attributes:</strong> <code>setAttribute()</code> aur <code>getAttribute()</code> se attributes manage kar sakte hain.
+                    <br>
+                    <strong>Styles:</strong> <code>style</code> property se directly CSS properties change kar sakte hain.
+                </div>
+
+                <div class="code-block">
+// Content change karna<br>
+element.textContent = 'New Text';<br>
+element.innerHTML = '&lt;strong&gt;Bold Text&lt;/strong&gt;';<br>
+<br>
+// Attributes change karna<br>
+element.setAttribute('class', 'newClass');<br>
+element.getAttribute('id');<br>
+<br>
+// Styles change karna<br>
+element.style.color = 'blue';<br>
+element.style.backgroundColor = '#f0f0f0';
+                </div>
+
+                <div class="demo-box">
+                    <div class="demo-title">Live Demo: Content Modification</div>
+                    <div id="modify-demo" style="padding: 20px; background: white; border-radius: 10px; margin: 15px 0;">
+                        Mujhe modify karo! 🔧
+                    </div>
+                    <input type="text" id="new-text" placeholder="Naya text enter karo">
+                    <button onclick="changeContent()">Change Text</button>
+                    <button onclick="changeColor()">Change Color</button>
+                    <button onclick="addBorder()">Add Border</button>
+                    <button onclick="resetDemo()">Reset</button>
+                </div>
+            </div>
+
+            <!-- Creating & Removing Elements -->
+            <div class="section">
+                <h2>➕➖ Creating & Removing Elements</h2>
+                <div class="explanation">
+                    JavaScript se aap dynamically elements create aur remove kar sakte ho:
+                    <br><br>
+                    <strong>Creating:</strong> <code>createElement()</code> se naya element banate hain, phir <code>appendChild()</code> ya <code>append()</code> se DOM mein add karte hain.
+                    <br>
+                    <strong>Removing:</strong> <code>remove()</code> ya <code>removeChild()</code> se elements ko DOM se hata sakte hain.
+                </div>
+
+                <div class="code-block">
+// Naya element create karna<br>
+const newDiv = document.createElement('div');<br>
+newDiv.textContent = 'I am new!';<br>
+newDiv.className = 'myClass';<br>
+<br>
+// DOM mein add karna<br>
+document.body.appendChild(newDiv);<br>
+<br>
+// Element remove karna<br>
+newDiv.remove();
+                </div>
+
+                <div class="demo-box">
+                    <div class="demo-title">Live Demo: Dynamic Elements</div>
+                    <div id="element-container" style="min-height: 100px;">
+                        <!-- Dynamic elements yahan add honge -->
+                    </div>
+                    <button onclick="addElement()">Add Element ➕</button>
+                    <button onclick="removeLastElement()">Remove Last ➖</button>
+                    <button onclick="clearAll()">Clear All 🗑️</button>
+                </div>
+            </div>
+
+            <!-- Quote Generator -->
+            <div class="section">
+                <h2>💬 Practice: Dynamic Quote Generator</h2>
+                <div class="explanation">
+                    Ab sab concepts ko use karke ek real-world project banate hain! Yeh quote generator DOM manipulation ke sabhi concepts use karta hai.
+                </div>
+
+                <div class="quote-generator">
+                    <h2 style="color: #333; margin-bottom: 20px;">✨ Inspirational Quote Generator ✨</h2>
+                    <div class="quote-text" id="quote-text">
+                        Click the button to generate an inspiring quote!
+                    </div>
+                    <div class="quote-author" id="quote-author"></div>
+                    <button onclick="generateQuote()" style="font-size: 1.1em; padding: 15px 40px;">
+                        Generate New Quote 🎲
+                    </button>
+                    <button onclick="shareQuote()" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                        Share Quote 📤
+                    </button>
+                </div>
+            </div>
+
+            <!-- Interview Questions -->
+            <div class="interview-section">
+                <h2 style="color: #667eea; margin-bottom: 30px;">🎤 Interview Questions</h2>
+
+                <div class="question" onclick="toggleAnswer(1)">
+                    <h3>Q1. What is the DOM and why is it important?</h3>
+                    <div class="answer" id="answer1">
+                        <strong>Answer:</strong> DOM (Document Object Model) ek programming interface hai jo HTML aur XML documents ko represent karta hai. 
+                        Yeh ek tree structure hai jahan har element, attribute, aur text ek node hota hai. 
+                        <br><br>
+                        <strong>Importance:</strong>
+                        <br>• JavaScript se HTML ko dynamically manipulate kar sakte hain
+                        <br>• User interactions handle kar sakte hain
+                        <br>• Content ko runtime mein change kar sakte hain
+                        <br>• Dynamic aur interactive web applications bana sakte hain
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(2)">
+                    <h3>Q2. querySelector vs getElementById - Kaunsa fast hai aur kyun?</h3>
+                    <div class="answer" id="answer2">
+                        <strong>Answer:</strong> <code>getElementById</code> <code>querySelector</code> se fast hai.
+                        <br><br>
+                        <strong>Reason:</strong>
+                        <br>• getElementById directly ID-based lookup karta hai (O(1) complexity)
+                        <br>• querySelector ko CSS selector parse karna padta hai, phir search karna padta hai
+                        <br>• getElementById only IDs ke liye kaam karta hai (limitation)
+                        <br>• querySelector zyada flexible hai - kisi bhi CSS selector use kar sakte ho
+                        <br><br>
+                        <strong>Best Practice:</strong> Agar sirf ID se select karna hai toh getElementById use karo, complex selectors ke liye querySelector.
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(3)">
+                    <h3>Q3. textContent vs innerHTML mein kya difference hai?</h3>
+                    <div class="answer" id="answer3">
+                        <strong>Answer:</strong>
+                        <br><br>
+                        <strong>textContent:</strong>
+                        <br>• Sirf plain text return/set karta hai
+                        <br>• HTML tags ko text ki tarah treat karta hai
+                        <br>• Fast aur secure hai
+                        <br>• XSS attacks se safe hai
+                        <br><br>
+                        <strong>innerHTML:</strong>
+                        <br>• HTML markup ko parse karta hai
+                        <br>• HTML tags ko render karta hai
+                        <br>• Slower hai kyunki parsing hoti hai
+                        <br>• Security risk hai agar user input directly use kiya
+                        <br><br>
+                        <strong>Example:</strong> element.innerHTML = '&lt;b&gt;Bold&lt;/b&gt;' → Bold text render hoga
+                        <br>element.textContent = '&lt;b&gt;Bold&lt;/b&gt;' → &lt;b&gt;Bold&lt;/b&gt; as text dikhega
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(4)">
+                    <h3>Q4. appendChild vs append mein kya difference hai?</h3>
+                    <div class="answer" id="answer4">
+                        <strong>Answer:</strong>
+                        <br><br>
+                        <strong>appendChild:</strong>
+                        <br>• Purana method hai (DOM Level 1)
+                        <br>• Sirf ek Node object add kar sakta hai
+                        <br>• Added node ko return karta hai
+                        <br>• String directly pass nahi kar sakte
+                        <br><br>
+                        <strong>append:</strong>
+                        <br>• Naya method hai (DOM Level 4)
+                        <br>• Multiple nodes ya strings add kar sakte hain
+                        <br>• Kuch return nahi karta (undefined)
+                        <br>• String directly pass kar sakte ho
+                        <br><br>
+                        <strong>Example:</strong>
+                        <br>parent.appendChild(child) → works
+                        <br>parent.append(child1, child2, 'text') → works
+                        <br>parent.appendChild('text') → error!
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(5)">
+                    <h3>Q5. How can you prevent XSS attacks when manipulating DOM?</h3>
+                    <div class="answer" id="answer5">
+                        <strong>Answer:</strong> XSS (Cross-Site Scripting) attacks ko prevent karne ke liye:
+                        <br><br>
+                        <strong>Best Practices:</strong>
+                        <br>• textContent use karo innerHTML ki jagah (jab possible ho)
+                        <br>• User input ko sanitize karo before adding to DOM
+                        <br>• Never use eval() with user input
+                        <br>• Use setAttribute() instead of directly setting HTML attributes
+                        <br>• Content Security Policy (CSP) headers implement karo
+                        <br>• Modern frameworks use karo jo automatic escaping provide karte hain
+                        <br><br>
+                        <strong>Example:</strong>
+                        <br>❌ element.innerHTML = userInput; // Dangerous!
+                        <br>✅ element.textContent = userInput; // Safe
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(6)">
+                    <h3>Q6. Explain Event Delegation in context of DOM manipulation</h3>
+                    <div class="answer" id="answer6">
+                        <strong>Answer:</strong> Event Delegation ek technique hai jahan aap parent element pe event listener lagate ho, 
+                        child elements pe individually listeners lagane ki bajaye.
+                        <br><br>
+                        <strong>Advantages:</strong>
+                        <br>• Memory efficient - kam event listeners
+                        <br>• Dynamic elements automatically handle ho jate hain
+                        <br>• Better performance for large lists
+                        <br><br>
+                        <strong>How it works:</strong> Events "bubble up" karte hain DOM tree mein, toh parent pe listener lagake 
+                        child events catch kar sakte ho using event.target.
+                        <br><br>
+                        <strong>Example:</strong>
+                        <br>parent.addEventListener('click', (e) => {
+                        <br>&nbsp;&nbsp;if(e.target.matches('.delete-btn')) {
+                        <br>&nbsp;&nbsp;&nbsp;&nbsp;// Handle delete
+                        <br>&nbsp;&nbsp;}
+                        <br>});
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer(7)">
+                    <h3>Q7. What are Virtual DOM and how does it relate to actual DOM?</h3>
+                    <div class="answer" id="answer7">
+                        <strong>Answer:</strong> Virtual DOM ek lightweight JavaScript representation hai actual DOM ka.
+                        <br><br>
+                        <strong>Key Points:</strong>
+                        <br>• React aur Vue jaise frameworks Virtual DOM use karte hain
+                        <br>• Changes pehle Virtual DOM mein hote hain (fast)
+                        <br>• Phir diffing algorithm se actual DOM mein minimal changes apply hoti hain
+                        <br>• Direct DOM manipulation se zyada efficient hai
+                        <br><br>
+                        <strong>Why it matters:</strong>
+                        <br>• DOM manipulation expensive hai (slow)
+                        <br>• Virtual DOM batching aur optimization allow karta hai
+                        <br>• Better performance in complex applications
+                        <br><br>
+                        <strong>Process:</strong>
+                        <br>1. State change hota hai
+                        <br>2. New Virtual DOM create hota hai
+                        <br>3. Old aur New Virtual DOM compare hote hain
+                        <br>4. Sirf differences actual DOM mein update hoti hain
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quote Generator Data
+        const quotes = [
+            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+            { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
+            { text: "Life is 10% what happens to you and 90% how you react to it.", author: "Charles R. Swindoll" },
+            { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+            { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+            { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+            { text: "The only impossible journey is the one you never begin.", author: "Tony Robbins" },
+            { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" }
+        ];
+
+        let elementCounter = 0;
+
+        // Select and Highlight Demo
+        function selectAndHighlight() {
+            const element = document.querySelector('#demo-element');
+            element.style.transform = 'scale(1.05)';
+            element.style.boxShadow = '0 10px 30px rgba(102, 126, 234, 0.5)';
+            document.getElementById('selection-output').textContent = '✅ Element successfully selected using querySelector!';
+        }
+
+        function resetElement() {
+            const element = document.querySelector('#demo-element');
+            element.style.transform = 'scale(1)';
+            element.style.boxShadow = 'none';
+            document.getElementById('selection-output').textContent = '';
+        }
+
+        // Content Modification Demo
+        function changeContent() {
+            const newText = document.getElementById('new-text').value;
+            const element = document.getElementById('modify-demo');
+            if(newText) {
+                element.textContent = newText;
+            } else {
+                alert('Pehle kuch text enter karo!');
+            }
+        }
+
+        function changeColor() {
+            const element = document.getElementById('modify-demo');
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            element.style.backgroundColor = randomColor;
+        }
+
+        function addBorder() {
+            const element = document.getElementById('modify-demo');
+            element.style.border = '5px solid #667eea';
+            element.style.borderStyle = 'dashed';
+        }
+
+        function resetDemo() {
+            const element = document.getElementById('modify-demo');
+            element.textContent = 'Mujhe modify karo! 🔧';
+            element.style.backgroundColor = 'white';
+            element.style.border = 'none';
+            document.getElementById('new-text').value = '';
+        }
+
+        // Creating and Removing Elements
+        function addElement() {
+            elementCounter++;
+            const container = document.getElementById('element-container');
+            const newElement = document.createElement('div');
+            newElement.className = 'created-element';
+            newElement.textContent = `Element #${elementCounter} - Main dynamically create hua hoon! 🎉`;
+            newElement.id = `element-${elementCounter}`;
+            container.appendChild(newElement);
+        }
+
+        function removeLastElement() {
+            const container = document.getElementById('element-container');
+            if(container.lastChild) {
+                container.removeChild(container.lastChild);
+            } else {
+                alert('Koi element nahi hai remove karne ke liye!');
+            }
+        }
+
+        function clearAll() {
+            const container = document.getElementById('element-container');
+            container.innerHTML = '';
+            elementCounter = 0;
+        }
+
+        // Quote Generator
+        function generateQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            const quote = quotes[randomIndex];
+            
+            const quoteText = document.getElementById('quote-text');
+            const quoteAuthor = document.getElementById('quote-author');
+            
+            // Animation effect
+            quoteText.style.opacity = '0';
+            quoteAuthor.style.opacity = '0';
+            
+            setTimeout(() => {
+                quoteText.textContent = `"${quote.text}"`;
+                quoteAuthor.textContent = `— ${quote.author}`;
+                quoteText.style.opacity = '1';
+                quoteAuthor.style.opacity = '1';
+            }, 300);
+        }
+
+        function shareQuote() {
+            const quoteText = document.getElementById('quote-text').textContent;
+            const quoteAuthor = document.getElementById('quote-author').textContent;
+            
+            if(quoteText && quoteText !== 'Click the button to generate an inspiring quote!') {
+                const shareText = `${quoteText}\n${quoteAuthor}\n\nShared from DOM Manipulation Tutorial`;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        text: shareText
+                    });
+                } else {
+                    navigator.clipboard.writeText(shareText);
+                    alert('Quote copied to clipboard! 📋');
+                }
+            } else {
+                alert('Pehle ek quote generate karo!');
+            }
+        }
+
+        // Interview Questions Toggle
+        function toggleAnswer(num) {
+            const answer = document.getElementById(`answer${num}`);
+            answer.classList.toggle('show');
+        }
+
+        // Initialize with a quote
+        window.onload = function() {
+            generateQuote();
+        }
+    </script>
+</body>
+</html>

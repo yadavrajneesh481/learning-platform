@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern JavaScript Features - Day 11</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .home-link:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        .home-link:focus {
+            outline: 2px solid #ffc107;
+            outline-offset: 2px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+
+        .topic-section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .topic-title {
+            font-size: 1.8em;
+            color: #764ba2;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topic-title span {
+            font-size: 0.8em;
+        }
+
+        .explanation {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+
+        .code-label {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+
+        .demo-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #667eea;
+        }
+
+        .demo-title {
+            font-weight: bold;
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .output {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            min-height: 50px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .error-output {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            width: 100%;
+            max-width: 300px;
+            margin: 5px 0;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .interview-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 50px;
+            color: white;
+        }
+
+        .interview-title {
+            font-size: 2em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .question-card {
+            background: white;
+            color: #333;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .question-card:hover {
+            transform: translateX(5px);
+        }
+
+        .question-number {
+            background: #f5576c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .answer {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+
+        .easy { background: #4caf50; color: white; }
+        .medium { background: #ff9800; color: white; }
+        .hard { background: #f44336; color: white; }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .topic-title {
+                font-size: 1.4em;
+            }
+        }
+
+        .visual-demo {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .demo-card {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            transition: all 0.3s;
+        }
+
+        .demo-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .toggle-switch {
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            background: #ccc;
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #667eea;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(30px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        <h1>🚀 Modern JavaScript Features</h1>
+        <p class="subtitle">ES6+ Advanced Concepts - Day 11 Part 2</p>
+
+        <!-- Optional Chaining Section -->
+        <div class="topic-section">
+            <h2 class="topic-title">1️⃣ Optional Chaining (?.)</h2>
+            
+            <div class="explanation">
+                <p><strong>Kya hai ye?</strong> Optional chaining ek special operator hai jo safely nested properties ko access karne mein help karta hai. Agar koi property exist nahi karti, toh error throw karne ki jagah <span class="highlight">undefined</span> return karta hai.</p>
+                
+                <p style="margin-top: 15px;"><strong>Problem:</strong> Purane code mein agar aap deeply nested object access karte the, toh har level pe check karna padta tha ki wo exist karta hai ya nahi.</p>
+            </div>
+
+            <div class="code-block">
+                <div class="code-label">Old Way</div>
+                <pre>// Purana tarika - bahut lengthy
+const userName = user && user.profile && user.profile.name;
+
+// Agar koi bhi level undefined hai, error aa jaayegi
+const city = user.address.city; // ❌ Error if address is undefined</pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-label">New Way with ?.</div>
+                <pre>// Modern tarika - clean aur safe
+const userName = user?.profile?.name;
+const city = user?.address?.city; // ✅ Returns undefined safely
+
+// Arrays ke saath
+const firstItem = items?.[0];
+
+// Functions ke saath
+const result = obj.method?.(); // Call only if method exists</pre>
+            </div>
+
+            <div class="demo-box">
+                <div class="demo-title">🎯 Live Demo: Optional Chaining</div>
+                <button onclick="testOptionalChaining()">Test Optional Chaining</button>
+                <button onclick="testWithoutChaining()">Test Without Chaining</button>
+                <button onclick="testArrayChaining()">Test Array Chaining</button>
+                <div id="chaining-output" class="output"></div>
+            </div>
+        </div>
+
+        <!-- Nullish Coalescing Section -->
+        <div class="topic-section">
+            <h2 class="topic-title">2️⃣ Nullish Coalescing (??)</h2>
+            
+            <div class="explanation">
+                <p><strong>Kya hai ye?</strong> Nullish coalescing operator (<span class="highlight">??</span>) tab default value return karta hai jab left side <span class="highlight">null</span> ya <span class="highlight">undefined</span> ho. Ye <span class="highlight">||</span> operator se different hai!</p>
+                
+                <p style="margin-top: 15px;"><strong>|| vs ?? ka difference:</strong> <span class="highlight">||</span> falsy values (0, '', false) ke liye bhi default return karta hai, lekin <span class="highlight">??</span> sirf null/undefined ke liye default deta hai.</p>
+            </div>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>|| operator result</th>
+                        <th>?? operator result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>0 || 'default'</td>
+                        <td>'default' ❌</td>
+                        <td>0 ✅</td>
+                    </tr>
+                    <tr>
+                        <td>'' || 'default'</td>
+                        <td>'default' ❌</td>
+                        <td>'' ✅</td>
+                    </tr>
+                    <tr>
+                        <td>false || 'default'</td>
+                        <td>'default' ❌</td>
+                        <td>false ✅</td>
+                    </tr>
+                    <tr>
+                        <td>null ?? 'default'</td>
+                        <td>'default' ✅</td>
+                        <td>'default' ✅</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="code-block">
+                <div class="code-label">Examples</div>
+                <pre>// Real-world examples
+const port = process.env.PORT ?? 3000; // 0 bhi valid port hai!
+const username = user.name ?? 'Guest'; 
+const count = items.count ?? 0; // 0 ko preserve karta hai
+
+// Optional chaining ke saath combine
+const city = user?.address?.city ?? 'Unknown';
+
+// Multiple levels
+const value = a ?? b ?? c ?? 'default';</pre>
+            </div>
+
+            <div class="demo-box">
+                <div class="demo-title">🎯 Live Demo: Nullish Coalescing</div>
+                <div class="input-group">
+                    <input type="text" id="nullish-input" placeholder="Enter value (or leave empty)">
+                    <button onclick="testNullishCoalescing()">Test ??</button>
+                    <button onclick="testOrOperator()">Test ||</button>
+                </div>
+                <div id="nullish-output" class="output"></div>
+            </div>
+        </div>
+
+        <!-- Short-circuit Evaluation Section -->
+        <div class="topic-section">
+            <h2 class="topic-title">3️⃣ Short-circuit Evaluation</h2>
+            
+            <div class="explanation">
+                <p><strong>Kya hai ye?</strong> Short-circuit evaluation ek technique hai jahan logical operators (<span class="highlight">&&</span>, <span class="highlight">||</span>) apne operands ko conditionally evaluate karte hain. Matlab pura expression evaluate karne ki zarurat nahi padti!</p>
+                
+                <p style="margin-top: 15px;"><strong>Kaise kaam karta hai?</strong></p>
+                <ul style="margin-left: 30px; margin-top: 10px;">
+                    <li><strong>&&</strong> - Agar left side falsy hai, toh right side check hi nahi hota</li>
+                    <li><strong>||</strong> - Agar left side truthy hai, toh right side check hi nahi hota</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                <div class="code-label">Practical Examples</div>
+                <pre>// && operator - conditional execution
+isLoggedIn && showDashboard(); // Execute only if true
+
+// Conditional rendering (React style)
+{isLoading && <Spinner />}
+{error && <ErrorMessage />}
+
+// || operator - default values
+const name = userName || 'Anonymous';
+const config = userConfig || defaultConfig;
+
+// Preventing errors
+user && user.save(); // Call save only if user exists
+
+// Multiple conditions
+const canEdit = isAdmin && hasPermission && !isLocked;</pre>
+            </div>
+
+            <div class="demo-box">
+                <div class="demo-title">🎯 Live Demo: Short-circuit Evaluation</div>
+                <div class="visual-demo">
+                    <div class="demo-card">
+                        <h4>User Status</h4>
+                        <div class="toggle-switch" id="login-toggle" onclick="toggleLogin()"></div>
+                        <p style="margin-top: 10px;">Status: <span id="login-status">Logged Out</span></p>
+                    </div>
+                    <div class="demo-card">
+                        <h4>Admin Rights</h4>
+                        <div class="toggle-switch" id="admin-toggle" onclick="toggleAdmin()"></div>
+                        <p style="margin-top: 10px;">Role: <span id="admin-status">User</span></p>
+                    </div>
+                </div>
+                <button onclick="checkAccess()">Check Dashboard Access</button>
+                <div id="shortcircuit-output" class="output"></div>
+            </div>
+        </div>
+
+        <!-- Enhanced Object Literals Section -->
+        <div class="topic-section">
+            <h2 class="topic-title">4️⃣ Enhanced Object Literals</h2>
+            
+            <div class="explanation">
+                <p><strong>Kya hai ye?</strong> ES6 mein objects create karne ke naye aur concise tareeke aaye hain. Ye aapke code ko cleaner aur readable banate hain.</p>
+                
+                <p style="margin-top: 15px;"><strong>Key Features:</strong></p>
+                <ul style="margin-left: 30px; margin-top: 10px;">
+                    <li><strong>Property Shorthand:</strong> Agar key aur variable name same hai</li>
+                    <li><strong>Method Shorthand:</strong> Function keyword ki zarurat nahi</li>
+                    <li><strong>Computed Property Names:</strong> Dynamic keys square brackets mein</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                <div class="code-label">Old vs New</div>
+                <pre>// OLD WAY
+const name = 'John';
+const age = 25;
+
+const person = {
+    name: name,
+    age: age,
+    greet: function() {
+        return 'Hello!';
+    }
+};
+
+// NEW WAY - Enhanced Object Literals
+const person = {
+    name,  // Property shorthand
+    age,
+    greet() {  // Method shorthand
+        return 'Hello!';
+    },
+    ['prop_' + name]: true  // Computed property
+};</pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-label">Real Examples</div>
+                <pre>// API Response builder
+const createResponse = (data, status) => ({
+    data,  // Instead of data: data
+    status,
+    timestamp: Date.now(),
+    success: status === 200
+});
+
+// Dynamic keys
+const field = 'email';
+const user = {
+    name: 'Alice',
+    [field]: 'alice@example.com',  // Dynamic key
+    [`${field}Verified`]: true
+};
+
+// Method definitions
+const calculator = {
+    add(a, b) { return a + b; },
+    subtract(a, b) { return a - b; },
+    multiply(a, b) { return a * b; }
+};</pre>
+            </div>
+
+            <div class="demo-box">
+                <div class="demo-title">🎯 Live Demo: Enhanced Object Literals</div>
+                <div class="input-group">
+                    <input type="text" id="obj-name" placeholder="Name" value="John">
+                    <input type="number" id="obj-age" placeholder="Age" value="25">
+                    <input type="text" id="obj-city" placeholder="City" value="Mumbai">
+                </div>
+                <button onclick="createEnhancedObject()">Create Object (Enhanced)</button>
+                <button onclick="createOldObject()">Create Object (Old Way)</button>
+                <div id="object-output" class="output"></div>
+            </div>
+        </div>
+
+        <!-- Data Manipulation Practice Section -->
+        <div class="topic-section">
+            <h2 class="topic-title">5️⃣ Combined Practice: Data Manipulation</h2>
+            
+            <div class="explanation">
+                <p><strong>Real-world scenario:</strong> Yahan hum sab features ko combine karke ek realistic data manipulation example dekhenge. Ye aapko interview aur real projects mein bahut kaam aayega!</p>
+            </div>
+
+            <div class="code-block">
+                <div class="code-label">Complete Example</div>
+                <pre>// Sample data with nested structures
+const users = [
+    { id: 1, name: 'Raj', profile: { age: 25, city: 'Delhi' } },
+    { id: 2, name: 'Priya', profile: null },
+    { id: 3, name: 'Amit' }
+];
+
+// Data manipulation function using all modern features
+const processUsers = (users) => {
+    return users.map(user => ({
+        id: user.id,
+        name: user.name,
+        age: user?.profile?.age ?? 'Unknown',  // Optional chaining + Nullish
+        city: user?.profile?.city ?? 'Not specified',
+        isAdult: user?.profile?.age >= 18 && 'Yes' || 'No',  // Short-circuit
+        displayName: user.name?.toUpperCase?.() ?? 'ANONYMOUS'
+    }));
+};
+
+// Configuration with defaults
+const config = {
+    theme: userPrefs?.theme ?? 'light',
+    notifications: userPrefs?.notifications ?? true,
+    language: userPrefs?.language ?? 'en'
+};</pre>
+            </div>
+
+            <div class="demo-box">
+                <div class="demo-title">🎯 Interactive Data Processor</div>
+                <button onclick="processSampleData()">Process Sample Data</button>
+                <button onclick="testEdgeCases()">Test Edge Cases</button>
+                <button onclick="showRawData()">Show Raw Data</button>
+                <div id="data-output" class="output"></div>
+            </div>
+        </div>
+
+        <!-- Interview Questions Section -->
+        <div class="interview-section">
+            <h2 class="interview-title">📝 Interview Questions</h2>
+            
+            <div class="question-card" onclick="toggleAnswer(1)">
+                <span class="question-number">Q1</span>
+                <span class="difficulty easy">Easy</span>
+                <div class="question-text">Optional chaining (?.) aur logical AND (&&) operator mein kya difference hai? Example ke saath samjhaiye.</div>
+                <div class="answer" id="answer-1">
+                    <strong>Answer:</strong> Optional chaining safely nested properties access karta hai aur undefined return karta hai agar koi property missing ho. Logical AND operator truthy/falsy check karta hai.<br><br>
+                    <strong>Example:</strong><br>
+                    <code>user?.profile?.name</code> - Agar user ya profile undefined hai, toh undefined milega (no error)<br>
+                    <code>user && user.profile && user.profile.name</code> - Similar result, lekin lengthy aur 0, false ko bhi falsy treat karta hai<br><br>
+                    <strong>Key Difference:</strong> Optional chaining specifically null/undefined ke liye hai, while && operator all falsy values ko check karta hai.
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer(2)">
+                <span class="question-number">Q2</span>
+                <span class="difficulty medium">Medium</span>
+                <div class="question-text">Nullish coalescing (??) operator ko use karna kab preferable hai compared to OR (||) operator? Real-world use case bataiye.</div>
+                <div class="answer" id="answer-2">
+                    <strong>Answer:</strong> ?? operator tab use karna chahiye jab aapko 0, false, ya empty string ko valid values ke roop mein treat karna ho.<br><br>
+                    <strong>Real-world Examples:</strong><br>
+                    1. <strong>Port numbers:</strong> <code>const port = config.port ?? 3000</code> - 0 bhi valid port hai<br>
+                    2. <strong>Counters:</strong> <code>const count = data.count ?? 0</code> - 0 ko preserve karta hai<br>
+                    3. <strong>Flags:</strong> <code>const enabled = settings.enabled ?? true</code> - false bhi valid option hai<br><br>
+                    <strong>|| operator problem:</strong> <code>0 || 'default'</code> returns 'default', but we might want 0<br>
+                    <strong>?? operator solution:</strong> <code>0 ?? 'default'</code> returns 0 correctly
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer(3)">
+                <span class="question-number">Q3</span>
+                <span class="difficulty medium">Medium</span>
+                <div class="question-text">Short-circuit evaluation ka practical use case bataye. Performance benefit kahan milta hai?</div>
+                <div class="answer" id="answer-3">
+                    <strong>Answer:</strong> Short-circuit evaluation unnecessary computations ko skip karta hai, jo performance improve karta hai.<br><br>
+                    <strong>Practical Uses:</strong><br>
+                    1. <strong>Conditional execution:</strong> <code>isLoggedIn && fetchUserData()</code> - Function call tab hi hoga jab needed ho<br>
+                    2. <strong>Avoiding errors:</strong> <code>user && user.save()</code> - Prevents "cannot read property" error<br>
+                    3. <strong>Default values:</strong> <code>userName || 'Guest'</code> - Fast fallback<br><br>
+                    <strong>Performance benefit:</strong> Expensive operations (API calls, heavy computations) sirf zarurat padne par hi execute hote hain. Example: <code>hasPermission && expensiveOperation()</code> - Agar permission nahi hai, toh operation execute hi nahi hoga.
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer(4)">
+                <span class="question-number">Q4</span>
+                <span class="difficulty easy">Easy</span>
+                <div class="question-text">Enhanced object literals mein property shorthand ka kya matlab hai? Code example dijiye.</div>
+                <div class="answer" id="answer-4">
+                    <strong>Answer:</strong> Property shorthand tab use hota hai jab object key aur variable name same ho. Tab aapko <code>key: value</code> likhne ki zarurat nahi, sirf <code>key</code> likh sakte hain.<br><br>
+                    <strong>Old Way:</strong><br>
+                    <code>const name = 'John';<br>
+                    const age = 25;<br>
+                    const person = { name: name, age: age };</code><br><br>
+                    <strong>New Way (Shorthand):</strong><br>
+                    <code>const name = 'John';<br>
+                    const age = 25;<br>
+                    const person = { name, age };</code><br><br>
+                    Dono same result dete hain, but shorthand cleaner aur readable hai!
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer(5)">
+                <span class="question-number">Q5</span>
+                <span class="difficulty hard">Hard</span>
+                <div class="question-text">Optional chaining ko array methods aur function calls ke saath kaise use kar sakte hain? Complex example dijiye jisme sab features combine hon.</div>
+                <div class="answer" id="answer-5">
+                    <strong>Answer:</strong> Optional chaining arrays, function calls, aur nested structures ke saath safely use ho sakta hai.<br><br>
+                    <strong>Complex Example:</strong><br>
+                    <code>
+                    const data = {<br>
+                    &nbsp;&nbsp;users: [<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{ getName: () => 'John', scores: [85, 90] },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{ getName: null, scores: null }<br>
+                    &nbsp;&nbsp;]<br>
+                    };<br><br>
+                    // Safe access with all features<br>
+                    const result = {<br>
+                    &nbsp;&nbsp;firstUser: data?.users?.[0]?.getName?.() ?? 'Unknown',<br>
+                    &nbsp;&nbsp;firstScore: data?.users?.[0]?.scores?.[0] ?? 0,<br>
+                    &nbsp;&nbsp;secondUser: data?.users?.[1]?.getName?.() ?? 'Unknown',<br>
+                    &nbsp;&nbsp;avgScore: data?.users?.[0]?.scores?.reduce?.((a,b) => a+b, 0) ?? 0<br>
+                    };
+                    </code><br><br>
+                    Is example mein: array access <code>?.[index]</code>, function call <code>?.()</code>, method call <code>?.method()</code>, aur nullish coalescing sab combine hain!
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer(6)">
+                <span class="question-number">Q6</span>
+                <span class="difficulty hard">Hard</span>
+                <div class="question-text">Computed property names ka real-world use case dijiye. Dynamic object creation mein ye kaise helpful hai?</div>
+                <div class="answer" id="answer-6">
+                    <strong>Answer:</strong> Computed property names se aap runtime pe dynamic keys create kar sakte hain, jo forms, API responses, aur configuration objects mein bahut useful hai.<br><br>
+                    <strong>Real-world Examples:</strong><br><br>
+                    1. <strong>Dynamic Form Handling:</strong><br>
+                    <code>
+                    const handleChange = (fieldName, value) => {<br>
+                    &nbsp;&nbsp;setFormData({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;...formData,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;[fieldName]: value  // Dynamic key<br>
+                    &nbsp;&nbsp;});<br>
+                    };
+                    </code><br><br>
+                    2. <strong>API Response Transformation:</strong><br>
+                    <code>
+                    const createResponse = (type, data) => ({<br>
+                    &nbsp;&nbsp;[`${type}Data`]: data,<br>
+                    &nbsp;&nbsp;[`${type}Status`]: 'success',<br>
+                    &nbsp;&nbsp;[`${type}Timestamp`]: Date.now()<br>
+                    });
+                    </code><br><br>
+                    3. <strong>State Management:</strong><br>
+                    <code>
+                    const updateState = (entity, id, data) => ({<br>
+                    &nbsp;&nbsp;[`${entity}_${id}`]: data<br>
+                    });<br>
+                    // Creates: { user_123: {...}, product_456: {...} }
+                    </code><br><br>
+                    <strong>Benefit:</strong> Ye pattern code duplication reduce karta hai aur flexible APIs banane mein help karta hai.
+                </div>
+            </div>
+
+            <div class="question-card" onclick="toggleAnswer(7)">
+                <span class="question-number">Q7</span>
+                <span class="difficulty hard">Hard</span>
+                <div class="question-text">Production code mein in sabhi features ko ek saath use karte waqt kya best practices follow karni chahiye? Performance aur readability ka balance kaise maintain karein?</div>
+                <div class="answer" id="answer-7">
+                    <strong>Answer:</strong> Modern features ka overuse code ko complex bana sakta hai. Balance maintain karna important hai.<br><br>
+                    <strong>Best Practices:</strong><br><br>
+                    1. <strong>Don't over-chain:</strong><br>
+                    ❌ <code>user?.profile?.settings?.theme?.colors?.primary?.hex</code><br>
+                    ✅ <code>const theme = user?.profile?.settings?.theme;<br>
+                    const primaryColor = theme?.colors?.primary?.hex ?? '#000';</code><br><br>
+                    2. <strong>Meaningful defaults:</strong><br>
+                    ❌ <code>const x = a ?? b ?? c ?? d ?? e ?? 'default'</code><br>
+                    ✅ <code>const DEFAULT_CONFIG = {...};<br>
+                    const config = userConfig ?? DEFAULT_CONFIG;</code><br><br>
+                    3. <strong>Clear naming with computed properties:</strong><br>
+                    ❌ <code>{[a+b+c]: value}</code><br>
+                    ✅ <code>const key = `${type}_${id}_data`;<br>
+                    {[key]: value}</code><br><br>
+                    4. <strong>Performance considerations:</strong><br>
+                    - Optional chaining fast hai but deeply nested structures avoid karein<br>
+                    - Short-circuit evaluation se expensive operations ko gate karein<br>
+                    - Repeated access ko variables mein cache karein<br><br>
+                    5. <strong>Team readability:</strong><br>
+                    - Comments add karein complex chains ke liye<br>
+                    - Consistent patterns use karein<br>
+                    - Type hints/JSDoc add karein (TypeScript preferable)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State for demos
+        let isLoggedIn = false;
+        let isAdmin = false;
+
+        // Optional Chaining Demos
+        function testOptionalChaining() {
+            const user = {
+                name: 'Raj',
+                profile: {
+                    age: 25,
+                    address: {
+                        city: 'Mumbai'
+                    }
+                }
+            };
+
+            const output = document.getElementById('chaining-output');
+            output.className = 'output';
+            output.innerHTML = `
+                <strong>✅ With Optional Chaining:</strong><br>
+                user?.name: <code>${user?.name}</code><br>
+                user?.profile?.age: <code>${user?.profile?.age}</code><br>
+                user?.profile?.address?.city: <code>${user?.profile?.address?.city}</code><br>
+                user?.profile?.phone: <code>${user?.profile?.phone}</code> (undefined, no error!)<br>
+                user?.profile?.contact?.email: <code>${user?.profile?.contact?.email}</code> (safely returns undefined)
+            `;
+        }
+
+        function testWithoutChaining() {
+            const output = document.getElementById('chaining-output');
+            try {
+                const user = { name: 'Raj' };
+                const phone = user.profile.phone; // This will throw error
+            } catch (error) {
+                output.className = 'output error-output';
+                output.innerHTML = `
+                    <strong>❌ Without Optional Chaining:</strong><br>
+                    Error: ${error.message}<br><br>
+                    <em>Ye error isliye aaya kyunki hum directly nested property access kar rahe hain without checking if parent exists!</em>
+                `;
+            }
+        }
+
+        function testArrayChaining() {
+            const data = {
+                users: [
+                    { name: 'Raj' },
+                    { name: 'Priya' }
+                ]
+            };
+
+            const output = document.getElementById('chaining-output');
+            output.className = 'output';
+            output.innerHTML = `
+                <strong>✅ Array Optional Chaining:</strong><br>
+                data?.users?.[0]?.name: <code>${data?.users?.[0]?.name}</code><br>
+                data?.users?.[5]?.name: <code>${data?.users?.[5]?.name}</code> (undefined, safe!)<br>
+                data?.items?.[0]?.name: <code>${data?.items?.[0]?.name}</code> (items array doesn't exist)<br>
+                data?.users?.find?.(u => u.name === 'Raj')?.name: <code>${data?.users?.find?.(u => u.name === 'Raj')?.name}</code>
+            `;
+        }
+
+        // Nullish Coalescing Demos
+        function testNullishCoalescing() {
+            const input = document.getElementById('nullish-input').value;
+            const output = document.getElementById('nullish-output');
+            
+            let testValue;
+            if (input === '') testValue = '';
+            else if (input === '0') testValue = 0;
+            else if (input === 'false') testValue = false;
+            else if (input === 'null') testValue = null;
+            else if (input === 'undefined') testValue = undefined;
+            else testValue = input;
+
+            const result = testValue ?? 'DEFAULT_VALUE';
+
+            output.className = 'output';
+            output.innerHTML = `
+                <strong>?? Operator Result:</strong><br>
+                Input type: <code>${typeof testValue}</code><br>
+                Input value: <code>${testValue === '' ? '(empty string)' : testValue}</code><br>
+                Result: <code>${result}</code><br><br>
+                <em>${testValue === null || testValue === undefined ? 
+                    '✅ null/undefined detected - DEFAULT_VALUE used' : 
+                    '✅ Value preserved - NOT null/undefined'}</em>
+            `;
+        }
+
+        function testOrOperator() {
+            const input = document.getElementById('nullish-input').value;
+            const output = document.getElementById('nullish-output');
+            
+            let testValue;
+            if (input === '') testValue = '';
+            else if (input === '0') testValue = 0;
+            else if (input === 'false') testValue = false;
+            else if (input === 'null') testValue = null;
+            else if (input === 'undefined') testValue = undefined;
+            else testValue = input;
+
+            const result = testValue || 'DEFAULT_VALUE';
+
+            output.className = 'output';
+            output.innerHTML = `
+                <strong>|| Operator Result:</strong><br>
+                Input type: <code>${typeof testValue}</code><br>
+                Input value: <code>${testValue === '' ? '(empty string)' : testValue}</code><br>
+                Result: <code>${result}</code><br><br>
+                <em>${!testValue && testValue !== 0 && testValue !== '' && testValue !== false ? 
+                    '✅ Falsy detected - DEFAULT_VALUE used' : 
+                    result === 'DEFAULT_VALUE' ? 
+                    '⚠️ Falsy value (but might be valid!) - DEFAULT_VALUE used' :
+                    '✅ Truthy value preserved'}</em>
+            `;
+        }
+
+        // Short-circuit Evaluation Demos
+        function toggleLogin() {
+            isLoggedIn = !isLoggedIn;
+            const toggle = document.getElementById('login-toggle');
+            const status = document.getElementById('login-status');
+            
+            toggle.classList.toggle('active');
+            status.textContent = isLoggedIn ? 'Logged In' : 'Logged Out';
+            status.style.color = isLoggedIn ? '#4caf50' : '#f44336';
+        }
+
+        function toggleAdmin() {
+            isAdmin = !isAdmin;
+            const toggle = document.getElementById('admin-toggle');
+            const status = document.getElementById('admin-status');
+            
+            toggle.classList.toggle('active');
+            status.textContent = isAdmin ? 'Admin' : 'User';
+            status.style.color = isAdmin ? '#4caf50' : '#666';
+        }
+
+        function checkAccess() {
+            const output = document.getElementById('shortcircuit-output');
+            
+            // Short-circuit evaluation in action
+            const canAccessDashboard = isLoggedIn && isAdmin;
+            const welcomeMessage = isLoggedIn && (isAdmin ? 'Welcome Admin!' : 'Welcome User!');
+            const errorMessage = !isLoggedIn && 'Please login first';
+
+            output.className = 'output';
+            output.innerHTML = `
+                <strong>Short-circuit Evaluation Results:</strong><br><br>
+                <strong>Expression 1:</strong> <code>isLoggedIn && isAdmin</code><br>
+                Result: <code>${canAccessDashboard}</code><br>
+                Explanation: ${!isLoggedIn ? 
+                    'isLoggedIn is false, so right side (isAdmin) not evaluated ❌' : 
+                    isAdmin ? 'Both conditions true ✅' : 'isLoggedIn is true but isAdmin is false ❌'}<br><br>
+                
+                <strong>Expression 2:</strong> <code>isLoggedIn && (nested condition)</code><br>
+                Result: <code>${welcomeMessage || 'Not evaluated'}</code><br>
+                Explanation: ${!isLoggedIn ? 
+                    'First condition false, entire expression short-circuits 🚫' : 
+                    'First condition true, nested ternary evaluated ✅'}<br><br>
+                
+                <strong>Expression 3:</strong> <code>!isLoggedIn && 'Please login'</code><br>
+                Result: <code>${errorMessage || false}</code><br>
+                Explanation: ${!isLoggedIn ? 
+                    'User not logged in, error message returned ⚠️' : 
+                    'User is logged in, expression returns false (no error) ✅'}<br><br>
+                
+                <strong>Dashboard Access:</strong> <span style="font-size: 1.2em;">${canAccessDashboard ? '✅ GRANTED' : '❌ DENIED'}</span>
+            `;
+        }
+
+        // Enhanced Object Literals Demos
+        function createEnhancedObject() {
+            const name = document.getElementById('obj-name').value || 'John';
+            const age = parseInt(document.getElementById('obj-age').value) || 25;
+            const city = document.getElementById('obj-city').value || 'Mumbai';
+
+            // Enhanced object literal features
+            const person = {
+                name,  // Property shorthand
+                age,
+                city,
+                // Method shorthand
+                greet() {
+                    return `Hello, I'm ${this.name}!`;
+                },
+                // Computed property names
+                [`is${name}Adult`]: age >= 18,
+                [`${city.toLowerCase()}Resident`]: true,
+                // Method with logic
+                getDetails() {
+                    return `${this.name}, ${this.age} years, from ${this.city}`;
+                }
+            };
+
+            const output = document.getElementById('object-output');
+            output.className = 'output';
+            output.innerHTML = `
+                <strong>✅ Enhanced Object Created:</strong><br><br>
+                <pre>${JSON.stringify(person, null, 2)}</pre><br>
+                <strong>Method Calls:</strong><br>
+                greet(): <code>${person.greet()}</code><br>
+                getDetails(): <code>${person.getDetails()}</code><br><br>
+                <strong>Features Used:</strong><br>
+                ✅ Property shorthand (name, age, city)<br>
+                ✅ Method shorthand (greet, getDetails)<br>
+                ✅ Computed properties (is${name}Adult, ${city.toLowerCase()}Resident)
+            `;
+        }
+
+        function createOldObject() {
+            const name = document.getElementById('obj-name').value || 'John';
+            const age = parseInt(document.getElementById('obj-age').value) || 25;
+            const city = document.getElementById('obj-city').value || 'Mumbai';
+
+            // Old way of creating objects
+            const person = {
+                name: name,
+                age: age,
+                city: city,
+                greet: function() {
+                    return 'Hello, I\'m ' + this.name + '!';
+                },
+                getDetails: function() {
+                    return this.name + ', ' + this.age + ' years, from ' + this.city;
+                }
+            };
+            
+            person['is' + name + 'Adult'] = age >= 18;
+            person[city.toLowerCase() + 'Resident'] = true;
+
+            const output = document.getElementById('object-output');
+            output.className = 'output';
+            output.innerHTML = `
+                <strong>Old Way Object Created:</strong><br><br>
+                <pre>${JSON.stringify(person, null, 2)}</pre><br>
+                <strong>Problems with old approach:</strong><br>
+                ❌ Repetitive (name: name, age: age)<br>
+                ❌ Verbose function syntax<br>
+                ❌ Dynamic keys need separate assignment<br>
+                ❌ Less readable and more code!<br><br>
+                <em>Compare this with Enhanced version - much cleaner! 🎯</em>
+            `;
+        }
+
+        // Data Manipulation Demos
+        function processSampleData() {
+            const users = [
+                { id: 1, name: 'Raj', profile: { age: 25, city: 'Delhi', phone: '9876543210' } },
+                { id: 2, name: 'Priya', profile: { age: 22 } },
+                { id: 3, name: 'Amit', profile: null },
+                { id: 4, name: null }
+            ];
+
+            const processedData = users.map(user => ({
+                id: user.id,
+                name: user.name ?? 'Anonymous',
+                age: user?.profile?.age ?? 'Not specified',
+                city: user?.profile?.city ?? 'Unknown',
+                phone: user?.profile?.phone ?? 'No phone',
+                isAdult: user?.profile?.age >= 18 && 'Yes' || 'No',
+                displayName: user.name?.toUpperCase?.() ?? 'GUEST',
+                hasCompleteProfile: !!(user?.profile?.age && user?.profile?.city)
+            }));
+
+            const output = document.getElementById('data-output');
+            output.className = 'output';
+            output.innerHTML = `
+                <strong>✅ Processed Data (All Modern Features Combined):</strong><br><br>
+                <pre>${JSON.stringify(processedData, null, 2)}</pre><br>
+                <strong>Features Applied:</strong><br>
+                ✅ Optional chaining: <code>user?.profile?.age</code><br>
+                ✅ Nullish coalescing: <code>?? 'Default'</code><br>
+                ✅ Short-circuit: <code>age >= 18 && 'Yes'</code><br>
+                ✅ Enhanced literals: Property shorthand in map<br>
+                ✅ Method chaining: <code>name?.toUpperCase?.()</code>
+            `;
+        }
+
+        function testEdgeCases() {
+            const edgeCases = [
+                { value: null, label: 'null' },
+                { value: undefined, label: 'undefined' },
+                { value: 0, label: '0' },
+                { value: '', label: 'empty string' },
+                { value: false, label: 'false' },
+                { value: NaN, label: 'NaN' }
+            ];
+
+            let results = '<strong>Edge Cases Testing:</strong><br><br>';
+            
+            edgeCases.forEach(({ value, label }) => {
+                const nullishResult = value ?? 'DEFAULT';
+                const orResult = value || 'DEFAULT';
+                const optionalResult = { data: value }?.data ?? 'DEFAULT';
+
+                results += `
+                    <strong>${label}:</strong><br>
+                    <code>${label} ?? 'DEFAULT'</code> → ${nullishResult}<br>
+                    <code>${label} || 'DEFAULT'</code> → ${orResult}<br>
+                    <code>obj?.data ?? 'DEFAULT'</code> → ${optionalResult}<br><br>
+                `;
+            });
+
+            const output = document.getElementById('data-output');
+            output.className = 'output';
+            output.innerHTML = results + '<em>Notice how ?? behaves differently from || for falsy values! 🎯</em>';
+        }
+
+        function showRawData() {
+            const rawData = {
+                users: [
+                    { id: 1, name: 'Raj', profile: { age: 25, city: 'Delhi' } },
+                    { id: 2, name: 'Priya', profile: { age: 22 } },
+                    { id: 3, name: 'Amit', profile: null },
+                    { id: 4, name: null }
+                ],
+                config: {
+                    theme: null,
+                    notifications: undefined,
+                    maxResults: 0
+                }
+            };
+
+            const output = document.getElementById('data-output');
+            output.className = 'output';
+            output.innerHTML = `
+                <strong>📦 Raw Sample Data:</strong><br><br>
+                <pre>${JSON.stringify(rawData, null, 2)}</pre><br>
+                <strong>Challenges in this data:</strong><br>
+                ⚠️ Missing nested properties (profile.city)<br>
+                ⚠️ Null values (profile, name)<br>
+                ⚠️ Undefined values (notifications)<br>
+                ⚠️ Falsy but valid values (maxResults: 0)<br><br>
+                <em>Modern features help handle all these cases safely! 🛡️</em>
+            `;
+        }
+
+        // Interview Questions Toggle
+        function toggleAnswer(questionNumber) {
+            const answer = document.getElementById(`answer-${questionNumber}`);
+            answer.classList.toggle('show');
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            console.log('Modern JavaScript Features Guide Loaded! 🚀');
+        };
+    </script>
+</body>
+</html>

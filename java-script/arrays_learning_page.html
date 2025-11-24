@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 8: JavaScript Arrays</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .home-link:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        .home-link:focus {
+            outline: 2px solid #ffc107;
+            outline-offset: 2px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        .section h3 {
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+        }
+        .hinglish {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre;
+        }
+        .interactive-demo {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .array-visual {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .array-item {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 80px;
+            text-align: center;
+            font-weight: bold;
+            position: relative;
+            animation: fadeIn 0.5s ease-in;
+        }
+        .array-item .index {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #764ba2;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        input {
+            padding: 12px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            margin: 5px;
+        }
+        .todo-app {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .todo-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .todo-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+        .questions {
+            background: #e3f2fd;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        .question {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #2196F3;
+        }
+        .question h4 {
+            color: #2196F3;
+            margin-bottom: 10px;
+        }
+        .answer {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f0f7ff;
+            border-radius: 8px;
+        }
+        .answer.show {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        .toggle-answer {
+            background: #2196F3;
+            font-size: 0.9em;
+            padding: 8px 15px;
+        }
+        .output {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px dashed #667eea;
+            min-height: 50px;
+        }
+        .badge {
+            display: inline-block;
+            background: #764ba2;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        <header>
+            <h1>🚀 Day 8: JavaScript Arrays</h1>
+            <p>Arrays ko samjho aur master karo - Complete Interactive Guide</p>
+        </header>
+        <div class="content">
+            <div class="section">
+                <h2>📚 Arrays Kya Hain?</h2>
+                <div class="hinglish">
+                    <strong>Arrays</strong> ek special type ka variable hai jo <strong>multiple values</strong> ko ek saath store kar sakta hai. Socho agar tumhe 100 students ke names store karne hain - kya tum 100 alag alag variables banaaoge? Nahi na! Yahan arrays kaam aate hain. Arrays JavaScript mein <strong>objects</strong> hain, primitive values nahi!
+                </div>
+                <h3>Definition (Technical):</h3>
+                <p>An <strong>array</strong> is an ordered collection of values that can store multiple data items of any type in a single variable. Each item in an array has a numeric position known as its index (starting from 0). Arrays are <strong>reference types</strong> and inherit from Array.prototype.</p>
+                
+                <h3>🧠 Array Deep Concepts:</h3>
+                <div class="hinglish">
+                    <ul>
+                        <li><strong>Zero-Indexed:</strong> Pehla element index 0 pe hota hai, 1 pe nahi</li>
+                        <li><strong>Dynamic Size:</strong> Runtime pe size badha ya ghata sakte hain</li>
+                        <li><strong>Mixed Types:</strong> Ek array mein different data types store kar sakte hain</li>
+                        <li><strong>Reference Type:</strong> Arrays memory mein reference store karte hain</li>
+                        <li><strong>Sparse Arrays:</strong> Missing indices undefined hote hain</li>
+                        <li><strong>Array-like Objects:</strong> Length property aur numeric indices wale objects</li>
+                    </ul>
+                </div>
+                <div class="code-block">// Array banane ke tarike
+let fruits = ["Apple", "Banana", "Mango"];
+let numbers = [1, 2, 3, 4, 5];
+let mixed = [1, "Hello", true, null];</div>
+                <div class="interactive-demo">
+                    <h3>🎨 Live Array Visualization:</h3>
+                    <div id="arrayVisual" class="array-visual"></div>
+                </div>
+            </div>
+            <div class="section">
+                <h2>🔨 Arrays Create Karna aur Access Karna</h2>
+                <div class="hinglish">
+                    Arrays ko banane ke do main tarike hain - <strong>Array Literal</strong> (square brackets use karke) aur <strong>Array Constructor</strong> use karke. Lekin mostly hum literal syntax hi use karte hain kyunki wo simple hai.
+                </div>
+                <div class="code-block">// Method 1: Array Literal (Recommended)
+let colors = ["Red", "Green", "Blue"];
+
+// Method 2: Array Constructor
+let numbers = new Array(1, 2, 3);
+
+// Accessing elements (Index 0 se start hota hai)
+console.log(colors[0]); // "Red"
+console.log(colors[1]); // "Green"
+console.log(colors[2]); // "Blue"</div>
+                <div class="interactive-demo">
+                    <h3>🎯 Try It: Access Array Elements</h3>
+                    <button onclick="accessDemo()">Show First Element</button>
+                    <button onclick="accessDemo2()">Show Last Element</button>
+                    <button onclick="accessDemo3()">Show Array Length</button>
+                    <div id="accessOutput" class="output"></div>
+                </div>
+            </div>
+            <div class="section">
+                <h2>✏️ Arrays Ko Modify Karna</h2>
+                <div class="hinglish">
+                    Arrays ko modify karne ke liye JavaScript mein kaafi saare methods hain. Chaliye sabse important methods ko detail mein samajhte hain.
+                </div>
+                <h3><span class="badge">push()</span> - End mein add karo</h3>
+                <div class="hinglish">
+                    <strong>push()</strong> method array ke <strong>end</strong> mein nayi value add karta hai aur naye array ki length return karta hai.
+                </div>
+                <div class="code-block">let fruits = ["Apple", "Banana"];
+fruits.push("Mango"); // ["Apple", "Banana", "Mango"]</div>
+                <h3><span class="badge">pop()</span> - End se remove karo</h3>
+                <div class="hinglish">
+                    <strong>pop()</strong> method array ke <strong>end</strong> se last element remove karta hai aur us element ko return karta hai.
+                </div>
+                <div class="code-block">let fruits = ["Apple", "Banana", "Mango"];
+let removed = fruits.pop(); // "Mango"
+// fruits = ["Apple", "Banana"]</div>
+                <h3><span class="badge">shift()</span> - Start se remove karo</h3>
+                <div class="hinglish">
+                    <strong>shift()</strong> method array ke <strong>beginning</strong> se first element remove karta hai.
+                </div>
+                <div class="code-block">let fruits = ["Apple", "Banana", "Mango"];
+let removed = fruits.shift(); // "Apple"
+// fruits = ["Banana", "Mango"]</div>
+                <h3><span class="badge">unshift()</span> - Start mein add karo</h3>
+                <div class="hinglish">
+                    <strong>unshift()</strong> method array ke <strong>beginning</strong> mein nayi value add karta hai.
+                </div>
+                <div class="code-block">let fruits = ["Banana", "Mango"];
+fruits.unshift("Apple"); // ["Apple", "Banana", "Mango"]</div>
+                <h3><span class="badge">splice()</span> - Kahi bhi add/remove karo</h3>
+                <div class="hinglish">
+                    <strong>splice()</strong> sabse powerful method hai - tum kisi bhi position se elements add ya remove kar sakte ho. Syntax: <code>splice(startIndex, deleteCount, item1, item2, ...)</code>
+                </div>
+                <div class="code-block">let fruits = ["Apple", "Banana", "Mango", "Orange"];
+
+// Position 1 se 2 elements remove karo
+fruits.splice(1, 2); // ["Apple", "Orange"]
+
+// Position 1 par naye elements add karo
+fruits.splice(1, 0, "Grapes", "Kiwi");
+// ["Apple", "Grapes", "Kiwi", "Orange"]</div>
+                <div class="interactive-demo">
+                    <h3>🎮 Interactive Array Manipulation:</h3>
+                    <input type="text" id="newItem" placeholder="Enter new item">
+                    <button onclick="doPush()">Push</button>
+                    <button onclick="doPop()">Pop</button>
+                    <button onclick="doShift()">Shift</button>
+                    <button onclick="doUnshift()">Unshift</button>
+                    <div id="manipulateArray" class="array-visual"></div>
+                    <div id="manipulateOutput" class="output"></div>
+                </div>
+            </div>
+            <div class="section">
+                <h2>🔄 Arrays Ko Loop Karna (Iteration)</h2>
+                <div class="hinglish">
+                    Array ke har element ko access karne ke liye hum loops use karte hain. JavaScript mein arrays ko iterate karne ke kaafi tarike hain.
+                </div>
+                <h3><span class="badge">for loop</span> - Traditional Way</h3>
+                <div class="code-block">let fruits = ["Apple", "Banana", "Mango"];
+for (let i = 0; i < fruits.length; i++) {
+    console.log(fruits[i]);
+}</div>
+                <h3><span class="badge">forEach()</span> - Modern & Clean</h3>
+                <div class="hinglish">
+                    <strong>forEach()</strong> method har element ke liye ek callback function run karta hai. Ye sabse commonly used method hai.
+                </div>
+                <div class="code-block">let fruits = ["Apple", "Banana", "Mango"];
+fruits.forEach(function(fruit, index) {
+    console.log(index + ": " + fruit);
+});
+
+// Arrow function ke saath
+fruits.forEach((fruit, index) => {
+    console.log(`${index}: ${fruit}`);
+});</div>
+                <h3><span class="badge">for...of</span> - Simple Iteration</h3>
+                <div class="code-block">let fruits = ["Apple", "Banana", "Mango"];
+for (let fruit of fruits) {
+    console.log(fruit);
+}</div>
+                <div class="interactive-demo">
+                    <h3>🔍 Loop Demonstration:</h3>
+                    <button onclick="showForLoop()">For Loop</button>
+                    <button onclick="showForEach()">forEach Method</button>
+                    <button onclick="showForOf()">for...of Loop</button>
+                    <div id="loopOutput" class="output"></div>
+                </div>
+            </div>
+            <div class="section">
+                <h2>📝 Practice Project: Simple To-Do List</h2>
+                <div class="hinglish">
+                    Ab hum ek complete To-Do List banaenge jismein arrays ke saare concepts use honge - push, pop, forEach, aur event handling!
+                </div>
+                <div class="todo-app">
+                    <h3 style="text-align: center; margin-bottom: 20px;">✨ My To-Do List</h3>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <input type="text" id="todoInput" placeholder="Enter a new task..." style="width: 60%; padding: 15px;">
+                        <button onclick="addTodo()" style="padding: 15px 30px;">Add Task</button>
+                    </div>
+                    <div id="todoList"></div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button onclick="clearCompleted()">Clear Completed</button>
+                        <button onclick="clearAll()">Clear All</button>
+                    </div>
+                </div>
+                <div class="code-block">// To-Do List ka basic logic
+let todos = [];
+
+function addTodo() {
+    let task = document.getElementById('todoInput').value;
+    if (task) {
+        todos.push({ text: task, completed: false });
+        renderTodos();
+    }
+}
+
+function toggleTodo(index) {
+    todos[index].completed = !todos[index].completed;
+    renderTodos();
+}
+
+function deleteTodo(index) {
+    todos.splice(index, 1);
+    renderTodos();
+}</div>
+            </div>
+            <div class="questions">
+                <h2 style="text-align: center; color: #2196F3; margin-bottom: 30px;">🎓 Interview Questions</h2>
+                <div class="question">
+                    <h4>Q1: What is the difference between push() and unshift() methods?</h4>
+                    <button class="toggle-answer" onclick="toggleAnswer(1)">Show Answer</button>
+                    <div id="answer1" class="answer">
+                        <strong>Answer:</strong> push() adds elements at the <strong>end</strong> of the array, while unshift() adds elements at the <strong>beginning</strong> of the array. push() is faster because it doesn't need to reindex all elements, whereas unshift() has to shift all existing elements to make room at the start.<br><br>
+                        <strong>Hinglish:</strong> push() array ke end mein add karta hai aur unshift() starting mein. push() fast hai kyunki wo baki elements ko shift nahi karta, lekin unshift() ko saare elements ko aage shift karna padta hai.
+                    </div>
+                </div>
+                <div class="question">
+                    <h4>Q2: How do you find the length of an array?</h4>
+                    <button class="toggle-answer" onclick="toggleAnswer(2)">Show Answer</button>
+                    <div id="answer2" class="answer">
+                        <strong>Answer:</strong> Use the <code>length</code> property: <code>arrayName.length</code>. It returns the number of elements in the array. The length is always one more than the highest index.<br><br>
+                        <strong>Example:</strong> <code>let arr = [1, 2, 3]; console.log(arr.length); // 3</code>
+                    </div>
+                </div>
+                <div class="question">
+                    <h4>Q3: What will splice(2, 1, 'x', 'y') do to an array?</h4>
+                    <button class="toggle-answer" onclick="toggleAnswer(3)">Show Answer</button>
+                    <div id="answer3" class="answer">
+                        <strong>Answer:</strong> It will start at index 2, remove 1 element, and insert 'x' and 'y' at that position.<br><br>
+                        <strong>Example:</strong><br>
+                        <code>let arr = ['a', 'b', 'c', 'd'];</code><br>
+                        <code>arr.splice(2, 1, 'x', 'y');</code><br>
+                        <code>// Result: ['a', 'b', 'x', 'y', 'd']</code><br><br>
+                        <strong>Hinglish:</strong> Index 2 se start karke 1 element remove karega ('c') aur uski jagah 'x' aur 'y' insert kar dega.
+                    </div>
+                </div>
+                <div class="question">
+                    <h4>Q4: What's the difference between forEach() and map()?</h4>
+                    <button class="toggle-answer" onclick="toggleAnswer(4)">Show Answer</button>
+                    <div id="answer4" class="answer">
+                        <strong>Answer:</strong> forEach() iterates through an array but <strong>doesn't return anything</strong> (returns undefined). map() creates and returns a <strong>new array</strong> with the results of calling a function on every element.<br><br>
+                        <strong>Hinglish:</strong> forEach() sirf loop karta hai aur kuch return nahi karta. map() ek naya array banata hai jismein har element par function call karke results store hote hain.
+                    </div>
+                </div>
+                <div class="question">
+                    <h4>Q5: How can you remove a specific element from an array by value (not index)?</h4>
+                    <button class="toggle-answer" onclick="toggleAnswer(5)">Show Answer</button>
+                    <div id="answer5" class="answer">
+                        <strong>Answer:</strong> First find the index using indexOf() or findIndex(), then use splice() to remove it. Or use filter() to create a new array without that element.<br><br>
+                        <strong>Method 1:</strong> Using indexOf + splice<br>
+                        <strong>Method 2:</strong> Using filter
+                    </div>
+                </div>
+                <div class="question">
+                    <h4>Q6: Can an array in JavaScript hold different data types?</h4>
+                    <button class="toggle-answer" onclick="toggleAnswer(6)">Show Answer</button>
+                    <div id="answer6" class="answer">
+                        <strong>Answer:</strong> Yes! JavaScript arrays can hold <strong>any combination of data types</strong> - numbers, strings, booleans, objects, even other arrays.<br><br>
+                        <strong>Hinglish:</strong> Haan bilkul! JavaScript mein ek hi array mein numbers, strings, booleans, objects, sab kuch store kar sakte ho.
+                    </div>
+                </div>
+                <div class="question">
+                    <h4>Q7: What happens when you access an index that doesn't exist in an array?</h4>
+                    <button class="toggle-answer" onclick="toggleAnswer(7)">Show Answer</button>
+                    <div id="answer7" class="answer">
+                        <strong>Answer:</strong> It returns <code>undefined</code>. JavaScript doesn't throw an error for accessing non-existent indices.<br><br>
+                        <strong>Hinglish:</strong> Agar tum kisi aisi index ko access karo jo exist nahi karti, to JavaScript undefined return karega, error nahi dega.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+var demoArray=["Apple","Banana","Mango","Orange"];var manipulateArray=["Item 1","Item 2","Item 3"];var todos=[];function updateArrayVisual(){var a=document.getElementById("arrayVisual");if(!a)return;a.innerHTML="";for(var b=0;b<demoArray.length;b++){var c=document.createElement("div");c.className="array-item";c.innerHTML='<span class="index">['+b+"]</span>"+demoArray[b];a.appendChild(c)}}function updateManipulateVisual(){var a=document.getElementById("manipulateArray");if(!a)return;a.innerHTML="";for(var b=0;b<manipulateArray.length;b++){var c=document.createElement("div");c.className="array-item";c.innerHTML='<span class="index">['+b+"]</span>"+manipulateArray[b];a.appendChild(c)}}function accessDemo(){document.getElementById("accessOutput").innerHTML="<strong>First Element:</strong> "+demoArray[0]+" (at index 0)"}function accessDemo2(){var a=demoArray.length-1;document.getElementById("accessOutput").innerHTML="<strong>Last Element:</strong> "+demoArray[a]+" (at index "+a+")"}function accessDemo3(){document.getElementById("accessOutput").innerHTML="<strong>Array Length:</strong> "+demoArray.length+" elements"}function doPush(){var a=document.getElementById("newItem").value||"New Item";manipulateArray.push(a);updateManipulateVisual();document.getElementById("manipulateOutput").innerHTML='✅ Pushed "'+a+'" to the end!';document.getElementById("newItem").value=""}function doPop(){if(manipulateArray.length>0){var a=manipulateArray.pop();updateManipulateVisual();document.getElementById("manipulateOutput").innerHTML='✅ Popped "'+a+'" from the end!'}else document.getElementById("manipulateOutput").innerHTML="❌ Array is empty!"}function doShift(){if(manipulateArray.length>0){var a=manipulateArray.shift();updateManipulateVisual();document.getElementById("manipulateOutput").innerHTML='✅ Shifted "'+a+'" from the beginning!'}else document.getElementById("manipulateOutput").innerHTML="❌ Array is empty!"}function doUnshift(){var a=document.getElementById("newItem").value||"New Item";manipulateArray.unshift(a);updateManipulateVisual();document.getElementById("manipulateOutput").innerHTML='✅ Unshifted "'+a+'" to the beginning!';document.getElementById("newItem").value=""}function showForLoop(){var a=document.getElementById("loopOutput"),b="<strong>For Loop Result:</strong><br>";for(var c=0;c<demoArray.length;c++)b+="Index "+c+": "+demoArray[c]+"<br>";a.innerHTML=b}function showForEach(){var a=document.getElementById("loopOutput"),b="<strong>forEach() Result:</strong><br>";for(var c=0;c<demoArray.length;c++)b+="Index "+c+": "+demoArray[c]+"<br>";a.innerHTML=b}function showForOf(){var a=document.getElementById("loopOutput"),b="<strong>for...of Result:</strong><br>";for(var c=0;c<demoArray.length;c++)b+=demoArray[c]+"<br>";a.innerHTML=b}function addTodo(){var a=document.getElementById("todoInput"),b=a.value.trim();if(b){todos.push({text:b,completed:!1});a.value="";renderTodos()}}function toggleTodo(a){todos[a].completed=!todos[a].completed;renderTodos()}function deleteTodo(a){todos.splice(a,1);renderTodos()}function clearCompleted(){var a=[];for(var b=0;b<todos.length;b++)todos[b].completed||a.push(todos[b]);todos=a;renderTodos()}function clearAll(){todos=[];renderTodos()}function renderTodos(){var a=document.getElementById("todoList");if(todos.length===0){a.innerHTML='<p style="text-align: center; color: #999;">No tasks yet! Add one above.</p>';return}a.innerHTML="";for(var b=0;b<todos.length;b++){var c=document.createElement("div");c.className="todo-item"+(todos[b].completed?" completed":"");c.innerHTML='<span onclick="toggleTodo('+b+')" style="cursor: pointer; flex: 1;">'+(todos[b].completed?"✅":"⭕")+" "+todos[b].text+'</span><button onclick="deleteTodo('+b+')" style="background: #f44336;">Delete</button>';a.appendChild(c)}}function toggleAnswer(a){var b=document.getElementById("answer"+a),c=event.target;b.classList.contains("show")?(b.classList.remove("show"),c.textContent="Show Answer"):(b.classList.add("show"),c.textContent="Hide Answer")}window.onload=function(){updateArrayVisual();updateManipulateVisual();renderTodos();var a=document.getElementById("todoInput");a&&a.addEventListener("keypress",function(a){a.key==="Enter"&&addTodo()})};
+</script>
+</body>
+</html>

@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 22: Object-Oriented Programming</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .home-link:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        .home-link:focus {
+            outline: 2px solid #ffc107;
+            outline-offset: 2px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }   
+     .section h3 {
+            color: #764ba2;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .hinglish {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .keyword { color: #569cd6; }
+        .string { color: #ce9178; }
+        .function { color: #dcdcaa; }
+        .comment { color: #6a9955; }
+
+        .interactive-demo {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #667eea;
+        }
+
+        .demo-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        } 
+       .output {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            min-height: 50px;
+            font-family: monospace;
+            border: 2px dashed #667eea;
+        }
+
+        .vehicle-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 10px;
+            display: inline-block;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .vehicle-card:hover {
+            transform: scale(1.05);
+        }
+
+        .vehicle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .tab-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: #e0e0e0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }        
+.interview-section {
+            background: #fff3e0;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+            border-left: 5px solid #ff9800;
+        }
+
+        .interview-section h2 {
+            color: #ff9800;
+            margin-bottom: 25px;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #ff9800;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .question:hover {
+            transform: translateX(5px);
+        }
+
+        .question-number {
+            color: #ff9800;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+
+        .easy { background: #c8e6c9; color: #2e7d32; }
+        .medium { background: #fff9c4; color: #f57f17; }
+        .hard { background: #ffcdd2; color: #c62828; }
+
+        .answer {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            border-left: 3px solid #4caf50;
+        }
+
+        .answer.show {
+            display: block;
+        }   
+     @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+
+            .vehicle-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comparison-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .highlight {
+            background: #fff59d;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        <div class="header">
+            <h1>🎯 Day 22: Object-Oriented Programming</h1>
+            <p>JavaScript mein OOP ko samajhte hain - Constructor Functions, ES6 Classes, aur Inheritance</p>
+        </div>        
+<div class="content">
+            <!-- Introduction Section -->
+            <div class="section">
+                <h2>📚 OOP Kya Hai?</h2>
+                <div class="hinglish">
+                    <p><strong>Object-Oriented Programming (OOP)</strong> ek programming paradigm hai jahan hum real-world entities ko objects ke form mein represent karte hain. JavaScript mein OOP ko implement karne ke liye humein multiple approaches milte hain.</p>
+                    <p style="margin-top: 10px;">Socho agar aapko ek car showroom ka software banana hai - har car ek object hogi jisme uski properties (color, model, price) aur methods (start, stop, accelerate) honge. OOP se hum isse efficiently organize kar sakte hain!</p>
+                </div>
+
+                <h3>Key Concepts:</h3>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Concept</th>
+                        <th>Explanation</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Encapsulation</strong></td>
+                        <td>Data aur methods ko ek unit (object) mein bundle karna</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Inheritance</strong></td>
+                        <td>Ek class apni properties aur methods doosri class ko de sakti hai</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Polymorphism</strong></td>
+                        <td>Same method ka different implementations</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Abstraction</strong></td>
+                        <td>Complex details ko hide karke sirf essential features dikhana</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Constructor Functions Section -->
+            <div class="section">
+                <h2>🔧 Constructor Functions</h2>
+                <div class="hinglish">
+                    <p>ES6 classes se pehle, JavaScript mein constructor functions use karte the objects create karne ke liye. Yeh functions capital letter se start hote hain aur <span class="highlight">new</span> keyword ke saath use hote hain.</p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Constructor Function Example</span>
+<span class="keyword">function</span> <span class="function">Person</span>(name, age) {
+    <span class="keyword">this</span>.name = name;
+    <span class="keyword">this</span>.age = age;
+    
+    <span class="keyword">this</span>.greet = <span class="keyword">function</span>() {
+        <span class="keyword">return</span> <span class="string">`Namaste! Mera naam ${this.name} hai.`</span>;
+    };
+}
+
+<span class="comment">// Object Creation</span>
+<span class="keyword">const</span> person1 = <span class="keyword">new</span> <span class="function">Person</span>(<span class="string">'Rahul'</span>, <span class="string">25</span>);
+console.log(person1.greet());
+                </div>          
+      <div class="interactive-demo">
+                    <div class="demo-title">🎮 Constructor Function Demo - Try It!</div>
+                    <input type="text" id="personName" placeholder="Name enter karo" style="padding: 10px; border-radius: 5px; border: 2px solid #667eea; margin: 5px; width: 200px;">
+                    <input type="number" id="personAge" placeholder="Age" style="padding: 10px; border-radius: 5px; border: 2px solid #667eea; margin: 5px; width: 100px;">
+                    <button class="btn" onclick="createPerson()">Person Create Karo</button>
+                    <div id="personOutput" class="output"></div>
+                </div>
+            </div>
+
+            <!-- ES6 Classes Section -->
+            <div class="section">
+                <h2>🎓 ES6 Classes</h2>
+                <div class="hinglish">
+                    <p>ES6 mein classes introduce hui jo OOP ko aur bhi cleaner aur easier bana deti hain. Yeh internally constructor functions ki tarah hi kaam karti hain, lekin syntax bahut better hai!</p>
+                </div>
+
+                <div class="tab-container">
+                    <button class="tab active" onclick="showTab('basic')">Basic Class</button>
+                    <button class="tab" onclick="showTab('methods')">Methods</button>
+                    <button class="tab" onclick="showTab('getters')">Getters/Setters</button>
+                    <button class="tab" onclick="showTab('static')">Static Methods</button>
+                </div>
+
+                <div id="basic" class="tab-content active">
+                    <div class="code-block">
+<span class="comment">// Basic ES6 Class</span>
+<span class="keyword">class</span> <span class="function">Student</span> {
+    <span class="function">constructor</span>(name, rollNo) {
+        <span class="keyword">this</span>.name = name;
+        <span class="keyword">this</span>.rollNo = rollNo;
+    }
+    
+    <span class="function">study</span>() {
+        <span class="keyword">return</span> <span class="string">`${this.name} padh raha hai`</span>;
+    }
+}
+
+<span class="keyword">const</span> student1 = <span class="keyword">new</span> <span class="function">Student</span>(<span class="string">'Priya'</span>, <span class="string">101</span>);
+                    </div>
+                </div>
+
+                <div id="methods" class="tab-content">
+                    <div class="code-block">
+<span class="comment">// Instance Methods vs Static Methods</span>
+<span class="keyword">class</span> <span class="function">Calculator</span> {
+    <span class="function">constructor</span>(value) {
+        <span class="keyword">this</span>.value = value;
+    }
+    
+    <span class="comment">// Instance Method - har object ke liye alag</span>
+    <span class="function">add</span>(num) {
+        <span class="keyword">this</span>.value += num;
+        <span class="keyword">return</span> <span class="keyword">this</span>.value;
+    }
+    
+    <span class="comment">// Static Method - class ke saath directly use hota hai</span>
+    <span class="keyword">static</span> <span class="function">multiply</span>(a, b) {
+        <span class="keyword">return</span> a * b;
+    }
+}
+
+Calculator.multiply(<span class="string">5</span>, <span class="string">3</span>); <span class="comment">// 15</span>
+                    </div>
+                </div>        
+        <div id="getters" class="tab-content">
+                    <div class="code-block">
+<span class="comment">// Getters and Setters</span>
+<span class="keyword">class</span> <span class="function">BankAccount</span> {
+    <span class="function">constructor</span>(owner) {
+        <span class="keyword">this</span>.owner = owner;
+        <span class="keyword">this</span>._balance = <span class="string">0</span>; <span class="comment">// private property</span>
+    }
+    
+    <span class="comment">// Getter - property ki tarah access kar sakte hain</span>
+    <span class="keyword">get</span> <span class="function">balance</span>() {
+        <span class="keyword">return</span> <span class="string">`₹${this._balance}`</span>;
+    }
+    
+    <span class="comment">// Setter - value set karne ke liye validation</span>
+    <span class="keyword">set</span> <span class="function">balance</span>(amount) {
+        <span class="keyword">if</span>(amount < <span class="string">0</span>) {
+            console.log(<span class="string">'Negative amount nahi ho sakta!'</span>);
+        } <span class="keyword">else</span> {
+            <span class="keyword">this</span>._balance = amount;
+        }
+    }
+}
+                    </div>
+                </div>
+
+                <div id="static" class="tab-content">
+                    <div class="code-block">
+<span class="comment">// Static Methods - Utility Functions</span>
+<span class="keyword">class</span> <span class="function">MathHelper</span> {
+    <span class="keyword">static</span> <span class="function">square</span>(num) {
+        <span class="keyword">return</span> num * num;
+    }
+    
+    <span class="keyword">static</span> <span class="function">cube</span>(num) {
+        <span class="keyword">return</span> num * num * num;
+    }
+    
+    <span class="keyword">static</span> <span class="function">max</span>(...numbers) {
+        <span class="keyword">return</span> Math.max(...numbers);
+    }
+}
+
+<span class="comment">// Static methods ko class ke saath directly call karte hain</span>
+MathHelper.square(<span class="string">5</span>); <span class="comment">// 25</span>
+MathHelper.max(<span class="string">10</span>, <span class="string">20</span>, <span class="string">30</span>); <span class="comment">// 30</span>
+                    </div>
+                </div>
+            </div>     
+       <!-- Inheritance Section -->
+            <div class="section">
+                <h2>🔗 Inheritance (Virasat)</h2>
+                <div class="hinglish">
+                    <p>Inheritance ka matlab hai ki ek class (child) doosri class (parent) ki properties aur methods ko inherit kar sakti hai. Isse code reusability badh jaati hai!</p>
+                    <p style="margin-top: 10px;">Jaise - <strong>Vehicle</strong> ek parent class hai, aur <strong>Car</strong> aur <strong>Bike</strong> uski child classes hain. Dono Vehicle ki common properties inherit kar lenge.</p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Parent Class</span>
+<span class="keyword">class</span> <span class="function">Vehicle</span> {
+    <span class="function">constructor</span>(brand, year) {
+        <span class="keyword">this</span>.brand = brand;
+        <span class="keyword">this</span>.year = year;
+        <span class="keyword">this</span>.isRunning = <span class="keyword">false</span>;
+    }
+    
+    <span class="function">start</span>() {
+        <span class="keyword">this</span>.isRunning = <span class="keyword">true</span>;
+        <span class="keyword">return</span> <span class="string">`${this.brand} start ho gayi!`</span>;
+    }
+    
+    <span class="function">stop</span>() {
+        <span class="keyword">this</span>.isRunning = <span class="keyword">false</span>;
+        <span class="keyword">return</span> <span class="string">`${this.brand} band ho gayi!`</span>;
+    }
+}
+
+<span class="comment">// Child Class - Car</span>
+<span class="keyword">class</span> <span class="function">Car</span> <span class="keyword">extends</span> <span class="function">Vehicle</span> {
+    <span class="function">constructor</span>(brand, year, doors) {
+        <span class="keyword">super</span>(brand, year); <span class="comment">// parent constructor ko call karta hai</span>
+        <span class="keyword">this</span>.doors = doors;
+    }
+    
+    <span class="function">honk</span>() {
+        <span class="keyword">return</span> <span class="string">'Beep Beep! 🚗'</span>;
+    }
+}
+
+<span class="comment">// Child Class - Bike</span>
+<span class="keyword">class</span> <span class="function">Bike</span> <span class="keyword">extends</span> <span class="function">Vehicle</span> {
+    <span class="function">constructor</span>(brand, year, type) {
+        <span class="keyword">super</span>(brand, year);
+        <span class="keyword">this</span>.type = type; <span class="comment">// sports, cruiser, etc</span>
+    }
+    
+    <span class="function">wheelie</span>() {
+        <span class="keyword">return</span> <span class="string">'Bike ek wheel pe chal rahi hai! 🏍️'</span>;
+    }
+}
+                </div>  
+              <div class="interactive-demo">
+                    <div class="demo-title">🚗 Vehicle Hierarchy Interactive Demo</div>
+                    <div style="margin: 15px 0;">
+                        <button class="btn" onclick="createCar()">Car Banao</button>
+                        <button class="btn" onclick="createBike()">Bike Banao</button>
+                        <button class="btn" onclick="clearVehicles()">Clear Karo</button>
+                    </div>
+                    <div id="vehicleGrid" class="vehicle-grid"></div>
+                </div>
+            </div>
+
+            <!-- Complete Example Section -->
+            <div class="section">
+                <h2>🎯 Complete Example: Bank Account System</h2>
+                <div class="hinglish">
+                    <p>Ab sab concepts ko combine karke ek practical example dekhte hain - Bank Account System jisme inheritance, getters/setters, aur static methods ka use hai.</p>
+                </div>
+
+                <div class="code-block">
+<span class="keyword">class</span> <span class="function">BankAccount</span> {
+    <span class="keyword">static</span> accountCount = <span class="string">0</span>;
+    
+    <span class="function">constructor</span>(owner, initialBalance = <span class="string">0</span>) {
+        <span class="keyword">this</span>.owner = owner;
+        <span class="keyword">this</span>._balance = initialBalance;
+        <span class="keyword">this</span>.accountNumber = ++BankAccount.accountCount;
+    }
+    
+    <span class="keyword">get</span> <span class="function">balance</span>() {
+        <span class="keyword">return</span> <span class="string">`₹${this._balance}`</span>;
+    }
+    
+    <span class="function">deposit</span>(amount) {
+        <span class="keyword">if</span>(amount > <span class="string">0</span>) {
+            <span class="keyword">this</span>._balance += amount;
+            <span class="keyword">return</span> <span class="string">`₹${amount} deposit ho gaye!`</span>;
+        }
+    }
+    
+    <span class="function">withdraw</span>(amount) {
+        <span class="keyword">if</span>(amount > <span class="keyword">this</span>._balance) {
+            <span class="keyword">return</span> <span class="string">'Insufficient balance!'</span>;
+        }
+        <span class="keyword">this</span>._balance -= amount;
+        <span class="keyword">return</span> <span class="string">`₹${amount} withdraw ho gaye!`</span>;
+    }
+    
+    <span class="keyword">static</span> <span class="function">getTotalAccounts</span>() {
+        <span class="keyword">return</span> <span class="string">`Total accounts: ${BankAccount.accountCount}`</span>;
+    }
+}
+
+<span class="keyword">class</span> <span class="function">SavingsAccount</span> <span class="keyword">extends</span> <span class="function">BankAccount</span> {
+    <span class="function">constructor</span>(owner, initialBalance, interestRate) {
+        <span class="keyword">super</span>(owner, initialBalance);
+        <span class="keyword">this</span>.interestRate = interestRate;
+    }
+    
+    <span class="function">addInterest</span>() {
+        <span class="keyword">const</span> interest = <span class="keyword">this</span>._balance * (<span class="keyword">this</span>.interestRate / <span class="string">100</span>);
+        <span class="keyword">this</span>._balance += interest;
+        <span class="keyword">return</span> <span class="string">`₹${interest.toFixed(2)} interest add hua!`</span>;
+    }
+}
+                </div>           
+     <div class="interactive-demo">
+                    <div class="demo-title">💰 Bank Account Demo</div>
+                    <div style="margin: 15px 0;">
+                        <input type="text" id="accountOwner" placeholder="Account holder ka naam" style="padding: 10px; border-radius: 5px; border: 2px solid #667eea; margin: 5px;">
+                        <input type="number" id="initialAmount" placeholder="Initial amount" style="padding: 10px; border-radius: 5px; border: 2px solid #667eea; margin: 5px; width: 150px;">
+                        <button class="btn" onclick="createAccount()">Account Banao</button>
+                    </div>
+                    <div style="margin: 15px 0;">
+                        <input type="number" id="depositAmount" placeholder="Deposit amount" style="padding: 10px; border-radius: 5px; border: 2px solid #667eea; margin: 5px; width: 150px;">
+                        <button class="btn" onclick="depositMoney()">Deposit</button>
+                        <input type="number" id="withdrawAmount" placeholder="Withdraw amount" style="padding: 10px; border-radius: 5px; border: 2px solid #667eea; margin: 5px; width: 150px;">
+                        <button class="btn" onclick="withdrawMoney()">Withdraw</button>
+                    </div>
+                    <div id="accountOutput" class="output"></div>
+                </div>
+            </div>
+
+            <!-- Interview Questions Section -->
+            <div class="interview-section">
+                <h2>💼 Interview Questions & Answers</h2>
+                
+                <div class="question" onclick="toggleAnswer('q1')">
+                    <span class="question-number">Q1.</span>
+                    Constructor function aur ES6 class mein kya difference hai?
+                    <span class="difficulty easy">Easy</span>
+                    <div id="q1" class="answer">
+                        <strong>Answer:</strong><br><br>
+                        Dono internally same kaam karte hain lekin syntax aur behavior mein differences hain:<br><br>
+                        
+                        <strong>🔹 Constructor Function:</strong><br>
+                        • Regular function hai jo capital letter se start hota hai<br>
+                        • Methods ko prototype mein manually add karna padta hai<br>
+                        • 'new' keyword mandatory hai object create karne ke liye<br>
+                        • Hoisted hote hain (function declarations ki tarah)<br><br>
+                        
+                        <strong>Example:</strong><br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        function Person(name) {<br>
+                        &nbsp;&nbsp;this.name = name;<br>
+                        }<br>
+                        Person.prototype.greet = function() {<br>
+                        &nbsp;&nbsp;console.log('Hello ' + this.name);<br>
+                        };
+                        </code><br>
+                        
+                        <strong>🔹 ES6 Class:</strong><br>
+                        • Cleaner aur readable syntax<br>
+                        • Methods automatically prototype mein add hote hain<br>
+                        • 'extends' keyword se inheritance easy ho jaati hai<br>
+                        • Hoisting nahi hoti (Temporal Dead Zone mein rehte hain)<br>
+                        • Strict mode mein automatically run hoti hai<br>
+                        • 'new' bina use kiye error throw karti hai<br><br>
+                        
+                        <strong>Example:</strong><br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class Person {<br>
+                        &nbsp;&nbsp;constructor(name) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;this.name = name;<br>
+                        &nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;greet() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log('Hello ' + this.name);<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                        </code><br>
+                        
+                        <strong>💡 Key Difference:</strong> Classes syntactic sugar hain lekin behavior mein differences hain jaise hoisting aur strict mode.
+                    </div>
+                </div>         
+       <div class="question" onclick="toggleAnswer('q2')">
+                    <span class="question-number">Q2.</span>
+                    'this' keyword class ke andar kaise kaam karta hai?
+                    <span class="difficulty easy">Easy</span>
+                    <div id="q2" class="answer">
+                        <strong>Answer:</strong><br><br>
+                        Class ke andar 'this' keyword current instance (object) ko refer karta hai jo us class se create hua hai.<br><br>
+                        
+                        <strong>🔸 Constructor mein 'this':</strong><br>
+                        Constructor mein 'this' naye object ko point karta hai jo abhi create ho raha hai. Jab hum 'new ClassName()' likhte hain, JavaScript internally ek empty object banata hai aur 'this' us object ko refer karta hai.<br><br>
+                        
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class Car {<br>
+                        &nbsp;&nbsp;constructor(brand) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;this.brand = brand; // 'this' = new car object<br>
+                        &nbsp;&nbsp;}<br>
+                        }<br>
+                        const car1 = new Car('Honda'); // this = car1<br>
+                        const car2 = new Car('Toyota'); // this = car2
+                        </code><br>
+                        
+                        <strong>🔸 Methods mein 'this':</strong><br>
+                        Instance methods mein 'this' us object ko refer karta hai jisne method ko call kiya hai.<br><br>
+                        
+                        <strong>⚠️ Important Points:</strong><br>
+                        • Arrow functions apna 'this' nahi rakhte, parent scope ka 'this' use karte hain<br>
+                        • Method ko variable mein assign karke call karne par 'this' context lost ho sakta hai<br>
+                        • .bind(), .call(), .apply() se 'this' ko explicitly set kar sakte hain<br><br>
+                        
+                        <strong>Example of Lost Context:</strong><br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        const obj = { name: 'Test', getName() { return this.name; } };<br>
+                        const fn = obj.getName;<br>
+                        fn(); // undefined - 'this' context lost!<br>
+                        fn.call(obj); // 'Test' - context restored
+                        </code>
+                    </div>
+                </div>
+
+                <div class="question" onclick="toggleAnswer('q3')">
+                    <span class="question-number">Q3.</span>
+                    Static methods kya hote hain aur kab use karte hain?
+                    <span class="difficulty medium">Medium</span>
+                    <div id="q3" class="answer">
+                        <strong>Answer:</strong><br><br>
+                        Static methods class ke saath directly bind hote hain, individual instances (objects) ke saath nahi. Inhe call karne ke liye object banana zaruri nahi hai.<br><br>
+                        
+                        <strong>🔹 Key Characteristics:</strong><br>
+                        • ClassName.methodName() se directly call hote hain<br>
+                        • 'this' keyword class constructor ko refer karta hai, instance ko nahi<br>
+                        • Instance se access nahi kar sakte (obj.staticMethod() ❌)<br>
+                        • Memory efficient - sirf ek copy memory mein rahti hai<br><br>
+                        
+                        <strong>📌 Kab Use Karte Hain:</strong><br><br>
+                        
+                        <strong>1. Utility/Helper Functions:</strong><br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class MathUtils {<br>
+                        &nbsp;&nbsp;static add(a, b) { return a + b; }<br>
+                        &nbsp;&nbsp;static square(n) { return n * n; }<br>
+                        }<br>
+                        MathUtils.add(5, 3); // 8
+                        </code><br>
+                        
+                        <strong>2. Factory Methods (Objects create karne ke liye):</strong><br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class User {<br>
+                        &nbsp;&nbsp;static createAdmin(name) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return new User(name, 'admin');<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                        </code><br>
+                        
+                        <strong>3. Constants ya Configuration:</strong><br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class Database {<br>
+                        &nbsp;&nbsp;static MAX_CONNECTIONS = 100;<br>
+                        &nbsp;&nbsp;static getConfig() { return {...}; }<br>
+                        }
+                        </code><br>
+                        
+                        <strong>4. Counter/Statistics:</strong><br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class Product {<br>
+                        &nbsp;&nbsp;static totalProducts = 0;<br>
+                        &nbsp;&nbsp;constructor() { Product.totalProducts++; }<br>
+                        }
+                        </code><br>
+                        
+                        <strong>💡 Real Examples:</strong> Math.max(), Array.from(), Object.keys(), Date.now() - yeh sab static methods hain!
+                    </div>
+                </div>   
+             <div class="question" onclick="toggleAnswer('q4')">
+                    <span class="question-number">Q4.</span>
+                    Getters aur Setters ki kya zarurat hai? Direct properties kyu nahi use karte?
+                    <span class="difficulty medium">Medium</span>
+                    <div id="q4" class="answer">
+                        <strong>Answer:</strong><br><br>
+                        Getters aur Setters data ko control aur protect karne ke liye use hote hain. Direct properties use karne se data validation aur encapsulation ka problem hota hai.<br><br>
+                        
+                        <strong>🔸 Getters aur Setters Kyu Zaruri Hain:</strong><br><br>
+                        
+                        <strong>1. Data Validation:</strong><br>
+                        Setter mein value set karne se pehle validation kar sakte hain:<br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class Person {<br>
+                        &nbsp;&nbsp;set age(value) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;if(value < 0 || value > 150) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw new Error('Invalid age!');<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;this._age = value;<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                        </code><br>
+                        
+                        <strong>2. Computed Properties:</strong><br>
+                        Getter se dynamic values calculate kar sakte hain:<br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class Rectangle {<br>
+                        &nbsp;&nbsp;constructor(width, height) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;this.width = width;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;this.height = height;<br>
+                        &nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;get area() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return this.width * this.height; // har baar calculate<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                        </code><br>
+                        
+                        <strong>3. Encapsulation (Data Protection):</strong><br>
+                        Internal representation ko hide kar sakte hain:<br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class BankAccount {<br>
+                        &nbsp;&nbsp;#balance = 0; // private<br>
+                        &nbsp;&nbsp;get balance() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return `₹${this.#balance}`; // formatted output<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                        </code><br>
+                        
+                        <strong>4. Backwards Compatibility:</strong><br>
+                        Implementation change karne par bhi API same rahta hai. Direct property ko getter/setter mein convert kar sakte hain bina code break kiye.<br><br>
+                        
+                        <strong>5. Side Effects:</strong><br>
+                        Value set/get karte waqt additional actions perform kar sakte hain (logging, notifications, etc.)<br><br>
+                        
+                        <strong>⚠️ Direct Property Problem:</strong><br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        person.age = -5; // ❌ Invalid age set ho jayegi!<br>
+                        person.age = 'twenty'; // ❌ String bhi set ho jayegi!
+                        </code>
+                    </div>
+                </div>  
+              <div class="question" onclick="toggleAnswer('q5')">
+                    <span class="question-number">Q5.</span>
+                    'super' keyword ka kya use hai aur kab zaruri hai?
+                    <span class="difficulty medium">Medium</span>
+                    <div id="q5" class="answer">
+                        <strong>Answer:</strong><br><br>
+                        'super' keyword child class se parent class ko access karne ke liye use hota hai. Inheritance mein yeh bahut important hai.<br><br>
+                        
+                        <strong>🔹 super() - Parent Constructor Call:</strong><br>
+                        Child class mein constructor hai toh super() call karna MANDATORY hai, woh bhi 'this' use karne se pehle.<br><br>
+                        
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class Animal {<br>
+                        &nbsp;&nbsp;constructor(name) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;this.name = name;<br>
+                        &nbsp;&nbsp;}<br>
+                        }<br><br>
+                        class Dog extends Animal {<br>
+                        &nbsp;&nbsp;constructor(name, breed) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;super(name); // ✅ Parent constructor call - ZARURI!<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;this.breed = breed; // 'this' sirf super() ke baad use kar sakte hain<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                        </code><br>
+                        
+                        <strong>🔹 super.method() - Parent Method Call:</strong><br>
+                        Parent class ke methods ko call karne ke liye, especially jab woh method override ho gaya ho.<br><br>
+                        
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class Vehicle {<br>
+                        &nbsp;&nbsp;start() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return 'Vehicle started';<br>
+                        &nbsp;&nbsp;}<br>
+                        }<br><br>
+                        class Car extends Vehicle {<br>
+                        &nbsp;&nbsp;start() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;const msg = super.start(); // Parent ka method call<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return msg + ' and engine is warming up!';<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                        </code><br>
+                        
+                        <strong>⚠️ Important Rules:</strong><br>
+                        • Child class mein agar constructor hai toh super() zaruri hai<br>
+                        • super() ko 'this' keyword use karne se PEHLE call karna padta hai<br>
+                        • super() sirf constructor ke andar call hota hai<br>
+                        • super.methodName() kisi bhi method mein use kar sakte hain<br><br>
+                        
+                        <strong>❌ Common Mistakes:</strong><br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        constructor(name) {<br>
+                        &nbsp;&nbsp;this.name = name; // ❌ Error! 'this' before super()<br>
+                        &nbsp;&nbsp;super(name);<br>
+                        }<br><br>
+                        constructor(name) {<br>
+                        &nbsp;&nbsp;// ❌ Error! super() missing<br>
+                        &nbsp;&nbsp;this.name = name;<br>
+                        }
+                        </code>
+                    </div>
+                </div>   
+             <div class="question" onclick="toggleAnswer('q6')">
+                    <span class="question-number">Q6.</span>
+                    Private properties (#property) kya hain aur kaise kaam karti hain?
+                    <span class="difficulty hard">Hard</span>
+                    <div id="q6" class="answer">
+                        <strong>Answer:</strong><br><br>
+                        Private properties ES2022 mein introduce hui - '#' symbol se start hoti hain aur class ke bahar se bilkul bhi accessible nahi hoti. Yeh true encapsulation provide karti hain.<br><br>
+                        
+                        <strong>🔸 Syntax aur Declaration:</strong><br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class User {<br>
+                        &nbsp;&nbsp;#password; // Private field declaration<br>
+                        &nbsp;&nbsp;#loginAttempts = 0; // With default value<br><br>
+                        &nbsp;&nbsp;constructor(username, password) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;this.username = username; // Public<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;this.#password = password; // Private<br>
+                        &nbsp;&nbsp;}<br><br>
+                        &nbsp;&nbsp;validatePassword(pass) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return this.#password === pass; // ✅ Class ke andar accessible<br>
+                        &nbsp;&nbsp;}<br>
+                        }<br><br>
+                        const user = new User('rahul', 'secret123');<br>
+                        console.log(user.username); // ✅ 'rahul'<br>
+                        console.log(user.#password); // ❌ SyntaxError!
+                        </code><br>
+                        
+                        <strong>🔸 Key Characteristics:</strong><br>
+                        • Class body mein declare hona chahiye (constructor se pehle)<br>
+                        • Class ke methods mein accessible hain<br>
+                        • Child classes mein bhi accessible NAHI hain<br>
+                        • Truly private - koi bhi external code access nahi kar sakta<br>
+                        • Private methods bhi ban sakte hain: #privateMethod() {}<br><br>
+                        
+                        <strong>🔸 _property vs #property:</strong><br>
+                        <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
+                        <tr style="background: #667eea; color: white;">
+                        <th style="padding: 8px; text-align: left;">Convention (_property)</th>
+                        <th style="padding: 8px; text-align: left;">Private (#property)</th>
+                        </tr>
+                        <tr style="background: #f5f5f5;">
+                        <td style="padding: 8px;">Sirf naming convention hai</td>
+                        <td style="padding: 8px;">Language-level privacy</td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 8px;">Actually accessible hai</td>
+                        <td style="padding: 8px;">Bilkul accessible nahi</td>
+                        </tr>
+                        <tr style="background: #f5f5f5;">
+                        <td style="padding: 8px;">obj._prop se access ho jayega</td>
+                        <td style="padding: 8px;">obj.#prop SyntaxError throw karega</td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 8px;">Child classes inherit kar sakti hain</td>
+                        <td style="padding: 8px;">Child classes access nahi kar sakti</td>
+                        </tr>
+                        </table><br>
+                        
+                        <strong>💡 Use Case Example:</strong><br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class BankAccount {<br>
+                        &nbsp;&nbsp;#balance = 0;<br>
+                        &nbsp;&nbsp;#pin;<br><br>
+                        &nbsp;&nbsp;constructor(pin) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;this.#pin = pin;<br>
+                        &nbsp;&nbsp;}<br><br>
+                        &nbsp;&nbsp;withdraw(amount, inputPin) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;if(this.#pin !== inputPin) return 'Wrong PIN!';<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;if(this.#balance >= amount) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.#balance -= amount;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;}<br>
+                        }<br>
+                        // PIN aur balance ko directly access nahi kar sakte!
+                        </code>
+                    </div>
+                </div>  
+              <div class="question" onclick="toggleAnswer('q7')">
+                    <span class="question-number">Q7.</span>
+                    Method Overriding kya hai? Real-world example ke saath explain karo.
+                    <span class="difficulty hard">Hard</span>
+                    <div id="q7" class="answer">
+                        <strong>Answer:</strong><br><br>
+                        Method Overriding tab hoti hai jab child class parent class ke method ko same name se redefine karta hai. Isse child class apna specific behavior implement kar sakti hai.<br><br>
+                        
+                        <strong>🔸 Basic Concept:</strong><br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class Animal {<br>
+                        &nbsp;&nbsp;makeSound() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return "Some generic sound";<br>
+                        &nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;eat() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return "Animal is eating";<br>
+                        &nbsp;&nbsp;}<br>
+                        }<br><br>
+                        class Dog extends Animal {<br>
+                        &nbsp;&nbsp;makeSound() { // ✅ Override<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return "Bhow Bhow! 🐕";<br>
+                        &nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;// eat() override nahi kiya - parent ka use hoga<br>
+                        }<br><br>
+                        class Cat extends Animal {<br>
+                        &nbsp;&nbsp;makeSound() { // ✅ Override<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return "Meow Meow! 🐈";<br>
+                        &nbsp;&nbsp;}<br>
+                        }<br><br>
+                        const dog = new Dog();<br>
+                        const cat = new Cat();<br>
+                        dog.makeSound(); // "Bhow Bhow! 🐕"<br>
+                        cat.makeSound(); // "Meow Meow! 🐈"<br>
+                        dog.eat(); // "Animal is eating" - parent ka method
+                        </code><br>
+                        
+                        <strong>🔸 Real-World Example - Payment System:</strong><br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class Payment {<br>
+                        &nbsp;&nbsp;processPayment(amount) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return `Processing ₹${amount}`;<br>
+                        &nbsp;&nbsp;}<br>
+                        }<br><br>
+                        class CreditCardPayment extends Payment {<br>
+                        &nbsp;&nbsp;processPayment(amount) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;// Credit card specific logic<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;const fee = amount * 0.02; // 2% fee<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return `Credit Card: ₹${amount + fee} (with fee)`;<br>
+                        &nbsp;&nbsp;}<br>
+                        }<br><br>
+                        class UPIPayment extends Payment {<br>
+                        &nbsp;&nbsp;processPayment(amount) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;// UPI specific logic<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return `UPI: ₹${amount} (instant, no fee)`;<br>
+                        &nbsp;&nbsp;}<br>
+                        }<br><br>
+                        class CashPayment extends Payment {<br>
+                        &nbsp;&nbsp;processPayment(amount) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return `Cash: ₹${amount} received`;<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                        </code><br>
+                        
+                        <strong>🔸 Benefits of Method Overriding:</strong><br>
+                        • <strong>Polymorphism:</strong> Same interface, different implementations<br>
+                        • <strong>Flexibility:</strong> Har child class apna behavior define kar sakti hai<br>
+                        • <strong>Code Reusability:</strong> Common code parent mein, specific code child mein<br>
+                        • <strong>Maintainability:</strong> Changes ek jagah karne se sab jagah reflect hote hain<br><br>
+                        
+                        <strong>🔸 super.method() ke saath:</strong><br>
+                        Parent ka method bhi use kar sakte hain aur uske saath extra functionality add kar sakte hain:<br>
+                        <code style="background: #f5f5f5; padding: 5px; display: block; margin: 5px 0;">
+                        class Employee {<br>
+                        &nbsp;&nbsp;getDetails() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return "Employee details";<br>
+                        &nbsp;&nbsp;}<br>
+                        }<br><br>
+                        class Manager extends Employee {<br>
+                        &nbsp;&nbsp;getDetails() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;const baseDetails = super.getDetails(); // Parent call<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return baseDetails + " + Team management";<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                        </code><br>
+                        
+                        <strong>💡 Real Interview Scenario:</strong><br>
+                        Interviewer: "Agar 100 types ke animals hain aur sabka sound alag hai, kaise handle karoge?"<br>
+                        Answer: "Method overriding use karunga - base Animal class mein makeSound() method rahega, aur har animal type (Dog, Cat, Lion, etc.) us method ko override karke apna specific sound return karega. Isse code maintainable aur scalable rahega."
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+   <script>
+        // Constructor Function Demo
+        function createPerson() {
+            const name = document.getElementById('personName').value;
+            const age = document.getElementById('personAge').value;
+            
+            if(!name || !age) {
+                document.getElementById('personOutput').innerHTML = '❌ Name aur age dono enter karo!';
+                return;
+            }
+            
+            function Person(name, age) {
+                this.name = name;
+                this.age = age;
+                this.greet = function() {
+                    return `Namaste! Mera naam ${this.name} hai aur meri age ${this.age} saal hai.`;
+                };
+            }
+            
+            const person = new Person(name, age);
+            document.getElementById('personOutput').innerHTML = `
+                ✅ <strong>Person Object Created!</strong><br>
+                Name: ${person.name}<br>
+                Age: ${person.age}<br>
+                Greeting: ${person.greet()}
+            `;
+        }
+
+        // Tab Switching
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Vehicle Demo
+        class Vehicle {
+            constructor(brand, year) {
+                this.brand = brand;
+                this.year = year;
+                this.isRunning = false;
+            }
+            
+            start() {
+                this.isRunning = true;
+                return `${this.brand} start ho gayi!`;
+            }
+            
+            stop() {
+                this.isRunning = false;
+                return `${this.brand} band ho gayi!`;
+            }
+        }
+
+        class Car extends Vehicle {
+            constructor(brand, year, doors) {
+                super(brand, year);
+                this.doors = doors;
+                this.type = 'Car';
+            }
+            
+            honk() {
+                return 'Beep Beep! 🚗';
+            }
+        }      
+  class Bike extends Vehicle {
+            constructor(brand, year, bikeType) {
+                super(brand, year);
+                this.bikeType = bikeType;
+                this.type = 'Bike';
+            }
+            
+            wheelie() {
+                return 'Bike ek wheel pe chal rahi hai! 🏍️';
+            }
+        }
+
+        let vehicleCount = 0;
+
+        function createCar() {
+            const brands = ['Honda', 'Toyota', 'Maruti', 'Hyundai', 'Tata'];
+            const brand = brands[Math.floor(Math.random() * brands.length)];
+            const year = 2020 + Math.floor(Math.random() * 5);
+            const doors = Math.random() > 0.5 ? 4 : 2;
+            
+            const car = new Car(brand, year, doors);
+            displayVehicle(car);
+        }
+
+        function createBike() {
+            const brands = ['Hero', 'Bajaj', 'Royal Enfield', 'TVS', 'Yamaha'];
+            const types = ['Sports', 'Cruiser', 'Commuter', 'Adventure'];
+            const brand = brands[Math.floor(Math.random() * brands.length)];
+            const year = 2020 + Math.floor(Math.random() * 5);
+            const bikeType = types[Math.floor(Math.random() * types.length)];
+            
+            const bike = new Bike(brand, year, bikeType);
+            displayVehicle(bike);
+        }
+
+        function displayVehicle(vehicle) {
+            const grid = document.getElementById('vehicleGrid');
+            const card = document.createElement('div');
+            card.className = 'vehicle-card';
+            
+            if(vehicle.type === 'Car') {
+                card.innerHTML = `
+                    <h3>🚗 ${vehicle.brand} Car</h3>
+                    <p>Year: ${vehicle.year}</p>
+                    <p>Doors: ${vehicle.doors}</p>
+                    <p>${vehicle.honk()}</p>
+                    <p style="margin-top: 10px; font-size: 0.9em;">
+                        Start: ${vehicle.start()}<br>
+                        Stop: ${vehicle.stop()}
+                    </p>
+                `;
+            } else {
+                card.innerHTML = `
+                    <h3>🏍️ ${vehicle.brand} Bike</h3>
+                    <p>Year: ${vehicle.year}</p>
+                    <p>Type: ${vehicle.bikeType}</p>
+                    <p>${vehicle.wheelie()}</p>
+                    <p style="margin-top: 10px; font-size: 0.9em;">
+                        Start: ${vehicle.start()}<br>
+                        Stop: ${vehicle.stop()}
+                    </p>
+                `;
+            }
+            
+            grid.appendChild(card);
+        }
+
+        function clearVehicles() {
+            document.getElementById('vehicleGrid').innerHTML = '';
+        }     
+   // Bank Account Demo
+        class BankAccount {
+            static accountCount = 0;
+            
+            constructor(owner, initialBalance = 0) {
+                this.owner = owner;
+                this._balance = initialBalance;
+                this.accountNumber = ++BankAccount.accountCount;
+            }
+            
+            get balance() {
+                return this._balance;
+            }
+            
+            deposit(amount) {
+                if(amount > 0) {
+                    this._balance += amount;
+                    return `₹${amount} deposit ho gaye!`;
+                }
+                return 'Invalid amount!';
+            }
+            
+            withdraw(amount) {
+                if(amount > this._balance) {
+                    return 'Insufficient balance!';
+                }
+                this._balance -= amount;
+                return `₹${amount} withdraw ho gaye!`;
+            }
+        }
+
+        let currentAccount = null;
+
+        function createAccount() {
+            const owner = document.getElementById('accountOwner').value;
+            const initial = parseFloat(document.getElementById('initialAmount').value) || 0;
+            
+            if(!owner) {
+                document.getElementById('accountOutput').innerHTML = '❌ Account holder ka naam enter karo!';
+                return;
+            }
+            
+            currentAccount = new BankAccount(owner, initial);
+            updateAccountDisplay();
+        }
+
+        function depositMoney() {
+            if(!currentAccount) {
+                document.getElementById('accountOutput').innerHTML = '❌ Pehle account banao!';
+                return;
+            }
+            
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            if(amount && amount > 0) {
+                const msg = currentAccount.deposit(amount);
+                updateAccountDisplay(msg);
+                document.getElementById('depositAmount').value = '';
+            }
+        }
+
+        function withdrawMoney() {
+            if(!currentAccount) {
+                document.getElementById('accountOutput').innerHTML = '❌ Pehle account banao!';
+                return;
+            }
+            
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            if(amount && amount > 0) {
+                const msg = currentAccount.withdraw(amount);
+                updateAccountDisplay(msg);
+                document.getElementById('withdrawAmount').value = '';
+            }
+        }     
+   function updateAccountDisplay(message = '') {
+            document.getElementById('accountOutput').innerHTML = `
+                <strong>💳 Account Details:</strong><br>
+                Account Number: ${currentAccount.accountNumber}<br>
+                Owner: ${currentAccount.owner}<br>
+                Balance: ₹${currentAccount.balance}<br>
+                ${message ? `<br><strong>Transaction:</strong> ${message}` : ''}
+            `;
+        }
+
+        // Interview Questions Toggle
+        function toggleAnswer(id) {
+            const answer = document.getElementById(id);
+            answer.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

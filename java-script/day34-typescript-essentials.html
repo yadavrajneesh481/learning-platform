@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 34: TypeScript Essentials</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #3178c6;
+        }
+        h1, h2, h3 {
+            color: #3178c6;
+        }
+        section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #3178c6;
+            background: #f9f9f9;
+        }
+        .demo {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+        }
+        button {
+            background: #3178c6;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #2c5aa0;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .home-link:hover {
+            background: #218838;
+        }
+        .ts-vs-js {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        .js-code {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        .ts-code {
+            background: #e7f3ff;
+            border-left: 4px solid #3178c6;
+        }
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .type-card {
+            background: white;
+            border: 2px solid #3178c6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: all 0.3s;
+        }
+        .type-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .interview-section {
+            background: #e9ecef;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+        input, textarea, select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .ts-vs-js {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        
+        <header>
+            <h1>Day 34: TypeScript Essentials</h1>
+            <p><em>Static typing, interfaces, type aliases - JavaScript with superpowers!</em></p>
+        </header>
+
+        <section id="intro">
+            <h2>TypeScript Kya Hai?</h2>
+            <p>TypeScript Microsoft ka open-source programming language hai jo JavaScript ka superset hai. Yeh static typing add karta hai JavaScript mein, jo large applications mein bugs reduce karta hai aur development experience improve karta hai.</p>
+            
+            <h3>🚀 TypeScript Benefits:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; border-left: 4px solid #3178c6;">
+                    <h4>🔍 Static Type Checking</h4>
+                    <p>Compile time pe errors catch karna</p>
+                    <ul>
+                        <li>Runtime errors prevent karna</li>
+                        <li>Better IDE support</li>
+                        <li>Refactoring confidence</li>
+                    </ul>
+                </div>
+                <div style="background: #f0f8e7; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
+                    <h4>📚 Better Documentation</h4>
+                    <p>Code self-documenting ban jaata hai</p>
+                    <ul>
+                        <li>Function signatures clear</li>
+                        <li>API contracts defined</li>
+                        <li>Team collaboration easier</li>
+                    </ul>
+                </div>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <h4>🛠️ Enhanced Tooling</h4>
+                    <p>IDE features aur developer experience</p>
+                    <ul>
+                        <li>IntelliSense autocomplete</li>
+                        <li>Go to definition</li>
+                        <li>Rename refactoring</li>
+                    </ul>
+                </div>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border-left: 4px solid #dc3545;">
+                    <h4>📈 Scalability</h4>
+                    <p>Large codebases maintain karna</p>
+                    <ul>
+                        <li>Type safety</li>
+                        <li>Module system</li>
+                        <li>Enterprise ready</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="basic-types">
+            <h2>Basic Types aur Type Annotations</h2>
+            <p>TypeScript mein variables ko specific types assign kar sakte hain. Yeh compile time pe type checking enable karta hai.</p>
+            
+            <div class="demo">
+                <h3>JavaScript vs TypeScript Comparison:</h3>
+                <div class="ts-vs-js">
+                    <div class="js-code" style="padding: 15px; border-radius: 8px;">
+                        <h4>📄 JavaScript (Dynamic)</h4>
+                        <div class="code-example">
+// JavaScript - No type checking
+let name = "John";
+let age = 25;
+let isStudent = true;
+
+function greet(person) {
+    return "Hello " + person.name;
+}
+
+// Runtime error possible
+greet("string"); // TypeError!
+                        </div>
+                    </div>
+                    <div class="ts-code" style="padding: 15px; border-radius: 8px;">
+                        <h4>📘 TypeScript (Static)</h4>
+                        <div class="code-example">
+// TypeScript - Type annotations
+let name: string = "John";
+let age: number = 25;
+let isStudent: boolean = true;
+
+function greet(person: {name: string}): string {
+    return "Hello " + person.name;
+}
+
+// Compile-time error prevention
+// greet("string"); // Error caught!
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Basic Type Examples:</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 15px 0;">
+                    <button onclick="showTypeExample('primitive')">Primitive Types</button>
+                    <button onclick="showTypeExample('array')">Array Types</button>
+                    <button onclick="showTypeExample('object')">Object Types</button>
+                    <button onclick="showTypeExample('function')">Function Types</button>
+                    <button onclick="showTypeExample('union')">Union Types</button>
+                    <button onclick="showTypeExample('literal')">Literal Types</button>
+                </div>
+                <div id="type-example-output"></div>
+            </div>
+        </section>
+
+        <section id="interfaces">
+            <h2>Interfaces aur Type Aliases</h2>
+            <p>Interfaces aur type aliases complex types define karne ke liye use hote hain. Yeh code ko more readable aur maintainable banate hain.</p>
+            
+            <div class="demo">
+                <h3>Interface vs Type Alias:</h3>
+                <div class="ts-vs-js">
+                    <div style="background: #e7f3ff; padding: 15px; border-radius: 8px;">
+                        <h4>🔷 Interface</h4>
+                        <div class="code-example">
+interface User {
+    id: number;
+    name: string;
+    email: string;
+    isActive?: boolean; // Optional
+}
+
+// Interface extension
+interface AdminUser extends User {
+    permissions: string[];
+}
+
+// Implementation
+const user: User = {
+    id: 1,
+    name: "John",
+    email: "john@example.com"
+};
+                        </div>
+                    </div>
+                    <div style="background: #f0f8e7; padding: 15px; border-radius: 8px;">
+                        <h4>🏷️ Type Alias</h4>
+                        <div class="code-example">
+type User = {
+    id: number;
+    name: string;
+    email: string;
+    isActive?: boolean; // Optional
+};
+
+// Union types
+type Status = "pending" | "approved" | "rejected";
+
+// Function types
+type EventHandler = (event: Event) => void;
+
+// Generic types
+type ApiResponse&lt;T&gt; = {
+    data: T;
+    status: number;
+};
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Interactive Interface Builder:</h3>
+                <div style="margin: 15px 0;">
+                    <label>Interface Name: <input type="text" id="interface-name" value="Person"></label><br>
+                    <label>Property Name: <input type="text" id="prop-name" placeholder="name"></label>
+                    <label>Property Type: 
+                        <select id="prop-type">
+                            <option value="string">string</option>
+                            <option value="number">number</option>
+                            <option value="boolean">boolean</option>
+                            <option value="string[]">string[]</option>
+                            <option value="any">any</option>
+                        </select>
+                    </label>
+                    <label><input type="checkbox" id="prop-optional"> Optional?</label>
+                    <button onclick="addInterfaceProperty()">Add Property</button>
+                    <button onclick="generateInterface()">Generate Interface</button>
+                    <button onclick="clearInterface()">Clear</button>
+                </div>
+                <div id="interface-output"></div>
+            </div>
+        </section>
+
+        <section id="conversion-practice">
+            <h2>Practice: JavaScript to TypeScript Conversion</h2>
+            <p>Existing JavaScript code ko TypeScript mein convert karne ka practice karenge:</p>
+            
+            <div class="demo">
+                <h3>Conversion Exercise:</h3>
+                <div style="margin: 15px 0;">
+                    <h4>Original JavaScript Code:</h4>
+                    <textarea id="js-code" style="width: 100%; height: 200px; font-family: monospace; padding: 10px;">
+// JavaScript Code to Convert
+function calculateTotal(items) {
+    let total = 0;
+    for (let item of items) {
+        total += item.price * item.quantity;
+    }
+    return total;
+}
+
+const shoppingCart = [
+    { name: "Laptop", price: 50000, quantity: 1 },
+    { name: "Mouse", price: 1500, quantity: 2 }
+];
+
+const user = {
+    name: "John Doe",
+    email: "john@example.com",
+    age: 30
+};
+
+console.log(calculateTotal(shoppingCart));
+                    </textarea>
+                </div>
+                <button onclick="convertToTypeScript()">🔄 Convert to TypeScript</button>
+                <div id="conversion-output"></div>
+                
+                <h3>TypeScript Compiler Simulation:</h3>
+                <button onclick="simulateTypeChecking()">🔍 Run Type Checker</button>
+                <div id="type-check-output"></div>
+            </div>
+        </section>
+
+        <section class="interview-section">
+            <h2>Interview Questions</h2>
+            <div class="question">
+                <h3>1. Basic: TypeScript kya hai aur JavaScript se kya different hai?</h3>
+                <p>Answer: TypeScript JavaScript ka superset hai jo static typing add karta hai. Compile time pe JavaScript mein convert ho jaata hai.</p>
+            </div>
+            <div class="question">
+                <h3>2. Basic: Interface aur type alias mein kya difference hai?</h3>
+                <p>Answer: Interface extend ho sakta hai aur declaration merging support karta hai. Type alias union types aur computed properties support karta hai.</p>
+            </div>
+            <div class="question">
+                <h3>3. Intermediate: Optional properties kaise define karte hain?</h3>
+                <p>Answer: Property name ke baad ? lagakar: interface User { name: string; age?: number; }</p>
+            </div>
+            <div class="question">
+                <h3>4. Intermediate: Union types kya hain? Example do.</h3>
+                <p>Answer: Multiple types allow karna: type Status = "loading" | "success" | "error";</p>
+            </div>
+            <div class="question">
+                <h3>5. Advanced: Generic types kya hain aur kab use karte hain?</h3>
+                <p>Answer: Reusable components jo different types ke saath work kar saken: function identity&lt;T&gt;(arg: T): T { return arg; }</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        let interfaceProperties = [];
+
+        function showTypeExample(type) {
+            const output = document.getElementById('type-example-output');
+            const examples = {
+                primitive: `
+// Primitive Types
+let name: string = "John";
+let age: number = 25;
+let isActive: boolean = true;
+let value: null = null;
+let notDefined: undefined = undefined;
+let uniqueId: symbol = Symbol("id");
+let bigNumber: bigint = 123n;`,
+                array: `
+// Array Types
+let numbers: number[] = [1, 2, 3, 4, 5];
+let names: Array<string> = ["John", "Jane"];
+let mixed: (string | number)[] = ["hello", 42];
+let matrix: number[][] = [[1, 2], [3, 4]];`,
+                object: `
+// Object Types
+let user: { name: string; age: number } = {
+    name: "John",
+    age: 25
+};
+
+let config: { [key: string]: any } = {
+    theme: "dark",
+    timeout: 5000
+};`,
+                function: `
+// Function Types
+let greet: (name: string) => string;
+greet = (name) => "Hello " + name;
+
+let calculate: (a: number, b: number) => number;
+calculate = (a, b) => a + b;`,
+                union: `
+// Union Types
+let status: "loading" | "success" | "error" = "loading";
+let id: string | number = "user123";
+let data: string | null = null;`,
+                literal: `
+// Literal Types
+let direction: "up" | "down" | "left" | "right" = "up";
+let httpMethod: "GET" | "POST" | "PUT" | "DELETE" = "GET";
+let theme: "light" | "dark" = "light";`
+            };
+            
+            output.innerHTML = `
+                <h4>📝 ${type.charAt(0).toUpperCase() + type.slice(1)} Types Example:</h4>
+                <div class="code-example">${examples[type]}</div>
+            `;
+        }
+
+        function addInterfaceProperty() {
+            const name = document.getElementById('prop-name').value.trim();
+            const type = document.getElementById('prop-type').value;
+            const optional = document.getElementById('prop-optional').checked;
+            
+            if (!name) {
+                alert('Please enter property name!');
+                return;
+            }
+            
+            interfaceProperties.push({
+                name: name,
+                type: type,
+                optional: optional
+            });
+            
+            document.getElementById('prop-name').value = '';
+            document.getElementById('prop-optional').checked = false;
+            
+            updateInterfacePreview();
+        }
+
+        function updateInterfacePreview() {
+            const interfaceName = document.getElementById('interface-name').value || 'MyInterface';
+            const output = document.getElementById('interface-output');
+            
+            if (interfaceProperties.length === 0) {
+                output.innerHTML = '<p>Add properties to see interface preview...</p>';
+                return;
+            }
+            
+            const interfaceCode = `interface ${interfaceName} {
+${interfaceProperties.map(prop => 
+    `    ${prop.name}${prop.optional ? '?' : ''}: ${prop.type};`
+).join('\n')}
+}`;
+            
+            output.innerHTML = `
+                <h4>🔷 Generated Interface:</h4>
+                <div class="code-example">${interfaceCode}</div>
+                <p><strong>Properties:</strong> ${interfaceProperties.length}</p>
+            `;
+        }
+
+        function generateInterface() {
+            updateInterfacePreview();
+        }
+
+        function clearInterface() {
+            interfaceProperties = [];
+            document.getElementById('interface-output').innerHTML = '';
+        }
+
+        function convertToTypeScript() {
+            const jsCode = document.getElementById('js-code').value;
+            const output = document.getElementById('conversion-output');
+            
+            // Simulate TypeScript conversion
+            const tsCode = `// TypeScript Version with Type Annotations
+
+interface CartItem {
+    name: string;
+    price: number;
+    quantity: number;
+}
+
+interface User {
+    name: string;
+    email: string;
+    age: number;
+}
+
+function calculateTotal(items: CartItem[]): number {
+    let total: number = 0;
+    for (let item of items) {
+        total += item.price * item.quantity;
+    }
+    return total;
+}
+
+const shoppingCart: CartItem[] = [
+    { name: "Laptop", price: 50000, quantity: 1 },
+    { name: "Mouse", price: 1500, quantity: 2 }
+];
+
+const user: User = {
+    name: "John Doe",
+    email: "john@example.com",
+    age: 30
+};
+
+console.log(calculateTotal(shoppingCart));`;
+            
+            output.innerHTML = `
+                <h4>🔄 TypeScript Conversion:</h4>
+                <div class="code-example">${tsCode}</div>
+                <div style="background: #d4edda; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                    <strong>✅ Improvements Added:</strong><br>
+                    • Interface definitions for CartItem and User<br>
+                    • Function parameter and return type annotations<br>
+                    • Array type annotations<br>
+                    • Type safety for all variables
+                </div>
+            `;
+        }
+
+        function simulateTypeChecking() {
+            const output = document.getElementById('type-check-output');
+            
+            // Simulate TypeScript compiler output
+            output.innerHTML = `
+                <h4>🔍 TypeScript Compiler Results:</h4>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; font-family: monospace; margin: 10px 0;">
+$ tsc --noEmit
+
+✅ No type errors found!
+
+Checking file: shopping-cart.ts
+- Interface CartItem: ✓
+- Interface User: ✓  
+- Function calculateTotal: ✓
+- Variable shoppingCart: ✓
+- Variable user: ✓
+
+Type checking completed successfully.
+                </div>
+                <div style="background: #d4edda; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                    <strong>🎉 Benefits Achieved:</strong><br>
+                    • Type safety ensured<br>
+                    • IDE autocomplete enabled<br>
+                    • Refactoring confidence increased<br>
+                    • Runtime errors prevented
+                </div>
+            `;
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📘 Day 34: TypeScript Essentials loaded!');
+            console.log('🚀 Adding superpowers to JavaScript!');
+        });
+    </script>
+</body>
+</html>

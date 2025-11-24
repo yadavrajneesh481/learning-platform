@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regular Expressions - Complete Learning Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .home-link:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        .home-link:focus {
+            outline: 2px solid #ffc107;
+            outline-offset: 2px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+        }
+
+        .header .day-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 25px;
+            margin-top: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #7e22ce;
+        }
+
+        .card-icon {
+            font-size: 2.5em;
+        }
+
+        .card-title {
+            font-size: 1.8em;
+            color: #1e3c72;
+            font-weight: bold;
+        }
+
+        .hinglish-text {
+            color: #555;
+            line-height: 1.8;
+            font-size: 1.05em;
+            margin-bottom: 15px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .highlight-box strong {
+            font-size: 1.1em;
+        }
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .pattern-item {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #7e22ce;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .pattern-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(126, 34, 206, 0.2);
+        }
+
+        .pattern-item code {
+            background: #2d2d2d;
+            color: #ff6b9d;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .pattern-item .description {
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .interactive-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .input-wrapper {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            font-size: 1em;
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #7e22ce;
+            box-shadow: 0 0 0 4px rgba(126, 34, 206, 0.1);
+        }
+
+        textarea.input-field {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(126, 34, 206, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(126, 34, 206, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .result-display {
+            margin-top: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .success-result {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .error-result {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .match-highlight {
+            background: #ffeb3b;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .code-display {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .code-display .keyword {
+            color: #569cd6;
+        }
+
+        .code-display .string {
+            color: #ce9178;
+        }
+
+        .code-display .comment {
+            color: #6a9955;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: #e0e0e0;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            color: #555;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(126, 34, 206, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .method-demo {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .validation-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .validation-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+
+        .validation-row.valid {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .validation-row.invalid {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .validation-icon {
+            font-size: 2em;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .validation-input {
+            flex: 1;
+        }
+
+        .validation-label {
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .quiz-container {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 50px;
+            border-radius: 20px;
+            margin-top: 40px;
+            color: white;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .quiz-header h2 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .question-card {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .difficulty-easy {
+            background: #28a745;
+            color: white;
+        }
+
+        .difficulty-medium {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .difficulty-hard {
+            background: #dc3545;
+            color: white;
+        }
+
+        .question-title {
+            font-size: 1.3em;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .answer-text {
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .answer-text strong {
+            color: #7e22ce;
+        }
+
+        .visual-demo {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .regex-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .flow-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(126, 34, 206, 0.3);
+        }
+
+        .flow-arrow {
+            font-size: 2em;
+            color: #7e22ce;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .quiz-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        <!-- Header -->
+        <div class="header">
+            <h1>🔍 Regular Expressions</h1>
+            <p class="subtitle">Pattern Matching aur Text Validation ka Complete Guide</p>
+            <div class="day-badge">📅 Day 13 - JavaScript Learning</div>
+        </div>
+
+        <!-- Introduction Section -->
+        <div class="content-grid">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">📚</span>
+                    <h2 class="card-title">RegEx Kya Hai?</h2>
+                </div>
+                <p class="hinglish-text">
+                    <strong>Regular Expression (RegEx)</strong> ek powerful pattern matching tool hai jo strings mein
+                    search, match, aur manipulation ke liye use hota hai. Yeh ek special syntax hai jisse aap complex
+                    patterns define kar sakte ho.
+                </p>
+                <div class="highlight-box">
+                    <strong>🎯 Real-Life Example:</strong><br>
+                    Jaise aap ek phone directory mein sabhi Mumbai ke numbers dhundna chahte ho jo 022 se shuru hote
+                    hain - RegEx exactly yahi kaam karta hai text patterns ke saath!
+                </div>
+                <p class="hinglish-text">
+                    RegEx use karke aap easily validate kar sakte ho: emails, phone numbers, passwords, URLs, aur bahut
+                    kuch!
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">⚡</span>
+                    <h2 class="card-title">RegEx Kyun Important Hai?</h2>
+                </div>
+                <p class="hinglish-text">
+                    <strong>1. Form Validation:</strong> User input ko validate karne ke liye - email, phone, password
+                    etc.<br><br>
+                    <strong>2. Data Extraction:</strong> Large text se specific information nikalne ke liye.<br><br>
+                    <strong>3. Text Search:</strong> Complex patterns ko quickly find karne ke liye.<br><br>
+                    <strong>4. Text Replacement:</strong> Multiple occurrences ko ek saath replace karna.<br><br>
+                    <strong>5. Data Cleaning:</strong> Unwanted characters ya formats ko remove karna.
+                </p>
+                <div class="visual-demo">
+                    <h3 style="color: #1e3c72; margin-bottom: 20px;">RegEx Workflow</h3>
+                    <div class="regex-flow">
+                        <div class="flow-box">Pattern Define</div>
+                        <span class="flow-arrow">→</span>
+                        <div class="flow-box">Text Search</div>
+                        <span class="flow-arrow">→</span>
+                        <div class="flow-box">Match/Replace</div>
+                        <span class="flow-arrow">→</span>
+                        <div class="flow-box">Result</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pattern Elements Section -->
+        <div class="card full-width">
+            <div class="card-header">
+                <span class="card-icon">🧩</span>
+                <h2 class="card-title">RegEx Pattern Elements</h2>
+            </div>
+
+            <h3 style="color: #7e22ce; margin: 25px 0 15px 0;">Character Classes</h3>
+            <div class="pattern-grid">
+                <div class="pattern-item">
+                    <code>\d</code>
+                    <div class="description">Koi bhi digit (0-9)</div>
+                </div>
+                <div class="pattern-item">
+                    <code>\D</code>
+                    <div class="description">Non-digit character</div>
+                </div>
+                <div class="pattern-item">
+                    <code>\w</code>
+                    <div class="description">Word character (a-z, A-Z, 0-9, _)</div>
+                </div>
+                <div class="pattern-item">
+                    <code>\W</code>
+                    <div class="description">Non-word character</div>
+                </div>
+                <div class="pattern-item">
+                    <code>\s</code>
+                    <div class="description">Whitespace (space, tab, newline)</div>
+                </div>
+                <div class="pattern-item">
+                    <code>\S</code>
+                    <div class="description">Non-whitespace character</div>
+                </div>
+                <div class="pattern-item">
+                    <code>.</code>
+                    <div class="description">Koi bhi single character (newline ke alawa)</div>
+                </div>
+                <div class="pattern-item">
+                    <code>[abc]</code>
+                    <div class="description">a, b, ya c mein se koi ek</div>
+                </div>
+            </div>
+
+            <h3 style="color: #7e22ce; margin: 25px 0 15px 0;">Quantifiers</h3>
+            <div class="pattern-grid">
+                <div class="pattern-item">
+                    <code>*</code>
+                    <div class="description">0 ya zyada times (greedy)</div>
+                </div>
+                <div class="pattern-item">
+                    <code>+</code>
+                    <div class="description">1 ya zyada times</div>
+                </div>
+                <div class="pattern-item">
+                    <code>?</code>
+                    <div class="description">0 ya 1 time (optional)</div>
+                </div>
+                <div class="pattern-item">
+                    <code>{n}</code>
+                    <div class="description">Exactly n times</div>
+                </div>
+                <div class="pattern-item">
+                    <code>{n,}</code>
+                    <div class="description">Kam se kam n times</div>
+                </div>
+                <div class="pattern-item">
+                    <code>{n,m}</code>
+                    <div class="description">n se m times ke beech</div>
+                </div>
+            </div>
+
+            <h3 style="color: #7e22ce; margin: 25px 0 15px 0;">Anchors & Boundaries</h3>
+            <div class="pattern-grid">
+                <div class="pattern-item">
+                    <code>^</code>
+                    <div class="description">String ki starting</div>
+                </div>
+                <div class="pattern-item">
+                    <code>$</code>
+                    <div class="description">String ki ending</div>
+                </div>
+                <div class="pattern-item">
+                    <code>\b</code>
+                    <div class="description">Word boundary</div>
+                </div>
+                <div class="pattern-item">
+                    <code>\B</code>
+                    <div class="description">Non-word boundary</div>
+                </div>
+            </div>
+
+            <h3 style="color: #7e22ce; margin: 25px 0 15px 0;">Flags</h3>
+            <div class="pattern-grid">
+                <div class="pattern-item">
+                    <code>g</code>
+                    <div class="description">Global - saare matches find karo</div>
+                </div>
+                <div class="pattern-item">
+                    <code>i</code>
+                    <div class="description">Case-insensitive matching</div>
+                </div>
+                <div class="pattern-item">
+                    <code>m</code>
+                    <div class="description">Multiline mode</div>
+                </div>
+                <div class="pattern-item">
+                    <code>s</code>
+                    <div class="description">Dot matches newline bhi</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive RegEx Tester -->
+        <div class="card full-width">
+            <div class="card-header">
+                <span class="card-icon">🎮</span>
+                <h2 class="card-title">Interactive RegEx Tester</h2>
+            </div>
+            <p class="hinglish-text">Apna pattern test karo aur real-time results dekho!</p>
+
+            <div class="interactive-section">
+                <div class="input-wrapper">
+                    <label class="input-label">🔸 Pattern (without slashes):</label>
+                    <input type="text" class="input-field" id="testerPattern" value="\b[A-Z]\w+"
+                        placeholder="Example: \d{3}-\d{3}-\d{4}">
+                </div>
+
+                <div class="input-wrapper">
+                    <label class="input-label">🔸 Flags (g, i, m):</label>
+                    <input type="text" class="input-field" id="testerFlags" value="g" placeholder="Example: gi">
+                </div>
+
+                <div class="input-wrapper">
+                    <label class="input-label">🔸 Test String:</label>
+                    <textarea class="input-field" id="testerString"
+                        placeholder="Enter text to test">Hello World! This is JavaScript RegEx Tutorial with 123 Numbers.</textarea>
+                </div>
+
+                <button class="btn" onclick="runTester()">🚀 Test Pattern</button>
+
+                <div id="testerResult"></div>
+            </div>
+        </div>
+
+        <!-- Methods Section -->
+        <div class="card full-width">
+            <div class="card-header">
+                <span class="card-icon">🛠️</span>
+                <h2 class="card-title">RegEx Methods</h2>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('test')">test()</button>
+                <button class="tab-btn" onclick="switchTab('exec')">exec()</button>
+                <button class="tab-btn" onclick="switchTab('match')">match()</button>
+                <button class="tab-btn" onclick="switchTab('replace')">replace()</button>
+            </div>
+
+            <!-- test() Tab -->
+            <div id="test" class="tab-content active">
+                <h3 style="color: #7e22ce;">test() Method</h3>
+                <p class="hinglish-text">
+                    Yeh method check karta hai ki pattern match ho raha hai ya nahi. Return karta hai <code>true</code>
+                    ya <code>false</code>.
+                </p>
+
+                <div class="code-display">
+                    <span class="keyword">const</span> pattern = <span class="keyword">/</span><span
+                        class="string">hello</span><span class="keyword">/i</span>;
+                    <span class="keyword">const</span> text = <span class="string">"Hello World"</span>;
+                    <span class="keyword">const</span> result = pattern.<span class="keyword">test</span>(text);
+                    console.<span class="keyword">log</span>(result); <span class="comment">// true</span>
+                </div>
+
+                <div class="method-demo">
+                    <h4 style="color: #1e3c72; margin-bottom: 15px;">Try it yourself:</h4>
+                    <div class="input-wrapper">
+                        <label class="input-label">Pattern:</label>
+                        <input type="text" class="input-field" id="testPattern" value="^\w+@\w+\.\w+$">
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-label">Test String:</label>
+                        <input type="text" class="input-field" id="testString" value="user@example.com">
+                    </div>
+                    <button class="btn" onclick="runTest()">Run test()</button>
+                    <div id="testResult"></div>
+                </div>
+            </div>
+
+            <!-- exec() Tab -->
+            <div id="exec" class="tab-content">
+                <h3 style="color: #7e22ce;">exec() Method</h3>
+                <p class="hinglish-text">
+                    Yeh method match ke detailed information return karta hai - matched text, index, aur capture groups.
+                </p>
+
+                <div class="code-display">
+                    <span class="keyword">const</span> pattern = <span class="keyword">/</span><span
+                        class="string">(\d{3})-(\d{3})-(\d{4})</span><span class="keyword">/</span>;
+                    <span class="keyword">const</span> text = <span class="string">"Call: 123-456-7890"</span>;
+                    <span class="keyword">const</span> result = pattern.<span class="keyword">exec</span>(text);
+                    console.<span class="keyword">log</span>(result[<span class="string">0</span>]); <span
+                        class="comment">// "123-456-7890" (full match)</span>
+                    console.<span class="keyword">log</span>(result[<span class="string">1</span>]); <span
+                        class="comment">// "123" (first group)</span>
+                    console.<span class="keyword">log</span>(result[<span class="string">2</span>]); <span
+                        class="comment">// "456" (second group)</span>
+                </div>
+
+                <div class="method-demo">
+                    <h4 style="color: #1e3c72; margin-bottom: 15px;">Try it yourself:</h4>
+                    <div class="input-wrapper">
+                        <label class="input-label">Pattern (with capture groups):</label>
+                        <input type="text" class="input-field" id="execPattern" value="(\w+)@(\w+)\.(\w+)">
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-label">Test String:</label>
+                        <input type="text" class="input-field" id="execString" value="john@example.com">
+                    </div>
+                    <button class="btn" onclick="runExec()">Run exec()</button>
+                    <div id="execResult"></div>
+                </div>
+            </div>
+
+            <!-- match() Tab -->
+            <div id="match" class="tab-content">
+                <h3 style="color: #7e22ce;">match() Method</h3>
+                <p class="hinglish-text">
+                    String ka method hai jo saare matches ko array mein return karta hai. Global flag (g) use karne par
+                    saare matches milte hain.
+                </p>
+
+                <div class="code-display">
+                    <span class="keyword">const</span> text = <span class="string">"Numbers: 123, 456, 789"</span>;
+                    <span class="keyword">const</span> pattern = <span class="keyword">/</span><span
+                        class="string">\d+</span><span class="keyword">/g</span>;
+                    <span class="keyword">const</span> matches = text.<span class="keyword">match</span>(pattern);
+                    console.<span class="keyword">log</span>(matches); <span class="comment">// ["123", "456",
+                        "789"]</span>
+                </div>
+
+                <div class="method-demo">
+                    <h4 style="color: #1e3c72; margin-bottom: 15px;">Try it yourself:</h4>
+                    <div class="input-wrapper">
+                        <label class="input-label">Pattern:</label>
+                        <input type="text" class="input-field" id="matchPattern" value="\b[A-Z][a-z]+\b">
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-label">Test String:</label>
+                        <input type="text" class="input-field" id="matchString"
+                            value="Hello World from JavaScript Tutorial">
+                    </div>
+                    <button class="btn" onclick="runMatch()">Run match()</button>
+                    <div id="matchResult"></div>
+                </div>
+            </div>
+
+            <!-- replace() Tab -->
+            <div id="replace" class="tab-content">
+                <h3 style="color: #7e22ce;">replace() Method</h3>
+                <p class="hinglish-text">
+                    Pattern ko match karke replacement string se replace kar deta hai. Global flag (g) ke saath saare
+                    occurrences replace hote hain.
+                </p>
+
+                <div class="code-display">
+                    <span class="keyword">const</span> text = <span class="string">"I love cats. Cats are cute."</span>;
+                    <span class="keyword">const</span> pattern = <span class="keyword">/</span><span
+                        class="string">cat</span><span class="keyword">/gi</span>;
+                    <span class="keyword">const</span> result = text.<span class="keyword">replace</span>(pattern, <span
+                        class="string">"dog"</span>);
+                    console.<span class="keyword">log</span>(result); <span class="comment">// "I love dogs. dogs are
+                        cute."</span>
+                </div>
+
+                <div class="method-demo">
+                    <h4 style="color: #1e3c72; margin-bottom: 15px;">Try it yourself:</h4>
+                    <div class="input-wrapper">
+                        <label class="input-label">Pattern:</label>
+                        <input type="text" class="input-field" id="replacePattern" value="\d+">
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-label">Original String:</label>
+                        <input type="text" class="input-field" id="replaceString" value="Price is 100 dollars">
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-label">Replacement Text:</label>
+                        <input type="text" class="input-field" id="replaceWith" value="200">
+                    </div>
+                    <button class="btn" onclick="runReplace()">Run replace()</button>
+                    <div id="replaceResult"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Validation Tool -->
+        <div class="card full-width">
+            <div class="card-header">
+                <span class="card-icon">✅</span>
+                <h2 class="card-title">Form Validation Tool</h2>
+            </div>
+            <p class="hinglish-text">
+                Real-world mein RegEx ka sabse common use case hai form validation. Neeche different types ke
+                validations ko live test karo!
+            </p>
+
+            <div class="interactive-section">
+                <div class="validation-grid">
+                    <div class="validation-row" id="emailRow">
+                        <span class="validation-icon" id="emailIcon">⚪</span>
+                        <div class="validation-input">
+                            <label class="validation-label">📧 Email Address</label>
+                            <input type="text" class="input-field" id="emailInput" placeholder="user@example.com">
+                            <small style="color: #666;">Pattern: username@domain.extension</small>
+                        </div>
+                    </div>
+
+                    <div class="validation-row" id="phoneRow">
+                        <span class="validation-icon" id="phoneIcon">⚪</span>
+                        <div class="validation-input">
+                            <label class="validation-label">📱 Phone Number</label>
+                            <input type="text" class="input-field" id="phoneInput" placeholder="123-456-7890">
+                            <small style="color: #666;">Pattern: xxx-xxx-xxxx</small>
+                        </div>
+                    </div>
+
+                    <div class="validation-row" id="urlRow">
+                        <span class="validation-icon" id="urlIcon">⚪</span>
+                        <div class="validation-input">
+                            <label class="validation-label">🌐 Website URL</label>
+                            <input type="text" class="input-field" id="urlInput" placeholder="https://example.com">
+                            <small style="color: #666;">Pattern: http(s)://domain.extension</small>
+                        </div>
+                    </div>
+
+                    <div class="validation-row" id="passwordRow">
+                        <span class="validation-icon" id="passwordIcon">⚪</span>
+                        <div class="validation-input">
+                            <label class="validation-label">🔒 Strong Password</label>
+                            <input type="text" class="input-field" id="passwordInput" placeholder="Pass@123">
+                            <small style="color: #666;">Required: 8+ chars, 1 number, 1 special char</small>
+                        </div>
+                    </div>
+
+                    <div class="validation-row" id="zipRow">
+                        <span class="validation-icon" id="zipIcon">⚪</span>
+                        <div class="validation-input">
+                            <label class="validation-label">📮 ZIP Code</label>
+                            <input type="text" class="input-field" id="zipInput" placeholder="12345">
+                            <small style="color: #666;">Pattern: 5 digits</small>
+                        </div>
+                    </div>
+
+                    <div class="validation-row" id="usernameRow">
+                        <span class="validation-icon" id="usernameIcon">⚪</span>
+                        <div class="validation-input">
+                            <label class="validation-label">👤 Username</label>
+                            <input type="text" class="input-field" id="usernameInput" placeholder="user_123">
+                            <small style="color: #666;">Pattern: 3-16 chars, letters, numbers, underscore</small>
+                        </div>
+                    </div>
+
+                    <div class="validation-row" id="creditCardRow">
+                        <span class="validation-icon" id="creditCardIcon">⚪</span>
+                        <div class="validation-input">
+                            <label class="validation-label">💳 Credit Card</label>
+                            <input type="text" class="input-field" id="creditCardInput"
+                                placeholder="1234-5678-9012-3456">
+                            <small style="color: #666;">Pattern: xxxx-xxxx-xxxx-xxxx</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-display" style="margin-top: 25px;">
+                <span class="comment">// Common Validation Patterns</span>
+
+                <span class="comment">// Email Validation</span>
+                <span class="keyword">const</span> emailPattern = <span
+                    class="keyword">/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/</span>;
+
+                <span class="comment">// Phone Number (xxx-xxx-xxxx)</span>
+                <span class="keyword">const</span> phonePattern = <span class="keyword">/^\d{3}-\d{3}-\d{4}$/</span>;
+
+                <span class="comment">// URL Validation</span>
+                <span class="keyword">const</span> urlPattern = <span
+                    class="keyword">/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/</span>;
+
+                <span class="comment">// Strong Password (8+ chars, 1 digit, 1 special)</span>
+                <span class="keyword">const</span> passwordPattern = <span
+                    class="keyword">/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/</span>;
+
+                <span class="comment">// ZIP Code</span>
+                <span class="keyword">const</span> zipPattern = <span class="keyword">/^\d{5}$/</span>;
+
+                <span class="comment">// Username (3-16 chars)</span>
+                <span class="keyword">const</span> usernamePattern = <span
+                    class="keyword">/^[a-zA-Z0-9_]{3,16}$/</span>;
+
+                <span class="comment">// Credit Card (xxxx-xxxx-xxxx-xxxx)</span>
+                <span class="keyword">const</span> creditCardPattern = <span
+                    class="keyword">/^\d{4}-\d{4}-\d{4}-\d{4}$/</span>;
+            </div>
+        </div>
+
+        <!-- Common Use Cases -->
+        <div class="content-grid">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">💡</span>
+                    <h2 class="card-title">Common Use Cases</h2>
+                </div>
+
+                <div class="pattern-item" style="margin-bottom: 15px;">
+                    <h4 style="color: #7e22ce;">1. Extract Dates</h4>
+                    <code>/\d{2}\/\d{2}\/\d{4}/g</code>
+                    <div class="description">Format: DD/MM/YYYY</div>
+                </div>
+
+                <div class="pattern-item" style="margin-bottom: 15px;">
+                    <h4 style="color: #7e22ce;">2. Find Hashtags</h4>
+                    <code>/#\w+/g</code>
+                    <div class="description">Social media hashtags</div>
+                </div>
+
+                <div class="pattern-item" style="margin-bottom: 15px;">
+                    <h4 style="color: #7e22ce;">3. Extract Prices</h4>
+                    <code>/\$\d+(\.\d{2})?/g</code>
+                    <div class="description">Prices with $ symbol</div>
+                </div>
+
+                <div class="pattern-item" style="margin-bottom: 15px;">
+                    <h4 style="color: #7e22ce;">4. Remove HTML Tags</h4>
+                    <code>/&lt;[^&gt;]*&gt;/g</code>
+                    <div class="description">Strip HTML from text</div>
+                </div>
+
+                <div class="pattern-item" style="margin-bottom: 15px;">
+                    <h4 style="color: #7e22ce;">5. Find IP Address</h4>
+                    <code>/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g</code>
+                    <div class="description">IPv4 addresses</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">⚠️</span>
+                    <h2 class="card-title">Important Tips</h2>
+                </div>
+
+                <div class="highlight-box" style="margin-bottom: 15px;">
+                    <strong>🎯 Performance:</strong><br>
+                    Complex patterns slow ho sakte hain. Simple patterns prefer karo jab possible ho.
+                </div>
+
+                <div class="highlight-box" style="margin-bottom: 15px;">
+                    <strong>🔍 Testing:</strong><br>
+                    Hamesha different test cases ke saath patterns test karo - valid aur invalid dono.
+                </div>
+
+                <div class="highlight-box" style="margin-bottom: 15px;">
+                    <strong>📝 Readability:</strong><br>
+                    Complex patterns mein comments use karo. Named capture groups help karte hain.
+                </div>
+
+                <div class="highlight-box" style="margin-bottom: 15px;">
+                    <strong>🛡️ Security:</strong><br>
+                    User input se dynamically regex mat banao - ReDoS attacks ka risk hai.
+                </div>
+
+                <div class="highlight-box">
+                    <strong>✅ Validation:</strong><br>
+                    Client-side validation ke saath server-side validation bhi zaroori hai.
+                </div>
+            </div>
+        </div>
+
+        <!-- Interview Questions -->
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h2>🎯 Interview Questions</h2>
+                <p>Regular Expressions par based important interview questions aur unke detailed answers</p>
+            </div>
+
+            <div class="question-card">
+                <span class="difficulty-badge difficulty-easy">Easy</span>
+                <h3 class="question-title">Q1: Regular Expression kya hai aur iska use kyun karte hain?</h3>
+                <div class="answer-text">
+                    <strong>Answer:</strong> Regular Expression (RegEx) ek pattern hai jo text search, match, aur
+                    manipulation ke liye use hota hai. Yeh ek sequence of characters hai jo search pattern define karta
+                    hai.
+                    <br><br>
+                    <strong>Use Cases:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Form validation (email, phone, password)</li>
+                        <li>Text search aur replace operations</li>
+                        <li>Data extraction from large text</li>
+                        <li>Input sanitization aur formatting</li>
+                        <li>Log file parsing</li>
+                    </ul>
+                    <br>
+                    <strong>Example:</strong> Email validation ke liye hum pattern define karte hain jo check karta hai
+                    ki @ symbol hai, domain name valid hai, etc.
+                </div>
+            </div>
+
+            <div class="question-card">
+                <span class="difficulty-badge difficulty-easy">Easy</span>
+                <h3 class="question-title">Q2: test() aur match() methods mein kya difference hai?</h3>
+                <div class="answer-text">
+                    <strong>Answer:</strong>
+                    <br><br>
+                    <strong>test() method:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>RegEx object ka method hai</li>
+                        <li>Boolean return karta hai (true/false)</li>
+                        <li>Sirf check karta hai ki pattern match ho raha hai ya nahi</li>
+                        <li>Fast hai jab sirf validation chahiye</li>
+                        <li>Syntax: <code>pattern.test(string)</code></li>
+                    </ul>
+                    <br>
+                    <strong>match() method:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>String object ka method hai</li>
+                        <li>Array return karta hai (matches) ya null</li>
+                        <li>Actual matched values provide karta hai</li>
+                        <li>Global flag (g) ke saath saare matches milte hain</li>
+                        <li>Syntax: <code>string.match(pattern)</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <span class="difficulty-badge difficulty-easy">Easy</span>
+                <h3 class="question-title">Q3: RegEx mein flags kya hote hain? Common flags ke baare mein batao.</h3>
+                <div class="answer-text">
+                    <strong>Answer:</strong> Flags RegEx ke behavior ko modify karte hain. Yeh pattern ke baad specify
+                    kiye jate hain.
+                    <br><br>
+                    <strong>Common Flags:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>g (global):</strong> Saare matches find karta hai, sirf pehla nahi</li>
+                        <li><strong>i (case-insensitive):</strong> Case ko ignore karke match karta hai</li>
+                        <li><strong>m (multiline):</strong> ^ aur $ har line ke start/end ko match karte hain</li>
+                        <li><strong>s (dotAll):</strong> Dot (.) newline characters ko bhi match karta hai</li>
+                        <li><strong>u (unicode):</strong> Unicode characters ko properly handle karta hai</li>
+                        <li><strong>y (sticky):</strong> lastIndex position se hi search start karta hai</li>
+                    </ul>
+                    <br>
+                    <strong>Example:</strong> <code>/hello/gi</code> - "hello" ko case-insensitive aur globally match
+                    karega
+                </div>
+            </div>
+
+            <div class="question-card">
+                <span class="difficulty-badge difficulty-medium">Medium</span>
+                <h3 class="question-title">Q4: Capture groups kya hote hain? Named capture groups kaise use karte hain?
+                </h3>
+                <div class="answer-text">
+                    <strong>Answer:</strong> Capture groups pattern ke specific parts ko capture karte hain jisse unhe
+                    alag se access kar saken.
+                    <br><br>
+                    <strong>Regular Capture Groups:</strong> Parentheses () use karke banaye jate hain
+                    <div class="code-display" style="margin: 10px 0;">
+                        <span class="keyword">const</span> pattern = <span
+                            class="keyword">/(\d{3})-(\d{3})-(\d{4})/</span>;
+                        <span class="keyword">const</span> result = pattern.exec(<span
+                            class="string">"123-456-7890"</span>);
+                        console.log(result[<span class="string">1</span>]); <span class="comment">// "123"</span>
+                        console.log(result[<span class="string">2</span>]); <span class="comment">// "456"</span>
+                        console.log(result[<span class="string">3</span>]); <span class="comment">// "7890"</span>
+                    </div>
+                    <strong>Named Capture Groups:</strong> (?&lt;name&gt;...) syntax use karte hain
+                    <div class="code-display" style="margin: 10px 0;">
+                        <span class="keyword">const</span> pattern = <span
+                            class="keyword">/(?&lt;year&gt;\d{4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})/</span>;
+                        <span class="keyword">const</span> result = pattern.exec(<span
+                            class="string">"2024-11-10"</span>);
+                        console.log(result.groups.year); <span class="comment">// "2024"</span>
+                        console.log(result.groups.month); <span class="comment">// "11"</span>
+                        console.log(result.groups.day); <span class="comment">// "10"</span>
+                    </div>
+                    <strong>Benefits:</strong> Code readability improve hoti hai aur groups ko meaningful names se
+                    access kar sakte hain.
+                </div>
+            </div>
+
+            <div class="question-card">
+                <span class="difficulty-badge difficulty-medium">Medium</span>
+                <h3 class="question-title">Q5: Greedy vs Non-greedy (lazy) quantifiers explain karo with example.</h3>
+                <div class="answer-text">
+                    <strong>Answer:</strong>
+                    <br><br>
+                    <strong>Greedy Quantifiers:</strong> Maximum possible text match karte hain (default behavior)
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>*, +, ?, {n,m} - yeh sab greedy hain</li>
+                        <li>Jitna zyada match kar sakte hain utna karte hain</li>
+                    </ul>
+                    <div class="code-display" style="margin: 10px 0;">
+                        <span class="keyword">const</span> text = <span
+                            class="string">"&lt;div&gt;Hello&lt;/div&gt;&lt;div&gt;World&lt;/div&gt;"</span>;
+                        <span class="keyword">const</span> greedy = <span class="keyword">/&lt;.*&gt;/</span>;
+                        console.log(text.match(greedy));
+                        <span class="comment">// ["&lt;div&gt;Hello&lt;/div&gt;&lt;div&gt;World&lt;/div&gt;"] - poora
+                            string match</span>
+                    </div>
+                    <strong>Non-greedy/Lazy Quantifiers:</strong> Minimum possible text match karte hain
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>*?, +?, ??, {n,m}? - ? suffix lagane se lazy ban jate hain</li>
+                        <li>Jitna kam match kar sakte hain utna karte hain</li>
+                    </ul>
+                    <div class="code-display" style="margin: 10px 0;">
+                        <span class="keyword">const</span> text = <span
+                            class="string">"&lt;div&gt;Hello&lt;/div&gt;&lt;div&gt;World&lt;/div&gt;"</span>;
+                        <span class="keyword">const</span> lazy = <span class="keyword">/&lt;.*?&gt;/g</span>;
+                        console.log(text.match(lazy));
+                        <span class="comment">// ["&lt;div&gt;", "&lt;/div&gt;", "&lt;div&gt;", "&lt;/div&gt;"] -
+                            separate tags</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <span class="difficulty-badge difficulty-medium">Medium</span>
+                <h3 class="question-title">Q6: Lookahead aur Lookbehind assertions kya hain?</h3>
+                <div class="answer-text">
+                    <strong>Answer:</strong> Lookahead aur lookbehind assertions pattern ko match karte hain bina actual
+                    match mein include kiye. Yeh "zero-width" assertions hain.
+                    <br><br>
+                    <strong>Positive Lookahead (?=...):</strong> Check karta hai ki aage kya hai
+                    <div class="code-display" style="margin: 10px 0;">
+                        <span class="comment">// Numbers find karo jo "dollars" se pehle hain</span>
+                        <span class="keyword">const</span> pattern = <span class="keyword">/\d+(?= dollars)/g</span>;
+                        <span class="keyword">const</span> text = <span class="string">"100 dollars and 200
+                            rupees"</span>;
+                        console.log(text.match(pattern)); <span class="comment">// ["100"]</span>
+                    </div>
+                    <strong>Negative Lookahead (?!...):</strong> Check karta hai ki aage kya NAHI hai
+                    <div class="code-display" style="margin: 10px 0;">
+                        <span class="comment">// Numbers find karo jo "dollars" se pehle NAHI hain</span>
+                        <span class="keyword">const</span> pattern = <span class="keyword">/\d+(?! dollars)/g</span>;
+                        <span class="keyword">const</span> text = <span class="string">"100 dollars and 200
+                            rupees"</span>;
+                        console.log(text.match(pattern)); <span class="comment">// ["200"]</span>
+                    </div>
+                    <strong>Positive Lookbehind (?&lt;=...):</strong> Check karta hai ki peeche kya hai
+                    <div class="code-display" style="margin: 10px 0;">
+                        <span class="comment">// Numbers find karo jo "$" ke baad hain</span>
+                        <span class="keyword">const</span> pattern = <span class="keyword">/(?&lt;=\$)\d+/g</span>;
+                        <span class="keyword">const</span> text = <span class="string">"Price: $100 and €200"</span>;
+                        console.log(text.match(pattern)); <span class="comment">// ["100"]</span>
+                    </div>
+                    <strong>Negative Lookbehind (?&lt;!...):</strong> Check karta hai ki peeche kya NAHI hai
+                </div>
+            </div>
+
+            <div class="question-card">
+                <span class="difficulty-badge difficulty-hard">Hard</span>
+                <h3 class="question-title">Q7: Email validation ke liye perfect RegEx pattern kyun nahi ban sakta?</h3>
+                <div class="answer-text">
+                    <strong>Answer:</strong> Email validation extremely complex hai aur "perfect" pattern practically
+                    impossible hai.
+                    <br><br>
+                    <strong>Reasons:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>RFC 5322 Complexity:</strong> Official email standard bahut permissive hai aur
+                            hundreds of edge cases allow karta hai</li>
+                        <li><strong>Local Part:</strong> @ se pehle ka part special characters, quotes, comments allow
+                            karta hai</li>
+                        <li><strong>Domain Part:</strong> International domains, IP addresses, many TLDs</li>
+                        <li><strong>Performance:</strong> Complete RFC-compliant pattern 6000+ characters ka hoga!</li>
+                    </ul>
+                    <br>
+                    <strong>Practical Approach:</strong>
+                    <div class="code-display" style="margin: 10px 0;">
+                        <span class="comment">// Simple pattern for 99% cases</span>
+                        <span class="keyword">const</span> simpleEmail = <span
+                            class="keyword">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>;
+
+                        <span class="comment">// More strict but still practical</span>
+                        <span class="keyword">const</span> strictEmail = <span
+                            class="keyword">/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/</span>;
+                    </div>
+                    <strong>Best Practice:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Client-side: Basic sanity check ke liye simple pattern use karo</li>
+                        <li>Server-side: Actual verification email bhejke validate karo</li>
+                        <li>DNS validation: MX records check karo</li>
+                        <li>Don't reject valid emails due to overly strict patterns</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <span class="difficulty-badge difficulty-hard">Hard</span>
+                <h3 class="question-title">Q8: ReDoS (Regular Expression Denial of Service) attack kya hai aur kaise
+                    prevent kare?</h3>
+                <div class="answer-text">
+                    <strong>Answer:</strong> ReDoS ek security vulnerability hai jahan malicious input RegEx engine ko
+                    extremely slow bana deta hai, causing denial of service.
+                    <br><br>
+                    <strong>Kaise Hota Hai:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Catastrophic backtracking - jab RegEx multiple ways mein match try karta hai</li>
+                        <li>Nested quantifiers jaise (a+)+ ya (a*)*</li>
+                        <li>Overlapping alternatives</li>
+                    </ul>
+                    <div class="code-display" style="margin: 10px 0;">
+                        <span class="comment">// Vulnerable pattern</span>
+                        <span class="keyword">const</span> vulnerable = <span class="keyword">/^(a+)+$/</span>;
+                        <span class="keyword">const</span> input = <span
+                            class="string">"aaaaaaaaaaaaaaaaaaaaaaaaaaaa!"</span>;
+                        <span class="comment">// Yeh pattern exponential time lega!</span>
+                    </div>
+                    <strong>Prevention Techniques:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Avoid nested quantifiers:</strong> (a+)+ ki jagah a+ use karo</li>
+                        <li><strong>Use possessive quantifiers:</strong> Backtracking prevent karne ke liye</li>
+                        <li><strong>Set timeouts:</strong> RegEx execution time limit karo</li>
+                        <li><strong>Input length limits:</strong> Maximum input size define karo</li>
+                        <li><strong>Test patterns:</strong> Tools jaise regex101 se complexity check karo</li>
+                        <li><strong>Avoid user-controlled regex:</strong> User input se regex mat banao</li>
+                    </ul>
+                    <div class="code-display" style="margin: 10px 0;">
+                        <span class="comment">// Safe pattern</span>
+                        <span class="keyword">const</span> safe = <span class="keyword">/^a+$/</span>;
+                        <span class="comment">// Single quantifier - linear time complexity</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; color: white; margin-top: 40px; padding: 20px;">
+            <p style="font-size: 1.2em; margin-bottom: 10px;">🎓 Regular Expressions Master Karne Ka Sabse Accha Tarika
+                Hai Practice!</p>
+            <p style="opacity: 0.8;">Keep experimenting with different patterns aur real-world use cases try karo.</p>
+        </div>
+    </div>
+
+    <script>
+        // Interactive RegEx Tester
+        function runTester() {
+            const pattern = document.getElementById('testerPattern').value;
+            const flags = document.getElementById('testerFlags').value;
+            const testString = document.getElementById('testerString').value;
+            const resultDiv = document.getElementById('testerResult');
+
+            try {
+                const regex = new RegExp(pattern, flags);
+                const matches = testString.match(regex);
+
+                if (matches && matches.length > 0) {
+                    let highlightedText = testString;
+                    const sortedMatches = [...matches].sort((a, b) => b.length - a.length);
+
+                    sortedMatches.forEach(match => {
+                        const escapedMatch = match.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                        highlightedText = highlightedText.replace(new RegExp(escapedMatch, 'g'),
+                            `<span class="match-highlight">${match}</span>`);
+                    });
+
+                    resultDiv.innerHTML = `
+                        <div class="result-display success-result">
+                            <h4 style="margin-bottom: 15px;">✅ Pattern Matched Successfully!</h4>
+                            <p><strong>Total Matches:</strong> ${matches.length}</p>
+                            <p><strong>Matched Values:</strong> ${matches.map(m => `"${m}"`).join(', ')}</p>
+                            <div style="margin-top: 15px; padding: 15px; background: white; border-radius: 8px;">
+                                <strong>Highlighted Text:</strong><br>
+                                ${highlightedText}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result-display error-result">
+                            <h4>❌ No Matches Found</h4>
+                            <p>Pattern ne koi match nahi kiya. Try different pattern or test string.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result-display error-result">
+                        <h4>❌ Invalid Pattern</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p>Please check your RegEx syntax.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Tab Switching
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+
+            document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Method demonstration functions
+        function runTest() {
+            const pattern = document.getElementById('testPattern').value;
+            const testString = document.getElementById('testString').value;
+            const resultDiv = document.getElementById('testResult');
+
+            try {
+                const regex = new RegExp(pattern);
+                const result = regex.test(testString);
+
+                resultDiv.innerHTML = `
+                    <div class="result-display success-result">
+                        <h4 style="margin-bottom: 15px;">✅ test() Method Result</h4>
+                        <p><strong>Pattern:</strong> /${pattern}/</p>
+                        <p><strong>Test String:</strong> "${testString}"</p>
+                        <p><strong>Result:</strong> <code>${result}</code></p>
+                        <p><strong>Explanation:</strong> ${result ? 'Pattern match ho gaya!' : 'Pattern match nahi hua.'}</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result-display error-result">
+                        <h4>❌ Invalid Pattern</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function runExec() {
+            const pattern = document.getElementById('execPattern').value;
+            const testString = document.getElementById('execString').value;
+            const resultDiv = document.getElementById('execResult');
+
+            try {
+                const regex = new RegExp(pattern);
+                const result = regex.exec(testString);
+
+                if (result) {
+                    let groupsHtml = '';
+                    for (let i = 0; i < result.length; i++) {
+                        groupsHtml += `<p><strong>Group ${i}:</strong> "${result[i]}" ${i === 0 ? '(full match)' : '(capture group ' + i + ')'}</p>`;
+                    }
+
+                    resultDiv.innerHTML = `
+                        <div class="result-display success-result">
+                            <h4 style="margin-bottom: 15px;">✅ exec() Method Result</h4>
+                            <p><strong>Pattern:</strong> /${pattern}/</p>
+                            <p><strong>Test String:</strong> "${testString}"</p>
+                            <p><strong>Index:</strong> ${result.index}</p>
+                            ${groupsHtml}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result-display error-result">
+                            <h4>❌ No Match Found</h4>
+                            <p>Pattern ne koi match nahi kiya.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result-display error-result">
+                        <h4>❌ Invalid Pattern</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function runMatch() {
+            const pattern = document.getElementById('matchPattern').value;
+            const testString = document.getElementById('matchString').value;
+            const resultDiv = document.getElementById('matchResult');
+
+            try {
+                const regex = new RegExp(pattern, 'g');
+                const matches = testString.match(regex);
+
+                if (matches && matches.length > 0) {
+                    resultDiv.innerHTML = `
+                        <div class="result-display success-result">
+                            <h4 style="margin-bottom: 15px;">✅ match() Method Result</h4>
+                            <p><strong>Pattern:</strong> /${pattern}/g</p>
+                            <p><strong>Test String:</strong> "${testString}"</p>
+                            <p><strong>Total Matches:</strong> ${matches.length}</p>
+                            <p><strong>Matches Array:</strong> [${matches.map(m => `"${m}"`).join(', ')}]</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result-display error-result">
+                            <h4>❌ No Matches Found</h4>
+                            <p>Pattern ne koi match nahi kiya.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result-display error-result">
+                        <h4>❌ Invalid Pattern</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function runReplace() {
+            const pattern = document.getElementById('replacePattern').value;
+            const originalString = document.getElementById('replaceString').value;
+            const replacement = document.getElementById('replaceWith').value;
+            const resultDiv = document.getElementById('replaceResult');
+
+            try {
+                const regex = new RegExp(pattern, 'g');
+                const result = originalString.replace(regex, replacement);
+
+                resultDiv.innerHTML = `
+                    <div class="result-display success-result">
+                        <h4 style="margin-bottom: 15px;">✅ replace() Method Result</h4>
+                        <p><strong>Pattern:</strong> /${pattern}/g</p>
+                        <p><strong>Original:</strong> "${originalString}"</p>
+                        <p><strong>Replacement:</strong> "${replacement}"</p>
+                        <p><strong>Result:</strong> "${result}"</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result-display error-result">
+                        <h4>❌ Invalid Pattern</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Validation patterns
+        const validationPatterns = {
+            email: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            phone: /^\d{3}-\d{3}-\d{4}$/,
+            url: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/i,
+            password: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/,
+            zip: /^\d{5}$/,
+            username: /^[a-zA-Z0-9_]{3,16}$/,
+            creditCard: /^\d{4}-\d{4}-\d{4}-\d{4}$/
+        };
+
+        // Validation function
+        function validateField(fieldId, pattern) {
+            const input = document.getElementById(fieldId + 'Input');
+            const row = document.getElementById(fieldId + 'Row');
+            const icon = document.getElementById(fieldId + 'Icon');
+            const value = input.value.trim();
+
+            if (value === '') {
+                row.className = 'validation-row';
+                icon.textContent = '⚪';
+                return;
+            }
+
+            if (pattern.test(value)) {
+                row.className = 'validation-row valid';
+                icon.textContent = '✅';
+            } else {
+                row.className = 'validation-row invalid';
+                icon.textContent = '❌';
+            }
+        }
+
+        // Initialize validation listeners
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add event listeners for validation fields
+            Object.keys(validationPatterns).forEach(fieldId => {
+                const input = document.getElementById(fieldId + 'Input');
+                if (input) {
+                    input.addEventListener('input', function () {
+                        validateField(fieldId, validationPatterns[fieldId]);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

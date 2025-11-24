@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 5: Loops & Iterations</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #007bff;
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background: #f9f9f9;
+        }
+        .demo {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .loop-visualizer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: 5px;
+            margin: 15px 0;
+            max-width: 500px;
+        }
+        .loop-item {
+            padding: 10px;
+            background: #e9ecef;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .loop-item.active {
+            background: #007bff;
+            color: white;
+            transform: scale(1.1);
+        }
+        .multiplication-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .table-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .pattern-display {
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .home-link:hover {
+            background: #218838;
+        }
+        .interview-section {
+            background: #e9ecef;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+        input, select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #007bff;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .multiplication-table {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        
+        <header>
+            <h1>Day 5: Loops & Iterations</h1>
+            <p><em>for, while, do-while loops, for...of, for...in, break, continue statements</em></p>
+        </header>
+
+        <section id="for-loop">
+            <h2>For Loop - Complete Deep Dive</h2>
+            <p>For loop JavaScript mein sabse commonly used iteration structure hai. Yeh tab use karte hain jab humein pata ho ki exactly kitni baar loop chalana hai. For loop mein teen parts hote hain: initialization, condition, aur increment/decrement.</p>
+            
+            <h3>For Loop Anatomy aur Working:</h3>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;">
+                <h4>🔄 Loop Structure Breakdown:</h4>
+                <div style="background: #e7f3ff; padding: 10px; border-radius: 5px; font-family: monospace; margin: 10px 0;">
+for (initialization; condition; increment/decrement) {<br>
+&nbsp;&nbsp;// Loop body - code to execute<br>
+}<br><br>
+// Example:<br>
+for (let i = 0; i < 5; i++) {<br>
+&nbsp;&nbsp;console.log("Iteration:", i);<br>
+}
+                </div>
+                <ul>
+                    <li><strong>Initialization:</strong> Loop variable set karna (let i = 0)</li>
+                    <li><strong>Condition:</strong> Kab tak loop chalana hai (i < 5)</li>
+                    <li><strong>Increment:</strong> Har iteration ke baad variable change (i++)</li>
+                    <li><strong>Execution Order:</strong> Init → Condition → Body → Increment → Condition...</li>
+                </ul>
+            </div>
+            
+            <h3>For Loop Variations aur Use Cases:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; border: 1px solid #007bff;">
+                    <h4>🔢 Standard For Loop</h4>
+                    <div style="background: #f8f9fa; padding: 8px; border-radius: 3px; font-family: monospace; font-size: 12px;">
+for (let i = 0; i < 10; i++) {<br>
+&nbsp;&nbsp;console.log(i);<br>
+}
+                    </div>
+                    <p><strong>Use:</strong> Fixed iterations, array indexing</p>
+                </div>
+                <div style="background: #f0f8e7; padding: 15px; border-radius: 8px; border: 1px solid #28a745;">
+                    <h4>⬇️ Reverse For Loop</h4>
+                    <div style="background: #f8f9fa; padding: 8px; border-radius: 3px; font-family: monospace; font-size: 12px;">
+for (let i = 10; i >= 0; i--) {<br>
+&nbsp;&nbsp;console.log(i);<br>
+}
+                    </div>
+                    <p><strong>Use:</strong> Countdown, reverse processing</p>
+                </div>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffc107;">
+                    <h4>⚡ Step-based Loop</h4>
+                    <div style="background: #f8f9fa; padding: 8px; border-radius: 3px; font-family: monospace; font-size: 12px;">
+for (let i = 0; i < 20; i += 2) {<br>
+&nbsp;&nbsp;console.log(i); // Even numbers<br>
+}
+                    </div>
+                    <p><strong>Use:</strong> Skip values, custom increments</p>
+                </div>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border: 1px solid #dc3545;">
+                    <h4>🔗 Nested For Loop</h4>
+                    <div style="background: #f8f9fa; padding: 8px; border-radius: 3px; font-family: monospace; font-size: 12px;">
+for (let i = 0; i < 3; i++) {<br>
+&nbsp;&nbsp;for (let j = 0; j < 3; j++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;console.log(i, j);<br>
+&nbsp;&nbsp;}<br>
+}
+                    </div>
+                    <p><strong>Use:</strong> 2D arrays, matrices, patterns</p>
+                </div>
+            </div>
+            
+            <div class="demo">
+                <h3>Interactive For Loop Visualizer</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 15px 0;">
+                    <div>
+                        <label>Start: <input type="number" id="for-start" value="0" min="-10" max="50"></label>
+                    </div>
+                    <div>
+                        <label>End: <input type="number" id="for-end" value="5" min="1" max="50"></label>
+                    </div>
+                    <div>
+                        <label>Step: <input type="number" id="for-step" value="1" min="1" max="5"></label>
+                    </div>
+                    <div>
+                        <label>Delay (ms): <input type="number" id="for-delay" value="500" min="100" max="2000"></label>
+                    </div>
+                </div>
+                <div style="margin: 15px 0;">
+                    <button onclick="visualizeForLoop()">▶️ Start Standard Loop</button>
+                    <button onclick="visualizeReverseLoop()">⬇️ Reverse Loop</button>
+                    <button onclick="visualizeNestedLoop()">🔗 Nested Loop</button>
+                    <button onclick="stopLoop()">⏹️ Stop Loop</button>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="for-progress"></div>
+                </div>
+                <div class="loop-visualizer" id="for-visualizer"></div>
+                <div id="for-output"></div>
+                
+                <h3>Advanced For Loop Concepts</h3>
+                <div style="margin: 15px 0;">
+                    <button onclick="demonstrateLoopOptimization()">🚀 Loop Optimization</button>
+                    <button onclick="demonstrateLoopPerformance()">⚡ Performance Comparison</button>
+                    <button onclick="demonstrateLoopPitfalls()">⚠️ Common Pitfalls</button>
+                </div>
+                <div id="advanced-for-result"></div>
+            </div>
+        </section>
+
+        <section id="loop-performance">
+            <h2>Loop Performance aur Optimization</h2>
+            <p>Different loop types ki performance aur optimization techniques samjhna important hai, especially large datasets ke saath kaam karte waqt.</p>
+            
+            <h3>Performance Factors:</h3>
+            <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #ffc107;">
+                <h4>⚡ Key Performance Considerations:</h4>
+                <ul>
+                    <li><strong>Loop Length Caching:</strong> Array length ko variable mein store karna</li>
+                    <li><strong>Condition Complexity:</strong> Simple conditions faster hote hain</li>
+                    <li><strong>Variable Declaration:</strong> Loop ke bahar declare karna better</li>
+                    <li><strong>DOM Access:</strong> Loop ke andar DOM access avoid karna</li>
+                    <li><strong>Function Calls:</strong> Expensive operations loop ke bahar karna</li>
+                </ul>
+            </div>
+            
+            <div class="demo">
+                <h3>Performance Benchmarking Tool</h3>
+                <label>Array Size: <input type="number" id="perf-size" value="100000" min="1000" max="1000000"></label>
+                <div style="margin: 15px 0;">
+                    <button onclick="benchmarkForLoop()">🔄 Standard For Loop</button>
+                    <button onclick="benchmarkForEach()">🔁 forEach Method</button>
+                    <button onclick="benchmarkForOf()">📋 for...of Loop</button>
+                    <button onclick="benchmarkWhileLoop()">⭕ While Loop</button>
+                </div>
+                <div id="performance-results"></div>
+            </div>
+        </section>
+
+        <section id="while-loop">
+            <h2>While Loop</h2>
+            <p>Jab condition true hai tab tak chalta rahega:</p>
+            
+            <div class="demo">
+                <h3>Number Guessing Game (While Loop)</h3>
+                <p>1 se 10 ke beech mein number guess karo!</p>
+                <input type="number" id="guess-input" placeholder="Your guess" min="1" max="10">
+                <button onclick="startGuessingGame()">Start Game</button>
+                <button onclick="resetGame()">Reset</button>
+                <div id="guess-output"></div>
+                <div id="guess-attempts"></div>
+            </div>
+        </section>
+
+        <section id="do-while">
+            <h2>Do-While Loop</h2>
+            <p>Pehle execute karta hai, phir condition check karta hai:</p>
+            
+            <div class="demo">
+                <h3>Do-While Demo</h3>
+                <button onclick="demonstrateDoWhile()">Run Do-While Example</button>
+                <div id="do-while-output"></div>
+            </div>
+        </section>
+
+        <section id="for-of-in">
+            <h2>For...of aur For...in</h2>
+            <p><strong>for...of</strong> values iterate karta hai, <strong>for...in</strong> keys/indices:</p>
+            
+            <div class="demo">
+                <h3>Array & Object Iteration</h3>
+                <button onclick="demonstrateForOf()">For...of (Values)</button>
+                <button onclick="demonstrateForIn()">For...in (Keys)</button>
+                <div id="iteration-output"></div>
+            </div>
+        </section>
+
+        <section id="break-continue">
+            <h2>Break aur Continue</h2>
+            <p><strong>break</strong> loop se bahar nikalta hai, <strong>continue</strong> current iteration skip karta hai:</p>
+            
+            <div class="demo">
+                <h3>Break & Continue Demo</h3>
+                <button onclick="demonstrateBreak()">Break Example</button>
+                <button onclick="demonstrateContinue()">Continue Example</button>
+                <div id="break-continue-output"></div>
+            </div>
+        </section>
+
+        <section id="multiplication-tables">
+            <h2>Practice: Multiplication Tables Generator</h2>
+            <p>Nested loops use karke multiplication tables banayenge:</p>
+            
+            <div class="demo">
+                <h3>Table Generator</h3>
+                <label>Start table: <input type="number" id="table-start" value="2" min="1" max="20"></label>
+                <label>End table: <input type="number" id="table-end" value="5" min="1" max="20"></label>
+                <label>Up to: <input type="number" id="table-limit" value="10" min="1" max="20"></label>
+                <button onclick="generateTables()">Generate Tables</button>
+                <div class="multiplication-table" id="tables-output"></div>
+            </div>
+        </section>
+
+        <section id="patterns">
+            <h2>Practice: Pattern Generator</h2>
+            <p>Loops use karke different patterns banayenge:</p>
+            
+            <div class="demo">
+                <h3>Pattern Maker</h3>
+                <label>Pattern type: 
+                    <select id="pattern-type">
+                        <option value="star-triangle">Star Triangle</option>
+                        <option value="number-triangle">Number Triangle</option>
+                        <option value="reverse-triangle">Reverse Triangle</option>
+                        <option value="diamond">Diamond</option>
+                    </select>
+                </label>
+                <label>Size: <input type="number" id="pattern-size" value="5" min="3" max="10"></label>
+                <button onclick="generatePattern()">Generate Pattern</button>
+                <div class="pattern-display" id="pattern-output"></div>
+            </div>
+        </section>
+
+        <section id="list-processor">
+            <h2>Practice: Dynamic List Processor</h2>
+            <p>Array processing with different loop types:</p>
+            
+            <div class="demo">
+                <h3>List Operations</h3>
+                <input type="text" id="list-input" placeholder="Enter items separated by commas">
+                <div style="margin: 10px 0;">
+                    <button onclick="processListSum()">Sum Numbers</button>
+                    <button onclick="processListFilter()">Filter Even</button>
+                    <button onclick="processListReverse()">Reverse List</button>
+                    <button onclick="processListSearch()">Search Item</button>
+                </div>
+                <div id="list-output"></div>
+            </div>
+        </section>
+
+        <section class="interview-section">
+            <h2>Interview Questions</h2>
+            <div class="question">
+                <h3>1. Basic: for, while, aur do-while loop mein kya difference hai?</h3>
+                <p>Answer: for loop fixed iterations ke liye, while condition check karke chalti hai, do-while pehle execute phir check karti hai.</p>
+            </div>
+            <div class="question">
+                <h3>2. Basic: for...of aur for...in mein kya difference hai?</h3>
+                <p>Answer: for...of values iterate karta hai (arrays ke liye), for...in keys/indices iterate karta hai (objects ke liye).</p>
+            </div>
+            <div class="question">
+                <h3>3. Intermediate: break aur continue statement ka use kab karte hain?</h3>
+                <p>Answer: break loop se completely bahar nikalne ke liye, continue current iteration skip karke next iteration pe jaane ke liye.</p>
+            </div>
+            <div class="question">
+                <h3>4. Intermediate: Infinite loop kya hai aur kaise avoid karte hain?</h3>
+                <p>Answer: Loop jo kabhi end nahi hoti. Condition properly set karo, counter increment/decrement karo, break statements use karo.</p>
+            </div>
+            <div class="question">
+                <h3>5. Advanced: Nested loops ki time complexity kya hoti hai?</h3>
+                <p>Answer: O(n²) for two nested loops, O(n³) for three nested loops. Performance impact hota hai large datasets pe.</p>
+            </div>
+            <div class="question">
+                <h3>6. Advanced: Label statements kya hain aur kab use karte hain?</h3>
+                <p>Answer: Nested loops mein specific loop se break/continue karne ke liye. outer: for(...) { inner: for(...) { break outer; } }</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        let gameNumber = Math.floor(Math.random() * 10) + 1;
+        let attempts = 0;
+        let gameActive = false;
+
+        function visualizeForLoop() {
+            const count = parseInt(document.getElementById('for-count').value) || 5;
+            const visualizer = document.getElementById('for-visualizer');
+            const output = document.getElementById('for-output');
+            const progress = document.getElementById('for-progress');
+            
+            // Clear previous
+            visualizer.innerHTML = '';
+            output.innerHTML = '';
+            progress.style.width = '0%';
+            
+            // Create items
+            for (let i = 0; i < count; i++) {
+                const item = document.createElement('div');
+                item.className = 'loop-item';
+                item.textContent = i + 1;
+                visualizer.appendChild(item);
+            }
+            
+            // Animate loop execution
+            let currentIndex = 0;
+            const interval = setInterval(() => {
+                if (currentIndex > 0) {
+                    visualizer.children[currentIndex - 1].classList.remove('active');
+                }
+                
+                if (currentIndex < count) {
+                    visualizer.children[currentIndex].classList.add('active');
+                    progress.style.width = ((currentIndex + 1) / count * 100) + '%';
+                    output.innerHTML += `<p>Iteration ${currentIndex + 1}: Processing item ${currentIndex + 1}</p>`;
+                    currentIndex++;
+                } else {
+                    clearInterval(interval);
+                    output.innerHTML += `<p><strong>Loop completed! Total iterations: ${count}</strong></p>`;
+                }
+            }, 500);
+        }
+
+        function startGuessingGame() {
+            if (!gameActive) {
+                gameNumber = Math.floor(Math.random() * 10) + 1;
+                attempts = 0;
+                gameActive = true;
+                document.getElementById('guess-output').innerHTML = '<p>Game started! Guess the number between 1-10</p>';
+                document.getElementById('guess-attempts').innerHTML = '';
+            }
+            
+            const guess = parseInt(document.getElementById('guess-input').value);
+            const output = document.getElementById('guess-output');
+            const attemptsDiv = document.getElementById('guess-attempts');
+            
+            if (isNaN(guess) || guess < 1 || guess > 10) {
+                output.innerHTML += '<p style="color: #dc3545;">Please enter a valid number between 1-10!</p>';
+                return;
+            }
+            
+            attempts++;
+            
+            if (guess === gameNumber) {
+                output.innerHTML += `<p style="color: #28a745;"><strong>🎉 Correct! You guessed it in ${attempts} attempts!</strong></p>`;
+                gameActive = false;
+            } else if (guess < gameNumber) {
+                output.innerHTML += `<p style="color: #ffc107;">Too low! Try higher.</p>`;
+            } else {
+                output.innerHTML += `<p style="color: #ffc107;">Too high! Try lower.</p>`;
+            }
+            
+            attemptsDiv.innerHTML = `<p>Attempts: ${attempts}</p>`;
+            document.getElementById('guess-input').value = '';
+        }
+
+        function resetGame() {
+            gameActive = false;
+            attempts = 0;
+            document.getElementById('guess-output').innerHTML = '';
+            document.getElementById('guess-attempts').innerHTML = '';
+            document.getElementById('guess-input').value = '';
+        }
+
+        function demonstrateDoWhile() {
+            const output = document.getElementById('do-while-output');
+            let result = '';
+            let i = 0;
+            
+            result += '<h4>Do-While Example:</h4>';
+            result += '<p>Starting with i = 0, condition: i < 3</p>';
+            
+            do {
+                result += `<p>Iteration ${i + 1}: i = ${i}</p>`;
+                i++;
+            } while (i < 3);
+            
+            result += '<p><strong>Loop ended when i = 3</strong></p>';
+            result += '<p><em>Notice: Loop executed at least once even if condition was false initially</em></p>';
+            
+            output.innerHTML = result;
+        }
+
+        function demonstrateForOf() {
+            const fruits = ['Apple', 'Banana', 'Orange', 'Mango'];
+            const output = document.getElementById('iteration-output');
+            let result = '<h4>For...of (Values):</h4>';
+            
+            result += `<p><strong>Array:</strong> [${fruits.join(', ')}]</p>`;
+            
+            for (const fruit of fruits) {
+                result += `<p>Value: ${fruit}</p>`;
+            }
+            
+            output.innerHTML = result;
+        }
+
+        function demonstrateForIn() {
+            const person = { name: 'Rahul', age: 25, city: 'Mumbai' };
+            const output = document.getElementById('iteration-output');
+            let result = '<h4>For...in (Keys):</h4>';
+            
+            result += `<p><strong>Object:</strong> {name: 'Rahul', age: 25, city: 'Mumbai'}</p>`;
+            
+            for (const key in person) {
+                result += `<p>Key: ${key}, Value: ${person[key]}</p>`;
+            }
+            
+            output.innerHTML = result;
+        }
+
+        function demonstrateBreak() {
+            const output = document.getElementById('break-continue-output');
+            let result = '<h4>Break Example:</h4>';
+            result += '<p>Loop from 1 to 10, break when i = 5</p>';
+            
+            for (let i = 1; i <= 10; i++) {
+                if (i === 5) {
+                    result += `<p style="color: #dc3545;">i = ${i} - BREAK! Loop terminated</p>`;
+                    break;
+                }
+                result += `<p>i = ${i}</p>`;
+            }
+            
+            output.innerHTML = result;
+        }
+
+        function demonstrateContinue() {
+            const output = document.getElementById('break-continue-output');
+            let result = '<h4>Continue Example:</h4>';
+            result += '<p>Loop from 1 to 8, skip even numbers</p>';
+            
+            for (let i = 1; i <= 8; i++) {
+                if (i % 2 === 0) {
+                    result += `<p style="color: #ffc107;">i = ${i} - CONTINUE! Skipped</p>`;
+                    continue;
+                }
+                result += `<p style="color: #28a745;">i = ${i} - Processed (odd number)</p>`;
+            }
+            
+            output.innerHTML = result;
+        }
+
+        function generateTables() {
+            const start = parseInt(document.getElementById('table-start').value) || 2;
+            const end = parseInt(document.getElementById('table-end').value) || 5;
+            const limit = parseInt(document.getElementById('table-limit').value) || 10;
+            const output = document.getElementById('tables-output');
+            
+            output.innerHTML = '';
+            
+            for (let table = start; table <= end; table++) {
+                const tableCard = document.createElement('div');
+                tableCard.className = 'table-card';
+                
+                let tableHTML = `<h4>Table of ${table}</h4>`;
+                for (let i = 1; i <= limit; i++) {
+                    tableHTML += `<p>${table} × ${i} = ${table * i}</p>`;
+                }
+                
+                tableCard.innerHTML = tableHTML;
+                output.appendChild(tableCard);
+            }
+        }
+
+        function generatePattern() {
+            const type = document.getElementById('pattern-type').value;
+            const size = parseInt(document.getElementById('pattern-size').value) || 5;
+            const output = document.getElementById('pattern-output');
+            let pattern = '';
+            
+            switch (type) {
+                case 'star-triangle':
+                    for (let i = 1; i <= size; i++) {
+                        pattern += '*'.repeat(i) + '\n';
+                    }
+                    break;
+                    
+                case 'number-triangle':
+                    for (let i = 1; i <= size; i++) {
+                        for (let j = 1; j <= i; j++) {
+                            pattern += j + ' ';
+                        }
+                        pattern += '\n';
+                    }
+                    break;
+                    
+                case 'reverse-triangle':
+                    for (let i = size; i >= 1; i--) {
+                        pattern += '*'.repeat(i) + '\n';
+                    }
+                    break;
+                    
+                case 'diamond':
+                    // Upper half
+                    for (let i = 1; i <= size; i++) {
+                        pattern += ' '.repeat(size - i) + '*'.repeat(2 * i - 1) + '\n';
+                    }
+                    // Lower half
+                    for (let i = size - 1; i >= 1; i--) {
+                        pattern += ' '.repeat(size - i) + '*'.repeat(2 * i - 1) + '\n';
+                    }
+                    break;
+            }
+            
+            output.textContent = pattern;
+        }
+
+        function processListSum() {
+            const input = document.getElementById('list-input').value;
+            const output = document.getElementById('list-output');
+            
+            if (!input.trim()) {
+                output.innerHTML = '<p style="color: #dc3545;">Please enter some numbers!</p>';
+                return;
+            }
+            
+            const numbers = input.split(',').map(item => parseFloat(item.trim())).filter(num => !isNaN(num));
+            let sum = 0;
+            
+            for (const num of numbers) {
+                sum += num;
+            }
+            
+            output.innerHTML = `
+                <h4>Sum Calculation:</h4>
+                <p><strong>Numbers:</strong> [${numbers.join(', ')}]</p>
+                <p><strong>Sum:</strong> ${sum}</p>
+                <p><em>Used for...of loop to iterate through numbers</em></p>
+            `;
+        }
+
+        function processListFilter() {
+            const input = document.getElementById('list-input').value;
+            const output = document.getElementById('list-output');
+            
+            if (!input.trim()) {
+                output.innerHTML = '<p style="color: #dc3545;">Please enter some numbers!</p>';
+                return;
+            }
+            
+            const numbers = input.split(',').map(item => parseFloat(item.trim())).filter(num => !isNaN(num));
+            const evenNumbers = [];
+            
+            for (const num of numbers) {
+                if (num % 2 === 0) {
+                    evenNumbers.push(num);
+                }
+            }
+            
+            output.innerHTML = `
+                <h4>Even Numbers Filter:</h4>
+                <p><strong>Original:</strong> [${numbers.join(', ')}]</p>
+                <p><strong>Even Numbers:</strong> [${evenNumbers.join(', ')}]</p>
+                <p><em>Used for...of loop with condition to filter</em></p>
+            `;
+        }
+
+        function processListReverse() {
+            const input = document.getElementById('list-input').value;
+            const output = document.getElementById('list-output');
+            
+            if (!input.trim()) {
+                output.innerHTML = '<p style="color: #dc3545;">Please enter some items!</p>';
+                return;
+            }
+            
+            const items = input.split(',').map(item => item.trim());
+            const reversed = [];
+            
+            for (let i = items.length - 1; i >= 0; i--) {
+                reversed.push(items[i]);
+            }
+            
+            output.innerHTML = `
+                <h4>List Reversal:</h4>
+                <p><strong>Original:</strong> [${items.join(', ')}]</p>
+                <p><strong>Reversed:</strong> [${reversed.join(', ')}]</p>
+                <p><em>Used for loop with reverse indexing</em></p>
+            `;
+        }
+
+        function processListSearch() {
+            const input = document.getElementById('list-input').value;
+            const output = document.getElementById('list-output');
+            
+            if (!input.trim()) {
+                output.innerHTML = '<p style="color: #dc3545;">Please enter some items!</p>';
+                return;
+            }
+            
+            const items = input.split(',').map(item => item.trim());
+            const searchTerm = prompt('Enter item to search:');
+            
+            if (!searchTerm) return;
+            
+            let found = false;
+            let position = -1;
+            
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].toLowerCase() === searchTerm.toLowerCase()) {
+                    found = true;
+                    position = i;
+                    break; // Found it, no need to continue
+                }
+            }
+            
+            output.innerHTML = `
+                <h4>Search Results:</h4>
+                <p><strong>List:</strong> [${items.join(', ')}]</p>
+                <p><strong>Searching for:</strong> "${searchTerm}"</p>
+                <p><strong>Result:</strong> ${found ? `Found at position ${position}` : 'Not found'}</p>
+                <p><em>Used for loop with break statement for efficient search</em></p>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 1: Introduction to JavaScript</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #007bff;
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background: #f9f9f9;
+        }
+        .demo {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+        .interview-section {
+            background: #e9ecef;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .home-link:hover {
+            background: #218838;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        
+        <header>
+            <h1>Day 1: Introduction to JavaScript</h1>
+            <p><em>JavaScript ka role web ecosystem mein, dynamic experiences kaise banate hain, aur environment setup</em></p>
+        </header>
+
+        <section id="intro">
+            <h2>JavaScript Kya Hai? - Complete Introduction</h2>
+            <p>Bhai, <strong>JavaScript</strong> ek high-level, interpreted programming language hai jo originally web pages ko interactive banane ke liye banayi gayi thi. Lekin aaj yeh sirf websites mein hi nahi, servers (Node.js), mobile apps (React Native), desktop applications (Electron), aur even IoT devices mein bhi use hoti hai.</p>
+            
+            <h3>JavaScript Ki History aur Evolution:</h3>
+            <ul>
+                <li><strong>1995:</strong> Brendan Eich ne Netscape mein sirf 10 days mein JavaScript banai</li>
+                <li><strong>1997:</strong> ECMAScript standard bana (ES1)</li>
+                <li><strong>2009:</strong> ES5 release - modern JavaScript ki shururat</li>
+                <li><strong>2015:</strong> ES6/ES2015 - major update with classes, arrow functions, etc.</li>
+                <li><strong>Present:</strong> Yearly releases with new features</li>
+            </ul>
+            
+            <h3>JavaScript Kahan-Kahan Use Hoti Hai:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 5px; border-left: 4px solid #007bff;">
+                    <h4>🌐 Frontend Development</h4>
+                    <p>Web pages ko interactive banana, user interfaces, animations</p>
+                </div>
+                <div style="background: #f0f8e7; padding: 15px; border-radius: 5px; border-left: 4px solid #28a745;">
+                    <h4>🖥️ Backend Development</h4>
+                    <p>Node.js se servers, APIs, databases handle karna</p>
+                </div>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107;">
+                    <h4>📱 Mobile Apps</h4>
+                    <p>React Native, Ionic se cross-platform mobile apps</p>
+                </div>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 5px; border-left: 4px solid #dc3545;">
+                    <h4>🖥️ Desktop Apps</h4>
+                    <p>Electron se VS Code, Discord jaise apps</p>
+                </div>
+            </div>
+            
+            <div class="demo">
+                <h3>Interactive Demo: JavaScript in Action</h3>
+                <p>Yeh button click karo aur dekho JavaScript kaise DOM ko real-time mein change karti hai:</p>
+                <button onclick="changeContent()">Click Me!</button>
+                <button onclick="addAnimation()">Add Animation</button>
+                <button onclick="changeColors()">Change Colors</button>
+                <p id="demo-text">Yeh text change ho jaayega!</p>
+                <div id="animation-box" style="width: 100px; height: 100px; background: #007bff; margin: 10px 0; transition: all 0.5s;"></div>
+            </div>
+        </section>
+
+        <section id="ecosystem">
+            <h2>Web Ecosystem Mein JavaScript Ka Role - Deep Dive</h2>
+            <p>Web development ek complex ecosystem hai jahan multiple technologies milkar modern web experiences banati hain. Samjhte hain ki JavaScript ka role kya hai:</p>
+            
+            <h3>Frontend Technologies Stack:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="background: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107;">
+                    <h4>📄 HTML (HyperText Markup Language)</h4>
+                    <p><strong>Role:</strong> Structure aur content define karta hai</p>
+                    <p><strong>Example:</strong> Headings, paragraphs, images, links</p>
+                    <p><strong>Analogy:</strong> Ghar ka skeleton/framework</p>
+                </div>
+                <div style="background: #d1ecf1; padding: 15px; border-radius: 5px; border-left: 4px solid #17a2b8;">
+                    <h4>🎨 CSS (Cascading Style Sheets)</h4>
+                    <p><strong>Role:</strong> Visual appearance aur layout control</p>
+                    <p><strong>Example:</strong> Colors, fonts, spacing, animations</p>
+                    <p><strong>Analogy:</strong> Ghar ki painting aur decoration</p>
+                </div>
+                <div style="background: #d4edda; padding: 15px; border-radius: 5px; border-left: 4px solid #28a745;">
+                    <h4>⚡ JavaScript</h4>
+                    <p><strong>Role:</strong> Interactivity aur dynamic behavior</p>
+                    <p><strong>Example:</strong> Button clicks, form validation, API calls</p>
+                    <p><strong>Analogy:</strong> Ghar ki electricity aur smart features</p>
+                </div>
+            </div>
+            
+            <h3>JavaScript Kaise Web Pages Ko Dynamic Banati Hai:</h3>
+            <ul>
+                <li><strong>DOM Manipulation:</strong> HTML elements ko runtime mein change karna</li>
+                <li><strong>Event Handling:</strong> User interactions (clicks, typing) ko handle karna</li>
+                <li><strong>AJAX/Fetch:</strong> Server se data lana bina page reload kiye</li>
+                <li><strong>Local Storage:</strong> Browser mein data store karna</li>
+                <li><strong>Animations:</strong> Smooth transitions aur visual effects</li>
+            </ul>
+            
+            <div class="demo">
+                <h3>Live Ecosystem Demo</h3>
+                <div style="border: 2px solid #007bff; padding: 15px; margin: 10px 0; border-radius: 8px;">
+                    <h4 id="ecosystem-title">HTML Structure</h4>
+                    <p id="ecosystem-text">Yeh basic HTML content hai - sirf text aur structure</p>
+                    <div style="margin: 15px 0;">
+                        <button onclick="addCSS()">🎨 Add CSS Styling</button>
+                        <button onclick="addJS()">⚡ Add JavaScript Behavior</button>
+                        <button onclick="addAdvancedJS()">🚀 Add Advanced Features</button>
+                        <button onclick="resetDemo()">🔄 Reset</button>
+                    </div>
+                    <div id="feature-showcase" style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 5px; display: none;">
+                        <p>Advanced JavaScript Features:</p>
+                        <button onclick="fetchData()">📡 Fetch Data</button>
+                        <button onclick="saveToStorage()">💾 Save to Storage</button>
+                        <button onclick="showNotification()">🔔 Show Notification</button>
+                        <div id="data-display"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="js-capabilities">
+            <h2>JavaScript Ki Powerful Capabilities</h2>
+            <p>Modern JavaScript sirf simple interactions se kahin zyada kar sakti hai. Dekho kya-kya possible hai:</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; border: 1px solid #007bff;">
+                    <h4>🎮 Interactive Applications</h4>
+                    <ul>
+                        <li>Games (2D/3D with Canvas/WebGL)</li>
+                        <li>Real-time chat applications</li>
+                        <li>Video/audio streaming</li>
+                        <li>Virtual Reality experiences</li>
+                    </ul>
+                </div>
+                <div style="background: #f0f8e7; padding: 15px; border-radius: 8px; border: 1px solid #28a745;">
+                    <h4>🔧 Development Tools</h4>
+                    <ul>
+                        <li>Code editors (VS Code)</li>
+                        <li>Build tools (Webpack, Vite)</li>
+                        <li>Testing frameworks (Jest, Cypress)</li>
+                        <li>Package managers (npm, yarn)</li>
+                    </ul>
+                </div>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffc107;">
+                    <h4>🌐 Full-Stack Development</h4>
+                    <ul>
+                        <li>Frontend frameworks (React, Vue, Angular)</li>
+                        <li>Backend servers (Node.js, Express)</li>
+                        <li>Databases (MongoDB with Mongoose)</li>
+                        <li>APIs aur microservices</li>
+                    </ul>
+                </div>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border: 1px solid #dc3545;">
+                    <h4>📱 Cross-Platform Apps</h4>
+                    <ul>
+                        <li>Mobile apps (React Native, Ionic)</li>
+                        <li>Desktop apps (Electron)</li>
+                        <li>Progressive Web Apps (PWAs)</li>
+                        <li>Browser extensions</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="environment">
+            <h2>Complete Development Environment Setup</h2>
+            <p>JavaScript development ke liye ek proper environment setup karna zaroori hai. Yahan step-by-step guide hai:</p>
+            
+            <h3>Essential Tools aur Software:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; border: 1px solid #007bff;">
+                    <h4>🌐 Web Browser</h4>
+                    <p><strong>Recommended:</strong> Google Chrome ya Firefox</p>
+                    <p><strong>Why:</strong> Best developer tools, debugging features</p>
+                    <p><strong>Features:</strong> Console, Network tab, Elements inspector</p>
+                </div>
+                <div style="background: #f0f8e7; padding: 15px; border-radius: 8px; border: 1px solid #28a745;">
+                    <h4>📝 Code Editor</h4>
+                    <p><strong>Recommended:</strong> Visual Studio Code (VS Code)</p>
+                    <p><strong>Why:</strong> Free, powerful, great extensions</p>
+                    <p><strong>Extensions:</strong> Live Server, Prettier, ESLint</p>
+                </div>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffc107;">
+                    <h4>⚙️ Node.js</h4>
+                    <p><strong>Purpose:</strong> JavaScript runtime outside browser</p>
+                    <p><strong>Includes:</strong> npm (package manager)</p>
+                    <p><strong>Use:</strong> Backend development, build tools</p>
+                </div>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border: 1px solid #dc3545;">
+                    <h4>🔧 Developer Tools</h4>
+                    <p><strong>Browser DevTools:</strong> F12 key</p>
+                    <p><strong>Git:</strong> Version control</p>
+                    <p><strong>Terminal:</strong> Command line interface</p>
+                </div>
+            </div>
+            
+            <h3>Browser Developer Tools Deep Dive:</h3>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;">
+                <h4>DevTools Tabs aur Unka Use:</h4>
+                <ul>
+                    <li><strong>Console:</strong> JavaScript code run karna, errors dekhna, debugging</li>
+                    <li><strong>Elements:</strong> HTML/CSS inspect aur modify karna</li>
+                    <li><strong>Sources:</strong> JavaScript files debug karna, breakpoints lagana</li>
+                    <li><strong>Network:</strong> API calls, file loading monitor karna</li>
+                    <li><strong>Application:</strong> Local storage, cookies, service workers</li>
+                    <li><strong>Performance:</strong> Page loading speed analyze karna</li>
+                </ul>
+            </div>
+            
+            <div class="demo">
+                <h3>Interactive Setup Checklist</h3>
+                <div id="setup-checklist">
+                    <label><input type="checkbox" onclick="updateProgress()"> ✅ Modern Browser (Chrome/Firefox) installed</label><br>
+                    <label><input type="checkbox" onclick="updateProgress()"> ✅ VS Code editor downloaded aur setup</label><br>
+                    <label><input type="checkbox" onclick="updateProgress()"> ✅ Node.js installed (check: node --version)</label><br>
+                    <label><input type="checkbox" onclick="updateProgress()"> ✅ DevTools open karna seekha (F12)</label><br>
+                    <label><input type="checkbox" onclick="updateProgress()"> ✅ Console tab mein code run kiya</label><br>
+                    <label><input type="checkbox" onclick="updateProgress()"> ✅ Basic HTML file banaya</label><br>
+                </div>
+                <p id="progress">Progress: 0/6 complete</p>
+                <button onclick="testDevTools()">🧪 Test DevTools Knowledge</button>
+                <div id="devtools-test"></div>
+            </div>
+        </section>
+
+        <section id="js-execution">
+            <h2>JavaScript Kaise Execute Hoti Hai?</h2>
+            <p>JavaScript execution ka process samjhna important hai. Yeh synchronous aur single-threaded language hai:</p>
+            
+            <h3>JavaScript Engine Architecture:</h3>
+            <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                <h4>🔧 Main Components:</h4>
+                <ul>
+                    <li><strong>Call Stack:</strong> Function calls ka order maintain karta hai</li>
+                    <li><strong>Heap:</strong> Objects aur variables store hote hain</li>
+                    <li><strong>Event Loop:</strong> Asynchronous operations handle karta hai</li>
+                    <li><strong>Web APIs:</strong> Browser-specific functions (setTimeout, fetch)</li>
+                </ul>
+            </div>
+            
+            <h3>Code Execution Process:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="background: #d4edda; padding: 15px; border-radius: 5px; text-align: center;">
+                    <h4>1️⃣ Parsing</h4>
+                    <p>Code ko tokens mein break karna</p>
+                </div>
+                <div style="background: #d1ecf1; padding: 15px; border-radius: 5px; text-align: center;">
+                    <h4>2️⃣ Compilation</h4>
+                    <p>AST (Abstract Syntax Tree) banana</p>
+                </div>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 5px; text-align: center;">
+                    <h4>3️⃣ Execution</h4>
+                    <p>Bytecode run karna</p>
+                </div>
+            </div>
+            
+            <div class="demo">
+                <h3>Execution Order Demo</h3>
+                <button onclick="demonstrateExecution()">▶️ Show Execution Order</button>
+                <div id="execution-demo" style="background: #000; color: #0f0; padding: 15px; font-family: monospace; margin-top: 10px; border-radius: 5px;">
+                    Click button to see execution order...
+                </div>
+            </div>
+        </section>
+
+        <section id="first-code">
+            <h2>Pehla JavaScript Code</h2>
+            <p>Chaliye apna pehla code likhte hain! <code>console.log()</code> se hum browser console mein message print kar sakte hain.</p>
+            
+            <div class="code-example">
+console.log("Hello JavaScript!");
+console.log("Mera pehla JS code!");
+            </div>
+            
+            <div class="demo">
+                <h3>Try It Yourself</h3>
+                <button onclick="runFirstCode()">Run Console.log</button>
+                <p>F12 dabao aur Console tab dekho!</p>
+                <div id="console-output" style="background: #000; color: #0f0; padding: 10px; font-family: monospace; margin-top: 10px;">
+                    Console output yahan dikhega...
+                </div>
+            </div>
+        </section>
+
+        <section id="practice">
+            <h2>Practice: Dynamic "Hello JavaScript!" Page</h2>
+            <p>Ab ek webpage banayenge jo dynamically message display kare:</p>
+            
+            <div class="demo">
+                <h3>Interactive Practice</h3>
+                <input type="text" id="user-name" placeholder="Apna naam enter karo">
+                <button onclick="createDynamicGreeting()">Create Dynamic Greeting</button>
+                <div id="greeting-output" style="margin-top: 10px; padding: 10px; background: #e7f3ff; border-radius: 5px;">
+                    Yahan dynamic greeting dikhegi...
+                </div>
+            </div>
+        </section>
+
+        <section class="interview-section">
+            <h2>Interview Questions</h2>
+            <div class="question">
+                <h3>1. Basic: JavaScript kya hai aur yeh kahan use hoti hai?</h3>
+                <p>Answer: JavaScript ek programming language hai jo web pages ko interactive banati hai. Yeh frontend, backend, mobile apps aur desktop applications mein use hoti hai.</p>
+            </div>
+            <div class="question">
+                <h3>2. Basic: HTML, CSS aur JavaScript mein kya difference hai?</h3>
+                <p>Answer: HTML structure banata hai, CSS styling karta hai, aur JavaScript behavior/interactivity add karti hai.</p>
+            </div>
+            <div class="question">
+                <h3>3. Intermediate: JavaScript kahan-kahan run ho sakti hai?</h3>
+                <p>Answer: Browser mein (client-side), Node.js mein (server-side), mobile apps mein (React Native), desktop apps mein (Electron).</p>
+            </div>
+            <div class="question">
+                <h3>4. Intermediate: console.log() ka purpose kya hai?</h3>
+                <p>Answer: Debugging ke liye browser console mein messages print karna, variables ki values check karna.</p>
+            </div>
+            <div class="question">
+                <h3>5. Advanced: JavaScript engine kya hai? Examples do.</h3>
+                <p>Answer: JavaScript code ko machine code mein convert karta hai. Examples: V8 (Chrome), SpiderMonkey (Firefox), Chakra (Edge).</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function changeContent() {
+            document.getElementById('demo-text').innerHTML = 'JavaScript ne yeh text change kar diya! 🎉';
+            document.getElementById('demo-text').style.color = '#007bff';
+            document.getElementById('demo-text').style.fontWeight = 'bold';
+        }
+
+        let cssAdded = false;
+        let jsAdded = false;
+
+        function addCSS() {
+            const title = document.getElementById('ecosystem-title');
+            const text = document.getElementById('ecosystem-text');
+            title.style.color = '#007bff';
+            title.style.textAlign = 'center';
+            text.style.background = '#f0f8ff';
+            text.style.padding = '10px';
+            text.style.borderRadius = '5px';
+            cssAdded = true;
+        }
+
+        function addJS() {
+            if (!jsAdded) {
+                const text = document.getElementById('ecosystem-text');
+                text.innerHTML = 'JavaScript ne yeh content dynamically change kar diya!';
+                text.style.animation = 'pulse 1s infinite';
+                jsAdded = true;
+            }
+        }
+
+        function resetDemo() {
+            const title = document.getElementById('ecosystem-title');
+            const text = document.getElementById('ecosystem-text');
+            title.style = '';
+            text.style = '';
+            text.innerHTML = 'Yeh basic HTML content hai';
+            cssAdded = false;
+            jsAdded = false;
+        }
+
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('#setup-checklist input[type="checkbox"]');
+            const checked = document.querySelectorAll('#setup-checklist input[type="checkbox"]:checked');
+            document.getElementById('progress').innerHTML = `Progress: ${checked.length}/${checkboxes.length} complete`;
+        }
+
+        function runFirstCode() {
+            console.log("Hello JavaScript!");
+            console.log("Mera pehla JS code!");
+            document.getElementById('console-output').innerHTML = 
+                '> Hello JavaScript!<br>' +
+                '> Mera pehla JS code!<br>' +
+                '> Code successfully executed! 🎉';
+        }
+
+        function createDynamicGreeting() {
+            const name = document.getElementById('user-name').value || 'Friend';
+            const output = document.getElementById('greeting-output');
+            const currentTime = new Date().toLocaleTimeString();
+            
+            output.innerHTML = `
+                <h4>🎉 Dynamic Greeting Created!</h4>
+                <p><strong>Hello ${name}!</strong></p>
+                <p>Welcome to JavaScript learning journey!</p>
+                <p>Time: ${currentTime}</p>
+                <p><em>Yeh sab JavaScript se dynamically generate hua hai!</em></p>
+            `;
+            output.style.background = '#d4edda';
+            output.style.border = '1px solid #c3e6cb';
+        }
+
+        // Additional interactive functions
+        function addAnimation() {
+            const box = document.getElementById('animation-box');
+            box.style.transform = 'rotate(45deg) scale(1.2)';
+            box.style.borderRadius = '50%';
+            setTimeout(() => {
+                box.style.transform = 'rotate(0deg) scale(1)';
+                box.style.borderRadius = '0';
+            }, 1000);
+        }
+
+        function changeColors() {
+            const colors = ['#007bff', '#28a745', '#dc3545', '#ffc107', '#17a2b8', '#6f42c1'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.getElementById('animation-box').style.background = randomColor;
+            document.getElementById('demo-text').style.color = randomColor;
+        }
+
+        function addAdvancedJS() {
+            document.getElementById('feature-showcase').style.display = 'block';
+        }
+
+        function fetchData() {
+            const display = document.getElementById('data-display');
+            display.innerHTML = '<p>🔄 Fetching data...</p>';
+            
+            // Simulate API call
+            setTimeout(() => {
+                const mockData = {
+                    users: 1250,
+                    posts: 8934,
+                    comments: 15678,
+                    timestamp: new Date().toLocaleString()
+                };
+                
+                display.innerHTML = `
+                    <h4>📊 Fetched Data:</h4>
+                    <p>👥 Users: ${mockData.users}</p>
+                    <p>📝 Posts: ${mockData.posts}</p>
+                    <p>💬 Comments: ${mockData.comments}</p>
+                    <p>🕒 Time: ${mockData.timestamp}</p>
+                `;
+            }, 1500);
+        }
+
+        function saveToStorage() {
+            const data = {
+                user: 'JavaScript Learner',
+                progress: '7%',
+                lastVisit: new Date().toISOString()
+            };
+            
+            localStorage.setItem('jsLearningProgress', JSON.stringify(data));
+            
+            document.getElementById('data-display').innerHTML = `
+                <h4>💾 Data Saved to Local Storage!</h4>
+                <p>✅ User progress saved successfully</p>
+                <p>📊 Progress: ${data.progress}</p>
+                <p>🔍 Check Application tab in DevTools</p>
+            `;
+        }
+
+        function showNotification() {
+            if ('Notification' in window) {
+                if (Notification.permission === 'granted') {
+                    new Notification('JavaScript Learning', {
+                        body: 'Great job! You\'re learning JavaScript features!',
+                        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🎉</text></svg>'
+                    });
+                } else if (Notification.permission !== 'denied') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            new Notification('JavaScript Learning', {
+                                body: 'Notifications enabled! Great job!',
+                                icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>'
+                            });
+                        }
+                    });
+                }
+            }
+            
+            document.getElementById('data-display').innerHTML = `
+                <h4>🔔 Notification Feature Tested!</h4>
+                <p>✅ Browser notification API called</p>
+                <p>📱 Check if notification appeared</p>
+            `;
+        }
+
+        function testDevTools() {
+            const output = document.getElementById('devtools-test');
+            output.innerHTML = `
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 5px; margin-top: 10px;">
+                    <h4>🧪 DevTools Test Instructions:</h4>
+                    <ol>
+                        <li>Press <strong>F12</strong> to open DevTools</li>
+                        <li>Go to <strong>Console</strong> tab</li>
+                        <li>Type: <code>console.log("DevTools working!")</code></li>
+                        <li>Press <strong>Enter</strong></li>
+                        <li>Check <strong>Elements</strong> tab to inspect HTML</li>
+                        <li>Try <strong>Network</strong> tab (refresh page to see requests)</li>
+                    </ol>
+                    <p><strong>✅ If you can see console output, DevTools is working!</strong></p>
+                </div>
+            `;
+            
+            // Log to console for testing
+            console.log("🎉 DevTools test successful!");
+            console.log("Welcome to JavaScript development!");
+            console.table({
+                'Browser': navigator.userAgent.split(' ')[0],
+                'JavaScript': 'Enabled',
+                'Console': 'Working',
+                'Status': '✅ Ready for development'
+            });
+        }
+
+        function demonstrateExecution() {
+            const output = document.getElementById('execution-demo');
+            output.innerHTML = '';
+            
+            const steps = [
+                '1️⃣ JavaScript engine starts...',
+                '2️⃣ Parsing code into tokens...',
+                '3️⃣ Building Abstract Syntax Tree (AST)...',
+                '4️⃣ Compiling to bytecode...',
+                '5️⃣ Executing code line by line...',
+                '6️⃣ console.log("Hello World!");',
+                '7️⃣ Function calls added to call stack...',
+                '8️⃣ Variables stored in memory heap...',
+                '9️⃣ Event loop checking for async operations...',
+                '🎉 Execution complete!'
+            ];
+            
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i < steps.length) {
+                    output.innerHTML += steps[i] + '<br>';
+                    output.scrollTop = output.scrollHeight;
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    output.innerHTML += '<br>💡 This is how JavaScript executes your code!';
+                }
+            }, 800);
+        }
+
+        // Add pulse animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Day 1: JavaScript Introduction loaded!');
+            console.log('💡 Tip: Open DevTools (F12) to see more interactive features!');
+        });
+    </script>
+</body>
+</html>

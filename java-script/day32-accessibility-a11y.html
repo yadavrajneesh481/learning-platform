@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 32: Accessibility (A11y)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #6f42c1;
+        }
+        h1, h2, h3 {
+            color: #6f42c1;
+        }
+        section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #6f42c1;
+            background: #f9f9f9;
+        }
+        .demo {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+        }
+        button {
+            background: #6f42c1;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5a32a3;
+        }
+        button:focus {
+            outline: 3px solid #ffc107;
+            outline-offset: 2px;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        
+        <header>
+            <h1>Day 32: Accessibility (A11y)</h1>
+            <p><em>Web accessibility basics, ARIA roles, keyboard navigation, screen readers</em></p>
+        </header>
+
+        <section id="intro">
+            <h2>Accessibility Kya Hai?</h2>
+            <p>Web accessibility (A11y) ka matlab hai websites aur applications ko sabke liye accessible banana, including people with disabilities. Yeh sirf moral responsibility nahi hai, legal requirement bhi hai kai countries mein.</p>
+            
+            <h3>🌟 Accessibility Principles (WCAG):</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; border-left: 4px solid #007bff;">
+                    <h4>👁️ Perceivable</h4>
+                    <p>Information must be presentable in ways users can perceive</p>
+                    <ul>
+                        <li>Text alternatives for images</li>
+                        <li>Captions for videos</li>
+                        <li>Sufficient color contrast</li>
+                    </ul>
+                </div>
+                <div style="background: #f0f8e7; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
+                    <h4>⚡ Operable</h4>
+                    <p>Interface components must be operable</p>
+                    <ul>
+                        <li>Keyboard accessible</li>
+                        <li>No seizure-inducing content</li>
+                        <li>Enough time to read content</li>
+                    </ul>
+                </div>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <h4>🧠 Understandable</h4>
+                    <p>Information and UI operation must be understandable</p>
+                    <ul>
+                        <li>Readable text</li>
+                        <li>Predictable functionality</li>
+                        <li>Input assistance</li>
+                    </ul>
+                </div>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border-left: 4px solid #dc3545;">
+                    <h4>🔧 Robust</h4>
+                    <p>Content must be robust enough for various assistive technologies</p>
+                    <ul>
+                        <li>Valid HTML</li>
+                        <li>Compatible with screen readers</li>
+                        <li>Future-proof code</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="aria">
+            <h2>ARIA Roles aur Attributes</h2>
+            <p>ARIA (Accessible Rich Internet Applications) attributes screen readers aur other assistive technologies ko extra information provide karte hain.</p>
+            
+            <div class="demo">
+                <h3>Common ARIA Attributes:</h3>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; font-family: monospace; margin: 10px 0;">
+<!-- ARIA Labels -->
+&lt;button aria-label="Close dialog"&gt;×&lt;/button&gt;
+&lt;input aria-describedby="password-help"&gt;
+&lt;div id="password-help"&gt;Password must be 8+ characters&lt;/div&gt;
+
+<!-- ARIA Roles -->
+&lt;div role="button" tabindex="0"&gt;Custom Button&lt;/div&gt;
+&lt;nav role="navigation"&gt;...&lt;/nav&gt;
+&lt;main role="main"&gt;...&lt;/main&gt;
+
+<!-- ARIA States -->
+&lt;button aria-expanded="false"&gt;Menu&lt;/button&gt;
+&lt;div aria-hidden="true"&gt;Decorative content&lt;/div&gt;
+&lt;input aria-invalid="true" aria-describedby="error"&gt;
+                </div>
+                
+                <h3>Interactive ARIA Demo:</h3>
+                <button id="aria-button" aria-expanded="false" aria-controls="aria-content" onclick="toggleAriaContent()">
+                    📋 Toggle Content (ARIA Enhanced)
+                </button>
+                <div id="aria-content" style="display: none; margin-top: 10px; padding: 10px; background: #e7f3ff; border-radius: 5px;">
+                    <p>This content is properly announced to screen readers!</p>
+                    <p>ARIA attributes help assistive technologies understand the relationship between elements.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="keyboard-navigation">
+            <h2>Keyboard Navigation</h2>
+            <p>Kai users mouse use nahi kar sakte, sirf keyboard se navigate karte hain. Proper keyboard support essential hai.</p>
+            
+            <div class="demo">
+                <h3>Keyboard Navigation Demo:</h3>
+                <p><strong>Instructions:</strong> Tab key use karke navigate karo, Enter/Space se activate karo</p>
+                
+                <div style="border: 2px solid #6f42c1; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <button onclick="alert('Button 1 clicked!')" onkeydown="handleKeyDown(event, 'Button 1')">
+                        🔘 Focusable Button 1
+                    </button>
+                    <button onclick="alert('Button 2 clicked!')" onkeydown="handleKeyDown(event, 'Button 2')">
+                        🔘 Focusable Button 2
+                    </button>
+                    <div tabindex="0" role="button" onclick="alert('Custom button clicked!')" 
+                         onkeydown="handleKeyDown(event, 'Custom Button')"
+                         style="display: inline-block; padding: 10px 15px; background: #6f42c1; color: white; border-radius: 5px; margin: 5px; cursor: pointer;">
+                        🎯 Custom Focusable Element
+                    </div>
+                    <a href="#" onclick="alert('Link clicked!'); return false;">🔗 Focusable Link</a>
+                </div>
+                
+                <div id="keyboard-feedback" style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                    Keyboard events will be shown here...
+                </div>
+            </div>
+        </section>
+
+        <section id="screen-readers">
+            <h2>Screen Reader Support</h2>
+            <p>Screen readers text ko speech mein convert karte hain. Proper semantic HTML aur ARIA attributes zaroori hain.</p>
+            
+            <div class="demo">
+                <h3>Screen Reader Friendly Form:</h3>
+                <form onsubmit="return false;">
+                    <fieldset>
+                        <legend>Personal Information</legend>
+                        
+                        <div style="margin: 10px 0;">
+                            <label for="sr-name">Full Name (required):</label>
+                            <input type="text" id="sr-name" required aria-describedby="name-help">
+                            <div id="name-help" style="font-size: 0.8em; color: #666;">Enter your first and last name</div>
+                        </div>
+                        
+                        <div style="margin: 10px 0;">
+                            <label for="sr-email">Email Address:</label>
+                            <input type="email" id="sr-email" aria-describedby="email-help">
+                            <div id="email-help" style="font-size: 0.8em; color: #666;">We'll never share your email</div>
+                        </div>
+                        
+                        <fieldset>
+                            <legend>Preferred Contact Method</legend>
+                            <div>
+                                <input type="radio" id="contact-email" name="contact" value="email">
+                                <label for="contact-email">Email</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="contact-phone" name="contact" value="phone">
+                                <label for="contact-phone">Phone</label>
+                            </div>
+                        </fieldset>
+                        
+                        <button type="submit" aria-describedby="submit-help">Submit Form</button>
+                        <div id="submit-help" style="font-size: 0.8em; color: #666;">Press Enter or click to submit</div>
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+
+        <section id="accessible-modal">
+            <h2>Practice: Accessible Modal</h2>
+            <p>Ek fully accessible modal banayenge jo keyboard navigation, focus management, aur screen readers support kare.</p>
+            
+            <div class="demo">
+                <button onclick="openModal()" aria-describedby="modal-help">
+                    🪟 Open Accessible Modal
+                </button>
+                <div id="modal-help" style="font-size: 0.8em; color: #666;">Opens a dialog with proper accessibility features</div>
+                
+                <!-- Modal -->
+                <div id="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;" onclick="closeModal()">
+                    <div id="modal-dialog" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description" 
+                         style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; max-width: 500px; width: 90%;"
+                         onclick="event.stopPropagation()">
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3 id="modal-title" style="margin: 0;">Accessible Modal Dialog</h3>
+                            <button onclick="closeModal()" aria-label="Close dialog" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">×</button>
+                        </div>
+                        
+                        <div id="modal-description">
+                            <p>This modal demonstrates accessibility best practices:</p>
+                            <ul>
+                                <li>Focus is trapped within the modal</li>
+                                <li>ESC key closes the modal</li>
+                                <li>Focus returns to trigger button when closed</li>
+                                <li>Proper ARIA attributes for screen readers</li>
+                                <li>Keyboard navigation support</li>
+                            </ul>
+                        </div>
+                        
+                        <div style="margin-top: 20px;">
+                            <input type="text" placeholder="Try tabbing through elements" style="margin-right: 10px;">
+                            <button onclick="alert('Action performed!')">Action Button</button>
+                            <button onclick="closeModal()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="interview-section" style="background: #e9ecef; padding: 20px; margin-top: 30px;">
+            <h2>Interview Questions</h2>
+            <div class="question" style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 5px;">
+                <h3>1. Basic: WCAG ke 4 main principles kya hain?</h3>
+                <p>Answer: Perceivable, Operable, Understandable, Robust (POUR)</p>
+            </div>
+            <div class="question" style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 5px;">
+                <h3>2. Basic: ARIA ka full form kya hai?</h3>
+                <p>Answer: Accessible Rich Internet Applications - assistive technologies ke liye extra information provide karta hai.</p>
+            </div>
+            <div class="question" style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 5px;">
+                <h3>3. Intermediate: aria-label aur aria-labelledby mein kya difference hai?</h3>
+                <p>Answer: aria-label direct text provide karta hai, aria-labelledby existing element ko reference karta hai.</p>
+            </div>
+            <div class="question" style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 5px;">
+                <h3>4. Intermediate: Focus management modal mein kyun important hai?</h3>
+                <p>Answer: Screen reader users ko context maintain karne ke liye, keyboard users ko proper navigation ke liye.</p>
+            </div>
+            <div class="question" style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 5px;">
+                <h3>5. Advanced: Color contrast ratio minimum kitna hona chahiye?</h3>
+                <p>Answer: Normal text ke liye 4.5:1, large text ke liye 3:1 (WCAG AA level)</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        let previousFocus = null;
+
+        function toggleAriaContent() {
+            const button = document.getElementById('aria-button');
+            const content = document.getElementById('aria-content');
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                content.style.display = 'none';
+                button.setAttribute('aria-expanded', 'false');
+                button.textContent = '📋 Toggle Content (ARIA Enhanced)';
+            } else {
+                content.style.display = 'block';
+                button.setAttribute('aria-expanded', 'true');
+                button.textContent = '📋 Hide Content (ARIA Enhanced)';
+            }
+        }
+
+        function handleKeyDown(event, elementName) {
+            const feedback = document.getElementById('keyboard-feedback');
+            
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                feedback.innerHTML = `✅ ${elementName} activated with ${event.key} key`;
+                
+                // Trigger the click event
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.target.click();
+                }
+            } else {
+                feedback.innerHTML = `⌨️ Key pressed: ${event.key} on ${elementName}`;
+            }
+        }
+
+        function openModal() {
+            previousFocus = document.activeElement;
+            const modal = document.getElementById('modal-overlay');
+            modal.style.display = 'block';
+            
+            // Focus the first focusable element in modal
+            setTimeout(() => {
+                const firstFocusable = modal.querySelector('button, input, [tabindex="0"]');
+                if (firstFocusable) {
+                    firstFocusable.focus();
+                }
+            }, 100);
+            
+            // Add keyboard event listener for ESC key
+            document.addEventListener('keydown', handleModalKeydown);
+            
+            // Trap focus within modal
+            trapFocus(modal);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal-overlay');
+            modal.style.display = 'none';
+            
+            // Return focus to the element that opened the modal
+            if (previousFocus) {
+                previousFocus.focus();
+            }
+            
+            // Remove event listeners
+            document.removeEventListener('keydown', handleModalKeydown);
+        }
+
+        function handleModalKeydown(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        }
+
+        function trapFocus(element) {
+            const focusableElements = element.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstFocusable = focusableElements[0];
+            const lastFocusable = focusableElements[focusableElements.length - 1];
+
+            element.addEventListener('keydown', function(event) {
+                if (event.key === 'Tab') {
+                    if (event.shiftKey) {
+                        if (document.activeElement === firstFocusable) {
+                            event.preventDefault();
+                            lastFocusable.focus();
+                        }
+                    } else {
+                        if (document.activeElement === lastFocusable) {
+                            event.preventDefault();
+                            firstFocusable.focus();
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('♿ Day 32: Accessibility (A11y) loaded!');
+            console.log('🌟 Making the web accessible for everyone!');
+        });
+    </script>
+</body>
+</html>

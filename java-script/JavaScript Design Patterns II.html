@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Day 27 — JavaScript Design Patterns II (Interactive)</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#7c3aed; --muted:#9aa4b2; --glass: rgba(255,255,255,0.03);
+      --glass-2: rgba(255,255,255,0.02);
+      font-synthesis: none;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;color:#e6eef6;background:linear-gradient(180deg,#071026 0%, #081226 60%);min-height:100vh}
+    header{display:flex;align-items:center;justify-content:space-between;padding:22px 28px;border-bottom:1px solid rgba(255,255,255,0.03)}
+    .brand{display:flex;gap:14px;align-items:center}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#2563eb);display:flex;align-items:center;justify-content:center;font-weight:700;color:white}
+    h1{font-size:18px;margin:0}
+    p.lead{margin:4px 0 0;color:var(--muted);font-size:13px}
+    main{max-width:1100px;margin:28px auto;padding:18px}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    .card{background:linear-gradient(180deg,var(--card), #061023);border-radius:12px;padding:16px;box-shadow:0 6px 20px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+    .section-title{display:flex;align-items:center;gap:10px}
+    .pill{background:var(--glass);padding:6px 10px;border-radius:999px;font-weight:600;font-size:12px;color:var(--muted)}
+    .pattern{margin-top:12px}
+    .pattern h2{margin:0;font-size:16px}
+    .pattern .def{font-weight:700;margin-top:8px}
+    .pattern .exp{margin-top:10px;color:#cbd8e6}
+    .controls{display:flex;gap:8px;margin-top:12px}
+    button{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#e6eef6;padding:8px 10px;border-radius:8px;cursor:pointer}
+    .home-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 15px;
+      background: #28a745;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .home-link:hover {
+      background: #218838;
+      transform: translateY(-1px);
+    }
+    .home-link:focus {
+      outline: 2px solid #ffc107;
+      outline-offset: 2px;
+    }
+    button.primary{background:linear-gradient(90deg,var(--accent),#2563eb);border:none}
+    .code{background:linear-gradient(180deg,#071229,#061124);padding:12px;border-radius:8px;margin-top:12px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;font-size:13px;color:#bfe0ff;overflow:auto;border:1px solid rgba(255,255,255,0.03)}
+    .demo{margin-top:12px}
+    .logger{height:120px;overflow:auto;background:var(--glass-2);padding:8px;border-radius:8px;border:1px dashed rgba(255,255,255,0.03);font-family:monospace;color:#a8cfff;font-size:13px}
+    .small{font-size:13px;color:var(--muted)}
+    aside .card{position:sticky;top:20px}
+    .diagram{background:linear-gradient(180deg,#052033,#04222f);border-radius:8px;padding:12px;margin-top:12px}
+    svg{width:100%;height:160px}
+    .faq{margin-top:18px}
+    .questions li{margin:8px 0}
+    footer{max-width:1100px;margin:20px auto;padding:16px;text-align:center;color:var(--muted)}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}aside .card{position:static}}
+    /* interactive visuals styling */
+    .node{fill:#0b1220;stroke:#1f2937;stroke-width:1.2}
+    .label{font-size:12px;fill:#cfe6ff}
+    .arrow{stroke:#7c3aed;stroke-width:2;fill:none;marker-end:url(#arrow)}
+    .toggle{display:inline-flex;align-items:center;gap:8px}
+    .toggle input{accent-color:var(--accent)}
+    .pattern-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+    @media (max-width:700px){.pattern-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+  <header>
+    <div class="brand">
+      <div class="logo">DP</div>
+      <div>
+        <h1>JavaScript Design Patterns — II</h1>
+        <p class="lead">Day 27 • MVC/MVVM · Revealing Module · Decorator · Pub/Sub — Interactive guide (Hinglish explanations)</p>
+      </div>
+    </div>
+    <div class="pill">Vanilla JS • Responsive • Interactive</div>
+  </header>
+
+  <main>
+    <div class="grid">
+      <section>
+        <div class="card">
+          <div class="section-title">
+            <div class="pill">Overview</div>
+            <div style="margin-left:auto" class="small">Mix: Hinglish explanations, Technical definitions in <strong>English</strong></div>
+          </div>
+          <div class="pattern">
+            <h2>MVC / MVVM</h2>
+            <div class="def">Definition (English): <em>Architectural patterns that separate concerns — Model, View, Controller/ViewModel — to organize code, make testing and maintenance easier.</em></div>
+            <div class="exp">
+              Hinglish: MVC aur MVVM ka basic idea yeh hai ke aap apne data (Model), UI (View) aur logic (Controller ya ViewModel) ko alag rakhte ho. Isse code clean, testable aur re-usable banta hai. Neeche ek chhota demo hai jo dikhata hai kaise model update se view update hota hai.
+            </div>
+            <div class="controls">
+              <button id="mvc-reset">Reset</button>
+              <button class="primary" id="mvc-add">Add Item</button>
+            </div>
+
+            <div class="demo" id="mvc-demo">
+              <div style="display:flex;gap:12px;align-items:center;margin-top:10px">
+                <input id="mvc-input" placeholder="Type item name" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#e6eef6">
+                <button id="mvc-add-2">Add</button>
+              </div>
+              <div class="code" id="mvc-code">
+<pre>// Model: plain JS object
+const Model = { items: [] };
+// View: renders list
+// Controller: coordinates user input and model
+</pre>
+              </div>
+              <div class="logger" id="mvc-log"></div>
+            </div>
+          </div>
+
+          <div class="pattern">
+            <h2>Revealing Module</h2>
+            <div class="def">Definition (English): <em>A module pattern that returns an object exposing only selected methods/variables, keeping others private through closure.</em></div>
+            <div class="exp">Hinglish: Revealing Module ka use karte hue hum private state rakh ke sirf public API expose karte hain. Yeh encapsulation aur cleaner API design ke liye best hai.</div>
+            <div class="controls">
+              <button id="rm-run">Run Demo</button>
+              <button id="rm-toggle">Toggle Private Access</button>
+            </div>
+            <div class="code" id="rm-code"><pre>// Revealing Module
+const Counter = (function(){
+  let count = 0; // private
+  function inc(){ count++; }
+  function get(){ return count; }
+  return { inc, get };
+})();
+</pre></div>
+            <div class="logger" id="rm-log"></div>
+          </div>
+
+          <div class="pattern">
+            <h2>Decorator</h2>
+            <div class="def">Definition (English): <em>A pattern to add responsibilities to objects dynamically without changing their structure, often by wrapping them.</em></div>
+            <div class="exp">Hinglish: Decorator se hum kisi object ko wrap karke extra behaviour add kar sakte hain — jaise logging, caching, ya validation — bina original object ko badle.</div>
+            <div class="controls">
+              <button id="dec-base">Create Base</button>
+              <button id="dec-log">Add Logger Decorator</button>
+              <button id="dec-time">Add Timer Decorator</button>
+            </div>
+            <div class="code" id="dec-code"><pre>// Base function
+function fetchData(){ return Promise.resolve('data'); }
+// decorators wrap fetchData
+</pre></div>
+            <div class="logger" id="dec-log"></div>
+          </div>
+
+          <div class="pattern">
+            <h2>Pub/Sub (Publish - Subscribe)</h2>
+            <div class="def">Definition (English): <em>A messaging pattern where publishers emit events and subscribers listen — decoupling components.</em></div>
+            <div class="exp">Hinglish: Pub/Sub se components loosely coupled hote hain. Ek component event publish karta hai aur jitne chahe subscribers hain woh subscribe kar ke react kar lete hain.</div>
+            <div class="controls">
+              <button id="pub-sub-init">Init Pub/Sub</button>
+              <button id="pub-event">Publish Event</button>
+              <button id="pub-sub-clear">Clear</button>
+            </div>
+            <div class="code" id="pub-code"><pre>// Simple PubSub
+const Bus = { on(){}, off(){}, emit(){} };
+</pre></div>
+            <div class="logger" id="pub-log"></div>
+          </div>
+
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="section-title"><div class="pill">Interactive Diagrams</div></div>
+          <div class="diagram">
+            <svg viewBox="0 0 600 180" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+                  <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed" />
+                </marker>
+              </defs>
+              <!-- Model -->
+              <rect x="20" y="20" width="110" height="40" rx="8" class="node"/>
+              <text x="75" y="45" text-anchor="middle" class="label">Model</text>
+
+              <!-- Controller -->
+              <rect x="170" y="20" width="140" height="40" rx="8" class="node"/>
+              <text x="240" y="45" text-anchor="middle" class="label">Controller / ViewModel</text>
+
+              <!-- View -->
+              <rect x="350" y="20" width="110" height="40" rx="8" class="node"/>
+              <text x="405" y="45" text-anchor="middle" class="label">View</text>
+
+              <!-- arrows -->
+              <path d="M130 40 L170 40" class="arrow"/>
+              <path d="M310 40 L350 40" class="arrow"/>
+
+              <!-- Pub/Sub -->
+              <circle cx="100" cy="120" r="28" class="node"/><text x="100" y="125" text-anchor="middle" class="label">Publisher</text>
+              <circle cx="260" cy="120" r="28" class="node"/><text x="260" y="125" text-anchor="middle" class="label">Bus</text>
+              <circle cx="420" cy="120" r="28" class="node"/><text x="420" y="125" text-anchor="middle" class="label">Subscriber</text>
+              <path d="M128 120 L232 120" class="arrow"/>
+              <path d="M288 120 L392 120" class="arrow"/>
+            </svg>
+            <div class="small" style="margin-top:8px">Click any demo "Run" or "Publish" button to see logging flow appear in the corresponding log box — observe the decoupling and data flow.</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="section-title"><div class="pill">Refactor Practice</div><div style="margin-left:8px;color:var(--muted)" class="small">Refactor a tiny Todo app into patterns</div></div>
+          <div class="exp">Hinglish: Yeh chhota Todo demo 4 patterns ko dikhata hai. Aap "Refactor" button se alternate implementations dekh sakte ho — MVC, Revealing Module, Decorator-enhanced, ya Pub/Sub driven.</div>
+          <div class="controls" style="margin-top:12px">
+            <button id="ref-mvc">Use MVC</button>
+            <button id="ref-rm">Use Revealing Module</button>
+            <button id="ref-dec">Use Decorator</button>
+            <button id="ref-pub">Use Pub/Sub</button>
+          </div>
+          <div class="pattern-grid" id="refactor-area">
+            <!-- left: UI -->
+            <div style="background:var(--glass);padding:12px;border-radius:8px">
+              <input id="todo-in" placeholder="Add todo" style="width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:#e6eef6">
+              <div style="display:flex;gap:8px;margin-top:8px">
+                <button id="todo-add">Add</button>
+                <button id="todo-clear">Clear</button>
+              </div>
+              <ul id="todo-list" style="margin-top:10px;padding-left:18px;color:#cde4ff"></ul>
+            </div>
+            <!-- right: implementation details -->
+            <div style="padding:6px;">
+              <div class="small">Implementation code:</div>
+              <pre class="code" id="todo-code"></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h2>Interview Questions</h2>
+          <ol class="questions">
+            <li>Explain the difference between MVC and MVVM. When would you choose one over the other?</li>
+            <li>How does the Revealing Module pattern help with encapsulation? Give a code example.</li>
+            <li>Describe how you would add a logging feature to many objects without modifying each — which pattern is best and why?</li>
+            <li>What are the advantages and pitfalls of using Pub/Sub in a frontend application?</li>
+            <li>How can decorators be used with asynchronous functions (Promises / async-await)? Provide an example.</li>
+            <li>(Advanced) Refactor a small component to move from tight coupling to a Pub/Sub design — what tests would you add to ensure correctness?</li>
+            <li>(Advanced) Compare memory/leak risks between closures in Revealing Module and event-based Pub/Sub systems.</li>
+          </ol>
+        </div>
+
+      </section>
+
+      <aside>
+        <div class="card">
+          <div class="section-title"><div class="pill">Quick Cheatsheet</div></div>
+          <ul style="margin-top:10px;line-height:1.6;color:var(--muted)">
+            <li><strong>MVC/MVVM</strong> — separation of concerns</li>
+            <li><strong>Revealing Module</strong> — closure + public API</li>
+            <li><strong>Decorator</strong> — wrap to extend</li>
+            <li><strong>Pub/Sub</strong> — decoupled messaging</li>
+          </ul>
+
+          <div style="margin-top:12px">
+            <div class="small">Toggle visual hints:</div>
+            <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+              <label class="toggle"><input type="checkbox" id="hint-flow" checked> Show arrows</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h3 style="margin:0">How to use</h3>
+          <p class="small" style="margin-top:8px">1) Pick a pattern in "Refactor Practice" — 2) Add Todos and watch the logs — 3) Read Hinglish explanations to connect concepts — 4) Try interview questions.</p>
+        </div>
+
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    Created for you — practice, tinker, and ask me to extend any demo. Good luck! 🚀
+  </footer>
+
+  <script>
+  // Utilities
+  function logTo(el, ...msgs){
+    const node = document.getElementById(el);
+    const time = new Date().toLocaleTimeString();
+    node.innerHTML += '['+time+'] ' + msgs.map(m=> typeof m==='object'? JSON.stringify(m): m).join(' ') + '\n';
+    node.scrollTop = node.scrollHeight;
+  }
+
+  // MVC demo
+  (function(){
+    const Model = { items: [] };
+    const View = {
+      init(){ this.list = document.getElementById('mvc-log'); },
+      render(){ document.getElementById('mvc-log').innerText = Model.items.map((i,idx)=> (idx+1)+'. '+i).join('\n'); }
+    };
+    const Controller = {
+      add(item){ Model.items.push(item); logTo('mvc-log','Controller -> added:', item); View.render(); },
+      reset(){ Model.items.length=0; View.render(); logTo('mvc-log','Controller -> reset'); }
+    };
+    document.getElementById('mvc-add').addEventListener('click', ()=>{ Controller.add('Item '+(Model.items.length+1)); });
+    document.getElementById('mvc-add-2').addEventListener('click', ()=>{
+      const v = document.getElementById('mvc-input').value.trim(); if(!v) return; Controller.add(v); document.getElementById('mvc-input').value='';
+    });
+    document.getElementById('mvc-reset').addEventListener('click', ()=> Controller.reset());
+    View.init();
+  })();
+
+  // Revealing Module demo
+  (function(){
+    const logEl='rm-log';
+    let Counter = (function(){
+      let count=0;
+      function inc(){ count++; }
+      function get(){ return count; }
+      return { inc, get };
+    })();
+    document.getElementById('rm-run').addEventListener('click', ()=>{
+      Counter.inc(); logTo(logEl,'Counter:', Counter.get());
+    });
+    let privateLeaked=false;
+    document.getElementById('rm-toggle').addEventListener('click', ()=>{
+      if(!privateLeaked){
+        // simulate a leak (bad practice) — do not do in real code
+        Counter._secret = 999; privateLeaked=true; logTo(logEl,'Private leaked via new property:', Counter._secret);
+      } else { delete Counter._secret; privateLeaked=false; logTo(logEl,'Leak removed'); }
+    });
+  })();
+
+  // Decorator demo
+  (function(){
+    let base = null;
+    const logEl='dec-log';
+    function makeBase(){ base = function(){ logTo(logEl,'base: fetching...'); return Promise.resolve('base-data'); }; logTo(logEl,'Base created'); updateDecCode(); }
+    function addLogger(fn){ const wrapped = function(...args){ logTo(logEl,'[logger] before'); const res = fn(...args); logTo(logEl,'[logger] after'); return res; }; base = wrapped; updateDecCode(); }
+    function addTimer(fn){ const wrapped = function(...args){ const s=Date.now(); const res = fn(...args); const e=Date.now(); logTo(logEl,'[timer] took '+(e-s)+'ms'); return res; }; base = wrapped; updateDecCode(); }
+    function updateDecCode(){ document.getElementById('dec-code').innerText = base ? base.toString() : '// base not created'; }
+    document.getElementById('dec-base').addEventListener('click', ()=> makeBase());
+    document.getElementById('dec-log').addEventListener('click', ()=> addLogger(base));
+    document.getElementById('dec-time').addEventListener('click', ()=> addTimer(base));
+  })();
+
+  // Pub/Sub demo
+  (function(){
+    const Bus = (function(){
+      const subs = {};
+      return {
+        on(event, cb){ (subs[event] = subs[event] || []).push(cb); },
+        off(event){ delete subs[event]; },
+        emit(event, data){ (subs[event]||[]).forEach(cb=>cb(data)); }
+      };
+    })();
+    document.getElementById('pub-sub-init').addEventListener('click', ()=>{
+      Bus.on('say', payload=> logTo('pub-log','Subscriber1 got:', payload));
+      Bus.on('say', payload=> logTo('pub-log','Subscriber2 got:', payload));
+      logTo('pub-log','Initialized with 2 subscribers');
+    });
+    document.getElementById('pub-event').addEventListener('click', ()=>{
+      const t = 'Hello @'+new Date().getSeconds();
+      Bus.emit('say', t); logTo('pub-log','Published:', t);
+    });
+    document.getElementById('pub-sub-clear').addEventListener('click', ()=>{ Bus.off('say'); logTo('pub-log','Cleared subscribers'); });
+  })();
+
+  // Refactor practice — todo app implementations
+  (function(){
+    const listEl = document.getElementById('todo-list');
+    const codeEl = document.getElementById('todo-code');
+    const input = document.getElementById('todo-in');
+    let implementation = 'mvc';
+
+    function renderList(items){ listEl.innerHTML = items.map((t,i)=> '<li>'+(i+1)+'. '+t+'</li>').join(''); }
+
+    // MVC impl
+    const MVC = (function(){
+      const Model = { items: [] };
+      const View = { render(){ renderList(Model.items); } };
+      const Controller = { add(t){ Model.items.push(t); View.render(); }, clear(){ Model.items = []; View.render(); } };
+      return Controller;
+    })();
+
+    // Revealing Module impl
+    const RM = (function(){
+      const module = (function(){
+        const items = [];
+        function add(t){ items.push(t); renderList(items); }
+        function clear(){ items.length=0; renderList(items); }
+        return { add, clear };
+      })();
+      return module;
+    })();
+
+    // Decorator impl — base storage with decorators
+    function makeBaseStore(){ return { items: [], add(t){ this.items.push(t); renderList(this.items); }, clear(){ this.items=[]; renderList(this.items); } } }
+    function loggerDecorator(store){ const origAdd = store.add; store.add = function(t){ console.log('[decorator] add',t); origAdd.call(this,t); }; return store; }
+    const DEC = (function(){ let s = makeBaseStore(); return { getStore(){ return s }, set(s2){ s=s2 }, add(t){ s.add(t) }, clear(){ s.clear() } } })();
+
+    // Pub/Sub impl
+    const Bus = (function(){ const subs = {}; return { on(e,cb){ (subs[e]=subs[e]||[]).push(cb); }, emit(e,p){ (subs[e]||[]).forEach(cb=>cb(p)); } }; })();
+    const PUB = (function(){ const store = { items: [] }; Bus.on('todo:add', t=>{ store.items.push(t); renderList(store.items); }); Bus.on('todo:clear', ()=>{ store.items=[]; renderList(store.items); }); return { add(t){ Bus.emit('todo:add', t); }, clear(){ Bus.emit('todo:clear'); } }; })();
+
+    function setImpl(name){ implementation = name; if(name==='mvc'){ codeEl.innerText = 'MVC Controller + Model + View (separate)'; }
+      else if(name==='rm'){ codeEl.innerText = 'Revealing Module (closure + public API)'; }
+      else if(name==='dec'){ codeEl.innerText = 'Decorator wraps store: you can add logging/time behavior without changing usage'; }
+      else if(name==='pub'){ codeEl.innerText = 'Pub/Sub: emit events and subscribers update view — decoupled'; }
+      // clear UI
+      renderList([]);
+      // reset underlying stores
+      // (recreate to simulate fresh refactor)
+      // MVC: reset
+    }
+
+    document.getElementById('ref-mvc').addEventListener('click', ()=> setImpl('mvc'));
+    document.getElementById('ref-rm').addEventListener('click', ()=> setImpl('rm'));
+    document.getElementById('ref-dec').addEventListener('click', ()=> setImpl('dec'));
+    document.getElementById('ref-pub').addEventListener('click', ()=> setImpl('pub'));
+
+    document.getElementById('todo-add').addEventListener('click', ()=>{
+      const v = input.value.trim(); if(!v) return; if(implementation==='mvc') MVC.add(v);
+      else if(implementation==='rm') RM.add(v);
+      else if(implementation==='dec'){
+        // attach decorator first time
+        if(!DEC._decorated){ DEC.set(loggerDecorator(makeBaseStore())); DEC._decorated=true; }
+        DEC.add(v);
+      } else if(implementation==='pub') PUB.add(v);
+      input.value='';
+    });
+    document.getElementById('todo-clear').addEventListener('click', ()=>{
+      if(implementation==='mvc') MVC.clear(); else if(implementation==='rm') RM.clear(); else if(implementation==='dec') DEC.clear(); else if(implementation==='pub') PUB.clear();
+    });
+
+    // default
+    setImpl('mvc');
+  })();
+
+  // visual hints toggle
+  document.getElementById('hint-flow').addEventListener('change',(e)=>{
+    const svg = document.querySelector('svg'); svg.style.opacity = e.target.checked? '1':'0.25';
+  });
+
+  </script>
+</body>
+</html>

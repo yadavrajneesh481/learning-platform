@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 28: JavaScript Modules - Interactive Learning Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        nav {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        nav li {
+            margin: 0 15px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        nav a:hover, nav a.active {
+            background: #667eea;
+            color: white;
+        }
+        section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+        section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        h3 {
+            color: #764ba2;
+            margin: 20px 0 10px;
+            font-size: 1.4em;
+        }
+        p, li {
+            margin-bottom: 10px;
+        }
+        .hinglish {
+            font-style: italic;
+            color: #555;
+        }
+        code {
+            background: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background: #2d3748;
+            color: #a0aec0;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .interactive {
+            background: #e8f4fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+            margin: 5px;
+        }
+        button:hover {
+            background: #764ba2;
+        }
+        .toggle {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .diagram {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .box {
+            width: 200px;
+            height: 100px;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            margin: 10px;
+            transition: transform 0.3s;
+        }
+        .box:hover {
+            transform: scale(1.05);
+        }
+        .arrow {
+            font-size: 2em;
+            color: #764ba2;
+            align-self: center;
+        }
+        .questions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-left: 4px solid #667eea;
+        }
+        #quiz button {
+            background: #28a745;
+        }
+        #quiz button:hover {
+            background: #218838;
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            nav ul {
+                flex-direction: column;
+            }
+            nav li {
+                margin: 5px 0;
+            }
+            .diagram {
+                flex-direction: column;
+                align-items: center;
+            }
+            .box {
+                width: 150px;
+                height: 80px;
+            }
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .home-link:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        .home-link:focus {
+            outline: 2px solid #ffc107;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        <header>
+            <h1>Day 28: JavaScript Modules</h1>
+            <p>Script loading problems and ES modules (import/export), CommonJS vs ES6 Modules, Dynamic imports, Practice: Structure your project with modules</p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#intro" class="nav-link active">Introduction</a></li>
+                <li><a href="#script-loading" class="nav-link">Script Loading Problems</a></li>
+                <li><a href="#es-modules" class="nav-link">ES Modules</a></li>
+                <li><a href="#commonjs-es6" class="nav-link">CommonJS vs ES6</a></li>
+                <li><a href="#dynamic-imports" class="nav-link">Dynamic Imports</a></li>
+                <li><a href="#practice" class="nav-link">Practice</a></li>
+                <li><a href="#questions" class="nav-link">Interview Questions</a></li>
+            </ul>
+        </nav>
+
+        <section id="intro" class="active">
+            <h2>Introduction to JavaScript Modules</h2>
+            <p class="hinglish">JavaScript modules ek bahut important concept hai modern web development mein. Yeh aapko code ko organize karne, reuse karne aur dependencies manage karne mein madad karte hain. Pehle ke time mein, global scope pollution ki problem thi, lekin ab modules se code modular ho gaya hai.</p>
+            <p><strong>Technical Definition:</strong> A JavaScript module is a file that encapsulates related code into a single unit, exposing only necessary parts to the outside world while keeping the rest private.</p>
+            <div class="interactive">
+                <button onclick="toggleSection('script-loading')">Next: Script Loading Problems</button>
+            </div>
+        </section>
+
+        <section id="script-loading">
+            <h2>Script Loading Problems</h2>
+            <p class="hinglish">Pehle, jab hum multiple &lt;script&gt; tags use karte the, tab blocking aur order ki problem hoti thi. Browser synchronously load karta tha, isse page load slow ho jata tha. Aur global variables conflict karte the.</p>
+            <ul>
+                <li>Blocking: Scripts page ko block kar dete hain.</li>
+                <li>Order Dependency: Galat order mein load karne se errors.</li>
+                <li>Global Scope Pollution: Sab variables global ho jate the.</li>
+            </ul>
+            <div class="interactive">
+                <h3>Interactive Demo: Simulate Script Loading</h3>
+                <button onclick="simulateBlocking()">Simulate Synchronous Load</button>
+                <button onclick="simulateAsync()">Simulate Async Load</button>
+                <p id="load-result">Click a button to see the effect.</p>
+                <button onclick="toggleSection('es-modules')">Next: ES Modules</button>
+            </div>
+        </section>
+
+        <section id="es-modules">
+            <h2>ES Modules (import/export)</h2>
+            <p class="hinglish">ES Modules, yaani ECMAScript modules, standard way hai JavaScript mein modules use karne ka. Yeh browser mein native support karte hain type="module" attribute se.</p>
+            <p><strong>Technical Definition:</strong> ES modules use <code>import</code> and <code>export</code> keywords to declare dependencies and expose functionality.</p>
+            <pre><code>// math.js
+export const add = (a, b) => a + b;
+export default function multiply(a, b) { return a * b; }
+
+// main.js
+import multiply, { add } from './math.js';</code></pre>
+            <div class="interactive">
+                <h3>Toggle Code Examples</h3>
+                <button class="toggle" onclick="toggleCode('export-code')">Show Export</button>
+                <button class="toggle" onclick="toggleCode('import-code')">Show Import</button>
+                <div id="export-code" style="display:none;">
+                    <pre><code>export const PI = 3.14;
+export function circleArea(r) { return PI * r * r; }</code></pre>
+                </div>
+                <div id="import-code" style="display:none;">
+                    <pre><code>import { PI, circleArea } from './utils.js';
+console.log(circleArea(5)); // 78.5</code></pre>
+                </div>
+                <button onclick="toggleSection('commonjs-es6')">Next: CommonJS vs ES6</button>
+            </div>
+        </section>
+
+        <section id="commonjs-es6">
+            <h2>CommonJS vs ES6 Modules</h2>
+            <p class="hinglish">CommonJS Node.js ke liye hai, synchronous hai, aur require/module.exports use karta hai. ES6 modules async hain, browser aur Node dono mein kaam karte hain.</p>
+            <div class="diagram">
+                <div class="box">CommonJS<br>require('module')<br>module.exports = {}</div>
+                <div class="arrow">→ vs ←</div>
+                <div class="box">ES6 Modules<br>import/export<br>Static Analysis</div>
+            </div>
+            <table style="width:100%; border-collapse: collapse; margin:20px 0;">
+                <tr><th>Feature</th><th>CommonJS</th><th>ES6</th></tr>
+                <tr><td>Loading</td><td>Synchronous</td><td>Asynchronous</td></tr>
+                <tr><td>Environment</td><td>Node.js</td><td>Browser/Node</td></tr>
+                <tr><td>Syntax</td><td>require/exports</td><td>import/export</td></tr>
+            </table>
+            <div class="interactive">
+                <button onclick="toggleDiagram('commonjs-diag')">Show CommonJS Flow</button>
+                <button onclick="toggleDiagram('es6-diag')">Show ES6 Flow</button>
+                <div id="commonjs-diag" style="display:none;">
+                    <p>Flow: require → Execute → Cache → Return</p>
+                </div>
+                <div id="es6-diag" style="display:none;">
+                    <p>Flow: Parse imports → Fetch → Execute</p>
+                </div>
+                <button onclick="toggleSection('dynamic-imports')">Next: Dynamic Imports</button>
+            </div>
+        </section>
+
+        <section id="dynamic-imports">
+            <h2>Dynamic Imports</h2>
+            <p class="hinglish">Dynamic imports runtime pe modules load karne ke liye hain, jaise user action pe. Yeh promise return karte hain.</p>
+            <p><strong>Technical Definition:</strong> <code>import()</code> is a function that returns a Promise, allowing conditional or lazy loading of modules.</p>
+            <pre><code>button.addEventListener('click', () => {
+  import('./heavyModule.js').then(module => {
+    module.init();
+  });
+});</code></pre>
+            <div class="interactive">
+                <h3>Live Demo: Dynamic Load</h3>
+                <button onclick="dynamicLoad()">Load Dynamic Module</button>
+                <p id="dynamic-result">Click to dynamically import a function.</p>
+                <button onclick="toggleSection('practice')">Next: Practice</button>
+            </div>
+        </section>
+
+        <section id="practice">
+            <h2>Practice: Structure Your Project with Modules</h2>
+            <p class="hinglish">Ab practice karo: Ek simple project banao jisme utils.js, main.js aur index.html ho. Utils mein functions export karo, main mein import.</p>
+            <div class="interactive">
+                <h3>Project Structure Visualizer</h3>
+                <button onclick="showStructure()">Show Folder Structure</button>
+                <div id="structure" style="display:none; background:#f0f0f0; padding:10px; border-radius:5px;">
+                    <pre>
+project/
+├── index.html
+├── main.js
+└── utils/
+    └── math.js
+                    </pre>
+                </div>
+                <p>Tip: Use &lt;script type="module" src="main.js"&gt; in HTML.</p>
+                <button onclick="toggleSection('questions')">Next: Interview Questions</button>
+            </div>
+        </section>
+
+        <section id="questions" class="questions">
+            <h2>Interview Questions</h2>
+            <div class="question">
+                <h3>Basic: What is the difference between script tags with and without type="module"?</h3>
+                <p>Answer: Without type="module", it's classic script (global scope). With it, it's ES module (strict mode, no global pollution).</p>
+            </div>
+            <div class="question">
+                <h3>Basic: How do you export a default from an ES module?</h3>
+                <p>Answer: Use <code>export default value;</code> and import as <code>import name from 'module';</code>.</p>
+            </div>
+            <div class="question">
+                <h3>Intermediate: Explain why ES modules are better for tree-shaking.</h3>
+                <p>Answer: Static structure allows bundlers to analyze and remove unused exports.</p>
+            </div>
+            <div class="question">
+                <h3>Intermediate: What is the role of dynamic imports in code splitting?</h3>
+                <p>Answer: They enable loading modules on demand, reducing initial bundle size for better performance.</p>
+            </div>
+            <div class="question">
+                <h3>Advanced: How does CommonJS handle circular dependencies vs ES modules?</h3>
+                <p>Answer: CommonJS partially executes during require; ES modules hoist and handle better with top-level await in some cases.</p>
+            </div>
+            <div class="question">
+                <h3>Advanced: Can you use ES modules in Node.js without flags? Explain.</h3>
+                <p>Answer: Yes, with .mjs extension or "type": "module" in package.json.</p>
+            </div>
+            <div id="quiz">
+                <h3>Quick Quiz: Test Yourself</h3>
+                <button onclick="showAnswer(1)">Q1: Syntax for named export? <span id="a1"></span></button>
+                <button onclick="showAnswer(2)">Q2: Dynamic import returns? <span id="a2"></span></button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function toggleSection(targetId) {
+            document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(targetId).classList.add('active');
+            // Scroll to top optional: uncomment if needed
+            // window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                toggleSection(targetId);
+                // Set active class for nav links only
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
+        function toggleCode(id) {
+            const elem = document.getElementById(id);
+            elem.style.display = elem.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleDiagram(id) {
+            const elem = document.getElementById(id);
+            elem.style.display = elem.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function simulateBlocking() {
+            document.getElementById('load-result').innerHTML = 'Synchronous: Page blocks until script loads. Slow! ⏳';
+            document.getElementById('load-result').style.color = 'red';
+        }
+
+        function simulateAsync() {
+            document.getElementById('load-result').innerHTML = 'Async: Loads in background. Faster! ⚡';
+            document.getElementById('load-result').style.color = 'green';
+        }
+
+        function dynamicLoad() {
+            // Simulate dynamic import
+            setTimeout(() => {
+                document.getElementById('dynamic-result').innerHTML = 'Module loaded dynamically! Function executed: 2 + 3 = 5';
+            }, 500);
+        }
+
+        function showStructure() {
+            document.getElementById('structure').style.display = 'block';
+        }
+
+        function showAnswer(q) {
+            const spans = {1: document.getElementById('a1'), 2: document.getElementById('a2')};
+            if (!spans[q].innerHTML) {
+                spans[q].innerHTML = q === 1 ? 'export { func };' : 'A Promise';
+                spans[q].style.color = 'green';
+            }
+        }
+    </script>
+</body>
+</html>

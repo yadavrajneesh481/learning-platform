@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asynchronous JavaScript Mastery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .home-link:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        .home-link:focus {
+            outline: 2px solid #ffc107;
+            outline-offset: 2px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .explanation {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .keyword { color: #c678dd; }
+        .function { color: #61afef; }
+        .string { color: #98c379; }
+        .comment { color: #5c6370; font-style: italic; }
+
+        .demo-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .demo-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .visual-demo {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .execution-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .sync-box {
+            background: #ffeaa7;
+            border: 3px solid #fdcb6e;
+        }
+
+        .async-box {
+            background: #81ecec;
+            border: 3px solid #00b894;
+        }
+
+        .execution-step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .execution-step.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .timer-demo {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .timer-display {
+            font-size: 4em;
+            font-weight: bold;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .callback-hell-visual {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        .callback-level {
+            margin-left: 30px;
+            padding: 15px;
+            border-left: 3px solid #e74c3c;
+            margin-top: 10px;
+            background: #ffe6e6;
+            border-radius: 5px;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .interval-demo {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .counter-box {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            padding: 30px;
+            border-radius: 15px;
+            min-width: 200px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .counter-value {
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .questions-section {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+
+        .question-card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+
+        .difficulty {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            color: white;
+        }
+
+        .easy { background: #00b894; }
+        .medium { background: #fdcb6e; color: #333; }
+        .hard { background: #e74c3c; }
+
+        .answer {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+            display: none;
+            color: #555;
+        }
+
+        .answer.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .timer-display {
+                font-size: 2.5em;
+            }
+            
+            .visual-demo {
+                flex-direction: column;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        <div class="header">
+            <h1>🚀 Asynchronous JavaScript Mastery</h1>
+            <p>Day 15: Callbacks, Timers & Async Execution</p>
+        </div>
+
+        <div class="content">
+            <!-- Section 1: Sync vs Async -->
+            <div class="section">
+                <h2>1️⃣ Synchronous vs Asynchronous Execution</h2>
+                
+                <div class="explanation">
+                    <h3>Synchronous Execution kya hai?</h3>
+                    <p><strong>Synchronous</strong> matlab ek line-by-line execution. Jab tak ek task complete nahi hota, next task wait karta rehta hai. Ye bilkul queue jaisa hai - ek ke baad ek.</p>
+                    <p>Example: Aap line mein khade ho ticket lene ke liye. Aapke aage wala person jab tak ticket nahi leta, aapki baari nahi aati.</p>
+                </div>
+
+                <div class="explanation">
+                    <h3>Asynchronous Execution kya hai?</h3>
+                    <p><strong>Asynchronous</strong> matlab tasks parallel mein chal sakte hain. Ek task complete hone ka wait kiye bina, dusra task shuru ho sakta hai.</p>
+                    <p>Example: Restaurant mein aapne order kiya, chef cooking kar raha hai, aur aap waiter se baat kar sakte ho simultaneously.</p>
+                </div>
+
+                <div class="demo-container">
+                    <div class="demo-title">🎯 Interactive Demo: Dekho Difference</div>
+                    <div class="visual-demo">
+                        <div class="execution-box sync-box">
+                            <h3>Synchronous</h3>
+                            <div id="syncSteps"></div>
+                        </div>
+                        <div class="execution-box async-box">
+                            <h3>Asynchronous</h3>
+                            <div id="asyncSteps"></div>
+                        </div>
+                    </div>
+                    <button onclick="runSyncAsync()">▶️ Demo Chalaiye</button>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Synchronous Example</span>
+<span class="function">console</span>.<span class="function">log</span>(<span class="string">"Task 1"</span>);
+<span class="function">console</span>.<span class="function">log</span>(<span class="string">"Task 2"</span>);
+<span class="function">console</span>.<span class="function">log</span>(<span class="string">"Task 3"</span>);
+
+<span class="comment">// Asynchronous Example</span>
+<span class="function">console</span>.<span class="function">log</span>(<span class="string">"Task 1"</span>);
+<span class="keyword">setTimeout</span>(() => {
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">"Task 2"</span>);
+}, <span class="string">1000</span>);
+<span class="function">console</span>.<span class="function">log</span>(<span class="string">"Task 3"</span>);
+                </div>
+            </div>
+
+            <!-- Section 2: Callbacks -->
+            <div class="section">
+                <h2>2️⃣ Callback Functions</h2>
+                
+                <div class="explanation">
+                    <h3>Callback kya hota hai?</h3>
+                    <p>Callback ek <span class="highlight">function hai jo dusre function ko argument ke tarah pass kiya jata hai</span>. Ye function baad mein execute hota hai jab koi specific event ho jaye ya task complete ho jaye.</p>
+                    <p>Simple words mein: "Ye kaam kar, aur jab ho jaye toh mujhe batana" - ye batana wala part callback hai.</p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Basic Callback Example</span>
+<span class="keyword">function</span> <span class="function">doSomething</span>(callback) {
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">"Kaam shuru..."</span>);
+    <span class="keyword">setTimeout</span>(() => {
+        <span class="function">console</span>.<span class="function">log</span>(<span class="string">"Kaam khatam!"</span>);
+        <span class="function">callback</span>(); <span class="comment">// Callback function call</span>
+    }, <span class="string">2000</span>);
+}
+
+<span class="function">doSomething</span>(() => {
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">"Thank you!"</span>);
+});
+                </div>
+
+                <div class="explanation">
+                    <h3>⚠️ Callback Hell kya hai?</h3>
+                    <p>Jab callbacks ke andar callbacks, aur uske andar callbacks... aise nested ho jaate hain, toh code pyramid jaisa dikh ta hai. Isko <span class="highlight">Callback Hell</span> ya <span class="highlight">Pyramid of Doom</span> kehte hain.</p>
+                </div>
+
+                <div class="demo-container">
+                    <div class="demo-title">👹 Callback Hell Visualization</div>
+                    <div class="callback-hell-visual">
+                        <div style="background: #e8f5e9; padding: 15px; border-radius: 5px;">
+                            Task 1 starts...
+                            <div class="callback-level">
+                                Task 2 starts (after Task 1)...
+                                <div class="callback-level">
+                                    Task 3 starts (after Task 2)...
+                                    <div class="callback-level">
+                                        Task 4 starts (after Task 3)...
+                                        <div class="callback-level">
+                                            Task 5 starts (after Task 4)... 😵
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Callback Hell Example - Avoid karna chahiye!</span>
+<span class="function">getData</span>(<span class="keyword">function</span>(a) {
+    <span class="function">processData</span>(a, <span class="keyword">function</span>(b) {
+        <span class="function">validateData</span>(b, <span class="keyword">function</span>(c) {
+            <span class="function">saveData</span>(c, <span class="keyword">function</span>(d) {
+                <span class="function">console</span>.<span class="function">log</span>(<span class="string">"Finally done!"</span>);
+            });
+        });
+    });
+});
+                </div>
+            </div>
+
+            <!-- Section 3: setTimeout & setInterval -->
+            <div class="section">
+                <h2>3️⃣ setTimeout & setInterval</h2>
+                
+                <div class="explanation">
+                    <h3>setTimeout</h3>
+                    <p><span class="highlight">setTimeout</span> ek function ko specified delay ke baad <strong>sirf ek baar</strong> execute karta hai.</p>
+                    <p>Syntax: <code>setTimeout(callback, delayInMilliseconds)</code></p>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// setTimeout Example</span>
+<span class="function">console</span>.<span class="function">log</span>(<span class="string">"Start"</span>);
+
+<span class="keyword">setTimeout</span>(() => {
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">"2 seconds baad ye print hoga"</span>);
+}, <span class="string">2000</span>);
+
+<span class="function">console</span>.<span class="function">log</span>(<span class="string">"End"</span>);
+
+<span class="comment">// Output: Start → End → 2 seconds baad ye print hoga</span>
+                </div>
+
+                <div class="explanation">
+                    <h3>setInterval</h3>
+                    <p><span class="highlight">setInterval</span> ek function ko specified interval par <strong>repeatedly</strong> execute karta hai jab tak aap use stop na kar do.</p>
+                    <p>Syntax: <code>setInterval(callback, intervalInMilliseconds)</code></p>
+                </div>
+
+                <div class="demo-container">
+                    <div class="demo-title">⏱️ setInterval Demo</div>
+                    <div class="interval-demo">
+                        <div class="counter-box">
+                            <div style="color: white; margin-bottom: 10px;">Counter</div>
+                            <div class="counter-value" id="intervalCounter">0</div>
+                        </div>
+                        <div>
+                            <button onclick="startInterval()">▶️ Start</button>
+                            <button onclick="stopInterval()" style="background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);">⏹️ Stop</button>
+                            <button onclick="resetInterval()">🔄 Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// setInterval Example</span>
+<span class="keyword">let</span> counter = <span class="string">0</span>;
+<span class="keyword">let</span> intervalId = <span class="keyword">setInterval</span>(() => {
+    counter++;
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">"Counter:"</span>, counter);
+    
+    <span class="keyword">if</span> (counter === <span class="string">5</span>) {
+        <span class="keyword">clearInterval</span>(intervalId); <span class="comment">// Stop karne ke liye</span>
+    }
+}, <span class="string">1000</span>);
+                </div>
+            </div>
+
+            <!-- Section 4: Countdown Timer -->
+            <div class="section">
+                <h2>4️⃣ Countdown Timer - Practice Project</h2>
+                
+                <div class="explanation">
+                    <p>Ab hum banayenge ek fully functional countdown timer using setTimeout aur setInterval!</p>
+                </div>
+
+                <div class="timer-demo">
+                    <h3 style="margin-bottom: 20px;">⏰ Countdown Timer</h3>
+                    <div>
+                        <input type="number" id="timerInput" placeholder="Seconds" 
+                               style="padding: 15px; border-radius: 10px; border: none; font-size: 1.2em; width: 150px; text-align: center;">
+                    </div>
+                    <div class="timer-display" id="timerDisplay">00:00</div>
+                    <div class="timer-controls">
+                        <button onclick="startTimer()">▶️ Start</button>
+                        <button onclick="pauseTimer()" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">⏸️ Pause</button>
+                        <button onclick="resetTimer()" style="background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);">🔄 Reset</button>
+                    </div>
+                    <div id="timerStatus" style="margin-top: 20px; font-size: 1.2em;"></div>
+                </div>
+
+                <div class="code-block">
+<span class="comment">// Countdown Timer Implementation</span>
+<span class="keyword">let</span> timerInterval;
+<span class="keyword">let</span> remainingTime = <span class="string">0</span>;
+
+<span class="keyword">function</span> <span class="function">startTimer</span>() {
+    <span class="keyword">const</span> seconds = <span class="keyword">parseInt</span>(<span class="function">document</span>.<span class="function">getElementById</span>(<span class="string">'timerInput'</span>).value);
+    remainingTime = seconds;
+    
+    timerInterval = <span class="keyword">setInterval</span>(() => {
+        <span class="keyword">if</span> (remainingTime <= <span class="string">0</span>) {
+            <span class="keyword">clearInterval</span>(timerInterval);
+            <span class="function">alert</span>(<span class="string">"Time's up!"</span>);
+            <span class="keyword">return</span>;
+        }
+        remainingTime--;
+        <span class="function">updateDisplay</span>();
+    }, <span class="string">1000</span>);
+}
+
+<span class="keyword">function</span> <span class="function">updateDisplay</span>() {
+    <span class="keyword">const</span> mins = <span class="keyword">Math</span>.<span class="function">floor</span>(remainingTime / <span class="string">60</span>);
+    <span class="keyword">const</span> secs = remainingTime % <span class="string">60</span>;
+    <span class="function">document</span>.<span class="function">getElementById</span>(<span class="string">'timerDisplay'</span>).textContent = 
+        <span class="string">`${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`</span>;
+}
+                </div>
+            </div>
+
+            <!-- Interview Questions -->
+            <div class="questions-section">
+                <h2 style="color: white; text-align: center; margin-bottom: 30px;">📝 Interview Questions</h2>
+                
+                <div class="question-card" onclick="toggleAnswer(this)">
+                    <div class="question-header">
+                        <span>Q1. Synchronous aur Asynchronous execution mein kya difference hai?</span>
+                        <span class="difficulty easy">Easy</span>
+                    </div>
+                    <div class="answer">
+                        <strong>Answer:</strong> Synchronous execution mein code line-by-line execute hota hai aur ek statement complete hone ka wait karta hai. Asynchronous execution mein code wait nahi karta aur non-blocking hota hai. Example: setTimeout asynchronous hai kyunki ye timer set karke immediately next line par chala jata hai.
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(this)">
+                    <div class="question-header">
+                        <span>Q2. Callback function kya hota hai? Example ke saath explain karo.</span>
+                        <span class="difficulty easy">Easy</span>
+                    </div>
+                    <div class="answer">
+                        <strong>Answer:</strong> Callback ek function hai jo dusre function ko argument ke taur par pass kiya jata hai aur baad mein execute hota hai. Example:<br><br>
+                        <code>function greet(name, callback) {<br>
+                        &nbsp;&nbsp;console.log('Hello ' + name);<br>
+                        &nbsp;&nbsp;callback();<br>
+                        }<br>
+                        greet('John', function() { console.log('Callback executed'); });</code>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(this)">
+                    <div class="question-header">
+                        <span>Q3. setTimeout(fn, 0) kya karta hai aur kyun use hota hai?</span>
+                        <span class="difficulty medium">Medium</span>
+                    </div>
+                    <div class="answer">
+                        <strong>Answer:</strong> setTimeout(fn, 0) function ko immediately execute nahi karta, balki use callback queue mein daal deta hai. Ye tab useful hai jab aap chahte ho ki current execution stack complete ho jaye, phir callback execute ho. Isse event loop ka proper use hota hai aur UI blocking se bacha ja sakta hai.
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(this)">
+                    <div class="question-header">
+                        <span>Q4. Callback Hell kya hai aur isse kaise avoid karein?</span>
+                        <span class="difficulty medium">Medium</span>
+                    </div>
+                    <div class="answer">
+                        <strong>Answer:</strong> Callback Hell tab hota hai jab multiple nested callbacks use karte hain, jo code ko unreadable aur unmaintainable bana deta hai. Isse avoid karne ke liye:<br>
+                        1. Named functions use karein instead of anonymous functions<br>
+                        2. Promises use karein<br>
+                        3. Async/Await use karein<br>
+                        4. Code ko modular banayein
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(this)">
+                    <div class="question-header">
+                        <span>Q5. setTimeout aur setInterval mein kya difference hai?</span>
+                        <span class="difficulty easy">Easy</span>
+                    </div>
+                    <div class="answer">
+                        <strong>Answer:</strong> setTimeout ek function ko specified delay ke baad sirf ek baar execute karta hai. setInterval ek function ko repeatedly specified interval par execute karta rehta hai jab tak clearInterval() call na ho. Example: setTimeout(fn, 1000) - 1 second baad ek baar run hoga. setInterval(fn, 1000) - har 1 second mein run hota rahega.
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(this)">
+                    <div class="question-header">
+                        <span>Q6. clearTimeout aur clearInterval kab aur kyun use karte hain?</span>
+                        <span class="difficulty medium">Medium</span>
+                    </div>
+                    <div class="answer">
+                        <strong>Answer:</strong> clearTimeout() aur clearInterval() ko use karte hain jab hume scheduled callbacks ko cancel karna ho. Ye memory leaks prevent karne ke liye important hai. Example:<br><br>
+                        <code>let timerId = setTimeout(fn, 5000);<br>
+                        clearTimeout(timerId); // Cancel kar diya<br><br>
+                        let intervalId = setInterval(fn, 1000);<br>
+                        clearInterval(intervalId); // Stop kar diya</code><br><br>
+                        Especially important when component unmount ho raha ho (React/Vue mein).
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleAnswer(this)">
+                    <div class="question-header">
+                        <span>Q7. Event Loop kya hai aur ye callbacks ko kaise handle karta hai?</span>
+                        <span class="difficulty hard">Hard</span>
+                    </div>
+                    <div class="answer">
+                        <strong>Answer:</strong> Event Loop JavaScript ka core mechanism hai jo asynchronous operations handle karta hai. Process:<br>
+                        1. Call Stack mein synchronous code execute hota hai<br>
+                        2. Async operations (setTimeout, callbacks) Web APIs ko diye jate hain<br>
+                        3. Complete hone par callbacks Task Queue mein aate hain<br>
+                        4. Jab Call Stack empty hota hai, Event Loop Task Queue se callbacks uthake Call Stack mein dalta hai<br>
+                        5. Phir callbacks execute hote hain<br><br>
+                        Isse JavaScript single-threaded hote hue bhi non-blocking behavior achieve karta hai.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sync vs Async Demo
+        function runSyncAsync() {
+            const syncSteps = document.getElementById('syncSteps');
+            const asyncSteps = document.getElementById('asyncSteps');
+            
+            syncSteps.innerHTML = '';
+            asyncSteps.innerHTML = '';
+            
+            // Synchronous Demo
+            setTimeout(() => {
+                addStep(syncSteps, 'Task 1 ✓');
+            }, 500);
+            
+            setTimeout(() => {
+                addStep(syncSteps, 'Task 2 ✓');
+            }, 1500);
+            
+            setTimeout(() => {
+                addStep(syncSteps, 'Task 3 ✓');
+            }, 2500);
+            
+            // Asynchronous Demo
+            setTimeout(() => {
+                addStep(asyncSteps, 'Task 1 ✓');
+            }, 500);
+            
+            setTimeout(() => {
+                addStep(asyncSteps, 'Task 3 ✓');
+            }, 800);
+            
+            setTimeout(() => {
+                addStep(asyncSteps, 'Task 2 ✓ (delayed)');
+            }, 2000);
+        }
+        
+        function addStep(container, text) {
+            const step = document.createElement('div');
+            step.className = 'execution-step';
+            step.textContent = text;
+            container.appendChild(step);
+            setTimeout(() => step.classList.add('active'), 10);
+        }
+        
+        // Interval Demo
+        let intervalId = null;
+        let counter = 0;
+        
+        function startInterval() {
+            if (intervalId) return;
+            intervalId = setInterval(() => {
+                counter++;
+                document.getElementById('intervalCounter').textContent = counter;
+            }, 1000);
+        }
+        
+        function stopInterval() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+        }
+        
+        function resetInterval() {
+            stopInterval();
+            counter = 0;
+            document.getElementById('intervalCounter').textContent = counter;
+        }
+        
+        // Countdown Timer
+        let timerInterval = null;
+        let remainingTime = 0;
+        let isPaused = false;
+        
+        function startTimer() {
+            const input = document.getElementById('timerInput').value;
+            const seconds = parseInt(input);
+            
+            if (!seconds || seconds <= 0) {
+                document.getElementById('timerStatus').textContent = '⚠️ Please enter valid seconds!';
+                return;
+            }
+            
+            if (timerInterval && !isPaused) {
+                document.getElementById('timerStatus').textContent = '⚠️ Timer already running!';
+                return;
+            }
+            
+            if (!isPaused) {
+                remainingTime = seconds;
+            }
+            
+            isPaused = false;
+            document.getElementById('timerStatus').textContent = '⏱️ Timer Running...';
+            
+            timerInterval = setInterval(() => {
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    document.getElementById('timerStatus').textContent = '🎉 Time Complete!';
+                    playSound();
+                    return;
+                }
+                
+                remainingTime--;
+                updateTimerDisplay();
+            }, 1000);
+            
+            updateTimerDisplay();
+        }
+        
+        function pauseTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                isPaused = true;
+                document.getElementById('timerStatus').textContent = '⏸️ Timer Paused';
+            }
+        }
+        
+        function resetTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            remainingTime = 0;
+            isPaused = false;
+            document.getElementById('timerDisplay').textContent = '00:00';
+            document.getElementById('timerStatus').textContent = '';
+            document.getElementById('timerInput').value = '';
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('timerDisplay').textContent = display;
+        }
+        
+        function playSound() {
+            // Create a simple beep sound using Web Audio API
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } catch (e) {
+                console.log('Audio not supported');
+            }
+        }
+        
+        // Toggle Interview Answers
+        function toggleAnswer(card) {
+            const answer = card.querySelector('.answer');
+            answer.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

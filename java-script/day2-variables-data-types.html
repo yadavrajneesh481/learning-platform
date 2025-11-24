@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 2: Variables & Data Types</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #007bff;
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background: #f9f9f9;
+        }
+        .demo {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+        .data-type-card {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .data-type-card:hover {
+            border-color: #007bff;
+            transform: scale(1.05);
+        }
+        .data-type-card.active {
+            border-color: #007bff;
+            background: #e7f3ff;
+        }
+        .interview-section {
+            background: #e9ecef;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .home-link:hover {
+            background: #218838;
+        }
+        input, select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        
+        <header>
+            <h1>Day 2: Variables & Data Types</h1>
+            <p><em>Variable declarations (var, let, const), primitive data types, aur type conversion</em></p>
+        </header>
+
+        <section id="variables">
+            <h2>Variables Kya Hain? - Complete Deep Dive</h2>
+            <p>Variables programming mein containers hain jo data store karte hain. Yeh memory locations hain jahan hum values rakh sakte hain aur baad mein use kar sakte hain. JavaScript mein variables declare karne ke teen main tarike hain, har ek ka apna behavior hai.</p>
+            
+            <h3>Variable Declaration Evolution:</h3>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;">
+                <h4>📚 Historical Context:</h4>
+                <ul>
+                    <li><strong>ES5 (2009):</strong> Sirf <code>var</code> available tha</li>
+                    <li><strong>ES6 (2015):</strong> <code>let</code> aur <code>const</code> introduce hue</li>
+                    <li><strong>Modern JavaScript:</strong> <code>var</code> avoid karte hain, <code>let</code>/<code>const</code> prefer karte hain</li>
+                </ul>
+            </div>
+            
+            <h3>Variable Declaration Types - Detailed Comparison:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border: 1px solid #dc3545;">
+                    <h4>🔴 var (Legacy)</h4>
+                    <p><strong>Scope:</strong> Function-scoped</p>
+                    <p><strong>Hoisting:</strong> Yes, initialized with undefined</p>
+                    <p><strong>Redeclaration:</strong> Allowed</p>
+                    <p><strong>Reassignment:</strong> Allowed</p>
+                    <p><strong>Use:</strong> Avoid in modern code</p>
+                </div>
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; border: 1px solid #28a745;">
+                    <h4>🟢 let (Modern)</h4>
+                    <p><strong>Scope:</strong> Block-scoped</p>
+                    <p><strong>Hoisting:</strong> Yes, but in TDZ</p>
+                    <p><strong>Redeclaration:</strong> Not allowed</p>
+                    <p><strong>Reassignment:</strong> Allowed</p>
+                    <p><strong>Use:</strong> For variables that change</p>
+                </div>
+                <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; border: 1px solid #17a2b8;">
+                    <h4>🔵 const (Constant)</h4>
+                    <p><strong>Scope:</strong> Block-scoped</p>
+                    <p><strong>Hoisting:</strong> Yes, but in TDZ</p>
+                    <p><strong>Redeclaration:</strong> Not allowed</p>
+                    <p><strong>Reassignment:</strong> Not allowed</p>
+                    <p><strong>Use:</strong> For constants & objects</p>
+                </div>
+            </div>
+            
+            <div class="demo">
+                <h3>Interactive Variable Declaration Demo</h3>
+                <div class="code-example">
+// var - Function Scoped (Legacy)
+var name = "Rahul";        // Function scoped, can be redeclared
+var name = "Priya";        // No error - redeclaration allowed
+
+// let - Block Scoped (Modern)
+let age = 25;              // Block scoped, cannot be redeclared
+// let age = 30;           // Error! Cannot redeclare
+age = 30;                  // OK - reassignment allowed
+
+// const - Block Scoped Constant
+const city = "Mumbai";     // Block scoped, cannot be changed
+// const city = "Delhi";   // Error! Cannot redeclare
+// city = "Delhi";         // Error! Cannot reassign
+                </div>
+                
+                <button onclick="demonstrateVariables()">🧪 Test Variable Behaviors</button>
+                <button onclick="demonstrateScoping()">🔍 Test Scoping Rules</button>
+                <button onclick="demonstrateHoisting()">⬆️ Test Hoisting</button>
+                <div id="variable-output"></div>
+            </div>
+        </section>
+
+        <section id="variable-naming">
+            <h2>Variable Naming Rules aur Best Practices</h2>
+            <p>JavaScript mein variables ka naam rakhne ke specific rules aur conventions hain:</p>
+            
+            <h3>Naming Rules (Mandatory):</h3>
+            <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #ffc107;">
+                <ul>
+                    <li>Letters (a-z, A-Z), digits (0-9), underscore (_), dollar sign ($) allowed</li>
+                    <li>Cannot start with a digit</li>
+                    <li>Case-sensitive (myVar ≠ MyVar ≠ MYVAR)</li>
+                    <li>Cannot use reserved keywords (let, const, function, etc.)</li>
+                    <li>No spaces allowed</li>
+                </ul>
+            </div>
+            
+            <h3>Naming Conventions (Best Practices):</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="background: #d4edda; padding: 15px; border-radius: 5px;">
+                    <h4>✅ Good Examples</h4>
+                    <ul>
+                        <li><code>userName</code> (camelCase)</li>
+                        <li><code>totalPrice</code></li>
+                        <li><code>isLoggedIn</code> (boolean)</li>
+                        <li><code>MAX_USERS</code> (constants)</li>
+                        <li><code>_privateVar</code> (private)</li>
+                    </ul>
+                </div>
+                <div style="background: #f8d7da; padding: 15px; border-radius: 5px;">
+                    <h4>❌ Bad Examples</h4>
+                    <ul>
+                        <li><code>2names</code> (starts with digit)</li>
+                        <li><code>user name</code> (space)</li>
+                        <li><code>let</code> (reserved keyword)</li>
+                        <li><code>a</code> (not descriptive)</li>
+                        <li><code>user_name</code> (snake_case)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="demo">
+                <h3>Variable Naming Validator</h3>
+                <input type="text" id="variable-name" placeholder="Enter variable name to validate">
+                <button onclick="validateVariableName()">Validate Name</button>
+                <div id="validation-result"></div>
+            </div>
+        </section>
+
+        <section id="data-types">
+            <h2>Primitive Data Types</h2>
+            <p>JavaScript mein 7 primitive data types hain. Har ek ko click karke explore karo:</p>
+            
+            <div class="demo">
+                <h3>Interactive Data Type Explorer</h3>
+                <div>
+                    <div class="data-type-card" onclick="exploreDataType('string')">String</div>
+                    <div class="data-type-card" onclick="exploreDataType('number')">Number</div>
+                    <div class="data-type-card" onclick="exploreDataType('boolean')">Boolean</div>
+                    <div class="data-type-card" onclick="exploreDataType('null')">Null</div>
+                    <div class="data-type-card" onclick="exploreDataType('undefined')">Undefined</div>
+                    <div class="data-type-card" onclick="exploreDataType('symbol')">Symbol</div>
+                    <div class="data-type-card" onclick="exploreDataType('bigint')">BigInt</div>
+                </div>
+                <div id="data-type-info" style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                    Koi data type select karo uski details dekhne ke liye...
+                </div>
+            </div>
+        </section>
+
+        <section id="typeof">
+            <h2>typeof Operator</h2>
+            <p><code>typeof</code> operator se hum kisi variable ka data type check kar sakte hain:</p>
+            
+            <div class="demo">
+                <h3>typeof Tester</h3>
+                <input type="text" id="typeof-input" placeholder="Kuch value enter karo...">
+                <button onclick="checkType()">Check Type</button>
+                <div id="typeof-result"></div>
+            </div>
+        </section>
+
+        <section id="conversion">
+            <h2>Type Conversion</h2>
+            <p>JavaScript mein automatic (implicit) aur manual (explicit) type conversion hoti hai:</p>
+            
+            <div class="demo">
+                <h3>Type Conversion Demo</h3>
+                <div>
+                    <label>First Value: <input type="text" id="conv-val1" value="5"></label>
+                    <label>Second Value: <input type="text" id="conv-val2" value="10"></label>
+                </div>
+                <div style="margin: 10px 0;">
+                    <button onclick="performConversion('add')">Add (+)</button>
+                    <button onclick="performConversion('subtract')">Subtract (-)</button>
+                    <button onclick="performConversion('multiply')">Multiply (*)</button>
+                    <button onclick="performConversion('concat')">Concatenate</button>
+                </div>
+                <div id="conversion-result"></div>
+            </div>
+        </section>
+
+        <section id="practice">
+            <h2>Practice: Mini Profile Script</h2>
+            <p>Ek mini profile banayenge jo different data types use kare:</p>
+            
+            <div class="demo">
+                <h3>Profile Builder</h3>
+                <div>
+                    <label>Name: <input type="text" id="profile-name" placeholder="Your name"></label><br>
+                    <label>Age: <input type="number" id="profile-age" placeholder="Your age"></label><br>
+                    <label>City: <input type="text" id="profile-city" placeholder="Your city"></label><br>
+                    <label>Is Student: <select id="profile-student">
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select></label><br>
+                    <label>Salary: <input type="number" id="profile-salary" placeholder="Monthly salary (optional)"></label><br>
+                </div>
+                <button onclick="createProfile()">Create Profile</button>
+                <div id="profile-output"></div>
+            </div>
+        </section>
+
+        <section class="interview-section">
+            <h2>Interview Questions</h2>
+            <div class="question">
+                <h3>1. Basic: var, let, aur const mein kya difference hai?</h3>
+                <p>Answer: var function-scoped hai aur redeclare ho sakta hai, let block-scoped hai, const bhi block-scoped hai lekin reassign nahi ho sakta.</p>
+            </div>
+            <div class="question">
+                <h3>2. Basic: JavaScript mein kitne primitive data types hain?</h3>
+                <p>Answer: 7 primitive types: string, number, boolean, null, undefined, symbol, bigint.</p>
+            </div>
+            <div class="question">
+                <h3>3. Intermediate: null aur undefined mein kya difference hai?</h3>
+                <p>Answer: null explicitly assigned empty value hai, undefined variable declare hua hai lekin value assign nahi hui.</p>
+            </div>
+            <div class="question">
+                <h3>4. Intermediate: Type coercion kya hai? Example do.</h3>
+                <p>Answer: Automatic type conversion. Example: "5" + 3 = "53" (string), "5" - 3 = 2 (number).</p>
+            </div>
+            <div class="question">
+                <h3>5. Advanced: typeof null kya return karta hai aur kyun?</h3>
+                <p>Answer: "object" return karta hai. Yeh JavaScript ka historical bug hai jo backward compatibility ke liye fix nahi kiya gaya.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function demonstrateVariables() {
+            const output = document.getElementById('variable-output');
+            
+            // Demonstrate scope differences
+            var varTest = "var works";
+            let letTest = "let works";
+            const constTest = "const works";
+            
+            output.innerHTML = `
+                <h4>Variable Test Results:</h4>
+                <p><strong>var:</strong> ${varTest} (function scoped)</p>
+                <p><strong>let:</strong> ${letTest} (block scoped)</p>
+                <p><strong>const:</strong> ${constTest} (block scoped, immutable)</p>
+                <p><em>Console mein detailed scope examples dekho!</em>
+            `;
+            
+            console.log("=== Variable Scope Demo ===");
+            console.log("var:", varTest);
+            console.log("let:", letTest);
+            console.log("const:", constTest);
+        }
+
+        const dataTypeInfo = {
+            string: {
+                description: "Text data store karta hai",
+                example: '"Hello World", "123", "true"',
+                usage: "Names, messages, HTML content ke liye"
+            },
+            number: {
+                description: "Integers aur floating point numbers",
+                example: "42, 3.14, -100, Infinity, NaN",
+                usage: "Calculations, ages, prices ke liye"
+            },
+            boolean: {
+                description: "True ya false values",
+                example: "true, false",
+                usage: "Conditions, flags, toggles ke liye"
+            },
+            null: {
+                description: "Intentionally empty value",
+                example: "null",
+                usage: "Explicitly empty value set karne ke liye"
+            },
+            undefined: {
+                description: "Variable declared but not assigned",
+                example: "undefined",
+                usage: "Default value jab kuch assign nahi kiya"
+            },
+            symbol: {
+                description: "Unique identifier",
+                example: "Symbol('id'), Symbol.for('key')",
+                usage: "Object properties ke unique keys ke liye"
+            },
+            bigint: {
+                description: "Large integers beyond Number.MAX_SAFE_INTEGER",
+                example: "123n, BigInt(123)",
+                usage: "Very large numbers ke liye"
+            }
+        };
+
+        function exploreDataType(type) {
+            // Remove active class from all cards
+            document.querySelectorAll('.data-type-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Add active class to clicked card
+            event.target.classList.add('active');
+            
+            const info = dataTypeInfo[type];
+            const infoDiv = document.getElementById('data-type-info');
+            
+            infoDiv.innerHTML = `
+                <h4>${type.toUpperCase()} Data Type</h4>
+                <p><strong>Description:</strong> ${info.description}</p>
+                <p><strong>Example:</strong> <code>${info.example}</code></p>
+                <p><strong>Usage:</strong> ${info.usage}</p>
+            `;
+        }
+
+        function checkType() {
+            const input = document.getElementById('typeof-input').value;
+            const result = document.getElementById('typeof-result');
+            
+            let value;
+            try {
+                // Try to evaluate as JavaScript
+                if (input === 'null') value = null;
+                else if (input === 'undefined') value = undefined;
+                else if (input === 'true') value = true;
+                else if (input === 'false') value = false;
+                else if (!isNaN(input) && input !== '') value = Number(input);
+                else value = input;
+            } catch (e) {
+                value = input;
+            }
+            
+            result.innerHTML = `
+                <p><strong>Value:</strong> ${input}</p>
+                <p><strong>Type:</strong> ${typeof value}</p>
+                <p><strong>Actual Value:</strong> ${value}</p>
+            `;
+        }
+
+        function performConversion(operation) {
+            const val1 = document.getElementById('conv-val1').value;
+            const val2 = document.getElementById('conv-val2').value;
+            const result = document.getElementById('conversion-result');
+            
+            let output;
+            switch(operation) {
+                case 'add':
+                    output = val1 + val2; // String concatenation
+                    break;
+                case 'subtract':
+                    output = val1 - val2; // Numeric conversion
+                    break;
+                case 'multiply':
+                    output = val1 * val2; // Numeric conversion
+                    break;
+                case 'concat':
+                    output = String(val1) + String(val2);
+                    break;
+            }
+            
+            result.innerHTML = `
+                <h4>Conversion Result:</h4>
+                <p><strong>Operation:</strong> ${val1} ${operation} ${val2}</p>
+                <p><strong>Result:</strong> ${output}</p>
+                <p><strong>Result Type:</strong> ${typeof output}</p>
+                <p><em>Notice karo ki different operations different type conversions karte hain!</em></p>
+            `;
+        }
+
+        function demonstrateScoping() {
+            const output = document.getElementById('variable-output');
+            
+            output.innerHTML = `
+                <h4>🔍 Scoping Rules Demo:</h4>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; font-family: monospace;">
+                    <p><strong>Function Scope (var):</strong></p>
+                    <p>function testVar() {</p>
+                    <p>&nbsp;&nbsp;if (true) {</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;var functionScoped = "accessible outside if";</p>
+                    <p>&nbsp;&nbsp;}</p>
+                    <p>&nbsp;&nbsp;console.log(functionScoped); // ✅ Works!</p>
+                    <p>}</p>
+                    <br>
+                    <p><strong>Block Scope (let/const):</strong></p>
+                    <p>function testLet() {</p>
+                    <p>&nbsp;&nbsp;if (true) {</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;let blockScoped = "only inside block";</p>
+                    <p>&nbsp;&nbsp;}</p>
+                    <p>&nbsp;&nbsp;console.log(blockScoped); // ❌ ReferenceError!</p>
+                    <p>}</p>
+                </div>
+                <p><em>Check console for live examples!</em></p>
+            `;
+            
+            // Live demonstration
+            console.log("=== Scoping Demo ===");
+            
+            // Function scope demo
+            function testVarScope() {
+                if (true) {
+                    var functionScoped = "I'm accessible outside the if block!";
+                }
+                console.log("var inside function:", functionScoped);
+            }
+            testVarScope();
+            
+            // Block scope demo
+            function testLetScope() {
+                if (true) {
+                    let blockScoped = "I'm only accessible inside this block!";
+                    console.log("let inside block:", blockScoped);
+                }
+                // console.log("let outside block:", blockScoped); // This would cause error
+                console.log("let outside block: ReferenceError (commented out to prevent crash)");
+            }
+            testLetScope();
+        }
+
+        function demonstrateHoisting() {
+            const output = document.getElementById('variable-output');
+            
+            output.innerHTML = `
+                <h4>⬆️ Hoisting Behavior Demo:</h4>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 5px;">
+                    <p><strong>var Hoisting:</strong></p>
+                    <p>✅ console.log(hoistedVar); // undefined (not error!)</p>
+                    <p>✅ var hoistedVar = "I'm hoisted!";</p>
+                    <br>
+                    <p><strong>let/const Hoisting (TDZ):</strong></p>
+                    <p>❌ console.log(notHoisted); // ReferenceError!</p>
+                    <p>✅ let notHoisted = "I'm in TDZ until here";</p>
+                </div>
+                <p><em>TDZ = Temporal Dead Zone</em></p>
+            `;
+            
+            console.log("=== Hoisting Demo ===");
+            console.log("var before declaration:", typeof hoistedVar); // undefined
+            var hoistedVar = "I'm hoisted!";
+            console.log("var after declaration:", hoistedVar);
+            
+            // let/const would cause ReferenceError if accessed before declaration
+            console.log("let/const are hoisted but in TDZ until declaration");
+        }
+
+        function validateVariableName() {
+            const name = document.getElementById('variable-name').value;
+            const result = document.getElementById('validation-result');
+            
+            if (!name) {
+                result.innerHTML = '<p style="color: #ffc107;">Please enter a variable name!</p>';
+                return;
+            }
+            
+            const reservedKeywords = [
+                'break', 'case', 'catch', 'class', 'const', 'continue', 'debugger', 'default',
+                'delete', 'do', 'else', 'export', 'extends', 'finally', 'for', 'function',
+                'if', 'import', 'in', 'instanceof', 'let', 'new', 'return', 'super',
+                'switch', 'this', 'throw', 'try', 'typeof', 'var', 'void', 'while', 'with', 'yield'
+            ];
+            
+            let isValid = true;
+            let errors = [];
+            let suggestions = [];
+            
+            // Check if starts with digit
+            if (/^[0-9]/.test(name)) {
+                isValid = false;
+                errors.push("Cannot start with a digit");
+                suggestions.push(`Try: _${name} or ${name.replace(/^[0-9]+/, 'num')}`);
+            }
+            
+            // Check for invalid characters
+            if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(name)) {
+                isValid = false;
+                errors.push("Contains invalid characters");
+                suggestions.push("Use only letters, digits, underscore (_), or dollar sign ($)");
+            }
+            
+            // Check for spaces
+            if (/\s/.test(name)) {
+                isValid = false;
+                errors.push("Cannot contain spaces");
+                suggestions.push(`Try camelCase: ${name.replace(/\s+(.)/g, (match, letter) => letter.toUpperCase())}`);
+            }
+            
+            // Check reserved keywords
+            if (reservedKeywords.includes(name.toLowerCase())) {
+                isValid = false;
+                errors.push("Cannot use reserved keyword");
+                suggestions.push(`Try: ${name}Variable or my${name.charAt(0).toUpperCase() + name.slice(1)}`);
+            }
+            
+            // Check naming convention
+            let conventionFeedback = [];
+            if (name.includes('_') && name !== name.toUpperCase()) {
+                conventionFeedback.push("Consider camelCase instead of snake_case");
+            }
+            if (name.length < 3 && !['i', 'j', 'k', 'x', 'y', 'z'].includes(name)) {
+                conventionFeedback.push("Consider more descriptive names");
+            }
+            
+            const color = isValid ? '#28a745' : '#dc3545';
+            const icon = isValid ? '✅' : '❌';
+            
+            result.innerHTML = `
+                <div style="background: ${isValid ? '#d4edda' : '#f8d7da'}; padding: 15px; border-radius: 5px; margin-top: 10px; border: 2px solid ${color};">
+                    <h4 style="color: ${color}; margin: 0 0 10px 0;">${icon} ${isValid ? 'Valid' : 'Invalid'} Variable Name</h4>
+                    <p><strong>Name:</strong> <code>${name}</code></p>
+                    
+                    ${errors.length > 0 ? `
+                        <p><strong>Errors:</strong></p>
+                        <ul>${errors.map(error => `<li style="color: #dc3545;">${error}</li>`).join('')}</ul>
+                    ` : ''}
+                    
+                    ${suggestions.length > 0 ? `
+                        <p><strong>Suggestions:</strong></p>
+                        <ul>${suggestions.map(suggestion => `<li style="color: #007bff;">${suggestion}</li>`).join('')}</ul>
+                    ` : ''}
+                    
+                    ${conventionFeedback.length > 0 ? `
+                        <p><strong>Convention Tips:</strong></p>
+                        <ul>${conventionFeedback.map(tip => `<li style="color: #ffc107;">${tip}</li>`).join('')}</ul>
+                    ` : ''}
+                    
+                    ${isValid ? '<p style="color: #28a745;"><strong>✅ This variable name follows JavaScript naming rules!</strong></p>' : ''}
+                </div>
+            `;
+        }
+
+        function createProfile() {
+            const name = document.getElementById('profile-name').value || 'Anonymous';
+            const age = parseInt(document.getElementById('profile-age').value) || 0;
+            const city = document.getElementById('profile-city').value || 'Unknown';
+            const isStudent = document.getElementById('profile-student').value === 'true';
+            const salary = document.getElementById('profile-salary').value ? 
+                          parseInt(document.getElementById('profile-salary').value) : null;
+            
+            const output = document.getElementById('profile-output');
+            
+            output.innerHTML = `
+                <h4>🎯 Profile Created Successfully!</h4>
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 5px; margin-top: 10px;">
+                    <p><strong>Name:</strong> ${name} (${typeof name})</p>
+                    <p><strong>Age:</strong> ${age} (${typeof age})</p>
+                    <p><strong>City:</strong> ${city} (${typeof city})</p>
+                    <p><strong>Is Student:</strong> ${isStudent} (${typeof isStudent})</p>
+                    <p><strong>Salary:</strong> ${salary} (${typeof salary})</p>
+                </div>
+                <p><em>Dekho ki har field ka data type different hai!</em></p>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                    <h4>📊 Data Type Analysis:</h4>
+                    <p><strong>Memory Usage:</strong> Primitive types store values directly</p>
+                    <p><strong>Type Coercion:</strong> JavaScript automatically converts types when needed</p>
+                    <p><strong>Best Practice:</strong> Use descriptive variable names and appropriate types</p>
+                </div>
+            `;
+            
+            // Log to console for detailed view
+            console.log("=== Profile Data Analysis ===");
+            console.log("Name:", name, typeof name, "Length:", name.length);
+            console.log("Age:", age, typeof age, "Valid:", !isNaN(age));
+            console.log("City:", city, typeof city, "Length:", city.length);
+            console.log("Is Student:", isStudent, typeof isStudent);
+            console.log("Salary:", salary, typeof salary, "Is null:", salary === null);
+            
+            // Demonstrate type coercion
+            console.log("\n=== Type Coercion Examples ===");
+            console.log("Age + '5':", age + '5', "(string concatenation)");
+            console.log("Age * 2:", age * 2, "(numeric operation)");
+            console.log("Boolean(age):", Boolean(age), "(explicit conversion)");
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Day 2: Variables & Data Types loaded!');
+            console.log('💡 Try the interactive demos to understand variable behaviors!');
+        });
+    </script>
+</body>
+</html>

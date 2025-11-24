@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototypal Inheritance Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .home-link:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        .home-link:focus {
+            outline: 2px solid #ffc107;
+            outline-offset: 2px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #667eea;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+        }
+
+        p {
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .hindi {
+            color: #764ba2;
+            font-weight: 500;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #68d391;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+
+        .keyword {
+            color: #f687b3;
+        }
+
+        .string {
+            color: #fbd38d;
+        }
+
+        .comment {
+            color: #a0aec0;
+        }
+
+        .interactive-demo {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .prototype-chain {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .proto-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            min-width: 250px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .proto-box:hover {
+            transform: scale(1.05);
+        }
+
+        .arrow {
+            width: 3px;
+            height: 40px;
+            background: #667eea;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .arrow::after {
+            content: '▼';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #667eea;
+            font-size: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 10px 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .output {
+            background: #edf2f7;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            min-height: 50px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+        .inheritance-visual {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            gap: 20px;
+        }
+
+        .object-box {
+            background: white;
+            border: 3px solid #667eea;
+            padding: 20px;
+            border-radius: 15px;
+            min-width: 200px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .object-title {
+            font-weight: bold;
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .property {
+            padding: 8px;
+            margin: 5px 0;
+            background: #f7fafc;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+
+        .question-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+            margin-top: 40px;
+        }
+
+        .question {
+            background: white;
+            color: #333;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #764ba2;
+        }
+
+        .question-num {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-top: 10px;
+        }
+
+        .easy {
+            background: #68d391;
+            color: white;
+        }
+
+        .medium {
+            background: #fbd38d;
+            color: #744210;
+        }
+
+        .hard {
+            background: #fc8181;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .inheritance-visual {
+                flex-direction: column;
+            }
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        <h1>🔗 Prototypal Inheritance</h1>
+        <p class="subtitle">JavaScript mein inheritance ka asli tareeka</p>
+
+        <!-- Introduction Section -->
+        <div class="section">
+            <h2>📚 Prototypal Inheritance Kya Hai?</h2>
+            <p><span class="hindi">JavaScript mein inheritance class-based nahi, balki prototype-based hai.</span> This means objects inherit directly from other objects through the prototype chain.</p>
+            <p><span class="hindi">Jab bhi aap kisi object ki property access karte ho aur wo property us object mein nahi milti, toh JavaScript uske prototype chain mein dhundhta hai.</span></p>
+            
+            <div class="interactive-demo">
+                <h3>Prototype Chain Visualization</h3>
+                <div class="prototype-chain" id="protoChain">
+                    <div class="proto-box">
+                        <strong>myObject</strong>
+                        <div>{ name: "John" }</div>
+                    </div>
+                    <div class="arrow"></div>
+                    <div class="proto-box">
+                        <strong>Object.prototype</strong>
+                        <div>{ toString(), valueOf() }</div>
+                    </div>
+                    <div class="arrow"></div>
+                    <div class="proto-box">
+                        <strong>null</strong>
+                        <div>Chain ends here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prototype Chain Section -->
+        <div class="section">
+            <h2>⛓️ Prototype Chain</h2>
+            <p><span class="hindi">Har JavaScript object ke paas ek internal property hoti hai jise [[Prototype]] kehte hain.</span> This creates a chain of objects linked together.</p>
+            
+            <div class="code-block">
+<span class="keyword">const</span> animal = {
+    <span class="string">eats</span>: <span class="keyword">true</span>,
+    walk() {
+        console.log(<span class="string">"Animal walks"</span>);
+    }
+};
+
+<span class="keyword">const</span> rabbit = {
+    <span class="string">jumps</span>: <span class="keyword">true</span>
+};
+
+<span class="comment">// Set animal as prototype of rabbit</span>
+rabbit.__proto__ = animal;
+
+console.log(rabbit.eats); <span class="comment">// true (inherited)</span>
+console.log(rabbit.jumps); <span class="comment">// true (own property)</span>
+rabbit.walk(); <span class="comment">// "Animal walks"</span>
+            </div>
+
+            <div class="interactive-demo">
+                <button class="btn" onclick="demoPrototypeChain()">Run Prototype Chain Demo</button>
+                <div class="output" id="protoOutput"></div>
+            </div>
+        </div>
+
+        <!-- Object.create() Section -->
+        <div class="section">
+            <h2>🏗️ Object.create() Method</h2>
+            <p><span class="hindi">Object.create() ek naya object banata hai aur specified prototype ke saath link karta hai.</span> This is the modern and recommended way to set up inheritance.</p>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('tab1')">Basic Usage</button>
+                <button class="tab" onclick="showTab('tab2')">With Properties</button>
+                <button class="tab" onclick="showTab('tab3')">Real Example</button>
+            </div>
+
+            <div id="tab1" class="tab-content active">
+                <div class="code-block">
+<span class="keyword">const</span> personProto = {
+    greet() {
+        <span class="keyword">return</span> <span class="string">`Hello, I'm ${this.name}`</span>;
+    }
+};
+
+<span class="comment">// Create object with personProto as prototype</span>
+<span class="keyword">const</span> john = Object.create(personProto);
+john.name = <span class="string">"John"</span>;
+
+console.log(john.greet()); <span class="comment">// "Hello, I'm John"</span>
+                </div>
+            </div>
+
+            <div id="tab2" class="tab-content">
+                <div class="code-block">
+<span class="keyword">const</span> person = Object.create(personProto, {
+    <span class="string">name</span>: {
+        <span class="string">value</span>: <span class="string">"Alice"</span>,
+        <span class="string">writable</span>: <span class="keyword">true</span>,
+        <span class="string">enumerable</span>: <span class="keyword">true</span>,
+        <span class="string">configurable</span>: <span class="keyword">true</span>
+    },
+    <span class="string">age</span>: {
+        <span class="string">value</span>: 30,
+        <span class="string">writable</span>: <span class="keyword">true</span>
+    }
+});
+                </div>
+            </div>
+
+            <div id="tab3" class="tab-content">
+                <div class="code-block">
+<span class="keyword">const</span> vehicleProto = {
+    start() {
+        console.log(<span class="string">`${this.name} started`</span>);
+    },
+    stop() {
+        console.log(<span class="string">`${this.name} stopped`</span>);
+    }
+};
+
+<span class="keyword">const</span> car = Object.create(vehicleProto);
+car.name = <span class="string">"Tesla"</span>;
+car.wheels = 4;
+
+<span class="keyword">const</span> bike = Object.create(vehicleProto);
+bike.name = <span class="string">"Harley"</span>;
+bike.wheels = 2;
+                </div>
+            </div>
+
+            <div class="interactive-demo">
+                <button class="btn" onclick="demoObjectCreate()">Test Object.create()</button>
+                <div class="output" id="createOutput"></div>
+            </div>
+        </div>
+
+        <!-- Manual Inheritance Section -->
+        <div class="section">
+            <h2>🔨 Manual Inheritance Implementation</h2>
+            <p><span class="hindi">Ab hum manually inheritance implement karenge bina ES6 classes ke.</span></p>
+            
+            <div class="inheritance-visual">
+                <div class="object-box">
+                    <div class="object-title">Parent (Animal)</div>
+                    <div class="property">name: "Generic Animal"</div>
+                    <div class="property">eat() { }</div>
+                    <div class="property">sleep() { }</div>
+                </div>
+                <div class="object-box">
+                    <div class="object-title">Child (Dog)</div>
+                    <div class="property">breed: "Labrador"</div>
+                    <div class="property">bark() { }</div>
+                    <div class="property">↑ Inherits from Animal</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+<span class="comment">// Parent Constructor</span>
+<span class="keyword">function</span> Animal(name) {
+    <span class="keyword">this</span>.name = name;
+}
+
+Animal.prototype.eat = <span class="keyword">function</span>() {
+    console.log(<span class="string">`${this.name} is eating`</span>);
+};
+
+Animal.prototype.sleep = <span class="keyword">function</span>() {
+    console.log(<span class="string">`${this.name} is sleeping`</span>);
+};
+
+<span class="comment">// Child Constructor</span>
+<span class="keyword">function</span> Dog(name, breed) {
+    Animal.call(<span class="keyword">this</span>, name); <span class="comment">// Call parent constructor</span>
+    <span class="keyword">this</span>.breed = breed;
+}
+
+<span class="comment">// Set up inheritance</span>
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+<span class="comment">// Add child-specific method</span>
+Dog.prototype.bark = <span class="keyword">function</span>() {
+    console.log(<span class="string">`${this.name} says Woof!`</span>);
+};
+
+<span class="comment">// Usage</span>
+<span class="keyword">const</span> myDog = <span class="keyword">new</span> Dog(<span class="string">"Buddy"</span>, <span class="string">"Golden Retriever"</span>);
+            </div>
+
+            <div class="interactive-demo">
+                <button class="btn" onclick="demoManualInheritance()">Run Inheritance Demo</button>
+                <button class="btn" onclick="showInheritanceChain()">Show Prototype Chain</button>
+                <div class="output" id="inheritOutput"></div>
+            </div>
+        </div>
+
+        <!-- Practice Exercise -->
+        <div class="section">
+            <h2>💻 Practice: Build Your Own Inheritance</h2>
+            <p><span class="hindi">Ab aap khud try karo! Ek Vehicle aur Car ka inheritance relationship banao.</span></p>
+            
+            <div class="interactive-demo">
+                <h3>Your Task:</h3>
+                <p>1. Create a Vehicle constructor with properties: brand, year</p>
+                <p>2. Add methods: start(), stop()</p>
+                <p>3. Create a Car constructor that inherits from Vehicle</p>
+                <p>4. Add Car-specific property: numDoors</p>
+                <p>5. Add Car-specific method: honk()</p>
+                
+                <button class="btn" onclick="runPracticeExample()">Show Solution</button>
+                <button class="btn" onclick="testInheritance()">Test Your Code</button>
+                <div class="output" id="practiceOutput"></div>
+            </div>
+        </div>
+
+        <!-- Interview Questions -->
+        <div class="question-section">
+            <h2 style="color: white; text-align: center; margin-bottom: 30px;">📝 Interview Questions</h2>
+            
+            <div class="question">
+                <span class="question-num">Q1.</span> What is the difference between __proto__ and prototype?
+                <span class="difficulty easy">Easy</span>
+                <p style="margin-top: 10px;"><strong>Answer:</strong> __proto__ is the actual object used in the lookup chain, while prototype is a property of constructor functions that becomes the __proto__ of instances created with that constructor.</p>
+            </div>
+
+            <div class="question">
+                <span class="question-num">Q2.</span> Explain how the prototype chain works when accessing a property.
+                <span class="difficulty easy">Easy</span>
+                <p style="margin-top: 10px;"><strong>Answer:</strong> When accessing a property, JavaScript first looks in the object itself, then in its prototype, then in the prototype's prototype, and so on until it reaches null.</p>
+            </div>
+
+            <div class="question">
+                <span class="question-num">Q3.</span> What does Object.create(null) create and why would you use it?
+                <span class="difficulty medium">Medium</span>
+                <p style="margin-top: 10px;"><strong>Answer:</strong> It creates an object with no prototype (not even Object.prototype). This is useful for creating truly "bare" objects or hash maps without inherited properties.</p>
+            </div>
+
+            <div class="question">
+                <span class="question-num">Q4.</span> How do you check if a property exists on the object itself vs inherited?
+                <span class="difficulty medium">Medium</span>
+                <p style="margin-top: 10px;"><strong>Answer:</strong> Use hasOwnProperty() method or Object.prototype.hasOwnProperty.call(obj, prop) to check if property is own property, not inherited.</p>
+            </div>
+
+            <div class="question">
+                <span class="question-num">Q5.</span> What's the difference between classical inheritance and prototypal inheritance?
+                <span class="difficulty medium">Medium</span>
+                <p style="margin-top: 10px;"><strong>Answer:</strong> Classical inheritance (Java, C++) uses classes as blueprints. Prototypal inheritance (JavaScript) uses objects as prototypes. Objects inherit directly from other objects.</p>
+            </div>
+
+            <div class="question">
+                <span class="question-num">Q6.</span> Explain the constructor property and why we reset it after setting up inheritance.
+                <span class="difficulty hard">Hard</span>
+                <p style="margin-top: 10px;"><strong>Answer:</strong> The constructor property points to the function that created the instance. When we do Child.prototype = Object.create(Parent.prototype), we lose the original constructor reference, so we need to reset it: Child.prototype.constructor = Child.</p>
+            </div>
+
+            <div class="question">
+                <span class="question-num">Q7.</span> What are the performance implications of deep prototype chains?
+                <span class="difficulty hard">Hard</span>
+                <p style="margin-top: 10px;"><strong>Answer:</strong> Deep prototype chains can slow down property lookups as JavaScript has to traverse the entire chain. This is especially impactful in tight loops or frequently called functions. It's better to keep chains shallow.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Demo Functions
+        function demoPrototypeChain() {
+            const output = document.getElementById('protoOutput');
+            let result = '';
+
+            const animal = {
+                eats: true,
+                walk() {
+                    return "Animal walks";
+                }
+            };
+
+            const rabbit = {
+                jumps: true
+            };
+
+            rabbit.__proto__ = animal;
+
+            result += `rabbit.jumps: ${rabbit.jumps}\n`;
+            result += `rabbit.eats: ${rabbit.eats}\n`;
+            result += `rabbit.walk(): ${rabbit.walk()}\n\n`;
+            result += `rabbit.hasOwnProperty('jumps'): ${rabbit.hasOwnProperty('jumps')}\n`;
+            result += `rabbit.hasOwnProperty('eats'): ${rabbit.hasOwnProperty('eats')}\n`;
+
+            output.textContent = result;
+        }
+
+        function demoObjectCreate() {
+            const output = document.getElementById('createOutput');
+            let result = '';
+
+            const personProto = {
+                greet() {
+                    return `Hello, I'm ${this.name}`;
+                }
+            };
+
+            const john = Object.create(personProto);
+            john.name = "John";
+            john.age = 30;
+
+            const mary = Object.create(personProto);
+            mary.name = "Mary";
+            mary.age = 25;
+
+            result += `${john.greet()}\n`;
+            result += `${mary.greet()}\n\n`;
+            result += `john.hasOwnProperty('name'): ${john.hasOwnProperty('name')}\n`;
+            result += `john.hasOwnProperty('greet'): ${john.hasOwnProperty('greet')}\n`;
+
+            output.textContent = result;
+        }
+
+        function demoManualInheritance() {
+            const output = document.getElementById('inheritOutput');
+            let result = '';
+
+            function Animal(name) {
+                this.name = name;
+            }
+
+            Animal.prototype.eat = function() {
+                return `${this.name} is eating`;
+            };
+
+            Animal.prototype.sleep = function() {
+                return `${this.name} is sleeping`;
+            };
+
+            function Dog(name, breed) {
+                Animal.call(this, name);
+                this.breed = breed;
+            }
+
+            Dog.prototype = Object.create(Animal.prototype);
+            Dog.prototype.constructor = Dog;
+
+            Dog.prototype.bark = function() {
+                return `${this.name} says Woof!`;
+            };
+
+            const myDog = new Dog("Buddy", "Golden Retriever");
+
+            result += `Name: ${myDog.name}\n`;
+            result += `Breed: ${myDog.breed}\n`;
+            result += `${myDog.eat()}\n`;
+            result += `${myDog.sleep()}\n`;
+            result += `${myDog.bark()}\n`;
+
+            output.textContent = result;
+        }
+
+        function showInheritanceChain() {
+            const output = document.getElementById('inheritOutput');
+            let result = '';
+
+            function Animal(name) {
+                this.name = name;
+            }
+
+            Animal.prototype.eat = function() {
+                return `${this.name} is eating`;
+            };
+
+            function Dog(name, breed) {
+                Animal.call(this, name);
+                this.breed = breed;
+            }
+
+            Dog.prototype = Object.create(Animal.prototype);
+            Dog.prototype.constructor = Dog;
+
+            Dog.prototype.bark = function() {
+                return `${this.name} says Woof!`;
+            };
+
+            const myDog = new Dog("Buddy", "Golden Retriever");
+
+            result += "Prototype Chain:\n\n";
+            result += "myDog → Dog.prototype → Animal.prototype → Object.prototype → null\n\n";
+            result += `myDog.__proto__ === Dog.prototype: ${myDog.__proto__ === Dog.prototype}\n`;
+            result += `Dog.prototype.__proto__ === Animal.prototype: ${Dog.prototype.__proto__ === Animal.prototype}\n`;
+            result += `Animal.prototype.__proto__ === Object.prototype: ${Animal.prototype.__proto__ === Object.prototype}\n`;
+            result += `Object.prototype.__proto__ === null: ${Object.prototype.__proto__ === null}\n`;
+
+            output.textContent = result;
+        }
+
+        function runPracticeExample() {
+            const output = document.getElementById('practiceOutput');
+            let result = 'SOLUTION:\n\n';
+
+            result += `function Vehicle(brand, year) {
+    this.brand = brand;
+    this.year = year;
+}
+
+Vehicle.prototype.start = function() {
+    return \`\${this.brand} is starting\`;
+};
+
+Vehicle.prototype.stop = function() {
+    return \`\${this.brand} is stopping\`;
+};
+
+function Car(brand, year, numDoors) {
+    Vehicle.call(this, brand, year);
+    this.numDoors = numDoors;
+}
+
+Car.prototype = Object.create(Vehicle.prototype);
+Car.prototype.constructor = Car;
+
+Car.prototype.honk = function() {
+    return \`\${this.brand} says Beep Beep!\`;
+};
+
+const myCar = new Car("Toyota", 2023, 4);
+`;
+
+            output.textContent = result;
+        }
+
+        function testInheritance() {
+            const output = document.getElementById('practiceOutput');
+            let result = 'TESTING:\n\n';
+
+            function Vehicle(brand, year) {
+                this.brand = brand;
+                this.year = year;
+            }
+
+            Vehicle.prototype.start = function() {
+                return `${this.brand} is starting`;
+            };
+
+            Vehicle.prototype.stop = function() {
+                return `${this.brand} is stopping`;
+            };
+
+            function Car(brand, year, numDoors) {
+                Vehicle.call(this, brand, year);
+                this.numDoors = numDoors;
+            }
+
+            Car.prototype = Object.create(Vehicle.prototype);
+            Car.prototype.constructor = Car;
+
+            Car.prototype.honk = function() {
+                return `${this.brand} says Beep Beep!`;
+            };
+
+            const myCar = new Car("Toyota", 2023, 4);
+
+            result += `Brand: ${myCar.brand}\n`;
+            result += `Year: ${myCar.year}\n`;
+            result += `Doors: ${myCar.numDoors}\n`;
+            result += `${myCar.start()}\n`;
+            result += `${myCar.stop()}\n`;
+            result += `${myCar.honk()}\n\n`;
+            result += `myCar instanceof Car: ${myCar instanceof Car}\n`;
+            result += `myCar instanceof Vehicle: ${myCar instanceof Vehicle}\n`;
+            result += `myCar instanceof Object: ${myCar instanceof Object}\n`;
+
+            output.textContent = result;
+        }
+
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
+</body>
+</html>

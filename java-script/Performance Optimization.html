@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 30: Performance Optimization</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #007bff;
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .home-link:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        .home-link:focus {
+            outline: 2px solid #ffc107;
+            outline-offset: 2px;
+        }
+        section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background: #f9f9f9;
+        }
+        .demo {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        input {
+            padding: 8px;
+            width: 200px;
+            margin: 5px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .performance {
+            font-weight: bold;
+            color: #28a745;
+            margin: 10px 0;
+        }
+        .interview-section {
+            background: #e9ecef;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            input {
+                width: 100%;
+            }
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        <header>
+            <h1>Day 30: Performance Optimization</h1>
+            <p><em>Profiling JavaScript with DevTools, Identifying Bottlenecks, aur Optimization Techniques jaise Memoization, Throttling, Debouncing. Practice: Optimize a Search Filter Script.</em></p>
+        </header>
+
+        <section id="intro">
+            <h2>Introduction</h2>
+            <p>Bhai, aaj hum JavaScript mein performance ko optimize karna seekhenge. Web apps fast hone chahiye, warna user bore ho jaate hain. Isme hum DevTools se profiling karenge, bottlenecks dhundenge, aur techniques jaise <strong>memoization</strong>, <strong>throttling</strong>, aur <strong>debouncing</strong> use karenge. Practice mein ek search filter ko optimize karenge. Sab kuch step-by-step samjhayenge, with interactive demos!</p>
+        </section>
+
+        <section id="profiling">
+            <h2>Profiling JavaScript with DevTools</h2>
+            <p>DevTools Chrome ya Firefox mein built-in tool hai jo code ki performance measure karta hai. <strong>Profiling</strong> ka matlab hai code ko run karke time aur memory track karna.</p>
+            <p>Kaise use karein:</p>
+            <ol>
+                <li>DevTools open karo (F12).</li>
+                <li>Performance tab pe jaao.</li>
+                <li>Record button dabao, code run karo, phir stop.</li>
+                <li>Flame chart dekho – yahaan slow functions dikhte hain.</li>
+            </ol>
+            <div class="demo">
+                <h3>Interactive Demo: Simulate Profiling</h3>
+                <p>Yahaan ek simple loop ko run kar ke time measure karte hain, jaise DevTools mein hota hai.</p>
+                <button onclick="simulateProfiling()">Run Profile Simulation</button>
+                <div id="profile-result"></div>
+            </div>
+        </section>
+
+        <section id="bottlenecks">
+            <h2>Identifying Bottlenecks</h2>
+            <p><strong>Bottlenecks</strong> woh parts hain jahaan code slow ho jaata hai, jaise heavy loops ya unnecessary re-renders. DevTools ke Performance panel mein CPU usage dekho – red areas bottlenecks hain.</p>
+            <p>Common bottlenecks:</p>
+            <ul>
+                <li>Too many DOM manipulations.</li>
+                <li>Inefficient algorithms (O(n^2) loops).</li>
+                <li>Frequent API calls.</li>
+            </ul>
+            <p>Tip: Bottom-up approach use karo – slow functions ko pehle optimize karo.</p>
+        </section>
+
+        <section id="optimizations">
+            <h2>Optimization Techniques</h2>
+            <h3>Memoization</h3>
+            <p><strong>Memoization</strong> ek caching technique hai jahaan expensive function calls ko store karte hain taaki same input pe dobara calculate na karna pade. Yeh pure functions ke liye best hai.</p>
+            <div class="demo">
+                <h4>Memoization Demo</h4>
+                <p>Fibonacci calculate karte hain without/with memoization.</p>
+                <button onclick="fibWithoutMemo(35)">Without Memo (Slow)</button>
+                <button onclick="fibWithMemo(35)">With Memo (Fast)</button>
+                <div id="memo-result"></div>
+            </div>
+
+            <h3>Throttling</h3>
+            <p><strong>Throttling</strong> function calls ko limit karta hai fixed time interval mein, jaise scroll events pe. Yeh over-firing prevent karta hai.</p>
+            <div class="demo">
+                <h4>Throttling Demo</h4>
+                <p>Drag yeh div ko – count dekho without/with throttling.</p>
+                <div id="throttle-demo" style="width: 200px; height: 200px; background: #007bff; color: white; cursor: move;" onmousedown="startDrag(event, 'throttle')">Drag Me (Throttled)</div>
+                <div id="throttle-count">Calls: 0</div>
+            </div>
+
+            <h3>Debouncing</h3>
+            <p><strong>Debouncing</strong> function ko delay karta hai jab tak user input ruk na jaaye, jaise search mein. Yeh unnecessary calls save karta hai.</p>
+            <div class="demo">
+                <h4>Debouncing Demo</h4>
+                <input type="text" id="debounce-input" placeholder="Type to search..." oninput="debounceSearch()">
+                <div id="debounce-result">Results will appear after delay...</div>
+                <div id="debounce-calls">API Calls: 0</div>
+            </div>
+        </section>
+
+        <section id="practice">
+            <h2>Practice: Optimize a Search Filter Script</h2>
+            <p>Ek list hai fruits ki. Search input mein type karo – without optimization har keystroke pe filter hota hai (slow). With debouncing, sirf rukne ke baad.</p>
+            <p>Performance measure karo time se.</p>
+            <div class="demo">
+                <h3>Before Optimization (No Debounce)</h3>
+                <input type="text" id="search-without" placeholder="Search fruits..." oninput="filterWithoutDebounce()">
+                <ul id="list-without"></ul>
+                <div id="time-without" class="performance"></div>
+
+                <h3>After Optimization (With Debounce)</h3>
+                <input type="text" id="search-with" placeholder="Search fruits..." oninput="debouncedFilter()">
+                <ul id="list-with"></ul>
+                <div id="time-with" class="performance"></div>
+            </div>
+        </section>
+
+        <section class="interview-section">
+            <h2>Interview Questions</h2>
+            <div class="question">
+                <h3>1. Basic: DevTools mein JavaScript profiling kaise karte hain?</h3>
+                <p>Answer: Performance tab open karo, record start karo, code run karo, stop. Flame chart se bottlenecks dekho.</p>
+            </div>
+            <div class="question">
+                <h3>2. Intermediate: Memoization kya hai aur kab use karte hain?</h3>
+                <p>Answer: Yeh caching hai same inputs ke liye results store karne ka. Pure functions mein, jaise recursive calculations.</p>
+            </div>
+            <div class="question">
+                <h3>3. Intermediate: Throttling aur Debouncing mein difference kya hai?</h3>
+                <p>Answer: Throttling fixed intervals mein calls allow karta hai; Debouncing wait karta hai input complete hone tak.</p>
+            </div>
+            <div class="question">
+                <h3>4. Advanced: Ek search input ko debounce kaise implement karoge vanilla JS mein?</h3>
+                <p>Answer: setTimeout use karo, har input pe clearTimeout karo, aur delay ke baad execute.</p>
+            </div>
+            <div class="question">
+                <h3>5. Advanced: Bottlenecks identify karne ke liye kaun se metrics dekhte ho DevTools mein?</h3>
+                <p>Answer: CPU time, JS heap size, DOM reflows, aur network requests.</p>
+            </div>
+            <div class="question">
+                <h3>6. Advanced: Memoization se memory leaks kaise prevent karte ho?</h3>
+                <p>Answer: Cache ko size limit karo aur old entries clear karo.</p>
+            </div>
+            <div class="question">
+                <h3>7. Expert: Real-world mein throttling ko scroll event pe apply karne ka code likho.</h3>
+                <p>Answer: function throttle(func, delay) { let timer; return (...args) => { clearTimeout(timer); timer = setTimeout(() => func(...args), delay); }; } Phir window.addEventListener('scroll', throttle(handleScroll, 100));</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Sample data
+        const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape', 'Honeydew', 'Kiwi', 'Lemon', 'Mango', 'Nectarine', 'Orange', 'Papaya', 'Quince', 'Raspberry', 'Strawberry', 'Tangerine', 'Ugli', 'Vanilla', 'Watermelon', 'Xigua', 'Yuzu', 'Zucchini'];
+
+        // Profiling Simulation
+        function simulateProfiling() {
+            const start = performance.now();
+            let sum = 0;
+            for (let i = 0; i < 1000000; i++) sum += i;
+            const end = performance.now();
+            document.getElementById('profile-result').innerHTML = `<p>Loop completed in ${end - start}ms. Yeh DevTools jaise time track karta hai!</p>`;
+        }
+
+        // Memoization
+        const memoCache = {};
+        function fib(n) {
+            if (n in memoCache) return memoCache[n];
+            if (n <= 2) return 1;
+            memoCache[n] = fib(n - 1) + fib(n - 2);
+            return memoCache[n];
+        }
+        function fibWithoutMemo(n) {
+            function fibSlow(n) {
+                if (n <= 2) return 1;
+                return fibSlow(n - 1) + fibSlow(n - 2);
+            }
+            const start = performance.now();
+            const result = fibSlow(n);
+            const end = performance.now();
+            document.getElementById('memo-result').innerHTML = `<p>Without Memo: Fib(${n}) = ${result} in ${end - start}ms (slow!)</p>`;
+        }
+        function fibWithMemo(n) {
+            const start = performance.now();
+            const result = fib(n);
+            const end = performance.now();
+            document.getElementById('memo-result').innerHTML += `<p>With Memo: Fib(${n}) = ${result} in ${end - start}ms (fast!)</p>`;
+        }
+
+        // Throttling Demo
+        let throttleCount = 0;
+        function throttledDrag(e) {
+            throttleCount++;
+            document.getElementById('throttle-count').innerHTML = `Calls: ${throttleCount}`;
+        }
+        function throttle(func, delay) {
+            let timer;
+            return function(...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+        const throttledMove = throttle(throttledDrag, 200);
+        let isDragging = false;
+        function startDrag(e, type) {
+            isDragging = true;
+            document.addEventListener('mousemove', () => { if (isDragging) throttledMove(); });
+            document.addEventListener('mouseup', () => isDragging = false);
+        }
+
+        // Debouncing Demo
+        let debounceTimer;
+        let apiCalls = 0;
+        function debounceSearch() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const query = document.getElementById('debounce-input').value;
+                apiCalls++;
+                document.getElementById('debounce-calls').innerHTML = `API Calls: ${apiCalls}`;
+                document.getElementById('debounce-result').innerHTML = query ? `Searching for: ${query} (debounced!)` : 'Type to search...';
+            }, 300);
+        }
+
+        // Practice: Without Debounce
+        function filterWithoutDebounce() {
+            const query = document.getElementById('search-without').value.toLowerCase();
+            const start = performance.now();
+            const filtered = fruits.filter(fruit => fruit.toLowerCase().includes(query));
+            const end = performance.now();
+            const list = document.getElementById('list-without');
+            list.innerHTML = filtered.map(f => `<li>${f}</li>`).join('');
+            document.getElementById('time-without').innerHTML = `Filter time: ${end - start}ms (har key pe chal raha hai!)`;
+        }
+
+        // Practice: With Debounce
+        let debouncePracticeTimer;
+        function debouncedFilter() {
+            clearTimeout(debouncePracticeTimer);
+            debouncePracticeTimer = setTimeout(() => {
+                const query = document.getElementById('search-with').value.toLowerCase();
+                const start = performance.now();
+                const filtered = fruits.filter(fruit => fruit.toLowerCase().includes(query));
+                const end = performance.now();
+                const list = document.getElementById('list-with');
+                list.innerHTML = filtered.map(f => `<li>${f}</li>`).join('');
+                document.getElementById('time-with').innerHTML = `Filter time: ${end - start}ms (sirf end mein!)`;
+            }, 300);
+        }
+
+        // Initialize lists
+        document.getElementById('list-without').innerHTML = fruits.map(f => `<li>${f}</li>`).join('');
+        document.getElementById('list-with').innerHTML = fruits.map(f => `<li>${f}</li>`).join('');
+    </script>
+</body>
+</html>

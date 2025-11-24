@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day 26: JavaScript Design Patterns — I</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .home-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 15px;
+      background: #28a745;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .home-link:hover {
+      background: #218838;
+      transform: translateY(-1px);
+    }
+    .home-link:focus {
+      outline: 2px solid #ffc107;
+      outline-offset: 2px;
+    }
+    header {
+      background: #004d99;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    section {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    h2 {
+      color: #004d99;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    .pattern-example {
+      background: #eef3fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    .btn {
+      background: #004d99;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #0073e6;
+    }
+    .notification-box {
+      border: 2px dashed #004d99;
+      padding: 15px;
+      border-radius: 10px;
+      background: #f0f8ff;
+      min-height: 60px;
+    }
+    footer {
+      text-align: center;
+      background: #004d99;
+      color: white;
+      padding: 10px;
+    }
+    @media(max-width:600px){
+      body{font-size:14px;}
+    }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+  <header>
+    <h1>Day 26: JavaScript Design Patterns — I</h1>
+    <p>Learn Module, Singleton, Factory, and Observer Patterns with Interactive Example</p>
+  </header>
+  
+  <section>
+    <div class="card">
+      <h2>🔹 Introduction</h2>
+      <p>Design Patterns ek reusable solution hota hai common software design problems ke liye. Ye patterns help karte hain code ko maintainable, scalable aur readable banane me.</p>
+    </div>
+
+    <div class="card">
+      <h2>1️⃣ Module Pattern</h2>
+      <p><strong>Definition:</strong> The Module Pattern is used to encapsulate private and public members in a single object.</p>
+      <div class="pattern-example">
+        <pre><code>const CounterModule = (() => {
+  let count = 0;
+  return {
+    increment: () => ++count,
+    getCount: () => count
+  };
+})();
+
+console.log(CounterModule.increment());</code></pre>
+      </div>
+      <p><strong>Hinglish:</strong> Is pattern me hum apne data ko private rakhte hain aur sirf limited access dete hain through public methods.</p>
+    </div>
+
+    <div class="card">
+      <h2>2️⃣ Singleton Pattern</h2>
+      <p><strong>Definition:</strong> Ensures that only one instance of a class is created and provides a global point of access.</p>
+      <div class="pattern-example">
+        <pre><code>class Singleton {
+  constructor() {
+    if (!Singleton.instance) Singleton.instance = this;
+    return Singleton.instance;
+  }
+}
+
+const obj1 = new Singleton();
+const obj2 = new Singleton();
+console.log(obj1 === obj2); // true</code></pre>
+      </div>
+      <p><strong>Hinglish:</strong> Ye pattern ek hi object create hone deta hai, multiple copies nahi.</p>
+    </div>
+
+    <div class="card">
+      <h2>3️⃣ Factory Pattern</h2>
+      <p><strong>Definition:</strong> Used to create objects without specifying the exact class of object that will be created.</p>
+      <div class="pattern-example">
+        <pre><code>function CarFactory(type) {
+  if (type === 'sedan') return { name: 'Sedan', wheels: 4 };
+  if (type === 'suv') return { name: 'SUV', wheels: 4 };
+}
+
+const myCar = CarFactory('suv');
+console.log(myCar);</code></pre>
+      </div>
+      <p><strong>Hinglish:</strong> Factory pattern me hum alag alag objects banate hain bina directly constructor call kiye.</p>
+    </div>
+
+    <div class="card">
+      <h2>4️⃣ Observer Pattern</h2>
+      <p><strong>Definition:</strong> The Observer Pattern defines a one-to-many dependency between objects so that when one object changes state, all its dependents are notified automatically.</p>
+      <div class="pattern-example">
+        <pre><code>class Subject {
+  constructor() {
+    this.observers = [];
+  }
+  subscribe(fn) { this.observers.push(fn); }
+  notify(data) { this.observers.forEach(fn => fn(data)); }
+}</code></pre>
+      </div>
+      <p><strong>Hinglish:</strong> Jab ek object me change hota hai to sab subscribers ko notification milta hai.</p>
+
+      <h3>🎯 Practice: Notification System</h3>
+      <p>Click below buttons aur dekho kaise notifications broadcast hoti hain!</p>
+      <button class="btn" onclick="subscribeUser()">Subscribe User</button>
+      <button class="btn" onclick="sendNotification()">Send Notification</button>
+      <div class="notification-box" id="notifyBox">Notifications appear here...</div>
+    </div>
+
+    <div class="card">
+      <h2>🧠 Interview Questions</h2>
+      <ol>
+        <li>What is the difference between Module and Singleton Pattern?</li>
+        <li>How does the Factory Pattern improve scalability?</li>
+        <li>Explain how Observer Pattern is useful in real-time systems.</li>
+        <li>What are the advantages of using design patterns?</li>
+        <li>Can Singleton cause memory issues? Why or why not?</li>
+        <li>Implement a small Observer pattern example using events in JS.</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    Created by Akhtar — Day 26 Learning Module
+  </footer>
+
+  <script>
+    const subject = new (class {
+      constructor() { this.observers = []; }
+      subscribe(fn) { this.observers.push(fn); }
+      notify(msg) { this.observers.forEach(fn => fn(msg)); }
+    })();
+
+    let userCount = 0;
+
+    function subscribeUser() {
+      userCount++;
+      const box = document.getElementById('notifyBox');
+      subject.subscribe((msg) => {
+        const note = document.createElement('div');
+        note.textContent = `User ${userCount} received: ${msg}`;
+        box.appendChild(note);
+      });
+      alert(`User ${userCount} subscribed!`);
+    }
+
+    function sendNotification() {
+      const msg = `New Notification at ${new Date().toLocaleTimeString()}`;
+      subject.notify(msg);
+    }
+  </script>
+</body>
+</html>

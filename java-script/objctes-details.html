@@ -1,0 +1,2290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Objects - Complete Learning Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            overflow-x: auto;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .nav-tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 1em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            background: #e9ecef;
+            color: #667eea;
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+            border-bottom: 3px solid #f093fb;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .explanation {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+
+        .code-block pre {
+            margin: 0;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .demo-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #d63031;
+            margin-bottom: 15px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            margin: 10px 5px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .output {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            min-height: 50px;
+            border: 2px solid #667eea;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+        .visual-box {
+            display: inline-block;
+            padding: 15px 25px;
+            margin: 10px;
+            background: white;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .visual-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        .property-demo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .property-card {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #764ba2;
+            text-align: center;
+        }
+
+        .property-key {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+
+        .property-value {
+            color: #e74c3c;
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            margin: 5px;
+            width: 200px;
+        }
+
+        .interview-section {
+            margin-top: 40px;
+        }
+
+        .question-card {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .question-number {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2d3436;
+            margin: 10px 0;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .difficulty.basic {
+            background: #55efc4;
+            color: #00b894;
+        }
+
+        .difficulty.intermediate {
+            background: #fdcb6e;
+            color: #e17055;
+        }
+
+        .difficulty.advanced {
+            background: #fd79a8;
+            color: #d63031;
+        }
+
+        .answer-toggle {
+            background: white;
+            color: #667eea;
+            margin-top: 15px;
+        }
+
+        .answer {
+            display: none;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .answer.show {
+            display: block;
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 500px; }
+        }
+
+        .prototype-chain {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .proto-box {
+            background: white;
+            padding: 20px;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            margin: 10px;
+            min-width: 150px;
+            text-align: center;
+            position: relative;
+        }
+
+        .arrow {
+            font-size: 2em;
+            color: #667eea;
+            margin: 0 10px;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .nav-tab {
+                padding: 12px 15px;
+                font-size: 0.9em;
+            }
+
+            .property-card {
+                min-width: 100%;
+            }
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .memory-visual {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .memory-block {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 3px dashed #764ba2;
+            text-align: center;
+        }
+
+        .reference-arrow {
+            font-size: 3em;
+            color: #e74c3c;
+            align-self: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 JavaScript Objects - Complete Guide</h1>
+            <p>Basic se Expert tak ka safar - Interactive Learning ke saath!</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection(0)">Basics</button>
+            <button class="nav-tab" onclick="showSection(1)">Intermediate</button>
+            <button class="nav-tab" onclick="showSection(2)">Advanced</button>
+            <button class="nav-tab" onclick="showSection(3)">Prototype & OOP</button>
+            <button class="nav-tab" onclick="showSection(4)">Expert Level</button>
+            <button class="nav-tab" onclick="showSection(5)">Interview Q&A</button>
+        </div>
+
+        <div class="content">
+            <!-- SECTION 1: BASICS -->
+            <div class="section active" id="section-0">
+                <h2>🔵 Basic Object Concepts</h2>
+
+                <div class="explanation">
+                    <h3>Object kya hai?</h3>
+                    <p>JavaScript mein <span class="highlight">Object</span> ek data structure hai jo <strong>key-value pairs</strong> store karta hai. Yeh real-world entities ko represent karne ke liye use hota hai.</p>
+                    <p><strong>Definition:</strong> An object is a collection of properties, where each property is defined as a key-value pair.</p>
+                </div>
+
+                <div class="code-block">
+<pre>// Object literal syntax
+const person = {
+    name: "Rahul",
+    age: 25,
+    city: "Mumbai"
+};
+
+// new Object() syntax
+const car = new Object();
+car.brand = "Maruti";
+car.model = "Swift";</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎯 Interactive Demo: Object Creation</div>
+                    <p>Apna khud ka object banao:</p>
+                    <input type="text" id="objKey" placeholder="Property name (e.g., name)">
+                    <input type="text" id="objValue" placeholder="Value (e.g., Priya)">
+                    <button onclick="addProperty()">Add Property</button>
+                    <button onclick="clearObject()">Clear Object</button>
+                    <div class="output" id="objectOutput">{}</div>
+                </div>
+
+                <h3>Property Access Methods</h3>
+                <div class="explanation">
+                    <p>Object ki properties ko access karne ke <strong>2 tarike</strong> hain:</p>
+                    <ul>
+                        <li><strong>Dot Notation:</strong> <code>object.property</code></li>
+                        <li><strong>Bracket Notation:</strong> <code>object["property"]</code></li>
+                    </ul>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🔍 Property Access Demo</div>
+                    <div class="property-demo" id="propertyDemo">
+                        <div class="property-card">
+                            <div class="property-key">name</div>
+                            <div class="property-value">"Amit"</div>
+                        </div>
+                        <div class="property-card">
+                            <div class="property-key">age</div>
+                            <div class="property-value">28</div>
+                        </div>
+                        <div class="property-card">
+                            <div class="property-key">profession</div>
+                            <div class="property-value">"Developer"</div>
+                        </div>
+                    </div>
+                    <button onclick="accessProperty('dot')">Access using Dot (.)</button>
+                    <button onclick="accessProperty('bracket')">Access using Bracket []</button>
+                    <div class="output" id="accessOutput"></div>
+                </div>
+
+                <h3>Object Operations</h3>
+                <div class="interactive-demo">
+                    <div class="demo-title">⚡ CRUD Operations</div>
+                    <button onclick="demonstrateAdd()">Add Property</button>
+                    <button onclick="demonstrateUpdate()">Update Property</button>
+                    <button onclick="demonstrateDelete()">Delete Property</button>
+                    <button onclick="demonstrateCheck()">Check Property</button>
+                    <div class="output" id="crudOutput"></div>
+                </div>
+
+                <h3>Object Looping</h3>
+                <div class="code-block">
+<pre>const student = { name: "Neha", marks: 95, grade: "A" };
+
+// for...in loop
+for (let key in student) {
+    console.log(key + ": " + student[key]);
+}
+
+// Object.keys()
+Object.keys(student).forEach(key => {
+    console.log(key + ": " + student[key]);
+});</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🔄 Loop Through Object</div>
+                    <button onclick="loopObject('forIn')">for...in Loop</button>
+                    <button onclick="loopObject('keys')">Object.keys()</button>
+                    <button onclick="loopObject('values')">Object.values()</button>
+                    <button onclick="loopObject('entries')">Object.entries()</button>
+                    <div class="output" id="loopOutput"></div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: INTERMEDIATE -->
+            <div class="section" id="section-1">
+                <h2>🟢 Intermediate Concepts</h2>
+
+                <div class="explanation">
+                    <h3>Object Methods aur 'this' Keyword</h3>
+                    <p><span class="highlight">this</span> keyword object ke andar current object ko refer karta hai.</p>
+                </div>
+
+                <div class="code-block">
+<pre>const user = {
+    firstName: "Raj",
+    lastName: "Kumar",
+    fullName: function() {
+        return this.firstName + " " + this.lastName;
+    }
+};
+
+console.log(user.fullName()); // "Raj Kumar"</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎭 'this' Keyword Demo</div>
+                    <button onclick="demonstrateThis()">Show 'this' in Action</button>
+                    <div class="output" id="thisOutput"></div>
+                </div>
+
+                <h3>Object Destructuring</h3>
+                <div class="explanation">
+                    <p><strong>Destructuring</strong> se hum object ki properties ko easily extract kar sakte hain variables mein.</p>
+                </div>
+
+                <div class="code-block">
+<pre>const product = {
+    name: "Laptop",
+    price: 45000,
+    brand: "Dell"
+};
+
+// Destructuring
+const { name, price, brand } = product;
+console.log(name);  // "Laptop"
+
+// Renaming
+const { name: productName } = product;
+
+// Default values
+const { discount = 0 } = product;</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">📦 Destructuring Demo</div>
+                    <button onclick="demonstrateDestructuring()">Basic Destructuring</button>
+                    <button onclick="demonstrateRenaming()">With Renaming</button>
+                    <button onclick="demonstrateDefaults()">With Defaults</button>
+                    <div class="output" id="destructOutput"></div>
+                </div>
+
+                <h3>Shallow Copy vs Deep Copy</h3>
+                <div class="explanation">
+                    <p><strong>Shallow Copy:</strong> Sirf top-level properties copy hoti hain, nested objects reference copy hote hain.</p>
+                    <p><strong>Deep Copy:</strong> Puri object recursively copy hoti hai.</p>
+                </div>
+
+                <div class="memory-visual">
+                    <div class="memory-block">
+                        <strong>Original Object</strong>
+                        <div style="margin-top: 10px;">{ a: 1, b: { c: 2 } }</div>
+                    </div>
+                    <div class="reference-arrow">→</div>
+                    <div class="memory-block">
+                        <strong>Shallow Copy</strong>
+                        <div style="margin-top: 10px;">New object, but 'b' points to same nested object</div>
+                    </div>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🔄 Copy Comparison</div>
+                    <button onclick="demonstrateShallowCopy()">Shallow Copy (Spread)</button>
+                    <button onclick="demonstrateObjectAssign()">Object.assign()</button>
+                    <button onclick="demonstrateDeepCopy()">Deep Copy (JSON)</button>
+                    <div class="output" id="copyOutput"></div>
+                </div>
+
+                <h3>Object Freeze & Seal</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Add Properties</th>
+                            <th>Delete Properties</th>
+                            <th>Modify Properties</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Object.freeze()</strong></td>
+                            <td>❌ No</td>
+                            <td>❌ No</td>
+                            <td>❌ No</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Object.seal()</strong></td>
+                            <td>❌ No</td>
+                            <td>❌ No</td>
+                            <td>✅ Yes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Normal Object</strong></td>
+                            <td>✅ Yes</td>
+                            <td>✅ Yes</td>
+                            <td>✅ Yes</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🔒 Freeze vs Seal Demo</div>
+                    <button onclick="demonstrateFreeze()">Object.freeze()</button>
+                    <button onclick="demonstrateSeal()">Object.seal()</button>
+                    <div class="output" id="freezeOutput"></div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: ADVANCED -->
+            <div class="section" id="section-2">
+                <h2>🟠 Advanced Concepts</h2>
+
+                <div class="explanation">
+                    <h3>Property Descriptors</h3>
+                    <p>Har property ke saath kuch hidden attributes hote hain jo control karte hain ki property kaise behave karegi.</p>
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Description</th>
+                            <th>Default</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>writable</strong></td>
+                            <td>Property ki value change ho sakti hai ya nahi</td>
+                            <td>true</td>
+                        </tr>
+                        <tr>
+                            <td><strong>enumerable</strong></td>
+                            <td>Property loops mein dikhegi ya nahi</td>
+                            <td>true</td>
+                        </tr>
+                        <tr>
+                            <td><strong>configurable</strong></td>
+                            <td>Property delete ho sakti hai ya descriptor change ho sakta hai</td>
+                            <td>true</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="code-block">
+<pre>const obj = {};
+
+Object.defineProperty(obj, 'name', {
+    value: 'Rahul',
+    writable: false,      // Cannot change
+    enumerable: true,     // Will show in loops
+    configurable: false   // Cannot delete
+});
+
+obj.name = 'Priya';  // Won't work (writable: false)
+console.log(obj.name); // Still "Rahul"</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎛️ Property Descriptors Demo</div>
+                    <button onclick="demonstrateDescriptors()">Show Descriptors</button>
+                    <button onclick="demonstrateWritable()">Test Writable</button>
+                    <button onclick="demonstrateEnumerable()">Test Enumerable</button>
+                    <div class="output" id="descriptorOutput"></div>
+                </div>
+
+                <h3>Getters and Setters</h3>
+                <div class="explanation">
+                    <p><strong>Getters:</strong> Property ko read karte waqt function execute hota hai</p>
+                    <p><strong>Setters:</strong> Property ko set karte waqt function execute hota hai</p>
+                </div>
+
+                <div class="code-block">
+<pre>const person = {
+    firstName: "Amit",
+    lastName: "Sharma",
+    
+    get fullName() {
+        return this.firstName + " " + this.lastName;
+    },
+    
+    set fullName(name) {
+        const parts = name.split(" ");
+        this.firstName = parts[0];
+        this.lastName = parts[1];
+    }
+};
+
+console.log(person.fullName);  // "Amit Sharma" (getter)
+person.fullName = "Raj Kumar";  // (setter)
+console.log(person.firstName);  // "Raj"</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎯 Getters & Setters Demo</div>
+                    <input type="text" id="getterInput" placeholder="Enter full name">
+                    <button onclick="demonstrateGetterSetter()">Set Name</button>
+                    <button onclick="showGetterResult()">Get Name</button>
+                    <div class="output" id="getterOutput"></div>
+                </div>
+
+                <h3>Constructor Functions</h3>
+                <div class="explanation">
+                    <p><strong>Constructor Function</strong> ek template hai jo multiple similar objects banane ke liye use hota hai.</p>
+                </div>
+
+                <div class="code-block">
+<pre>function Person(name, age) {
+    this.name = name;
+    this.age = age;
+    this.greet = function() {
+        return "Hello, I'm " + this.name;
+    };
+}
+
+const person1 = new Person("Rahul", 25);
+const person2 = new Person("Priya", 23);
+
+console.log(person1.greet()); // "Hello, I'm Rahul"</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🏗️ Constructor Function Demo</div>
+                    <input type="text" id="constructorName" placeholder="Name">
+                    <input type="text" id="constructorAge" placeholder="Age">
+                    <button onclick="createWithConstructor()">Create Object</button>
+                    <div class="output" id="constructorOutput"></div>
+                </div>
+
+                <h3>Factory Functions</h3>
+                <div class="code-block">
+<pre>function createPerson(name, age) {
+    return {
+        name: name,
+        age: age,
+        greet() {
+            return `Namaste, main ${this.name} hoon`;
+        }
+    };
+}
+
+const person = createPerson("Amit", 30);</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🏭 Factory Function Demo</div>
+                    <button onclick="demonstrateFactory()">Create with Factory</button>
+                    <div class="output" id="factoryOutput"></div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: PROTOTYPE & OOP -->
+            <div class="section" id="section-3">
+                <h2>🔴 Prototype & OOP</h2>
+
+                <div class="explanation">
+                    <h3>Prototype Chain kya hai?</h3>
+                    <p>JavaScript mein har object ke paas ek hidden link hota hai apne <span class="highlight">prototype</span> se. Jab aap koi property access karte ho jo object mein nahi hai, toh JavaScript usko prototype chain mein dhundhta hai.</p>
+                </div>
+
+                <div class="prototype-chain">
+                    <div class="proto-box">
+                        <strong>myObject</strong>
+                        <div>{ name: "Raj" }</div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="proto-box">
+                        <strong>Object.prototype</strong>
+                        <div>toString(), valueOf()</div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="proto-box">
+                        <strong>null</strong>
+                    </div>
+                </div>
+
+                <div class="code-block">
+<pre>// Constructor function
+function Car(brand, model) {
+    this.brand = brand;
+    this.model = model;
+}
+
+// Adding method to prototype
+Car.prototype.getInfo = function() {
+    return this.brand + " " + this.model;
+};
+
+const myCar = new Car("Maruti", "Swift");
+console.log(myCar.getInfo()); // "Maruti Swift"
+
+// Prototype chain
+console.log(myCar.__proto__ === Car.prototype); // true
+console.log(Car.prototype.__proto__ === Object.prototype); // true</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🔗 Prototype Chain Visualization</div>
+                    <button onclick="demonstratePrototype()">Show Prototype Chain</button>
+                    <button onclick="demonstratePrototypeMethod()">Add Prototype Method</button>
+                    <div class="output" id="prototypeOutput"></div>
+                </div>
+
+                <h3>ES6 Classes</h3>
+                <div class="explanation">
+                    <p><strong>Classes</strong> prototype-based inheritance ka syntactic sugar hai. Yeh code ko cleaner aur readable banata hai.</p>
+                </div>
+
+                <div class="code-block">
+<pre>class Animal {
+    constructor(name) {
+        this.name = name;
+    }
+    
+    speak() {
+        return `${this.name} makes a sound`;
+    }
+}
+
+class Dog extends Animal {
+    constructor(name, breed) {
+        super(name);  // Parent constructor call
+        this.breed = breed;
+    }
+    
+    speak() {
+        return `${this.name} barks!`;
+    }
+}
+
+const myDog = new Dog("Tommy", "Labrador");
+console.log(myDog.speak()); // "Tommy barks!"</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎓 Class Inheritance Demo</div>
+                    <button onclick="demonstrateClass()">Create Class Instance</button>
+                    <button onclick="demonstrateInheritance()">Show Inheritance</button>
+                    <button onclick="demonstrateSuper()">Super Keyword</button>
+                    <div class="output" id="classOutput"></div>
+                </div>
+
+                <h3>Static Methods</h3>
+                <div class="code-block">
+<pre>class MathHelper {
+    static add(a, b) {
+        return a + b;
+    }
+    
+    static multiply(a, b) {
+        return a * b;
+    }
+}
+
+// Static methods are called on class, not instance
+console.log(MathHelper.add(5, 3)); // 8
+
+const helper = new MathHelper();
+// helper.add(5, 3); // Error! Static method hai</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">⚡ Static Methods Demo</div>
+                    <button onclick="demonstrateStatic()">Call Static Method</button>
+                    <div class="output" id="staticOutput"></div>
+                </div>
+
+                <h3>Encapsulation with Private Fields</h3>
+                <div class="code-block">
+<pre>class BankAccount {
+    #balance = 0;  // Private field
+    
+    constructor(initialBalance) {
+        this.#balance = initialBalance;
+    }
+    
+    deposit(amount) {
+        this.#balance += amount;
+        return `Deposited: ${amount}`;
+    }
+    
+    getBalance() {
+        return this.#balance;
+    }
+}
+
+const account = new BankAccount(1000);
+console.log(account.getBalance()); // 1000
+// console.log(account.#balance); // Error! Private hai</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🔐 Private Fields Demo</div>
+                    <button onclick="demonstratePrivate()">Create Bank Account</button>
+                    <button onclick="tryAccessPrivate()">Try Access Private Field</button>
+                    <div class="output" id="privateOutput"></div>
+                </div>
+            </div>
+
+            <!-- SECTION 5: EXPERT LEVEL -->
+            <div class="section" id="section-4">
+                <h2>⚫ Expert Level Concepts</h2>
+
+                <div class="explanation">
+                    <h3>Proxy Objects</h3>
+                    <p><strong>Proxy</strong> ek wrapper hai jo object ke operations ko intercept kar sakta hai aur custom behavior add kar sakta hai.</p>
+                </div>
+
+                <div class="code-block">
+<pre>const target = {
+    name: "Rahul",
+    age: 25
+};
+
+const handler = {
+    get(target, property) {
+        console.log(`Getting ${property}`);
+        return target[property];
+    },
+    set(target, property, value) {
+        console.log(`Setting ${property} to ${value}`);
+        target[property] = value;
+        return true;
+    }
+};
+
+const proxy = new Proxy(target, handler);
+console.log(proxy.name); // Logs: "Getting name", returns "Rahul"
+proxy.age = 26; // Logs: "Setting age to 26"</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🎭 Proxy Demo</div>
+                    <button onclick="demonstrateProxy()">Create Proxy</button>
+                    <button onclick="demonstrateProxyValidation()">Proxy with Validation</button>
+                    <div class="output" id="proxyOutput"></div>
+                </div>
+
+                <h3>Reflect API</h3>
+                <div class="explanation">
+                    <p><strong>Reflect</strong> ek built-in object hai jo object operations ke liye methods provide karta hai.</p>
+                </div>
+
+                <div class="code-block">
+<pre>const obj = { name: "Amit", age: 30 };
+
+// Traditional way
+console.log(obj.name);
+obj.age = 31;
+delete obj.name;
+
+// Using Reflect
+console.log(Reflect.get(obj, 'name'));
+Reflect.set(obj, 'age', 31);
+Reflect.deleteProperty(obj, 'name');
+
+// Reflect returns boolean for success/failure
+const success = Reflect.set(obj, 'city', 'Mumbai');
+console.log(success); // true</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🪞 Reflect API Demo</div>
+                    <button onclick="demonstrateReflect()">Reflect Operations</button>
+                    <div class="output" id="reflectOutput"></div>
+                </div>
+
+                <h3>WeakMap & WeakSet</h3>
+                <div class="explanation">
+                    <p><strong>WeakMap/WeakSet:</strong> Yeh special collections hain jo objects ko weakly hold karti hain. Agar object ka koi aur reference nahi hai, toh garbage collector use remove kar deta hai.</p>
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Map/Set</th>
+                            <th>WeakMap/WeakSet</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Keys</strong></td>
+                            <td>Any type</td>
+                            <td>Only objects</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Iteration</strong></td>
+                            <td>✅ Yes</td>
+                            <td>❌ No</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Size property</strong></td>
+                            <td>✅ Yes</td>
+                            <td>❌ No</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Garbage Collection</strong></td>
+                            <td>Prevents GC</td>
+                            <td>Allows GC</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="code-block">
+<pre>// WeakMap example
+const weakMap = new WeakMap();
+let obj = { name: "Rahul" };
+
+weakMap.set(obj, "some data");
+console.log(weakMap.get(obj)); // "some data"
+
+obj = null; // Now object can be garbage collected
+// weakMap automatically removes the entry</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">💾 WeakMap Demo</div>
+                    <button onclick="demonstrateWeakMap()">WeakMap Example</button>
+                    <div class="output" id="weakMapOutput"></div>
+                </div>
+
+                <h3>Object Performance Optimization</h3>
+                <div class="explanation">
+                    <p>JavaScript engines (jaise V8) objects ko optimize karte hain using <strong>Hidden Classes</strong> aur <strong>Inline Caching</strong>.</p>
+                </div>
+
+                <div class="code-block">
+<pre>// ❌ Bad: Properties different order mein add ho rahe hain
+function createPerson1(name, age) {
+    const obj = {};
+    obj.name = name;
+    obj.age = age;
+    return obj;
+}
+
+function createPerson2(name, age) {
+    const obj = {};
+    obj.age = age;  // Different order!
+    obj.name = name;
+    return obj;
+}
+
+// ✅ Good: Same structure, same order
+function createPerson(name, age) {
+    return { name, age };  // Consistent structure
+}</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">⚡ Performance Tips</div>
+                    <button onclick="showPerformanceTips()">Show Optimization Tips</button>
+                    <div class="output" id="performanceOutput"></div>
+                </div>
+
+                <h3>Symbol Properties</h3>
+                <div class="code-block">
+<pre>// Symbols create unique property keys
+const id = Symbol('id');
+const user = {
+    name: "Rahul",
+    [id]: 12345  // Symbol as property key
+};
+
+console.log(user[id]); // 12345
+console.log(Object.keys(user)); // ['name'] - Symbol hidden!
+
+// Well-known symbols
+const obj = {
+    [Symbol.iterator]: function*() {
+        yield 1;
+        yield 2;
+        yield 3;
+    }
+};
+
+for (let val of obj) {
+    console.log(val); // 1, 2, 3
+}</pre>
+                </div>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">🔣 Symbol Demo</div>
+                    <button onclick="demonstrateSymbol()">Create Symbol Property</button>
+                    <button onclick="demonstrateWellKnownSymbol()">Well-known Symbols</button>
+                    <div class="output" id="symbolOutput"></div>
+                </div>
+            </div>
+
+            <!-- SECTION 6: INTERVIEW Q&A -->
+            <div class="section" id="section-5">
+                <h2>💼 Interview Questions & Answers</h2>
+
+                <div class="interview-section">
+                    <div class="question-card">
+                        <span class="question-number">Question 1</span>
+                        <span class="difficulty basic">Basic</span>
+                        <div class="question-text">
+                            What is the difference between dot notation and bracket notation for accessing object properties?
+                        </div>
+                        <button class="answer-toggle" onclick="toggleAnswer(1)">Show Answer</button>
+                        <div class="answer" id="answer-1">
+                            <strong>Answer:</strong><br>
+                            <strong>Dot Notation:</strong> <code>object.property</code><br>
+                            - Simple aur readable<br>
+                            - Property name valid identifier hona chahiye<br>
+                            - Dynamic property names ke saath kaam nahi karta<br><br>
+                            
+                            <strong>Bracket Notation:</strong> <code>object["property"]</code><br>
+                            - Property name string ya variable ho sakta hai<br>
+                            - Special characters aur spaces allow hain<br>
+                            - Dynamic property access ke liye use hota hai<br><br>
+                            
+                            <strong>Example:</strong><br>
+                            <code>
+                            const obj = { "first name": "Rahul" };<br>
+                            // obj.first name; // Error!<br>
+                            obj["first name"]; // Works!<br><br>
+                            
+                            const key = "age";<br>
+                            obj[key]; // Dynamic access
+                            </code>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <span class="question-number">Question 2</span>
+                        <span class="difficulty basic">Basic</span>
+                        <div class="question-text">
+                            Explain the difference between Object.freeze() and Object.seal().
+                        </div>
+                        <button class="answer-toggle" onclick="toggleAnswer(2)">Show Answer</button>
+                        <div class="answer" id="answer-2">
+                            <strong>Answer:</strong><br><br>
+                            <strong>Object.freeze():</strong><br>
+                            - Properties add/delete/modify - sab kuch block<br>
+                            - Object completely immutable ban jata hai<br>
+                            - Existing properties ki values change nahi ho sakti<br><br>
+                            
+                            <strong>Object.seal():</strong><br>
+                            - Properties add/delete nahi kar sakte<br>
+                            - Lekin existing properties modify kar sakte hain<br>
+                            - Property descriptors change nahi ho sakte<br><br>
+                            
+                            <strong>Example:</strong><br>
+                            <code>
+                            const frozen = Object.freeze({ a: 1 });<br>
+                            frozen.a = 2; // Won't work<br>
+                            frozen.b = 3; // Won't work<br><br>
+                            
+                            const sealed = Object.seal({ a: 1 });<br>
+                            sealed.a = 2; // Works! ✅<br>
+                            sealed.b = 3; // Won't work ❌
+                            </code>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <span class="question-number">Question 3</span>
+                        <span class="difficulty intermediate">Intermediate</span>
+                        <div class="question-text">
+                            What is the difference between shallow copy and deep copy? How do you create each?
+                        </div>
+                        <button class="answer-toggle" onclick="toggleAnswer(3)">Show Answer</button>
+                        <div class="answer" id="answer-3">
+                            <strong>Answer:</strong><br><br>
+                            <strong>Shallow Copy:</strong><br>
+                            - Sirf top-level properties copy hoti hain<br>
+                            - Nested objects ka reference copy hota hai<br>
+                            - Original nested object change hoga toh copy bhi change hoga<br><br>
+                            
+                            <strong>Methods:</strong><br>
+                            <code>
+                            const obj = { a: 1, b: { c: 2 } };<br><br>
+                            
+                            // Spread operator<br>
+                            const copy1 = { ...obj };<br><br>
+                            
+                            // Object.assign()<br>
+                            const copy2 = Object.assign({}, obj);
+                            </code><br><br>
+                            
+                            <strong>Deep Copy:</strong><br>
+                            - Puri object recursively copy hoti hai<br>
+                            - Nested objects bhi completely copy hote hain<br>
+                            - Original aur copy completely independent<br><br>
+                            
+                            <strong>Methods:</strong><br>
+                            <code>
+                            // JSON method (simple objects ke liye)<br>
+                            const deepCopy1 = JSON.parse(JSON.stringify(obj));<br><br>
+                            
+                            // structuredClone (modern browsers)<br>
+                            const deepCopy2 = structuredClone(obj);
+                            </code>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <span class="question-number">Question 4</span>
+                        <span class="difficulty intermediate">Intermediate</span>
+                        <div class="question-text">
+                            Explain the 'this' keyword in JavaScript objects. How does its value change in different contexts?
+                        </div>
+                        <button class="answer-toggle" onclick="toggleAnswer(4)">Show Answer</button>
+                        <div class="answer" id="answer-4">
+                            <strong>Answer:</strong><br><br>
+                            <strong>'this' keyword</strong> current execution context ko refer karta hai. Iska value depend karta hai ki function kaise call hua.<br><br>
+                            
+                            <strong>1. Object Method:</strong><br>
+                            <code>
+                            const obj = {<br>
+                            &nbsp;&nbsp;name: "Rahul",<br>
+                            &nbsp;&nbsp;greet() { return this.name; }<br>
+                            };<br>
+                            obj.greet(); // 'this' = obj
+                            </code><br><br>
+                            
+                            <strong>2. Regular Function:</strong><br>
+                            <code>
+                            function show() { console.log(this); }<br>
+                            show(); // 'this' = window (browser) / global (Node)
+                            </code><br><br>
+                            
+                            <strong>3. Arrow Function:</strong><br>
+                            <code>
+                            const obj = {<br>
+                            &nbsp;&nbsp;name: "Rahul",<br>
+                            &nbsp;&nbsp;greet: () => this.name<br>
+                            };<br>
+                            // Arrow function mein 'this' lexical scope se aata hai
+                            </code><br><br>
+                            
+                            <strong>4. Constructor:</strong><br>
+                            <code>
+                            function Person(name) {<br>
+                            &nbsp;&nbsp;this.name = name; // 'this' = new object<br>
+                            }
+                            </code>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <span class="question-number">Question 5</span>
+                        <span class="difficulty advanced">Advanced</span>
+                        <div class="question-text">
+                            What is the prototype chain in JavaScript? How does property lookup work?
+                        </div>
+                        <button class="answer-toggle" onclick="toggleAnswer(5)">Show Answer</button>
+                        <div class="answer" id="answer-5">
+                            <strong>Answer:</strong><br><br>
+                            <strong>Prototype Chain</strong> ek mechanism hai jisse objects properties aur methods inherit karte hain.<br><br>
+                            
+                            <strong>Property Lookup Process:</strong><br>
+                            1. Pehle object mein property dhundho<br>
+                            2. Agar nahi mili, toh object ke prototype mein dhundho<br>
+                            3. Phir prototype ke prototype mein dhundho<br>
+                            4. Yeh chain tab tak chalti hai jab tak null nahi mil jata<br><br>
+                            
+                            <strong>Example:</strong><br>
+                            <code>
+                            function Animal(name) {<br>
+                            &nbsp;&nbsp;this.name = name;<br>
+                            }<br><br>
+                            
+                            Animal.prototype.speak = function() {<br>
+                            &nbsp;&nbsp;return this.name + " makes sound";<br>
+                            };<br><br>
+                            
+                            const dog = new Animal("Tommy");<br><br>
+                            
+                            // Lookup chain:<br>
+                            // dog.speak() →<br>
+                            // 1. dog object mein 'speak' nahi hai<br>
+                            // 2. dog.__proto__ (Animal.prototype) mein mil gaya!<br>
+                            // 3. Execute ho gaya<br><br>
+                            
+                            console.log(dog.__proto__ === Animal.prototype); // true<br>
+                            console.log(Animal.prototype.__proto__ === Object.prototype); // true<br>
+                            console.log(Object.prototype.__proto__); // null
+                            </code>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <span class="question-number">Question 6</span>
+                        <span class="difficulty advanced">Advanced</span>
+                        <div class="question-text">
+                            Explain Object.defineProperty() and property descriptors. What are writable, enumerable, and configurable?
+                        </div>
+                        <button class="answer-toggle" onclick="toggleAnswer(6)">Show Answer</button>
+                        <div class="answer" id="answer-6">
+                            <strong>Answer:</strong><br><br>
+                            <strong>Object.defineProperty()</strong> se hum property ke behavior ko fine-tune kar sakte hain using descriptors.<br><br>
+                            
+                            <strong>Property Descriptors:</strong><br><br>
+                            
+                            <strong>1. writable:</strong> Property ki value change ho sakti hai ya nahi<br>
+                            <code>
+                            Object.defineProperty(obj, 'name', {<br>
+                            &nbsp;&nbsp;value: 'Rahul',<br>
+                            &nbsp;&nbsp;writable: false  // Value change nahi hogi<br>
+                            });
+                            </code><br><br>
+                            
+                            <strong>2. enumerable:</strong> Property loops mein dikhegi ya nahi<br>
+                            <code>
+                            Object.defineProperty(obj, 'secret', {<br>
+                            &nbsp;&nbsp;value: 'hidden',<br>
+                            &nbsp;&nbsp;enumerable: false  // for...in mein nahi dikhega<br>
+                            });
+                            </code><br><br>
+                            
+                            <strong>3. configurable:</strong> Property delete ho sakti hai ya descriptor change ho sakta hai<br>
+                            <code>
+                            Object.defineProperty(obj, 'id', {<br>
+                            &nbsp;&nbsp;value: 123,<br>
+                            &nbsp;&nbsp;configurable: false  // Delete nahi kar sakte<br>
+                            });
+                            </code><br><br>
+                            
+                            <strong>Complete Example:</strong><br>
+                            <code>
+                            const user = {};<br><br>
+                            
+                            Object.defineProperty(user, 'name', {<br>
+                            &nbsp;&nbsp;value: 'Rahul',<br>
+                            &nbsp;&nbsp;writable: true,<br>
+                            &nbsp;&nbsp;enumerable: true,<br>
+                            &nbsp;&nbsp;configurable: true<br>
+                            });<br><br>
+                            
+                            // Get descriptor<br>
+                            const descriptor = Object.getOwnPropertyDescriptor(user, 'name');<br>
+                            console.log(descriptor);
+                            </code>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <span class="question-number">Question 7</span>
+                        <span class="difficulty advanced">Advanced</span>
+                        <div class="question-text">
+                            What are Proxy and Reflect in JavaScript? Provide practical use cases.
+                        </div>
+                        <button class="answer-toggle" onclick="toggleAnswer(7)">Show Answer</button>
+                        <div class="answer" id="answer-7">
+                            <strong>Answer:</strong><br><br>
+                            <strong>Proxy:</strong> Ek wrapper object jo fundamental operations ko intercept kar sakta hai.<br><br>
+                            
+                            <strong>Reflect:</strong> Built-in object jo object operations ke liye methods provide karta hai.<br><br>
+                            
+                            <strong>Practical Use Cases:</strong><br><br>
+                            
+                            <strong>1. Validation:</strong><br>
+                            <code>
+                            const validator = {<br>
+                            &nbsp;&nbsp;set(target, property, value) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;if (property === 'age') {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (typeof value !== 'number') {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw new TypeError('Age must be number');<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (value < 0) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw new RangeError('Age cannot be negative');<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;target[property] = value;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;return true;<br>
+                            &nbsp;&nbsp;}<br>
+                            };<br><br>
+                            
+                            const person = new Proxy({}, validator);<br>
+                            person.age = 25; // Works<br>
+                            // person.age = -5; // Error!
+                            </code><br><br>
+                            
+                            <strong>2. Logging/Debugging:</strong><br>
+                            <code>
+                            const handler = {<br>
+                            &nbsp;&nbsp;get(target, property) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;console.log(`Accessing ${property}`);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;return Reflect.get(target, property);<br>
+                            &nbsp;&nbsp;}<br>
+                            };
+                            </code><br><br>
+                            
+                            <strong>3. Default Values:</strong><br>
+                            <code>
+                            const withDefaults = new Proxy({}, {<br>
+                            &nbsp;&nbsp;get(target, property) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;return property in target ? target[property] : 'N/A';<br>
+                            &nbsp;&nbsp;}<br>
+                            });
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global object for demos
+        let demoObject = {};
+        let personGetterSetter = {
+            firstName: "Amit",
+            lastName: "Sharma",
+            get fullName() {
+                return this.firstName + " " + this.lastName;
+            },
+            set fullName(name) {
+                const parts = name.split(" ");
+                this.firstName = parts[0];
+                this.lastName = parts[1] || "";
+            }
+        };
+
+        // Navigation
+        function showSection(index) {
+            const sections = document.querySelectorAll('.section');
+            const tabs = document.querySelectorAll('.nav-tab');
+            
+            sections.forEach(section => section.classList.remove('active'));
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            sections[index].classList.add('active');
+            tabs[index].classList.add('active');
+        }
+
+        // Basic Section Functions
+        function addProperty() {
+            const key = document.getElementById('objKey').value;
+            const value = document.getElementById('objValue').value;
+            
+            if (key && value) {
+                demoObject[key] = value;
+                document.getElementById('objectOutput').textContent = JSON.stringify(demoObject, null, 2);
+                document.getElementById('objKey').value = '';
+                document.getElementById('objValue').value = '';
+            } else {
+                alert('Please enter both key and value!');
+            }
+        }
+
+        function clearObject() {
+            demoObject = {};
+            document.getElementById('objectOutput').textContent = '{}';
+        }
+
+        function accessProperty(method) {
+            const obj = {
+                name: "Amit",
+                age: 28,
+                profession: "Developer"
+            };
+            
+            let output = '';
+            if (method === 'dot') {
+                output = `Using Dot Notation:\n`;
+                output += `obj.name = "${obj.name}"\n`;
+                output += `obj.age = ${obj.age}\n`;
+                output += `obj.profession = "${obj.profession}"`;
+            } else {
+                output = `Using Bracket Notation:\n`;
+                output += `obj["name"] = "${obj["name"]}"\n`;
+                output += `obj["age"] = ${obj["age"]}\n`;
+                output += `obj["profession"] = "${obj["profession"]}"`;
+            }
+            
+            document.getElementById('accessOutput').textContent = output;
+        }
+
+        function demonstrateAdd() {
+            const obj = { name: "Rahul" };
+            obj.age = 25;
+            obj["city"] = "Mumbai";
+            
+            document.getElementById('crudOutput').textContent = 
+                `Original: { name: "Rahul" }\n\n` +
+                `After adding properties:\n` +
+                JSON.stringify(obj, null, 2);
+        }
+
+        function demonstrateUpdate() {
+            const obj = { name: "Rahul", age: 25 };
+            obj.age = 26;
+            obj.name = "Rahul Kumar";
+            
+            document.getElementById('crudOutput').textContent = 
+                `Original: { name: "Rahul", age: 25 }\n\n` +
+                `After updating:\n` +
+                JSON.stringify(obj, null, 2);
+        }
+
+        function demonstrateDelete() {
+            const obj = { name: "Rahul", age: 25, city: "Mumbai" };
+            delete obj.city;
+            
+            document.getElementById('crudOutput').textContent = 
+                `Original: { name: "Rahul", age: 25, city: "Mumbai" }\n\n` +
+                `After deleting 'city':\n` +
+                JSON.stringify(obj, null, 2);
+        }
+
+        function demonstrateCheck() {
+            const obj = { name: "Rahul", age: 25 };
+            
+            const output = 
+                `Object: ${JSON.stringify(obj)}\n\n` +
+                `"name" in obj: ${"name" in obj}\n` +
+                `"city" in obj: ${"city" in obj}\n\n` +
+                `obj.hasOwnProperty("name"): ${obj.hasOwnProperty("name")}\n` +
+                `obj.hasOwnProperty("city"): ${obj.hasOwnProperty("city")}`;
+            
+            document.getElementById('crudOutput').textContent = output;
+        }
+
+        function loopObject(method) {
+            const student = { name: "Neha", marks: 95, grade: "A" };
+            let output = `Object: ${JSON.stringify(student)}\n\n`;
+            
+            if (method === 'forIn') {
+                output += 'Using for...in loop:\n';
+                for (let key in student) {
+                    output += `${key}: ${student[key]}\n`;
+                }
+            } else if (method === 'keys') {
+                output += 'Using Object.keys():\n';
+                Object.keys(student).forEach(key => {
+                    output += `${key}: ${student[key]}\n`;
+                });
+            } else if (method === 'values') {
+                output += 'Using Object.values():\n';
+                output += Object.values(student).join(', ');
+            } else if (method === 'entries') {
+                output += 'Using Object.entries():\n';
+                Object.entries(student).forEach(([key, value]) => {
+                    output += `[${key}, ${value}]\n`;
+                });
+            }
+            
+            document.getElementById('loopOutput').textContent = output;
+        }
+
+        // Intermediate Section Functions
+        function demonstrateThis() {
+            const user = {
+                firstName: "Raj",
+                lastName: "Kumar",
+                fullName: function() {
+                    return this.firstName + " " + this.lastName;
+                },
+                greet: function() {
+                    return `Namaste! Main ${this.fullName()} hoon.`;
+                }
+            };
+            
+            const output = 
+                `Object:\n${JSON.stringify(user, null, 2)}\n\n` +
+                `user.fullName(): "${user.fullName()}"\n` +
+                `user.greet(): "${user.greet()}"\n\n` +
+                `'this' keyword object ko refer kar raha hai!`;
+            
+            document.getElementById('thisOutput').textContent = output;
+        }
+
+        function demonstrateDestructuring() {
+            const product = {
+                name: "Laptop",
+                price: 45000,
+                brand: "Dell"
+            };
+            
+            const { name, price, brand } = product;
+            
+            const output = 
+                `Original Object:\n${JSON.stringify(product, null, 2)}\n\n` +
+                `Destructured Variables:\n` +
+                `name = "${name}"\n` +
+                `price = ${price}\n` +
+                `brand = "${brand}"`;
+            
+            document.getElementById('destructOutput').textContent = output;
+        }
+
+        function demonstrateRenaming() {
+            const product = { name: "Laptop", price: 45000 };
+            const { name: productName, price: productPrice } = product;
+            
+            const output = 
+                `Original: { name: "Laptop", price: 45000 }\n\n` +
+                `With Renaming:\n` +
+                `const { name: productName, price: productPrice } = product;\n\n` +
+                `productName = "${productName}"\n` +
+                `productPrice = ${productPrice}`;
+            
+            document.getElementById('destructOutput').textContent = output;
+        }
+
+        function demonstrateDefaults() {
+            const product = { name: "Laptop", price: 45000 };
+            const { name, price, discount = 0, warranty = "1 year" } = product;
+            
+            const output = 
+                `Original: { name: "Laptop", price: 45000 }\n\n` +
+                `With Default Values:\n` +
+                `const { name, price, discount = 0, warranty = "1 year" } = product;\n\n` +
+                `name = "${name}"\n` +
+                `price = ${price}\n` +
+                `discount = ${discount} (default value used!)\n` +
+                `warranty = "${warranty}" (default value used!)`;
+            
+            document.getElementById('destructOutput').textContent = output;
+        }
+
+        function demonstrateShallowCopy() {
+            const original = { a: 1, b: { c: 2 } };
+            const copy = { ...original };
+            
+            copy.a = 10;
+            copy.b.c = 20;
+            
+            const output = 
+                `Original: { a: 1, b: { c: 2 } }\n` +
+                `Shallow Copy: const copy = { ...original };\n\n` +
+                `After modifying copy:\n` +
+                `copy.a = 10;\n` +
+                `copy.b.c = 20;\n\n` +
+                `Original object:\n${JSON.stringify(original, null, 2)}\n\n` +
+                `Copy object:\n${JSON.stringify(copy, null, 2)}\n\n` +
+                `Notice: original.b.c bhi change ho gaya! (Shallow copy)`;
+            
+            document.getElementById('copyOutput').textContent = output;
+        }
+
+        function demonstrateObjectAssign() {
+            const original = { a: 1, b: 2 };
+            const copy = Object.assign({}, original);
+            
+            copy.a = 10;
+            
+            const output = 
+                `Original: { a: 1, b: 2 }\n` +
+                `const copy = Object.assign({}, original);\n\n` +
+                `After copy.a = 10:\n\n` +
+                `Original: ${JSON.stringify(original)}\n` +
+                `Copy: ${JSON.stringify(copy)}`;
+            
+            document.getElementById('copyOutput').textContent = output;
+        }
+
+        function demonstrateDeepCopy() {
+            const original = { a: 1, b: { c: 2 } };
+            const deepCopy = JSON.parse(JSON.stringify(original));
+            
+            deepCopy.a = 10;
+            deepCopy.b.c = 20;
+            
+            const output = 
+                `Original: { a: 1, b: { c: 2 } }\n` +
+                `Deep Copy: JSON.parse(JSON.stringify(original))\n\n` +
+                `After modifying deepCopy:\n` +
+                `deepCopy.a = 10;\n` +
+                `deepCopy.b.c = 20;\n\n` +
+                `Original object:\n${JSON.stringify(original, null, 2)}\n\n` +
+                `Deep Copy object:\n${JSON.stringify(deepCopy, null, 2)}\n\n` +
+                `Notice: original.b.c change nahi hua! (Deep copy)`;
+            
+            document.getElementById('copyOutput').textContent = output;
+        }
+
+        function demonstrateFreeze() {
+            const obj = { name: "Rahul", age: 25 };
+            Object.freeze(obj);
+            
+            obj.age = 30;
+            obj.city = "Mumbai";
+            delete obj.name;
+            
+            const output = 
+                `Original: { name: "Rahul", age: 25 }\n` +
+                `Object.freeze(obj);\n\n` +
+                `Trying to modify:\n` +
+                `obj.age = 30; // Won't work\n` +
+                `obj.city = "Mumbai"; // Won't work\n` +
+                `delete obj.name; // Won't work\n\n` +
+                `Final object:\n${JSON.stringify(obj, null, 2)}\n\n` +
+                `Object completely frozen hai!`;
+            
+            document.getElementById('freezeOutput').textContent = output;
+        }
+
+        function demonstrateSeal() {
+            const obj = { name: "Rahul", age: 25 };
+            Object.seal(obj);
+            
+            obj.age = 30;
+            obj.city = "Mumbai";
+            delete obj.name;
+            
+            const output = 
+                `Original: { name: "Rahul", age: 25 }\n` +
+                `Object.seal(obj);\n\n` +
+                `Trying to modify:\n` +
+                `obj.age = 30; // Works! ✅\n` +
+                `obj.city = "Mumbai"; // Won't work ❌\n` +
+                `delete obj.name; // Won't work ❌\n\n` +
+                `Final object:\n${JSON.stringify(obj, null, 2)}\n\n` +
+                `Existing properties modify ho sakti hain!`;
+            
+            document.getElementById('freezeOutput').textContent = output;
+        }
+
+        // Advanced Section Functions
+        function demonstrateDescriptors() {
+            const obj = { name: "Rahul", age: 25 };
+            
+            const nameDesc = Object.getOwnPropertyDescriptor(obj, 'name');
+            const ageDesc = Object.getOwnPropertyDescriptor(obj, 'age');
+            
+            const output = 
+                `Object: ${JSON.stringify(obj)}\n\n` +
+                `Property Descriptor for 'name':\n${JSON.stringify(nameDesc, null, 2)}\n\n` +
+                `Property Descriptor for 'age':\n${JSON.stringify(ageDesc, null, 2)}`;
+            
+            document.getElementById('descriptorOutput').textContent = output;
+        }
+
+        function demonstrateWritable() {
+            const obj = {};
+            
+            Object.defineProperty(obj, 'name', {
+                value: 'Rahul',
+                writable: false
+            });
+            
+            const before = obj.name;
+            obj.name = 'Priya';
+            const after = obj.name;
+            
+            const output = 
+                `Object.defineProperty(obj, 'name', {\n` +
+                `  value: 'Rahul',\n` +
+                `  writable: false\n` +
+                `});\n\n` +
+                `Before: obj.name = "${before}"\n` +
+                `Trying: obj.name = 'Priya'\n` +
+                `After: obj.name = "${after}"\n\n` +
+                `Value change nahi hui! (writable: false)`;
+            
+            document.getElementById('descriptorOutput').textContent = output;
+        }
+
+        function demonstrateEnumerable() {
+            const obj = {};
+            
+            Object.defineProperty(obj, 'visible', {
+                value: 'I am visible',
+                enumerable: true
+            });
+            
+            Object.defineProperty(obj, 'hidden', {
+                value: 'I am hidden',
+                enumerable: false
+            });
+            
+            const keys = Object.keys(obj);
+            
+            const output = 
+                `Object with two properties:\n\n` +
+                `'visible' (enumerable: true)\n` +
+                `'hidden' (enumerable: false)\n\n` +
+                `Object.keys(obj): ${JSON.stringify(keys)}\n\n` +
+                `for...in loop:\n`;
+            
+            for (let key in obj) {
+                output += `${key}\n`;
+            }
+            
+            document.getElementById('descriptorOutput').textContent = output + 
+                `\n'hidden' property loops mein nahi dikhi!`;
+        }
+
+        function demonstrateGetterSetter() {
+            const name = document.getElementById('getterInput').value;
+            if (name) {
+                personGetterSetter.fullName = name;
+                document.getElementById('getterOutput').textContent = 
+                    `Setter called!\n\n` +
+                    `Input: "${name}"\n\n` +
+                    `firstName: "${personGetterSetter.firstName}"\n` +
+                    `lastName: "${personGetterSetter.lastName}"`;
+            } else {
+                alert('Please enter a full name!');
+            }
+        }
+
+        function showGetterResult() {
+            const output = 
+                `Getter called!\n\n` +
+                `firstName: "${personGetterSetter.firstName}"\n` +
+                `lastName: "${personGetterSetter.lastName}"\n\n` +
+                `fullName (getter): "${personGetterSetter.fullName}"`;
+            
+            document.getElementById('getterOutput').textContent = output;
+        }
+
+        function createWithConstructor() {
+            const name = document.getElementById('constructorName').value;
+            const age = document.getElementById('constructorAge').value;
+            
+            if (name && age) {
+                function Person(name, age) {
+                    this.name = name;
+                    this.age = age;
+                    this.greet = function() {
+                        return `Namaste! Main ${this.name} hoon, ${this.age} saal ka.`;
+                    };
+                }
+                
+                const person = new Person(name, age);
+                
+                document.getElementById('constructorOutput').textContent = 
+                    `Constructor Function:\n\n` +
+                    `function Person(name, age) {\n` +
+                    `  this.name = name;\n` +
+                    `  this.age = age;\n` +
+                    `}\n\n` +
+                    `Created Object:\n${JSON.stringify(person, null, 2)}\n\n` +
+                    `person.greet(): "${person.greet()}"`;
+            } else {
+                alert('Please enter both name and age!');
+            }
+        }
+
+        function demonstrateFactory() {
+            function createPerson(name, age) {
+                return {
+                    name: name,
+                    age: age,
+                    greet() {
+                        return `Namaste, main ${this.name} hoon`;
+                    }
+                };
+            }
+            
+            const person1 = createPerson("Amit", 30);
+            const person2 = createPerson("Priya", 25);
+            
+            document.getElementById('factoryOutput').textContent = 
+                `Factory Function:\n\n` +
+                `function createPerson(name, age) {\n` +
+                `  return { name, age, greet() {...} };\n` +
+                `}\n\n` +
+                `Person 1:\n${JSON.stringify(person1, null, 2)}\n\n` +
+                `Person 2:\n${JSON.stringify(person2, null, 2)}\n\n` +
+                `person1.greet(): "${person1.greet()}"`;
+        }
+
+        // Prototype Section Functions
+        function demonstratePrototype() {
+            function Car(brand, model) {
+                this.brand = brand;
+                this.model = model;
+            }
+            
+            const myCar = new Car("Maruti", "Swift");
+            
+            const output = 
+                `Constructor Function:\n` +
+                `function Car(brand, model) {\n` +
+                `  this.brand = brand;\n` +
+                `  this.model = model;\n` +
+                `}\n\n` +
+                `const myCar = new Car("Maruti", "Swift");\n\n` +
+                `Prototype Chain:\n` +
+                `myCar.__proto__ === Car.prototype: ${myCar.__proto__ === Car.prototype}\n` +
+                `Car.prototype.__proto__ === Object.prototype: ${Car.prototype.__proto__ === Object.prototype}\n` +
+                `Object.prototype.__proto__ === null: ${Object.prototype.__proto__ === null}`;
+            
+            document.getElementById('prototypeOutput').textContent = output;
+        }
+
+        function demonstratePrototypeMethod() {
+            function Car(brand, model) {
+                this.brand = brand;
+                this.model = model;
+            }
+            
+            Car.prototype.getInfo = function() {
+                return this.brand + " " + this.model;
+            };
+            
+            Car.prototype.start = function() {
+                return this.brand + " started!";
+            };
+            
+            const myCar = new Car("Maruti", "Swift");
+            
+            const output = 
+                `Adding methods to prototype:\n\n` +
+                `Car.prototype.getInfo = function() {...};\n` +
+                `Car.prototype.start = function() {...};\n\n` +
+                `const myCar = new Car("Maruti", "Swift");\n\n` +
+                `myCar.getInfo(): "${myCar.getInfo()}"\n` +
+                `myCar.start(): "${myCar.start()}"\n\n` +
+                `Prototype methods sab instances share karte hain!`;
+            
+            document.getElementById('prototypeOutput').textContent = output;
+        }
+
+        function demonstrateClass() {
+            class Animal {
+                constructor(name) {
+                    this.name = name;
+                }
+                
+                speak() {
+                    return `${this.name} makes a sound`;
+                }
+            }
+            
+            const dog = new Animal("Tommy");
+            
+            const output = 
+                `ES6 Class:\n\n` +
+                `class Animal {\n` +
+                `  constructor(name) {\n` +
+                `    this.name = name;\n` +
+                `  }\n` +
+                `  speak() {\n` +
+                `    return this.name + " makes a sound";\n` +
+                `  }\n` +
+                `}\n\n` +
+                `const dog = new Animal("Tommy");\n\n` +
+                `dog.speak(): "${dog.speak()}"`;
+            
+            document.getElementById('classOutput').textContent = output;
+        }
+
+        function demonstrateInheritance() {
+            class Animal {
+                constructor(name) {
+                    this.name = name;
+                }
+                speak() {
+                    return `${this.name} makes a sound`;
+                }
+            }
+            
+            class Dog extends Animal {
+                constructor(name, breed) {
+                    super(name);
+                    this.breed = breed;
+                }
+                speak() {
+                    return `${this.name} barks!`;
+                }
+            }
+            
+            const myDog = new Dog("Tommy", "Labrador");
+            
+            const output = 
+                `Parent Class: Animal\n` +
+                `Child Class: Dog extends Animal\n\n` +
+                `const myDog = new Dog("Tommy", "Labrador");\n\n` +
+                `myDog.name: "${myDog.name}"\n` +
+                `myDog.breed: "${myDog.breed}"\n` +
+                `myDog.speak(): "${myDog.speak()}"\n\n` +
+                `Child class ne parent method ko override kiya!`;
+            
+            document.getElementById('classOutput').textContent = output;
+        }
+
+        function demonstrateSuper() {
+            class Animal {
+                constructor(name) {
+                    this.name = name;
+                }
+                speak() {
+                    return `${this.name} makes a sound`;
+                }
+            }
+            
+            class Dog extends Animal {
+                constructor(name, breed) {
+                    super(name);
+                    this.breed = breed;
+                }
+                speak() {
+                    const parentSpeak = super.speak();
+                    return `${parentSpeak} and barks!`;
+                }
+            }
+            
+            const myDog = new Dog("Tommy", "Labrador");
+            
+            const output = 
+                `Using super keyword:\n\n` +
+                `class Dog extends Animal {\n` +
+                `  constructor(name, breed) {\n` +
+                `    super(name);  // Parent constructor\n` +
+                `    this.breed = breed;\n` +
+                `  }\n` +
+                `  speak() {\n` +
+                `    const parentSpeak = super.speak();\n` +
+                `    return parentSpeak + " and barks!";\n` +
+                `  }\n` +
+                `}\n\n` +
+                `myDog.speak(): "${myDog.speak()}"`;
+            
+            document.getElementById('classOutput').textContent = output;
+        }
+
+        function demonstrateStatic() {
+            class MathHelper {
+                static add(a, b) {
+                    return a + b;
+                }
+                static multiply(a, b) {
+                    return a * b;
+                }
+            }
+            
+            const sum = MathHelper.add(5, 3);
+            const product = MathHelper.multiply(4, 6);
+            
+            const output = 
+                `Static Methods:\n\n` +
+                `class MathHelper {\n` +
+                `  static add(a, b) { return a + b; }\n` +
+                `  static multiply(a, b) { return a * b; }\n` +
+                `}\n\n` +
+                `MathHelper.add(5, 3): ${sum}\n` +
+                `MathHelper.multiply(4, 6): ${product}\n\n` +
+                `Static methods class pe directly call hote hain!`;
+            
+            document.getElementById('staticOutput').textContent = output;
+        }
+
+        function demonstratePrivate() {
+            const output = 
+                `Private Fields Example:\n\n` +
+                `class BankAccount {\n` +
+                `  #balance = 0;  // Private field\n` +
+                `  \n` +
+                `  constructor(initial) {\n` +
+                `    this.#balance = initial;\n` +
+                `  }\n` +
+                `  \n` +
+                `  deposit(amount) {\n` +
+                `    this.#balance += amount;\n` +
+                `  }\n` +
+                `  \n` +
+                `  getBalance() {\n` +
+                `    return this.#balance;\n` +
+                `  }\n` +
+                `}\n\n` +
+                `const account = new BankAccount(1000);\n` +
+                `account.getBalance(): 1000\n` +
+                `account.deposit(500);\n` +
+                `account.getBalance(): 1500`;
+            
+            document.getElementById('privateOutput').textContent = output;
+        }
+
+        function tryAccessPrivate() {
+            const output = 
+                `Trying to access private field:\n\n` +
+                `const account = new BankAccount(1000);\n` +
+                `console.log(account.#balance);\n\n` +
+                `❌ Error: Private field '#balance' must be declared in an enclosing class\n\n` +
+                `Private fields class ke bahar accessible nahi hain!`;
+            
+            document.getElementById('privateOutput').textContent = output;
+        }
+
+        // Expert Section Functions
+        function demonstrateProxy() {
+            const target = { name: "Rahul", age: 25 };
+            
+            const handler = {
+                get(target, property) {
+                    return `Getting ${property}: ${target[property]}`;
+                },
+                set(target, property, value) {
+                    target[property] = value;
+                    return true;
+                }
+            };
+            
+            const proxy = new Proxy(target, handler);
+            
+            const output = 
+                `Target Object: ${JSON.stringify(target)}\n\n` +
+                `Creating Proxy:\n` +
+                `const proxy = new Proxy(target, handler);\n\n` +
+                `proxy.name: "${proxy.name}"\n` +
+                `proxy.age: "${proxy.age}"\n\n` +
+                `Proxy ne get operation intercept kiya!`;
+            
+            document.getElementById('proxyOutput').textContent = output;
+        }
+
+        function demonstrateProxyValidation() {
+            const validator = {
+                set(target, property, value) {
+                    if (property === 'age') {
+                        if (typeof value !== 'number') {
+                            return false;
+                        }
+                        if (value < 0 || value > 150) {
+                            return false;
+                        }
+                    }
+                    target[property] = value;
+                    return true;
+                }
+            };
+            
+            const person = new Proxy({}, validator);
+            
+            const output = 
+                `Validation Proxy:\n\n` +
+                `person.age = 25; // ✅ Valid\n` +
+                `person.age = "twenty"; // ❌ Invalid (not a number)\n` +
+                `person.age = -5; // ❌ Invalid (negative)\n` +
+                `person.age = 200; // ❌ Invalid (too high)\n\n` +
+                `Proxy se validation automatically ho rahi hai!`;
+            
+            document.getElementById('proxyOutput').textContent = output;
+        }
+
+        function demonstrateReflect() {
+            const obj = { name: "Amit", age: 30 };
+            
+            const getName = Reflect.get(obj, 'name');
+            const setSuccess = Reflect.set(obj, 'city', 'Mumbai');
+            const hasAge = Reflect.has(obj, 'age');
+            const keys = Reflect.ownKeys(obj);
+            
+            const output = 
+                `Object: ${JSON.stringify(obj)}\n\n` +
+                `Reflect.get(obj, 'name'): "${getName}"\n` +
+                `Reflect.set(obj, 'city', 'Mumbai'): ${setSuccess}\n` +
+                `Reflect.has(obj, 'age'): ${hasAge}\n` +
+                `Reflect.ownKeys(obj): ${JSON.stringify(keys)}\n\n` +
+                `Updated Object: ${JSON.stringify(obj)}`;
+            
+            document.getElementById('reflectOutput').textContent = output;
+        }
+
+        function demonstrateWeakMap() {
+            const output = 
+                `WeakMap Example:\n\n` +
+                `const weakMap = new WeakMap();\n` +
+                `let obj = { name: "Rahul" };\n\n` +
+                `weakMap.set(obj, "some data");\n` +
+                `console.log(weakMap.get(obj)); // "some data"\n\n` +
+                `obj = null; // Object reference removed\n` +
+                `// WeakMap automatically removes entry\n` +
+                `// Garbage collector can now clean up\n\n` +
+                `Use Case: Private data storage for objects\n` +
+                `Benefits: Automatic memory management`;
+            
+            document.getElementById('weakMapOutput').textContent = output;
+        }
+
+        function showPerformanceTips() {
+            const output = 
+                `🚀 Object Performance Tips:\n\n` +
+                `1. Consistent Object Shape:\n` +
+                `   ✅ Always add properties in same order\n` +
+                `   ✅ Use same property names\n` +
+                `   ❌ Avoid adding/deleting properties dynamically\n\n` +
+                `2. Use Object Literals:\n` +
+                `   ✅ const obj = { a: 1, b: 2 };\n` +
+                `   ❌ const obj = {}; obj.a = 1; obj.b = 2;\n\n` +
+                `3. Avoid delete operator:\n` +
+                `   ✅ obj.prop = undefined;\n` +
+                `   ❌ delete obj.prop;\n\n` +
+                `4. Prototype Methods:\n` +
+                `   ✅ Add methods to prototype\n` +
+                `   ❌ Add methods in constructor\n\n` +
+                `5. Use Maps for dynamic keys:\n` +
+                `   ✅ const map = new Map();\n` +
+                `   ❌ const obj = {}; obj[dynamicKey] = value;`;
+            
+            document.getElementById('performanceOutput').textContent = output;
+        }
+
+        function demonstrateSymbol() {
+            const id = Symbol('id');
+            const user = {
+                name: "Rahul",
+                [id]: 12345
+            };
+            
+            const output = 
+                `Symbol Property:\n\n` +
+                `const id = Symbol('id');\n` +
+                `const user = {\n` +
+                `  name: "Rahul",\n` +
+                `  [id]: 12345\n` +
+                `};\n\n` +
+                `user[id]: ${user[id]}\n` +
+                `user.name: "${user.name}"\n\n` +
+                `Object.keys(user): ${JSON.stringify(Object.keys(user))}\n\n` +
+                `Symbol property hidden hai in normal iteration!`;
+            
+            document.getElementById('symbolOutput').textContent = output;
+        }
+
+        function demonstrateWellKnownSymbol() {
+            const output = 
+                `Well-known Symbols:\n\n` +
+                `Symbol.iterator - Make object iterable\n` +
+                `Symbol.toStringTag - Custom toString behavior\n` +
+                `Symbol.hasInstance - Custom instanceof behavior\n\n` +
+                `Example:\n` +
+                `const obj = {\n` +
+                `  [Symbol.iterator]: function*() {\n` +
+                `    yield 1; yield 2; yield 3;\n` +
+                `  }\n` +
+                `};\n\n` +
+                `for (let val of obj) {\n` +
+                `  console.log(val); // 1, 2, 3\n` +
+                `}`;
+            
+            document.getElementById('symbolOutput').textContent = output;
+        }
+
+        // Interview Section Functions
+        function toggleAnswer(num) {
+            const answer = document.getElementById(`answer-${num}`);
+            answer.classList.toggle('show');
+            
+            const button = answer.previousElementSibling;
+            button.textContent = answer.classList.contains('show') ? 'Hide Answer' : 'Show Answer';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Learning Hub</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #007bff;
+            margin-bottom: 30px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #007bff;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .navigation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .category-card {
+            background: #f9f9f9;
+            border-left: 4px solid #007bff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-title {
+            color: #007bff;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .category-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .tutorial-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tutorial-link {
+            display: block;
+            padding: 10px 15px;
+            margin: 5px 0;
+            background: white;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            transition: all 0.2s ease;
+        }
+
+        .tutorial-link:hover {
+            background: #007bff;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .tutorial-link:focus {
+            outline: 2px solid #007bff;
+            outline-offset: 2px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            border-top: 2px solid #007bff;
+            margin-top: 40px;
+            color: #666;
+        }
+
+        /* Roadmap Styles */
+        .roadmap-section {
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .roadmap-intro {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .roadmap-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .week-roadmap {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .week-roadmap:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .week-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .week-number {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .week-info h3 {
+            color: white;
+            margin: 0 0 5px 0;
+            font-size: 1.4rem;
+        }
+
+        .week-info p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .day-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #ffd700;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .day-card:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(5px);
+        }
+
+        .day-title {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .day-topics {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .day-topics li {
+            padding: 3px 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .day-topics li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+        }
+
+        .practice-project {
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 3px solid #ffd700;
+        }
+
+        .practice-project strong {
+            color: #ffd700;
+        }
+
+        .tutorials-section {
+            margin-top: 50px;
+        }
+
+        .tutorials-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .navigation-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .category-card {
+                padding: 15px;
+            }
+
+            .roadmap-section {
+                padding: 20px;
+                margin: 20px 0;
+            }
+
+            .week-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .week-number {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .days-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .day-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 35-Day JavaScript Mastery Course</h1>
+            <p class="subtitle">Complete guide to confidently write, debug, and structure modern, secure, and scalable
+                JavaScript applications</p>
+            <div class="course-goal">
+                <p><strong>Goal:</strong> By the end of this course, you'll master JavaScript from fundamentals to
+                    advanced patterns, integrating APIs and applying industry-standard practices.</p>
+            </div>
+        </header>
+
+        <main>
+            <!-- Visual Roadmap Section -->
+            <section class="roadmap-section">
+                <h2 style="color: #00ffaf;">📍 Complete 35-Day JavaScript Learning Roadmap</h2>
+                <p class="roadmap-intro">Follow this comprehensive roadmap to master JavaScript from basics to advanced
+                    concepts</p>
+                <div class="roadmap-container" id="roadmap-container">
+                    <!-- Roadmap will be generated here -->
+                </div>
+            </section>
+
+            <!-- Tutorial Navigation Grid -->
+            <section class="tutorials-section">
+                <h2>🚀 INDEX  to Tutorials</h2>
+                <div class="navigation-grid" id="navigation-grid">
+                    <!-- Tutorial categories will be dynamically generated here -->
+                </div>
+            </section>
+        </main>
+
+
+        <footer>
+            <p>&copy; 2024 JavaScript Learning Hub. Happy coding! 🚀</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tutorial data structure organized by 35-day course weeks
+        const tutorials = {
+            week1: {
+                title: "🗓 Week 1: JavaScript Foundations",
+                description: "Days 1-7: Core concepts, variables, operators, functions, and scope",
+                tutorials: [
+                    { title: "Day 1: Introduction to JavaScript", file: "day1-introduction-to-javascript.html" },
+                    { title: "Day 2: Variables & Data Types", file: "day2-variables-data-types.html" },
+                    { title: "Day 3: Operators & Expressions", file: "day3-operators-expressions.html" },
+                    { title: "Day 4: Conditional Logic", file: "day4-conditional-logic.html" },
+                    { title: "Day 5: Loops & Iterations", file: "day5-loops-iterations.html" },
+                    { title: "Day 6: Functions in JavaScript", file: "day6-functions-javascript.html" },
+                    { title: "Day 7: Scope & Hoisting", file: "day7-scope-hoisting.html" },
+                   
+                ]
+            },
+            week2: {
+                title: "🗓 Week 2: Working with Data & Modern Syntax",
+                description: "Days 8-14: Arrays, objects, ES6+ features, regex, and error handling",
+                tutorials: [
+                { title: "Day 8: Arrays Learning Page", file: "arrays_learning_page.html" },
+                    { title: "Day 9: JavaScript Objects Learning", file: "js_objects_learning.html" },
+                    { title: " JavaScript Objects In Detail", file: "objctes-details.html" },
+                    { title: "Day 10-11: ES6+ Features Tutorial", file: "es6-features-tutorial.html" },
+                    { title: "Day 10-11: Modern JS Features (Hindi)", file: "modern-js-features-hindi.html" },
+                    
+                    { title: "Day 12: Array Methods Learning", file: "array_methods_learning.html" },
+                   { title: "Day 13: Regex Learning Tool", file: "regex_learning_tool.html" },
+                    { title: "Day 14: Error Handling Tutorial", file: "error_handling_tutorial.html" }
+                ]
+            },
+            week3: {
+                title: "🗓 Week 3: Asynchronous JavaScript & DOM Mastery",
+                description: "Days 15-21: Callbacks, promises, async/await, DOM manipulation, and APIs",
+                tutorials: [
+                    { title: "Day 16: Promises Learning", file: "promises_learning.html" },
+                    { title: "Day 17: Async/Await Tutorial", file: "async-await.html" },
+                    { title: "Day 15,17: Async JS Learning", file: "async-js-learning.html" },
+              
+                    { title: "Day 18-19: DOM Manipulation Tutorial", file: "dom_manipulation_tutorial.html" },
+                    { title: "Day 20: Browser Storage Tutorial", file: "browser_storage_tutorial.html" },
+                    { title: "Day 21: Fetch API & AJAX Tutorial", file: "fetch-api-ajax-tutorial.html" },
+                ]
+            },
+            week4: {
+                title: "🗓 Week 4: Advanced Concepts & Design Patterns",
+                description: "Days 22-28: OOP, prototypes, closures, this context, and design patterns",
+                tutorials: [
+                    { title: "Day 22: OOP Learning Page", file: "oop_learning_page.html" },
+                    { title: "Day 23: Prototypal Inheritance Tutorial", file: "prototypal-inheritance-tutorial.html" },
+                    { title: "Day 24: Closures & Advanced Functions", file: "closures-advanced-functions.html" },
+                    { title: "Day 25: This Context Tutorial", file: "this-context-tutorial.html" },
+                    { title: "Day 26-27: JavaScript Design Patterns I", file: "JavaScript Design Patterns — I.html" },
+                    { title: "Day 26-27: JavaScript Design Patterns II", file: "JavaScript Design Patterns II.html" },
+                    { title: "Day 28: JavaScript Modules - Interactive Guide", file: "JavaScript Modules - Interactive Learning Guide.html" }
+                ]
+            },
+            week5: {
+                title: "🗓 Week 5: Modern Development & Final Project",
+                description: "Days 29-35: Testing, performance, security, accessibility, and build tools",
+                tutorials: [
+                    { title: "Day 29: Testing JavaScript", file: "Testing JavaScript.html" },
+                    { title: "Day 30: Performance Optimization", file: "Performance Optimization.html" },
+                    { title: "Day 31: JavaScript Security", file: "day31-javascript-security.html" },
+                    { title: "Day 32: Accessibility (A11y)", file: "day32-accessibility-a11y.html" },
+                    { title: "Day 33: Build Tools & Workflow", file: "day33-build-tools-workflow.html" },
+                    { title: "Day 34: TypeScript Essentials", file: "day34-typescript-essentials.html" },
+                    { title: "Day 35: Final Project & Beyond", file: "day35-final-project-beyond.html" }
+                ]
+            }
+        };
+
+        // Function to generate category sections
+        function generateNavigationGrid() {
+            const navigationGrid = document.getElementById('navigation-grid');
+
+            Object.keys(tutorials).forEach(categoryKey => {
+                const category = tutorials[categoryKey];
+
+                // Create category card
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'category-card';
+
+                // Create category title
+                const categoryTitle = document.createElement('h3');
+                categoryTitle.className = 'category-title';
+                categoryTitle.textContent = category.title;
+                categoryCard.appendChild(categoryTitle);
+
+                // Create category description
+                if (category.description) {
+                    const categoryDescription = document.createElement('p');
+                    categoryDescription.className = 'category-description';
+                    categoryDescription.textContent = category.description;
+                    categoryCard.appendChild(categoryDescription);
+                }
+
+                // Create tutorial list
+                const tutorialList = document.createElement('ul');
+                tutorialList.className = 'tutorial-list';
+
+                category.tutorials.forEach(tutorial => {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = tutorial.file;
+                    link.className = 'tutorial-link';
+                    link.textContent = tutorial.title;
+                    link.setAttribute('aria-label', `Navigate to ${tutorial.title} tutorial`);
+
+                    listItem.appendChild(link);
+                    tutorialList.appendChild(listItem);
+                });
+
+                categoryCard.appendChild(tutorialList);
+                navigationGrid.appendChild(categoryCard);
+            });
+        }
+
+        // Comprehensive 35-Day JavaScript Course Roadmap Data
+        const roadmapData = {
+            week1: {
+                title: "Week 1: JavaScript Foundations",
+                description: "Master the core building blocks of JavaScript programming",
+                days: [
+                    {
+                        day: "Day 1",
+                        title: "Introduction to JavaScript",
+                        topics: [
+                            "What is JavaScript and its role in the web ecosystem",
+                            "How JavaScript powers dynamic web experiences",
+                            "Setting up environment: VS Code, Node.js, browsers, DevTools",
+                            "Inline, internal, and external JavaScript in HTML",
+                            "Writing and executing your first JavaScript code (console.log)"
+                        ],
+                        practice: "Create a webpage that displays 'Hello JavaScript!' dynamically"
+                    },
+                    {
+                        day: "Day 2",
+                        title: "Variables & Data Types",
+                        topics: [
+                            "Variable declarations: var, let, const and scope rules",
+                            "Primitive data types: string, number, boolean, null, undefined, symbol, bigint",
+                            "Type conversion and typeof operator"
+                        ],
+                        practice: "Build a mini profile script that logs personal info dynamically"
+                    },
+                    {
+                        day: "Day 3",
+                        title: "Operators & Expressions",
+                        topics: [
+                            "Arithmetic, assignment, and logical operators",
+                            "Comparison operators and strict equality",
+                            "Operator precedence and associativity",
+                            "Type coercion and pitfalls"
+                        ],
+                        practice: "Build a simple calculator program"
+                    },
+                    {
+                        day: "Day 4",
+                        title: "Conditional Logic",
+                        topics: [
+                            "If-else and switch statements",
+                            "Ternary operator",
+                            "Truthy and falsy values"
+                        ],
+                        practice: "Create a weather or grade evaluator app"
+                    },
+                    {
+                        day: "Day 5",
+                        title: "Loops & Iterations",
+                        topics: [
+                            "for, while, do…while loops",
+                            "Iterating arrays with for…of and objects with for…in",
+                            "break, continue, labeled loops"
+                        ],
+                        practice: "Generate multiplication tables and process lists dynamically"
+                    },
+                    {
+                        day: "Day 6",
+                        title: "Functions in JavaScript",
+                        topics: [
+                            "Function declarations vs expressions",
+                            "Arrow functions and implicit returns",
+                            "Parameters, return values, default and rest parameters"
+                        ],
+                        practice: "Create a function library (e.g., for math utilities)"
+                    },
+                    {
+                        day: "Day 7",
+                        title: "Scope & Hoisting",
+                        topics: [
+                            "Global, local, and block scope",
+                            "Function and variable hoisting",
+                            "Closures introduction and examples"
+                        ],
+                        practice: "Debug scope-related issues in code snippets"
+                    }
+                ]
+            },
+            week2: {
+                title: "Week 2: Working with Data & Modern Syntax",
+                description: "Learn to manipulate data structures and use modern JavaScript features",
+                days: [
+                    {
+                        day: "Day 8",
+                        title: "Arrays",
+                        topics: [
+                            "Creating and accessing arrays",
+                            "Modifying arrays (push, pop, shift, unshift, splice)",
+                            "Iteration with loops and forEach"
+                        ],
+                        practice: "Build a simple to-do list"
+                    },
+                    {
+                        day: "Day 9",
+                        title: "Objects",
+                        topics: [
+                            "Object literals and constructor functions",
+                            "Adding, accessing, and deleting properties",
+                            "The this keyword",
+                            "Object.keys(), Object.values(), Object.entries()"
+                        ],
+                        practice: "Create a student or product object model"
+                    },
+                    {
+                        day: "Day 10",
+                        title: "Modern JavaScript Features (ES6+) — Part 1",
+                        topics: [
+                            "Template literals & multiline strings",
+                            "Destructuring arrays & objects",
+                            "Spread and rest operators"
+                        ],
+                        practice: "Refactor old code into ES6 syntax"
+                    },
+                    {
+                        day: "Day 11",
+                        title: "Modern JavaScript Features (ES6+) — Part 2",
+                        topics: [
+                            "Optional chaining (?.)",
+                            "Nullish coalescing (??)",
+                            "Short-circuit evaluation",
+                            "Enhanced object literals"
+                        ],
+                        practice: "Apply these features in a data manipulation script"
+                    },
+                    {
+                        day: "Day 12",
+                        title: "Advanced Array Methods",
+                        topics: [
+                            "map, filter, reduce, find, some, every, sort",
+                            "Method chaining"
+                        ],
+                        practice: "Create a student grade analyzer or shopping cart summary"
+                    },
+                    {
+                        day: "Day 13",
+                        title: "Regular Expressions",
+                        topics: [
+                            "Creating regex patterns",
+                            "Using test(), exec(), match(), replace()",
+                            "Common regex use cases (email, phone validation)"
+                        ],
+                        practice: "Build a form validation tool"
+                    },
+                    {
+                        day: "Day 14",
+                        title: "Error Handling",
+                        topics: [
+                            "try, catch, finally",
+                            "Throwing and catching custom errors",
+                            "Error propagation"
+                        ],
+                        practice: "Implement safe error handling in user input functions"
+                    }
+                ]
+            },
+            week3: {
+                title: "Week 3: Asynchronous JavaScript & DOM Mastery",
+                description: "Master async programming and dynamic web page manipulation",
+                days: [
+                    {
+                        day: "Day 15",
+                        title: "Asynchronous JavaScript (Callbacks)",
+                        topics: [
+                            "Sync vs Async execution",
+                            "Callback functions and callback hell",
+                            "setTimeout, setInterval"
+                        ],
+                        practice: "Create a countdown timer"
+                    },
+                    {
+                        day: "Day 16",
+                        title: "Promises",
+                        topics: [
+                            "Creating and chaining promises",
+                            "Promise combinators: all, race, any"
+                        ],
+                        practice: "Convert callback code to promises"
+                    },
+                    {
+                        day: "Day 17",
+                        title: "Async/Await",
+                        topics: [
+                            "Writing cleaner async code",
+                            "Handling errors with try/catch",
+                            "Sequential vs parallel async execution"
+                        ],
+                        practice: "Fetch data using async/await"
+                    },
+                    {
+                        day: "Day 18",
+                        title: "DOM Manipulation — Part 1",
+                        topics: [
+                            "DOM tree overview",
+                            "Selecting elements with querySelector & getElementById",
+                            "Modifying content, attributes, and styles",
+                            "Creating & removing elements dynamically"
+                        ],
+                        practice: "Build a dynamic quote generator"
+                    },
+                    {
+                        day: "Day 19",
+                        title: "DOM Manipulation — Part 2",
+                        topics: [
+                            "Event listeners and event objects",
+                            "Event bubbling, capturing, and delegation"
+                        ],
+                        practice: "Create an interactive form or dynamic gallery"
+                    },
+                    {
+                        day: "Day 20",
+                        title: "Browser Storage",
+                        topics: [
+                            "Cookies vs LocalStorage vs SessionStorage",
+                            "Using localStorage for data persistence",
+                            "Intro to IndexedDB and caching"
+                        ],
+                        practice: "Build a dark/light mode preference saver"
+                    },
+                    {
+                        day: "Day 21",
+                        title: "Fetch API & AJAX",
+                        topics: [
+                            "Fetching data from APIs",
+                            "Working with JSON responses",
+                            "Error handling in network calls"
+                        ],
+                        practice: "Build a weather or movie search app using a public API"
+                    }
+                ]
+            },
+            week4: {
+                title: "Week 4: Advanced Concepts & Design Patterns",
+                description: "Dive deep into advanced JavaScript concepts and architectural patterns",
+                days: [
+                    {
+                        day: "Day 22",
+                        title: "Object-Oriented Programming (OOP)",
+                        topics: [
+                            "Constructor functions and ES6 classes",
+                            "Inheritance, getters/setters, static methods"
+                        ],
+                        practice: "Build a class hierarchy (e.g., Vehicle, Car, Bike)"
+                    },
+                    {
+                        day: "Day 23",
+                        title: "Prototypal Inheritance",
+                        topics: [
+                            "Prototype chain and inheritance",
+                            "Object.create() and prototype manipulation"
+                        ],
+                        practice: "Implement inheritance using prototypes manually"
+                    },
+                    {
+                        day: "Day 24",
+                        title: "Closures & Advanced Functions",
+                        topics: [
+                            "Deep dive into closures",
+                            "IIFE, currying, partial application"
+                        ],
+                        practice: "Build a private counter or data encapsulation demo"
+                    },
+                    {
+                        day: "Day 25",
+                        title: "Understanding this & Context",
+                        topics: [
+                            "this in different contexts",
+                            "call, apply, and bind methods",
+                            "Lexical this in arrow functions"
+                        ],
+                        practice: "Debug and fix incorrect this behavior"
+                    },
+                    {
+                        day: "Day 26",
+                        title: "JavaScript Design Patterns — I",
+                        topics: [
+                            "Module, Singleton, Factory, Observer patterns"
+                        ],
+                        practice: "Implement a notification system using Observer pattern"
+                    },
+                    {
+                        day: "Day 27",
+                        title: "JavaScript Design Patterns — II",
+                        topics: [
+                            "MVC/MVVM, Revealing Module, Decorator, Pub/Sub patterns"
+                        ],
+                        practice: "Refactor a small app using a design pattern"
+                    },
+                    {
+                        day: "Day 28",
+                        title: "JavaScript Modules",
+                        topics: [
+                            "Script loading problems and ES modules (import/export)",
+                            "CommonJS vs ES6 Modules",
+                            "Dynamic imports"
+                        ],
+                        practice: "Structure your project with modules"
+                    }
+                ]
+            },
+            week5: {
+                title: "Week 5: Modern Development & Final Project",
+                description: "Professional development practices and real-world application building",
+                days: [
+                    {
+                        day: "Day 29",
+                        title: "Testing JavaScript",
+                        topics: [
+                            "Introduction to testing types: unit, integration, e2e",
+                            "Jest or Mocha basics",
+                            "Writing and running basic tests"
+                        ],
+                        practice: "Test utility functions using Jest"
+                    },
+                    {
+                        day: "Day 30",
+                        title: "Performance Optimization",
+                        topics: [
+                            "Profiling JavaScript with DevTools",
+                            "Identifying bottlenecks",
+                            "Optimization techniques: memoization, throttling, debouncing"
+                        ],
+                        practice: "Optimize a search filter script"
+                    },
+                    {
+                        day: "Day 31",
+                        title: "JavaScript Security",
+                        topics: [
+                            "Common vulnerabilities: XSS, CSRF",
+                            "Input sanitization & escaping",
+                            "Content Security Policy"
+                        ],
+                        practice: "Secure a form submission flow"
+                    },
+                    {
+                        day: "Day 32",
+                        title: "Accessibility (A11y)",
+                        topics: [
+                            "Web accessibility basics",
+                            "ARIA roles and attributes",
+                            "Keyboard navigation and screen readers"
+                        ],
+                        practice: "Make a modal or dropdown fully accessible"
+                    },
+                    {
+                        day: "Day 33",
+                        title: "Build Tools & Workflow",
+                        topics: [
+                            "npm & package.json basics",
+                            "Babel, Webpack, and Vite introduction",
+                            "ESLint & Prettier setup"
+                        ],
+                        practice: "Set up a simple JS build pipeline"
+                    },
+                    {
+                        day: "Day 34",
+                        title: "TypeScript Essentials",
+                        topics: [
+                            "What is TypeScript and why use it",
+                            "Static typing, interfaces, type aliases"
+                        ],
+                        practice: "Convert a JS module to TypeScript"
+                    },
+                    {
+                        day: "Day 35",
+                        title: "Final Project & Beyond",
+                        topics: [
+                            "Review of all key concepts",
+                            "Final project: build a mini app (API + LocalStorage + OOP + Async)",
+                            "Overview of modern frameworks (React, Vue, Angular)",
+                            "Career guidance & next learning steps"
+                        ],
+                        practice: "Complete comprehensive final project"
+                    }
+                ]
+            }
+        };
+
+        // Function to generate the visual roadmap
+        function generateRoadmap() {
+            const roadmapContainer = document.getElementById('roadmap-container');
+
+            Object.keys(roadmapData).forEach((weekKey, weekIndex) => {
+                const week = roadmapData[weekKey];
+
+                // Create week container
+                const weekElement = document.createElement('div');
+                weekElement.className = 'week-roadmap';
+
+                // Create week header
+                const weekHeader = document.createElement('div');
+                weekHeader.className = 'week-header';
+
+                const weekNumber = document.createElement('div');
+                weekNumber.className = 'week-number';
+                weekNumber.textContent = weekIndex + 1;
+
+                const weekInfo = document.createElement('div');
+                weekInfo.className = 'week-info';
+
+                const weekTitle = document.createElement('h3');
+                weekTitle.textContent = week.title;
+
+                const weekDescription = document.createElement('p');
+                weekDescription.textContent = week.description;
+
+                weekInfo.appendChild(weekTitle);
+                weekInfo.appendChild(weekDescription);
+                weekHeader.appendChild(weekNumber);
+                weekHeader.appendChild(weekInfo);
+                weekElement.appendChild(weekHeader);
+
+                // Create days grid
+                const daysGrid = document.createElement('div');
+                daysGrid.className = 'days-grid';
+
+                week.days.forEach(day => {
+                    const dayCard = document.createElement('div');
+                    dayCard.className = 'day-card';
+
+                    const dayTitle = document.createElement('div');
+                    dayTitle.className = 'day-title';
+                    dayTitle.textContent = `${day.day}: ${day.title}`;
+                    dayCard.appendChild(dayTitle);
+
+                    const topicsList = document.createElement('ul');
+                    topicsList.className = 'day-topics';
+
+                    day.topics.forEach(topic => {
+                        const topicItem = document.createElement('li');
+                        topicItem.textContent = topic;
+                        topicsList.appendChild(topicItem);
+                    });
+
+                    dayCard.appendChild(topicsList);
+
+                    if (day.practice) {
+                        const practiceProject = document.createElement('div');
+                        practiceProject.className = 'practice-project';
+                        practiceProject.innerHTML = `<strong>Practice:</strong> ${day.practice}`;
+                        dayCard.appendChild(practiceProject);
+                    }
+
+                    daysGrid.appendChild(dayCard);
+                });
+
+                weekElement.appendChild(daysGrid);
+                roadmapContainer.appendChild(weekElement);
+            });
+        }
+
+        // Initialize both roadmap and navigation grid when page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            generateRoadmap();
+            generateNavigationGrid();
+            console.log('JavaScript Learning Hub loaded with comprehensive roadmap and tutorial links!');
+        });
+    </script>
+</body>
+
+</html>

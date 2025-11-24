@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 7: Scope & Hoisting</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #007bff;
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background: #f9f9f9;
+        }
+        .demo {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .scope-visualizer {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .scope-box {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .scope-box.global {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+        .scope-box.function {
+            border-color: #ffc107;
+            background: #fff3cd;
+        }
+        .scope-box.block {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        .scope-box.active {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .hoisting-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        .before-after {
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .before {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+        .after {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+        .closure-example {
+            background: #e7f3ff;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .home-link:hover {
+            background: #218838;
+        }
+        .interview-section {
+            background: #e9ecef;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+        input, select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .debug-console {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            min-height: 100px;
+            overflow-y: auto;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .scope-visualizer, .hoisting-demo {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
+        
+        <header>
+            <h1>Day 7: Scope & Hoisting</h1>
+            <p><em>Global, local, block scope, function/variable hoisting, aur closures introduction</em></p>
+        </header>
+
+        <section id="scope-types">
+            <h2>Scope Types - Complete Understanding</h2>
+            <p>Scope JavaScript mein variables aur functions ka visibility aur accessibility determine karta hai. Yeh execution context ke saath closely related hai aur memory management mein crucial role play karta hai. JavaScript mein scope chain through lexical scoping work karta hai.</p>
+            
+            <h3>Scope Fundamentals aur Execution Context:</h3>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;">
+                <h4>🧠 Core Scope Concepts:</h4>
+                <ul>
+                    <li><strong>Lexical Scoping:</strong> Scope code likhte waqt determine hoti hai, runtime pe nahi</li>
+                    <li><strong>Scope Chain:</strong> Inner scopes outer scopes ko access kar sakte hain</li>
+                    <li><strong>Execution Context:</strong> Har function call apna execution context create karta hai</li>
+                    <li><strong>Variable Environment:</strong> Scope mein available variables ka collection</li>
+                    <li><strong>Closure:</strong> Function apne outer scope ko "remember" karta hai</li>
+                </ul>
+            </div>
+            
+            <h3>Detailed Scope Types Analysis:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border: 1px solid #dc3545;">
+                    <h4>🌍 Global Scope</h4>
+                    <p><strong>Definition:</strong> Outermost scope, accessible everywhere</p>
+                    <p><strong>Variables:</strong> window object properties (browser)</p>
+                    <p><strong>Lifetime:</strong> Application lifetime</p>
+                    <p><strong>Memory:</strong> Never garbage collected</p>
+                    <p><strong>Best Practice:</strong> Minimize global variables</p>
+                    <div style="background: #f8f9fa; padding: 8px; border-radius: 3px; font-family: monospace; font-size: 11px; margin: 5px 0;">
+var globalVar = "I'm global";<br>
+function anyFunction() {<br>
+&nbsp;&nbsp;console.log(globalVar); // Accessible<br>
+}
+                    </div>
+                </div>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffc107;">
+                    <h4>🔧 Function Scope</h4>
+                    <p><strong>Definition:</strong> Variables declared inside function</p>
+                    <p><strong>Variables:</strong> var, function declarations</p>
+                    <p><strong>Lifetime:</strong> Function execution time</p>
+                    <p><strong>Memory:</strong> Garbage collected after execution</p>
+                    <p><strong>Access:</strong> Only within function body</p>
+                    <div style="background: #f8f9fa; padding: 8px; border-radius: 3px; font-family: monospace; font-size: 11px; margin: 5px 0;">
+function myFunction() {<br>
+&nbsp;&nbsp;var functionScoped = "Only here";<br>
+&nbsp;&nbsp;// Accessible throughout function<br>
+}
+                    </div>
+                </div>
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; border: 1px solid #28a745;">
+                    <h4>📦 Block Scope (ES6+)</h4>
+                    <p><strong>Definition:</strong> Variables declared inside {} blocks</p>
+                    <p><strong>Variables:</strong> let, const declarations</p>
+                    <p><strong>Lifetime:</strong> Block execution time</p>
+                    <p><strong>Memory:</strong> Garbage collected after block</p>
+                    <p><strong>Access:</strong> Only within block boundaries</p>
+                    <div style="background: #f8f9fa; padding: 8px; border-radius: 3px; font-family: monospace; font-size: 11px; margin: 5px 0;">
+if (true) {<br>
+&nbsp;&nbsp;let blockScoped = "Only in block";<br>
+&nbsp;&nbsp;const alsoBlock = "Me too";<br>
+}
+                    </div>
+                </div>
+                <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; border: 1px solid #17a2b8;">
+                    <h4>🔗 Module Scope (ES6)</h4>
+                    <p><strong>Definition:</strong> Top-level scope in modules</p>
+                    <p><strong>Variables:</strong> Module-level declarations</p>
+                    <p><strong>Lifetime:</strong> Module lifetime</p>
+                    <p><strong>Memory:</strong> Persistent until module unloaded</p>
+                    <p><strong>Access:</strong> Private unless exported</p>
+                    <div style="background: #f8f9fa; padding: 8px; border-radius: 3px; font-family: monospace; font-size: 11px; margin: 5px 0;">
+// module.js<br>
+const moduleVar = "Private";<br>
+export const publicVar = "Public";
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo">
+                <h3>Interactive Scope Visualizer</h3>
+                <div class="scope-visualizer">
+                    <div class="scope-box global" onclick="demonstrateScope('global')">
+                        <h4>🌍 Global Scope</h4>
+                        <p>Kahin bhi accessible</p>
+                    </div>
+                    <div class="scope-box function" onclick="demonstrateScope('function')">
+                        <h4>🔧 Function Scope</h4>
+                        <p>Function ke andar hi</p>
+                    </div>
+                    <div class="scope-box block" onclick="demonstrateScope('block')">
+                        <h4>📦 Block Scope</h4>
+                        <p>{} ke andar hi</p>
+                    </div>
+                </div>
+                <div id="scope-output"></div>
+                
+                <h3>Advanced Scope Concepts</h3>
+                <div style="margin: 15px 0;">
+                    <button onclick="demonstrateScopeChain()">🔗 Scope Chain</button>
+                    <button onclick="demonstrateLexicalScoping()">📖 Lexical Scoping</button>
+                    <button onclick="demonstrateExecutionContext()">⚙️ Execution Context</button>
+                    <button onclick="demonstrateScopePolllution()">⚠️ Scope Pollution</button>
+                </div>
+                <div id="advanced-scope-result"></div>
+            </div>
+        </section>
+
+        <section id="scope-chain-deep">
+            <h2>Scope Chain aur Lexical Environment</h2>
+            <p>JavaScript mein scope chain ek fundamental concept hai jo variable resolution determine karta hai. Yeh lexical environment ke through implement hota hai.</p>
+            
+            <h3>Scope Chain Working Mechanism:</h3>
+            <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;">
+                <h4>🔍 Variable Resolution Process:</h4>
+                <ol>
+                    <li><strong>Current Scope:</strong> Pehle current execution context mein variable dhundho</li>
+                    <li><strong>Outer Scope:</strong> Agar nahi mila to parent scope mein dhundho</li>
+                    <li><strong>Chain Traversal:</strong> Global scope tak chain follow karo</li>
+                    <li><strong>ReferenceError:</strong> Agar global mein bhi nahi mila to error throw karo</li>
+                </ol>
+                <div style="background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; margin: 10px 0;">
+let global = "I'm global";<br><br>
+function outer() {<br>
+&nbsp;&nbsp;let outerVar = "I'm outer";<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;function inner() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;let innerVar = "I'm inner";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;console.log(innerVar);  // Found in current scope<br>
+&nbsp;&nbsp;&nbsp;&nbsp;console.log(outerVar);  // Found in parent scope<br>
+&nbsp;&nbsp;&nbsp;&nbsp;console.log(global);    // Found in global scope<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;inner();<br>
+}<br><br>
+outer();
+                </div>
+            </div>
+            
+            <div class="demo">
+                <h3>Scope Chain Visualization</h3>
+                <button onclick="visualizeScopeChain()">🔍 Visualize Scope Chain</button>
+                <button onclick="demonstrateVariableResolution()">🎯 Variable Resolution</button>
+                <div id="scope-chain-result"></div>
+            </div>
+        </section>
+
+        <section id="var-let-const">
+            <h2>var vs let vs const Scope</h2>
+            <p>Different keywords ka scope behavior different hota hai:</p>
+            
+            <div class="demo">
+                <h3>Scope Comparison</h3>
+                <button onclick="demonstrateVarScope()">var Scope</button>
+                <button onclick="demonstrateLetScope()">let Scope</button>
+                <button onclick="demonstrateConstScope()">const Scope</button>
+                <div class="debug-console" id="scope-console">Console output yahan dikhega...</div>
+            </div>
+        </section>
+
+        <section id="hoisting">
+            <h2>Hoisting Kya Hai?</h2>
+            <p>JavaScript mein variables aur functions declarations top pe move ho jaati hain. Yeh hoisting hai!</p>
+            
+            <div class="demo">
+                <h3>Hoisting Examples</h3>
+                <div class="hoisting-demo">
+                    <div class="before">
+                        <h4>❌ Code Likhte Waqt</h4>
+                        <div class="code-example">console.log(x); // undefined
+var x = 5;
+
+sayHello(); // "Hello!"
+function sayHello() {
+    console.log("Hello!");
+}</div>
+                    </div>
+                    <div class="after">
+                        <h4>✅ JavaScript Engine Dekhta Hai</h4>
+                        <div class="code-example">var x; // hoisted
+function sayHello() { // hoisted
+    console.log("Hello!");
+}
+
+console.log(x); // undefined
+x = 5;
+sayHello(); // "Hello!"</div>
+                    </div>
+                </div>
+                <button onclick="demonstrateHoisting()">Test Hoisting</button>
+                <div id="hoisting-output"></div>
+            </div>
+        </section>
+
+        <section id="temporal-dead-zone">
+            <h2>Temporal Dead Zone (TDZ)</h2>
+            <p>let aur const hoisted hote hain lekin access nahi kar sakte initialization se pehle:</p>
+            
+            <div class="demo">
+                <h3>TDZ Demo</h3>
+                <button onclick="demonstrateTDZ()">Test TDZ</button>
+                <div id="tdz-output"></div>
+            </div>
+        </section>
+
+        <section id="closures-intro">
+            <h2>Closures Introduction</h2>
+            <p>Closure matlab inner function outer function ke variables ko access kar sakta hai:</p>
+            
+            <div class="demo">
+                <h3>Simple Closure Example</h3>
+                <div class="closure-example">
+                    <div class="code-example">function outerFunction(x) {
+    // Outer variable
+    
+    function innerFunction(y) {
+        // Inner function can access outer variable
+        return x + y;
+    }
+    
+    return innerFunction;
+}
+
+const addFive = outerFunction(5);
+console.log(addFive(3)); // 8</div>
+                </div>
+                <button onclick="demonstrateClosures()">Test Closures</button>
+                <div id="closure-output"></div>
+            </div>
+        </section>
+
+        <section id="practical-closures">
+            <h2>Practical Closure Examples</h2>
+            <p>Real-world mein closures kaise use karte hain:</p>
+            
+            <div class="demo">
+                <h3>Counter with Closure</h3>
+                <button onclick="createCounter()">Create Counter</button>
+                <button onclick="incrementCounter()" id="increment-btn" disabled>Increment</button>
+                <button onclick="decrementCounter()" id="decrement-btn" disabled>Decrement</button>
+                <button onclick="resetCounter()" id="reset-btn" disabled>Reset</button>
+                <div id="counter-display" style="font-size: 2rem; text-align: center; margin: 15px 0;">0</div>
+                
+                <h3>Private Variables Demo</h3>
+                <button onclick="createBankAccount()">Create Bank Account</button>
+                <div id="bank-demo"></div>
+            </div>
+        </section>
+
+        <section id="scope-debugging">
+            <h2>Practice: Scope Debugging</h2>
+            <p>Common scope issues ko identify aur fix karo:</p>
+            
+            <div class="demo">
+                <h3>Debug These Code Snippets</h3>
+                <button onclick="debugExample1()">Example 1: Loop Variable</button>
+                <button onclick="debugExample2()">Example 2: Function Scope</button>
+                <button onclick="debugExample3()">Example 3: Hoisting Issue</button>
+                <div class="debug-console" id="debug-output">Debug results yahan dikhenge...</div>
+            </div>
+        </section>
+
+        <section class="interview-section">
+            <h2>Interview Questions</h2>
+            <div class="question">
+                <h3>1. Basic: Scope kya hai? Kitne types ke hain?</h3>
+                <p>Answer: Scope variables ka access area hai. 3 types: Global (kahin bhi access), Function (function ke andar), Block ({} ke andar).</p>
+            </div>
+            <div class="question">
+                <h3>2. Basic: var, let, const mein scope difference kya hai?</h3>
+                <p>Answer: var function-scoped hai, let aur const block-scoped hain. var hoisted hota hai aur redeclare ho sakta hai.</p>
+            </div>
+            <div class="question">
+                <h3>3. Intermediate: Hoisting kya hai? Example do.</h3>
+                <p>Answer: Variable aur function declarations top pe move ho jaana. var undefined return karta hai, functions completely hoist hote hain.</p>
+            </div>
+            <div class="question">
+                <h3>4. Intermediate: Temporal Dead Zone kya hai?</h3>
+                <p>Answer: let/const variables hoisted hote hain lekin initialization se pehle access nahi kar sakte. ReferenceError aata hai.</p>
+            </div>
+            <div class="question">
+                <h3>5. Advanced: Closure kya hai? Practical use cases kya hain?</h3>
+                <p>Answer: Inner function outer function ke variables access kar sakta hai. Use cases: data privacy, callbacks, modules, currying.</p>
+            </div>
+            <div class="question">
+                <h3>6. Advanced: for loop mein var vs let ka behavior different kyun hai?</h3>
+                <p>Answer: var function-scoped hai to same variable reuse hota hai, let block-scoped hai to har iteration mein new variable banta hai.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        let consoleOutput = [];
+        let counter = null;
+        let bankAccount = null;
+
+        function logToConsole(message) {
+            consoleOutput.push(message);
+            updateConsole();
+        }
+
+        function updateConsole() {
+            const console = document.getElementById('scope-console');
+            console.innerHTML = consoleOutput.join('<br>');
+            console.scrollTop = console.scrollHeight;
+        }
+
+        function clearConsole() {
+            consoleOutput = [];
+            updateConsole();
+        }
+
+        function demonstrateScope(type) {
+            // Remove active class from all boxes
+            document.querySelectorAll('.scope-box').forEach(box => {
+                box.classList.remove('active');
+            });
+            
+            // Add active class to clicked box
+            event.target.closest('.scope-box').classList.add('active');
+            
+            const output = document.getElementById('scope-output');
+            
+            switch(type) {
+                case 'global':
+                    output.innerHTML = `
+                        <h4>🌍 Global Scope Example:</h4>
+                        <div class="code-example">var globalVar = "I'm global!";
+
+function testGlobal() {
+    console.log(globalVar); // Accessible
+}
+
+if (true) {
+    console.log(globalVar); // Accessible
+}
+
+console.log(globalVar); // Accessible</div>
+                        <p><em>Global variables kahin bhi access kar sakte hain!</em></p>
+                    `;
+                    break;
+                    
+                case 'function':
+                    output.innerHTML = `
+                        <h4>🔧 Function Scope Example:</h4>
+                        <div class="code-example">function testFunction() {
+    var functionVar = "I'm in function!";
+    console.log(functionVar); // Accessible
+}
+
+testFunction();
+console.log(functionVar); // Error! Not accessible</div>
+                        <p><em>Function variables sirf function ke andar accessible hain!</em></p>
+                    `;
+                    break;
+                    
+                case 'block':
+                    output.innerHTML = `
+                        <h4>📦 Block Scope Example:</h4>
+                        <div class="code-example">if (true) {
+    let blockVar = "I'm in block!";
+    const blockConst = "Me too!";
+    console.log(blockVar); // Accessible
+}
+
+console.log(blockVar); // Error! Not accessible
+console.log(blockConst); // Error! Not accessible</div>
+                        <p><em>let aur const block scope follow karte hain!</em></p>
+                    `;
+                    break;
+            }
+        }
+
+        function demonstrateVarScope() {
+            clearConsole();
+            logToConsole("=== var Scope Demo ===");
+            
+            // Simulate var behavior
+            logToConsole("console.log(varTest); // undefined (hoisted)");
+            logToConsole("var varTest = 'Hello';");
+            logToConsole("console.log(varTest); // 'Hello'");
+            
+            logToConsole("\n// Function scope:");
+            logToConsole("function testVar() {");
+            logToConsole("  if (true) {");
+            logToConsole("    var insideIf = 'accessible outside if';");
+            logToConsole("  }");
+            logToConsole("  console.log(insideIf); // 'accessible outside if'");
+            logToConsole("}");
+        }
+
+        function demonstrateLetScope() {
+            clearConsole();
+            logToConsole("=== let Scope Demo ===");
+            
+            logToConsole("// console.log(letTest); // ReferenceError!");
+            logToConsole("let letTest = 'Hello';");
+            logToConsole("console.log(letTest); // 'Hello'");
+            
+            logToConsole("\n// Block scope:");
+            logToConsole("if (true) {");
+            logToConsole("  let blockScoped = 'only inside block';");
+            logToConsole("  console.log(blockScoped); // 'only inside block'");
+            logToConsole("}");
+            logToConsole("// console.log(blockScoped); // ReferenceError!");
+        }
+
+        function demonstrateConstScope() {
+            clearConsole();
+            logToConsole("=== const Scope Demo ===");
+            
+            logToConsole("// console.log(constTest); // ReferenceError!");
+            logToConsole("const constTest = 'Hello';");
+            logToConsole("console.log(constTest); // 'Hello'");
+            logToConsole("// constTest = 'Bye'; // TypeError!");
+            
+            logToConsole("\n// Block scope (same as let):");
+            logToConsole("if (true) {");
+            logToConsole("  const blockConst = 'only inside block';");
+            logToConsole("  console.log(blockConst); // 'only inside block'");
+            logToConsole("}");
+            logToConsole("// console.log(blockConst); // ReferenceError!");
+        }
+
+        function demonstrateHoisting() {
+            const output = document.getElementById('hoisting-output');
+            
+            output.innerHTML = `
+                <h4>Hoisting Test Results:</h4>
+                <div class="code-example">// What we write:
+console.log(hoistedVar); // undefined (not error!)
+var hoistedVar = "I'm hoisted!";
+
+sayHello(); // "Hello from hoisted function!"
+function sayHello() {
+    console.log("Hello from hoisted function!");
+}
+
+// But this won't work:
+// sayHi(); // TypeError!
+var sayHi = function() {
+    console.log("Hi!");
+};</div>
+                <p><strong>Key Points:</strong></p>
+                <ul>
+                    <li>var declarations hoisted hote hain, values nahi</li>
+                    <li>Function declarations completely hoist hote hain</li>
+                    <li>Function expressions hoist nahi hote</li>
+                </ul>
+            `;
+        }
+
+        function demonstrateTDZ() {
+            const output = document.getElementById('tdz-output');
+            
+            output.innerHTML = `
+                <h4>Temporal Dead Zone Example:</h4>
+                <div class="code-example">console.log(typeof undeclaredVar); // "undefined"
+
+// console.log(typeof letVar); // ReferenceError!
+// console.log(typeof constVar); // ReferenceError!
+
+let letVar = "I'm let";
+const constVar = "I'm const";
+
+console.log(letVar); // "I'm let"
+console.log(constVar); // "I'm const"</div>
+                <p><strong>Explanation:</strong> let aur const hoisted hote hain lekin TDZ mein rehte hain initialization tak.</p>
+            `;
+        }
+
+        function demonstrateClosures() {
+            const output = document.getElementById('closure-output');
+            
+            // Create closure example
+            function createMultiplier(multiplier) {
+                return function(number) {
+                    return number * multiplier;
+                };
+            }
+            
+            const multiplyByTwo = createMultiplier(2);
+            const multiplyByFive = createMultiplier(5);
+            
+            output.innerHTML = `
+                <h4>Closure Test Results:</h4>
+                <p><strong>multiplyByTwo(4):</strong> ${multiplyByTwo(4)}</p>
+                <p><strong>multiplyByFive(3):</strong> ${multiplyByFive(3)}</p>
+                <p><em>Inner function ne outer function ka 'multiplier' variable remember kiya!</em></p>
+                
+                <div class="code-example">function createMultiplier(multiplier) {
+    return function(number) {
+        return number * multiplier; // Closure!
+    };
+}
+
+const multiplyByTwo = createMultiplier(2);
+console.log(multiplyByTwo(4)); // 8</div>
+            `;
+        }
+
+        function createCounter() {
+            // Counter closure
+            counter = (function() {
+                let count = 0;
+                
+                return {
+                    increment: function() {
+                        count++;
+                        return count;
+                    },
+                    decrement: function() {
+                        count--;
+                        return count;
+                    },
+                    reset: function() {
+                        count = 0;
+                        return count;
+                    },
+                    getValue: function() {
+                        return count;
+                    }
+                };
+            })();
+            
+            // Enable buttons
+            document.getElementById('increment-btn').disabled = false;
+            document.getElementById('decrement-btn').disabled = false;
+            document.getElementById('reset-btn').disabled = false;
+            
+            updateCounterDisplay();
+        }
+
+        function incrementCounter() {
+            if (counter) {
+                counter.increment();
+                updateCounterDisplay();
+            }
+        }
+
+        function decrementCounter() {
+            if (counter) {
+                counter.decrement();
+                updateCounterDisplay();
+            }
+        }
+
+        function resetCounter() {
+            if (counter) {
+                counter.reset();
+                updateCounterDisplay();
+            }
+        }
+
+        function updateCounterDisplay() {
+            if (counter) {
+                document.getElementById('counter-display').textContent = counter.getValue();
+            }
+        }
+
+        function createBankAccount() {
+            // Bank account with private variables
+            bankAccount = (function() {
+                let balance = 1000; // Private variable
+                let accountNumber = "ACC" + Math.floor(Math.random() * 10000);
+                
+                return {
+                    deposit: function(amount) {
+                        if (amount > 0) {
+                            balance += amount;
+                            return `Deposited ₹${amount}. New balance: ₹${balance}`;
+                        }
+                        return "Invalid amount!";
+                    },
+                    withdraw: function(amount) {
+                        if (amount > 0 && amount <= balance) {
+                            balance -= amount;
+                            return `Withdrawn ₹${amount}. New balance: ₹${balance}`;
+                        }
+                        return "Invalid amount or insufficient funds!";
+                    },
+                    getBalance: function() {
+                        return `Current balance: ₹${balance}`;
+                    },
+                    getAccountNumber: function() {
+                        return `Account Number: ${accountNumber}`;
+                    }
+                };
+            })();
+            
+            const output = document.getElementById('bank-demo');
+            output.innerHTML = `
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 5px; margin-top: 10px;">
+                    <h4>🏦 Bank Account Created!</h4>
+                    <p>${bankAccount.getAccountNumber()}</p>
+                    <p>${bankAccount.getBalance()}</p>
+                    <div>
+                        <button onclick="bankDeposit()">Deposit ₹500</button>
+                        <button onclick="bankWithdraw()">Withdraw ₹200</button>
+                        <button onclick="checkBalance()">Check Balance</button>
+                    </div>
+                    <div id="bank-transactions"></div>
+                </div>
+            `;
+        }
+
+        function bankDeposit() {
+            if (bankAccount) {
+                const result = bankAccount.deposit(500);
+                document.getElementById('bank-transactions').innerHTML += `<p style="color: #28a745;">${result}</p>`;
+            }
+        }
+
+        function bankWithdraw() {
+            if (bankAccount) {
+                const result = bankAccount.withdraw(200);
+                document.getElementById('bank-transactions').innerHTML += `<p style="color: #dc3545;">${result}</p>`;
+            }
+        }
+
+        function checkBalance() {
+            if (bankAccount) {
+                const result = bankAccount.getBalance();
+                document.getElementById('bank-transactions').innerHTML += `<p style="color: #007bff;">${result}</p>`;
+            }
+        }
+
+        function debugExample1() {
+            const output = document.getElementById('debug-output');
+            output.innerHTML = `
+                <div style="color: #dc3545;">❌ Problematic Code:</div>
+                <div style="color: #fff;">for (var i = 0; i < 3; i++) {
+    setTimeout(() => console.log(i), 100); // Prints 3, 3, 3
+}</div>
+                
+                <div style="color: #28a745; margin-top: 10px;">✅ Fixed Code:</div>
+                <div style="color: #fff;">for (let i = 0; i < 3; i++) {
+    setTimeout(() => console.log(i), 100); // Prints 0, 1, 2
+}</div>
+                
+                <div style="color: #ffc107; margin-top: 10px;">Explanation: var is function-scoped, let is block-scoped</div>
+            `;
+        }
+
+        function debugExample2() {
+            const output = document.getElementById('debug-output');
+            output.innerHTML = `
+                <div style="color: #dc3545;">❌ Problematic Code:</div>
+                <div style="color: #fff;">function outer() {
+    var x = 1;
+    function inner() {
+        console.log(x); // undefined
+        var x = 2;
+    }
+    inner();
+}</div>
+                
+                <div style="color: #28a745; margin-top: 10px;">✅ Fixed Code:</div>
+                <div style="color: #fff;">function outer() {
+    var x = 1;
+    function inner() {
+        console.log(x); // 1
+        var y = 2; // Different variable name
+    }
+    inner();
+}</div>
+                
+                <div style="color: #ffc107; margin-top: 10px;">Explanation: Inner var x shadows outer x due to hoisting</div>
+            `;
+        }
+
+        function debugExample3() {
+            const output = document.getElementById('debug-output');
+            output.innerHTML = `
+                <div style="color: #dc3545;">❌ Problematic Code:</div>
+                <div style="color: #fff;">console.log(myFunc()); // TypeError!
+var myFunc = function() {
+    return "Hello!";
+};</div>
+                
+                <div style="color: #28a745; margin-top: 10px;">✅ Fixed Code:</div>
+                <div style="color: #fff;">function myFunc() {
+    return "Hello!";
+}
+console.log(myFunc()); // "Hello!"</div>
+                
+                <div style="color: #ffc107; margin-top: 10px;">Explanation: Function expressions don't hoist, declarations do</div>
+            `;
+        }
+    </script>
+</body>
+</html>
