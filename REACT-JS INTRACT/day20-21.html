@@ -155,12 +155,14 @@
             overflow-x: auto;
             margin: 15px 0;
             border: 1px solid var(--border-color);
+            position: relative;
         }
 
         .code-block pre {
             margin: 0;
             font-family: 'Courier New', monospace;
             font-size: 0.9em;
+            color: slategrey;
             line-height: 1.5;
         }
 
@@ -416,7 +418,7 @@
             }
             to {
                 opacity: 1;
-                max-height: 500px;
+                max-height: 1000px;
             }
         }
 
@@ -516,33 +518,38 @@
             50% { width: 100%; }
         }
 
-        .tooltip {
-            position: relative;
+        .installation-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            color: white;
+        }
+
+        .installation-box h4 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #fff;
+        }
+
+        .step-number {
             display: inline-block;
-            cursor: help;
-            border-bottom: 1px dotted var(--primary-color);
-        }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: var(--secondary-color);
-            color: #fff;
+            background: white;
+            color: #667eea;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
             text-align: center;
-            border-radius: 6px;
-            padding: 10px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -620,6 +627,18 @@
                     <strong>Global CSS:</strong> A traditional styling approach where CSS rules are defined in separate .css files and imported into components, making styles available globally across the application.
                 </div>
 
+                <div class="installation-box">
+                    <h4>📦 Setup & Installation</h4>
+                    <div class="step-card">
+                        <span class="step-number">1</span>
+                        <strong>Create React App mein already included hai!</strong>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">2</span>
+                        <strong>CSS file banao aur import karo:</strong>
+                    </div>
+                </div>
+
                 <div class="code-block">
                     <pre>
 /* styles.css */
@@ -687,6 +706,22 @@ function App() {
                     <strong>CSS Modules:</strong> A CSS file in which all class names and animation names are scoped locally by default, preventing naming conflicts and ensuring component-level encapsulation.
                 </div>
 
+                <div class="installation-box">
+                    <h4>📦 Setup & Installation</h4>
+                    <div class="step-card">
+                        <span class="step-number">1</span>
+                        <strong>Create React App mein built-in hai - koi installation nahi chahiye!</strong>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">2</span>
+                        <strong>File naming convention:</strong> ComponentName.module.css
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">3</span>
+                        <strong>Import karo aur use karo:</strong>
+                    </div>
+                </div>
+
                 <div class="code-block">
                     <pre>
 /* Button.module.css */
@@ -709,7 +744,10 @@ import styles from './Button.module.css';
 
 function Button() {
     return &lt;button className={styles.button}&gt;Click Me&lt;/button&gt;;
-}</pre>
+}
+
+/* Multiple classes */
+&lt;div className={`${styles.card} ${styles.active}`}&gt;Content&lt;/div&gt;</pre>
                 </div>
 
                 <div class="live-demo">
@@ -755,11 +793,34 @@ function Button() {
                     <strong>Styled Components:</strong> A CSS-in-JS library that allows you to write actual CSS code to style components using tagged template literals, enabling dynamic styling based on props and automatic critical CSS injection.
                 </div>
 
+                <div class="installation-box">
+                    <h4>📦 Installation Steps</h4>
+                    <div class="step-card">
+                        <span class="step-number">1</span>
+                        <strong>Install styled-components:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>npm install styled-components</pre>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">2</span>
+                        <strong>Import aur use karo:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>import styled from 'styled-components';</pre>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">3</span>
+                        <strong>Optional: VS Code Extension install karo</strong>
+                        <p style="margin-top: 5px;">vscode-styled-components - syntax highlighting ke liye</p>
+                    </div>
+                </div>
+
                 <div class="code-block">
                     <pre>
 import styled from 'styled-components';
 
-// Styled component create karo
+// Basic styled component
 const Button = styled.button`
     background-color: ${props => props.primary ? '#61dafb' : '#gray'};
     color: white;
@@ -774,15 +835,49 @@ const Button = styled.button`
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 `;
 
-// Use karo
+// Extending styles
+const PrimaryButton = styled(Button)`
+    background-color: #61dafb;
+    font-weight: bold;
+`;
+
+// Using with props
 function App() {
     return (
         &lt;&gt;
             &lt;Button primary&gt;Primary Button&lt;/Button&gt;
             &lt;Button&gt;Secondary Button&lt;/Button&gt;
+            &lt;PrimaryButton&gt;Extended Button&lt;/PrimaryButton&gt;
         &lt;/&gt;
+    );
+}
+
+// Theming support
+import { ThemeProvider } from 'styled-components';
+
+const theme = {
+    colors: {
+        primary: '#61dafb',
+        secondary: '#282c34',
+    }
+};
+
+const ThemedButton = styled.button`
+    background: ${props => props.theme.colors.primary};
+`;
+
+function App() {
+    return (
+        &lt;ThemeProvider theme={theme}&gt;
+            &lt;ThemedButton&gt;Themed Button&lt;/ThemedButton&gt;
+        &lt;/ThemeProvider&gt;
     );
 }</pre>
                 </div>
@@ -834,6 +929,36 @@ function App() {
                     <strong>Emotion:</strong> A performant and flexible CSS-in-JS library that provides both styled component API and css prop approach, with excellent performance characteristics and smaller bundle size compared to alternatives.
                 </div>
 
+                <div class="installation-box">
+                    <h4>📦 Installation Steps</h4>
+                    <div class="step-card">
+                        <span class="step-number">1</span>
+                        <strong>Install Emotion packages:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>npm install @emotion/react @emotion/styled</pre>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">2</span>
+                        <strong>For css prop, add JSX pragma:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>/** @jsxImportSource @emotion/react */</pre>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">3</span>
+                        <strong>Or configure in tsconfig.json/jsconfig.json:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>
+{
+  "compilerOptions": {
+    "jsxImportSource": "@emotion/react"
+  }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="code-block">
                     <pre>
 /** @jsxImportSource @emotion/react */
@@ -863,6 +988,30 @@ const Button = styled.button`
     background-color: #b2dfdb;
     color: #004d40;
     padding: 12px 24px;
+    border: 2px solid #00796b;
+    border-radius: 8px;
+`;
+
+// Method 3: Object styles
+const objectStyle = css({
+    backgroundColor: '#b2dfdb',
+    color: '#004d40',
+    padding: '12px 24px',
+    '&:hover': {
+        backgroundColor: '#80cbc4'
+    }
+});
+
+// Composition
+const baseButton = css`
+    padding: 12px 24px;
+    border-radius: 8px;
+`;
+
+const primaryButton = css`
+    ${baseButton}
+    background-color: #61dafb;
+    color: white;
 `;</pre>
                 </div>
 
@@ -899,26 +1048,62 @@ const Button = styled.button`
                     <strong>Tailwind CSS:</strong> A utility-first CSS framework that provides low-level utility classes to build custom designs without writing custom CSS, promoting rapid development and consistent design systems.
                 </div>
 
+                <div class="installation-box">
+                    <h4>📦 Installation Steps</h4>
+                    <div class="step-card">
+                        <span class="step-number">1</span>
+                        <strong>Install Tailwind CSS:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>npm install -D tailwindcss postcss autoprefixer</pre>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">2</span>
+                        <strong>Initialize Tailwind:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>npx tailwindcss init -p</pre>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">3</span>
+                        <strong>Configure tailwind.config.js:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#61dafb',
+      }
+    },
+  },
+  plugins: [],
+}</pre>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">4</span>
+                        <strong>Add Tailwind directives to CSS:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>
+/* index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;</pre>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">5</span>
+                        <strong>Start using Tailwind classes!</strong>
+                    </div>
+                </div>
+
                 <div class="code-block">
                     <pre>
-// Installation
-npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
-
-// tailwind.config.js
-module.exports = {
-    content: ["./src/**/*.{js,jsx,ts,tsx}"],
-    theme: {
-        extend: {
-            colors: {
-                primary: '#61dafb',
-            }
-        },
-    },
-    plugins: [],
-}
-
-// Component usage
+// Basic usage
 function Button() {
     return (
         &lt;button className="bg-blue-500 hover:bg-blue-700 text-white 
@@ -928,6 +1113,36 @@ function Button() {
             Click Me
         &lt;/button&gt;
     );
+}
+
+// Responsive design
+function Card() {
+    return (
+        &lt;div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"&gt;
+            &lt;div className="bg-white p-6 rounded-lg shadow-md"&gt;
+                Card 1
+            &lt;/div&gt;
+        &lt;/div&gt;
+    );
+}
+
+// Dark mode support
+function DarkModeExample() {
+    return (
+        &lt;div className="bg-white dark:bg-gray-800 
+                       text-black dark:text-white"&gt;
+            Content
+        &lt;/div&gt;
+    );
+}
+
+// Custom classes with @apply
+/* styles.css */
+@layer components {
+    .btn-primary {
+        @apply bg-blue-500 hover:bg-blue-700 text-white 
+               font-bold py-2 px-4 rounded;
+    }
 }</pre>
                 </div>
 
@@ -975,17 +1190,47 @@ function Button() {
                     <strong>UI Component Libraries:</strong> Pre-built, customizable component libraries that provide ready-to-use styled components following specific design systems, significantly speeding up development time.
                 </div>
 
+                <!-- Material UI Installation -->
+                <div class="installation-box">
+                    <h4>📦 Material UI (MUI) Installation</h4>
+                    <div class="step-card">
+                        <span class="step-number">1</span>
+                        <strong>Install MUI:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>npm install @mui/material @emotion/react @emotion/styled</pre>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">2</span>
+                        <strong>Install icons (optional):</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>npm install @mui/icons-material</pre>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">3</span>
+                        <strong>Add Roboto font to index.html:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>&lt;link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" /&gt;</pre>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="code-block">
                     <pre>
 // Material UI Example
-import { Button, TextField, Card } from '@mui/material';
+import { Button, TextField, Card, CardContent } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const theme = createTheme({
     palette: {
         primary: {
             main: '#61dafb',
         },
+        secondary: {
+            main: '#ff6b6b',
+        }
     },
 });
 
@@ -993,24 +1238,123 @@ function App() {
     return (
         &lt;ThemeProvider theme={theme}&gt;
             &lt;Card&gt;
-                &lt;TextField label="Name" variant="outlined" /&gt;
-                &lt;Button variant="contained" color="primary"&gt;
-                    Submit
-                &lt;/Button&gt;
+                &lt;CardContent&gt;
+                    &lt;TextField 
+                        label="Name" 
+                        variant="outlined" 
+                        fullWidth 
+                        margin="normal"
+                    /&gt;
+                    &lt;Button 
+                        variant="contained" 
+                        color="primary"
+                        startIcon={&lt;DeleteIcon /&gt;}
+                    &gt;
+                        Submit
+                    &lt;/Button&gt;
+                &lt;/CardContent&gt;
             &lt;/Card&gt;
         &lt;/ThemeProvider&gt;
     );
-}
+}</pre>
+                </div>
 
-// Chakra UI Example
-import { Button, Input, Box } from '@chakra-ui/react';
+                <!-- Chakra UI Installation -->
+                <div class="installation-box" style="margin-top: 30px;">
+                    <h4>📦 Chakra UI Installation</h4>
+                    <div class="step-card">
+                        <span class="step-number">1</span>
+                        <strong>Install Chakra UI:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>npm install @chakra-ui/react @emotion/react @emotion/styled framer-motion</pre>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">2</span>
+                        <strong>Wrap app with ChakraProvider:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>
+import { ChakraProvider } from '@chakra-ui/react';
 
 function App() {
     return (
-        &lt;Box p={4}&gt;
-            &lt;Input placeholder="Enter name" mb={3} /&gt;
-            &lt;Button colorScheme="blue"&gt;Submit&lt;/Button&gt;
+        &lt;ChakraProvider&gt;
+            {/* Your app */}
+        &lt;/ChakraProvider&gt;
+    );
+}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+// Chakra UI Example
+import { Button, Input, Box, Stack, useColorMode } from '@chakra-ui/react';
+
+function App() {
+    const { colorMode, toggleColorMode } = useColorMode();
+    
+    return (
+        &lt;Box p={8} bg={colorMode === 'light' ? 'white' : 'gray.800'}&gt;
+            &lt;Stack spacing={4}&gt;
+                &lt;Input placeholder="Enter name" size="lg" /&gt;
+                &lt;Button colorScheme="blue" size="lg"&gt;
+                    Submit
+                &lt;/Button&gt;
+                &lt;Button onClick={toggleColorMode}&gt;
+                    Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
+                &lt;/Button&gt;
+            &lt;/Stack&gt;
         &lt;/Box&gt;
+    );
+}</pre>
+                </div>
+
+                <!-- Ant Design Installation -->
+                <div class="installation-box" style="margin-top: 30px;">
+                    <h4>📦 Ant Design Installation</h4>
+                    <div class="step-card">
+                        <span class="step-number">1</span>
+                        <strong>Install Ant Design:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>npm install antd</pre>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">2</span>
+                        <strong>Import CSS in index.js or App.js:</strong>
+                        <div class="code-block" style="margin-top: 10px;">
+                            <pre>import 'antd/dist/reset.css';</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <pre>
+// Ant Design Example
+import { Button, Input, Card, Space } from 'antd';
+import { DeleteOutlined, SearchOutlined } from '@ant-design/icons';
+
+function App() {
+    return (
+        &lt;Card title="User Form" style={{ width: 400 }}&gt;
+            &lt;Space direction="vertical" style={{ width: '100%' }}&gt;
+                &lt;Input 
+                    placeholder="Enter name" 
+                    prefix={&lt;SearchOutlined /&gt;}
+                    size="large"
+                /&gt;
+                &lt;Button 
+                    type="primary" 
+                    icon={&lt;DeleteOutlined /&gt;}
+                    size="large"
+                    block
+                &gt;
+                    Submit
+                &lt;/Button&gt;
+            &lt;/Space&gt;
+        &lt;/Card&gt;
     );
 }</pre>
                 </div>
@@ -1112,9 +1456,29 @@ function App() {
                 <strong>Dark Mode:</strong> A color scheme that uses light-colored text and UI elements on dark backgrounds, reducing eye strain in low-light conditions and potentially saving battery on OLED screens.
             </div>
 
+            <div class="installation-box">
+                <h4>📦 Dark Mode Implementation Methods</h4>
+                <div class="step-card">
+                    <span class="step-number">1</span>
+                    <strong>CSS Variables Method (Recommended)</strong>
+                </div>
+                <div class="step-card">
+                    <span class="step-number">2</span>
+                    <strong>Styled Components ThemeProvider</strong>
+                </div>
+                <div class="step-card">
+                    <span class="step-number">3</span>
+                    <strong>Chakra UI useColorMode Hook</strong>
+                </div>
+                <div class="step-card">
+                    <span class="step-number">4</span>
+                    <strong>Tailwind Dark Mode Classes</strong>
+                </div>
+            </div>
+
             <div class="code-block">
                 <pre>
-// CSS Variables Approach
+// Method 1: CSS Variables Approach
 :root {
     --bg-color: #ffffff;
     --text-color: #333333;
@@ -1136,6 +1500,7 @@ function App() {
     
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
     }, [theme]);
     
     const toggleTheme = () => {
@@ -1147,7 +1512,55 @@ function App() {
             Toggle {theme === 'light' ? '🌙' : '☀️'}
         &lt;/button&gt;
     );
-}</pre>
+}
+
+// Method 2: Styled Components
+import { ThemeProvider } from 'styled-components';
+
+const lightTheme = {
+    bg: '#ffffff',
+    text: '#333333',
+};
+
+const darkTheme = {
+    bg: '#1a1a1a',
+    text: '#e0e0e0',
+};
+
+function App() {
+    const [isDark, setIsDark] = useState(false);
+    
+    return (
+        &lt;ThemeProvider theme={isDark ? darkTheme : lightTheme}&gt;
+            {/* Your app */}
+        &lt;/ThemeProvider&gt;
+    );
+}
+
+// Method 3: Chakra UI
+import { useColorMode } from '@chakra-ui/react';
+
+function App() {
+    const { colorMode, toggleColorMode } = useColorMode();
+    
+    return (
+        &lt;Button onClick={toggleColorMode}&gt;
+            Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
+        &lt;/Button&gt;
+    );
+}
+
+// Method 4: Tailwind CSS
+// Enable dark mode in tailwind.config.js
+module.exports = {
+    darkMode: 'class', // or 'media'
+    // ...
+}
+
+// Use dark: prefix
+&lt;div className="bg-white dark:bg-gray-800 text-black dark:text-white"&gt;
+    Content
+&lt;/div&gt;</pre>
             </div>
 
             <div class="live-demo">
