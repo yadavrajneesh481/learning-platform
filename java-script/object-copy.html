@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Object Copy - Shallow vs Deep vs Object.assign()</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 15px 30px;
+            background: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .tab.active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+        }
+
+        .hinglish {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #ffc107;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .definition {
+            background: #d1ecf1;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #17a2b8;
+            font-style: italic;
+            font-size: 15px;
+        }
+
+        .demo-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .demo-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+
+        .demo-box h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .string { color: #50fa7b; }
+        .code-block .number { color: #bd93f9; }
+        .code-block .comment { color: #6272a4; }
+        .code-block .function { color: #8be9fd; }
+
+        button.run-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+
+        button.run-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        button.reset-btn {
+            background: #f44336;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+
+        button.reset-btn:hover {
+            background: #da190b;
+            transform: scale(1.05);
+        }
+
+        .output {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            min-height: 100px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .visual-demo {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .object-visual {
+            flex: 1;
+            min-width: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .object-visual h4 {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        .property {
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nested {
+            margin-left: 20px;
+            border-left: 3px solid rgba(255,255,255,0.5);
+            padding-left: 15px;
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            color: #000;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .warning {
+            background: #ff5722;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .success {
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .comparison-table tr:hover {
+            background: #e9ecef;
+        }
+
+        @media (max-width: 768px) {
+            .demo-area {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .tabs {
+                justify-content: center;
+            }
+            
+            .tab {
+                flex: 1;
+                min-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 JavaScript Object Copy - Complete Guide</h1>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('basics')">Basics</button>
+            <button class="tab" onclick="showTab('shallow')">Shallow Copy</button>
+            <button class="tab" onclick="showTab('deep')">Deep Copy</button>
+            <button class="tab" onclick="showTab('assign')">Object.assign()</button>
+            <button class="tab" onclick="showTab('comparison')">Comparison</button>
+            <button class="tab" onclick="showTab('advanced')">Advanced</button>
+        </div>
+
+        <!-- BASICS TAB -->
+        <div id="basics" class="content active">
+            <div class="section">
+                <h2>📚 Basics - Object Reference vs Copy</h2>
+                
+                <div class="hinglish">
+                    <strong>Samjho yaar:</strong> JavaScript mein jab tum ek object banate ho, toh wo memory mein store hota hai. Jab tum us object ko kisi variable mein assign karte ho, toh actually wo object copy nahi hota, balki uska <span class="highlight">reference</span> (address) copy hota hai. Matlab dono variables same object ko point karte hain!
+                </div>
+
+                <div class="definition">
+                    <strong>Definition:</strong> In JavaScript, objects are reference types. When you assign an object to a variable, you're storing a reference (memory address) to that object, not the actual object itself.
+                </div>
+
+                <h3>🎯 Live Demo - Reference Problem</h3>
+                <div class="code-block">
+<span class="keyword">let</span> original = {
+    name: <span class="string">"Rajesh"</span>,
+    age: <span class="number">25</span>,
+    city: <span class="string">"Mumbai"</span>
+};
+
+<span class="keyword">let</span> copy = original; <span class="comment">// Ye copy nahi hai, reference hai!</span>
+
+copy.name = <span class="string">"Suresh"</span>; <span class="comment">// Original bhi change ho jayega!</span>
+
+<span class="function">console.log</span>(original.name); <span class="comment">// Output: "Suresh" 😱</span>
+                </div>
+
+                <button class="run-btn" onclick="runBasicDemo()">▶ Run Demo</button>
+                <button class="reset-btn" onclick="resetBasicDemo()">🔄 Reset</button>
+                
+                <div class="visual-demo">
+                    <div class="object-visual">
+                        <h4>Original Object</h4>
+                        <div id="basicOriginal" class="property">
+                            name: "Rajesh"<br>
+                            age: 25<br>
+                            city: "Mumbai"
+                        </div>
+                    </div>
+                    <div class="object-visual">
+                        <h4>Copy Variable</h4>
+                        <div id="basicCopy" class="property">
+                            name: "Rajesh"<br>
+                            age: 25<br>
+                            city: "Mumbai"
+                        </div>
+                    </div>
+                </div>
+
+                <div class="output" id="basicOutput">Click "Run Demo" to see the magic! ✨</div>
+
+                <div class="warning">
+                    ⚠️ Dhyan do: Simple assignment (=) se object copy nahi hota, sirf reference copy hota hai!
+                </div>
+            </div>
+        </div>
+
+        <!-- SHALLOW COPY TAB -->
+        <div id="shallow" class="content">
+            <div class="section">
+                <h2>📋 Shallow Copy</h2>
+                
+                <div class="hinglish">
+                    <strong>Kya hai ye:</strong> Shallow copy matlab object ki <span class="highlight">first level</span> properties copy ho jati hain, lekin agar koi nested object hai (object ke andar object), toh uska sirf reference copy hota hai. Matlab nested objects mein changes dono jagah reflect honge!
+                </div>
+
+                <div class="definition">
+                    <strong>Definition:</strong> A shallow copy creates a new object and copies the values of the original object's properties. However, if a property value is a reference to another object, only the reference is copied, not the actual nested object.
+                </div>
+
+                <h3>🛠️ Shallow Copy Kaise Banaye?</h3>
+                
+                <div class="code-block">
+<span class="comment">// Method 1: Spread Operator (...)</span>
+<span class="keyword">let</span> original = { name: <span class="string">"Amit"</span>, age: <span class="number">30</span> };
+<span class="keyword">let</span> copy1 = { ...original };
+
+<span class="comment">// Method 2: Object.assign()</span>
+<span class="keyword">let</span> copy2 = <span class="function">Object.assign</span>({}, original);
+
+<span class="comment">// Method 3: Object.create() + Object.assign()</span>
+<span class="keyword">let</span> copy3 = <span class="function">Object.create</span>(
+    <span class="function">Object.getPrototypeOf</span>(original),
+    <span class="function">Object.getOwnPropertyDescriptors</span>(original)
+);
+                </div>
+
+                <h3>🎯 Problem with Nested Objects</h3>
+                <div class="code-block">
+<span class="keyword">let</span> person = {
+    name: <span class="string">"Rahul"</span>,
+    age: <span class="number">28</span>,
+    address: {
+        city: <span class="string">"Delhi"</span>,
+        pincode: <span class="number">110001</span>
+    }
+};
+
+<span class="keyword">let</span> shallowCopy = { ...person };
+
+shallowCopy.name = <span class="string">"Rohan"</span>; <span class="comment">// ✅ Original nahi badlega</span>
+shallowCopy.address.city = <span class="string">"Bangalore"</span>; <span class="comment">// ❌ Original bhi badlega!</span>
+                </div>
+
+                <button class="run-btn" onclick="runShallowDemo()">▶ Run Demo</button>
+                <button class="reset-btn" onclick="resetShallowDemo()">🔄 Reset</button>
+
+                <div class="visual-demo">
+                    <div class="object-visual">
+                        <h4>Original Object</h4>
+                        <div id="shallowOriginal">
+                            <div class="property">name: "Rahul"</div>
+                            <div class="property">age: 28</div>
+                            <div class="property nested">
+                                address: {<br>
+                                &nbsp;&nbsp;city: "Delhi"<br>
+                                &nbsp;&nbsp;pincode: 110001<br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="object-visual">
+                        <h4>Shallow Copy</h4>
+                        <div id="shallowCopy">
+                            <div class="property">name: "Rahul"</div>
+                            <div class="property">age: 28</div>
+                            <div class="property nested">
+                                address: {<br>
+                                &nbsp;&nbsp;city: "Delhi"<br>
+                                &nbsp;&nbsp;pincode: 110001<br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="output" id="shallowOutput">Click "Run Demo" to see shallow copy in action! 🎬</div>
+
+                <div class="warning">
+                    ⚠️ Yaad rakho: Shallow copy sirf top-level properties ko copy karta hai. Nested objects ka reference copy hota hai!
+                </div>
+            </div>
+        </div>
+
+        <!-- DEEP COPY TAB -->
+        <div id="deep" class="content">
+            <div class="section">
+                <h2>🔍 Deep Copy</h2>
+                
+                <div class="hinglish">
+                    <strong>Perfect solution:</strong> Deep copy matlab <span class="highlight">pura object</span> copy ho jata hai, including all nested objects! Matlab original aur copy completely independent ho jate hain. Kisi mein bhi change karo, dusra affect nahi hoga! 🎉
+                </div>
+
+                <div class="definition">
+                    <strong>Definition:</strong> A deep copy creates a new object and recursively copies all nested objects and their properties. The copied object is completely independent of the original, with no shared references.
+                </div>
+
+                <h3>🛠️ Deep Copy Kaise Banaye?</h3>
+                
+                <div class="code-block">
+<span class="comment">// Method 1: JSON.parse + JSON.stringify (Simple but limited)</span>
+<span class="keyword">let</span> original = {
+    name: <span class="string">"Priya"</span>,
+    address: { city: <span class="string">"Pune"</span> }
+};
+<span class="keyword">let</span> deepCopy1 = <span class="function">JSON.parse</span>(<span class="function">JSON.stringify</span>(original));
+
+<span class="comment">// Method 2: structuredClone() (Modern & Best)</span>
+<span class="keyword">let</span> deepCopy2 = <span class="function">structuredClone</span>(original);
+
+<span class="comment">// Method 3: Recursive Function (Custom)</span>
+<span class="keyword">function</span> <span class="function">deepClone</span>(obj) {
+    <span class="keyword">if</span> (obj === <span class="keyword">null</span> || <span class="keyword">typeof</span> obj !== <span class="string">'object'</span>) <span class="keyword">return</span> obj;
+    
+    <span class="keyword">let</span> clone = <span class="function">Array.isArray</span>(obj) ? [] : {};
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> obj) {
+        <span class="keyword">if</span> (obj.<span class="function">hasOwnProperty</span>(key)) {
+            clone[key] = <span class="function">deepClone</span>(obj[key]);
+        }
+    }
+    
+    <span class="keyword">return</span> clone;
+}
+                </div>
+
+                <h3>🎯 Deep Copy Demo</h3>
+                <div class="code-block">
+<span class="keyword">let</span> company = {
+    name: <span class="string">"TechCorp"</span>,
+    employees: <span class="number">100</span>,
+    ceo: {
+        name: <span class="string">"Vikram"</span>,
+        age: <span class="number">45</span>,
+        address: {
+            city: <span class="string">"Mumbai"</span>,
+            country: <span class="string">"India"</span>
+        }
+    }
+};
+
+<span class="keyword">let</span> deepCopy = <span class="function">structuredClone</span>(company);
+
+deepCopy.ceo.address.city = <span class="string">"Bangalore"</span>;
+<span class="function">console.log</span>(company.ceo.address.city); <span class="comment">// Still "Mumbai" ✅</span>
+                </div>
+
+                <button class="run-btn" onclick="runDeepDemo()">▶ Run Demo</button>
+                <button class="reset-btn" onclick="resetDeepDemo()">🔄 Reset</button>
+
+                <div class="visual-demo">
+                    <div class="object-visual">
+                        <h4>Original Object</h4>
+                        <div id="deepOriginal">
+                            <div class="property">name: "TechCorp"</div>
+                            <div class="property">employees: 100</div>
+                            <div class="property nested">
+                                ceo: {<br>
+                                &nbsp;&nbsp;name: "Vikram"<br>
+                                &nbsp;&nbsp;age: 45<br>
+                                &nbsp;&nbsp;address: {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;city: "Mumbai"<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;country: "India"<br>
+                                &nbsp;&nbsp;}<br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="object-visual">
+                        <h4>Deep Copy</h4>
+                        <div id="deepCopy">
+                            <div class="property">name: "TechCorp"</div>
+                            <div class="property">employees: 100</div>
+                            <div class="property nested">
+                                ceo: {<br>
+                                &nbsp;&nbsp;name: "Vikram"<br>
+                                &nbsp;&nbsp;age: 45<br>
+                                &nbsp;&nbsp;address: {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;city: "Mumbai"<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;country: "India"<br>
+                                &nbsp;&nbsp;}<br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="output" id="deepOutput">Click "Run Demo" to see deep copy magic! 🪄</div>
+
+                <div class="success">
+                    ✅ Perfect: Deep copy mein original aur copy completely independent hain!
+                </div>
+
+                <h3>⚠️ JSON Method Ki Limitations</h3>
+                <div class="hinglish">
+                    JSON.parse(JSON.stringify()) simple hai but ye kuch cheezein copy nahi kar sakta:
+                </div>
+                <ul style="margin: 15px 0; padding-left: 30px; line-height: 2;">
+                    <li><strong>Functions</strong> - Functions lost ho jate hain</li>
+                    <li><strong>undefined</strong> - undefined values remove ho jati hain</li>
+                    <li><strong>Date objects</strong> - String ban jate hain</li>
+                    <li><strong>RegExp</strong> - Empty object ban jata hai</li>
+                    <li><strong>Infinity/NaN</strong> - null ban jate hain</li>
+                    <li><strong>Circular references</strong> - Error throw karta hai</li>
+                </ul>
+
+                <div class="code-block">
+<span class="keyword">let</span> problematic = {
+    func: <span class="keyword">function</span>() { <span class="function">console.log</span>(<span class="string">"Hello"</span>); },
+    undef: <span class="keyword">undefined</span>,
+    date: <span class="keyword">new</span> <span class="function">Date</span>(),
+    regex: <span class="keyword">/test/</span>g
+};
+
+<span class="keyword">let</span> jsonCopy = <span class="function">JSON.parse</span>(<span class="function">JSON.stringify</span>(problematic));
+<span class="comment">// func aur undef gayab ho jayenge! 😱</span>
+
+<span class="comment">// Better: Use structuredClone()</span>
+<span class="keyword">let</span> betterCopy = <span class="function">structuredClone</span>(problematic);
+                </div>
+            </div>
+        </div>
+
+        <!-- OBJECT.ASSIGN TAB -->
+        <div id="assign" class="content">
+            <div class="section">
+                <h2>🔧 Object.assign()</h2>
+                
+                <div class="hinglish">
+                    <strong>Kya hai ye:</strong> Object.assign() ek built-in method hai jo ek ya zyada source objects ki properties ko target object mein copy kar deta hai. Ye bhi <span class="highlight">shallow copy</span> karta hai, matlab nested objects ka reference copy hota hai!
+                </div>
+
+                <div class="definition">
+                    <strong>Definition:</strong> Object.assign() copies all enumerable own properties from one or more source objects to a target object. It returns the modified target object. It performs a shallow copy.
+                </div>
+
+                <h3>📝 Syntax</h3>
+                <div class="code-block">
+<span class="function">Object.assign</span>(target, source1, source2, ...sourceN)
+
+<span class="comment">// Example:</span>
+<span class="keyword">let</span> target = { a: <span class="number">1</span> };
+<span class="keyword">let</span> source = { b: <span class="number">2</span>, c: <span class="number">3</span> };
+<span class="keyword">let</span> result = <span class="function">Object.assign</span>(target, source);
+
+<span class="comment">// target ab { a: 1, b: 2, c: 3 } hai</span>
+                </div>
+
+                <h3>🎯 Use Cases</h3>
+                
+                <h4>1️⃣ Object Copy Karna</h4>
+                <div class="code-block">
+<span class="keyword">let</span> original = { name: <span class="string">"Ankit"</span>, age: <span class="number">25</span> };
+<span class="keyword">let</span> copy = <span class="function">Object.assign</span>({}, original);
+
+copy.name = <span class="string">"Sumit"</span>;
+<span class="function">console.log</span>(original.name); <span class="comment">// "Ankit" - Original safe hai ✅</span>
+                </div>
+
+                <h4>2️⃣ Multiple Objects Merge Karna</h4>
+                <div class="code-block">
+<span class="keyword">let</span> obj1 = { a: <span class="number">1</span>, b: <span class="number">2</span> };
+<span class="keyword">let</span> obj2 = { c: <span class="number">3</span>, d: <span class="number">4</span> };
+<span class="keyword">let</span> obj3 = { e: <span class="number">5</span>, f: <span class="number">6</span> };
+
+<span class="keyword">let</span> merged = <span class="function">Object.assign</span>({}, obj1, obj2, obj3);
+<span class="comment">// Result: { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6 }</span>
+                </div>
+
+                <h4>3️⃣ Default Values Set Karna</h4>
+                <div class="code-block">
+<span class="keyword">function</span> <span class="function">createUser</span>(options) {
+    <span class="keyword">let</span> defaults = {
+        name: <span class="string">"Guest"</span>,
+        age: <span class="number">18</span>,
+        role: <span class="string">"user"</span>
+    };
+    
+    <span class="keyword">return</span> <span class="function">Object.assign</span>({}, defaults, options);
+}
+
+<span class="keyword">let</span> user1 = <span class="function">createUser</span>({ name: <span class="string">"Raj"</span> });
+<span class="comment">// { name: "Raj", age: 18, role: "user" }</span>
+                </div>
+
+                <button class="run-btn" onclick="runAssignDemo()">▶ Run Demo</button>
+                <button class="reset-btn" onclick="resetAssignDemo()">🔄 Reset</button>
+
+                <div class="output" id="assignOutput">Click "Run Demo" to see Object.assign() in action! 🚀</div>
+
+                <h3>⚠️ Important Points</h3>
+                <div class="hinglish">
+                    <ul style="margin: 15px 0; padding-left: 30px; line-height: 2;">
+                        <li><strong>Shallow copy:</strong> Nested objects ka reference copy hota hai</li>
+                        <li><strong>Property overwrite:</strong> Same property name hone par last wala value win karta hai</li>
+                        <li><strong>Target modify:</strong> First argument (target) modify ho jata hai</li>
+                        <li><strong>Enumerable only:</strong> Sirf enumerable properties copy hoti hain</li>
+                        <li><strong>Prototype chain:</strong> Inherited properties copy nahi hoti</li>
+                    </ul>
+                </div>
+
+                <h3>🆚 Object.assign() vs Spread Operator</h3>
+                <div class="code-block">
+<span class="comment">// Object.assign()</span>
+<span class="keyword">let</span> copy1 = <span class="function">Object.assign</span>({}, original);
+
+<span class="comment">// Spread Operator (Modern & Cleaner)</span>
+<span class="keyword">let</span> copy2 = { ...original };
+
+<span class="comment">// Dono same kaam karte hain for simple objects!</span>
+<span class="comment">// Spread operator zyada readable hai 👍</span>
+                </div>
+
+                <div class="warning">
+                    ⚠️ Dhyan do: Object.assign() bhi shallow copy hai! Nested objects ke liye deep copy use karo!
+                </div>
+            </div>
+        </div>
+
+        <!-- COMPARISON TAB -->
+        <div id="comparison" class="content">
+            <div class="section">
+                <h2>📊 Complete Comparison</h2>
+                
+                <div class="hinglish">
+                    <strong>Sab ek saath samjho:</strong> Yahan sabhi methods ka comparison hai. Dekho kaunsa method kab use karna chahiye!
+                </div>
+
+                <h3>🔍 Feature Comparison Table</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Reference (=)</th>
+                            <th>Shallow Copy</th>
+                            <th>Deep Copy</th>
+                            <th>Object.assign()</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Top-level properties</strong></td>
+                            <td>❌ Shared</td>
+                            <td>✅ Independent</td>
+                            <td>✅ Independent</td>
+                            <td>✅ Independent</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Nested objects</strong></td>
+                            <td>❌ Shared</td>
+                            <td>❌ Shared</td>
+                            <td>✅ Independent</td>
+                            <td>❌ Shared</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Arrays inside</strong></td>
+                            <td>❌ Shared</td>
+                            <td>❌ Shared</td>
+                            <td>✅ Independent</td>
+                            <td>❌ Shared</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Functions</strong></td>
+                            <td>✅ Preserved</td>
+                            <td>✅ Preserved</td>
+                            <td>⚠️ Depends on method</td>
+                            <td>✅ Preserved</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Performance</strong></td>
+                            <td>⚡ Fastest</td>
+                            <td>🚀 Fast</td>
+                            <td>🐢 Slower</td>
+                            <td>🚀 Fast</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Memory usage</strong></td>
+                            <td>💚 Minimal</td>
+                            <td>💛 Moderate</td>
+                            <td>❤️ High</td>
+                            <td>💛 Moderate</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Circular references</strong></td>
+                            <td>✅ Works</td>
+                            <td>✅ Works</td>
+                            <td>⚠️ Depends on method</td>
+                            <td>✅ Works</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Use case</strong></td>
+                            <td>Same object chahiye</td>
+                            <td>Simple objects</td>
+                            <td>Complex nested objects</td>
+                            <td>Merge/Copy simple objects</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>🎯 Method Comparison Demo</h3>
+                <button class="run-btn" onclick="runComparisonDemo()">▶ Run All Methods</button>
+                <button class="reset-btn" onclick="resetComparisonDemo()">🔄 Reset</button>
+
+                <div class="output" id="comparisonOutput">Click "Run All Methods" to see side-by-side comparison! 🔬</div>
+
+                <h3>💡 Kab Kya Use Karein?</h3>
+                <div class="demo-area">
+                    <div class="demo-box">
+                        <h4>✅ Reference (=) Use Karo Jab:</h4>
+                        <ul style="line-height: 2; padding-left: 20px;">
+                            <li>Same object ko multiple variables mein chahiye</li>
+                            <li>Memory save karni ho</li>
+                            <li>Changes everywhere reflect hone chahiye</li>
+                        </ul>
+                        <div class="code-block">
+<span class="keyword">let</span> config = { theme: <span class="string">"dark"</span> };
+<span class="keyword">let</span> appConfig = config;
+<span class="comment">// Dono same object point karenge</span>
+                        </div>
+                    </div>
+
+                    <div class="demo-box">
+                        <h4>✅ Shallow Copy Use Karo Jab:</h4>
+                        <ul style="line-height: 2; padding-left: 20px;">
+                            <li>Simple flat objects copy karni ho</li>
+                            <li>Nested objects nahi hain</li>
+                            <li>Fast performance chahiye</li>
+                            <li>Objects merge karne hain</li>
+                        </ul>
+                        <div class="code-block">
+<span class="keyword">let</span> user = { name: <span class="string">"Raj"</span>, age: <span class="number">25</span> };
+<span class="keyword">let</span> copy = { ...user };
+                        </div>
+                    </div>
+
+                    <div class="demo-box">
+                        <h4>✅ Deep Copy Use Karo Jab:</h4>
+                        <ul style="line-height: 2; padding-left: 20px;">
+                            <li>Complex nested objects ho</li>
+                            <li>Complete independence chahiye</li>
+                            <li>Arrays of objects ho</li>
+                            <li>State management mein (Redux, etc.)</li>
+                        </ul>
+                        <div class="code-block">
+<span class="keyword">let</span> data = {
+    user: { address: { city: <span class="string">"Delhi"</span> } }
+};
+<span class="keyword">let</span> copy = <span class="function">structuredClone</span>(data);
+                        </div>
+                    </div>
+
+                    <div class="demo-box">
+                        <h4>✅ Object.assign() Use Karo Jab:</h4>
+                        <ul style="line-height: 2; padding-left: 20px;">
+                            <li>Multiple objects merge karni ho</li>
+                            <li>Default values set karni ho</li>
+                            <li>Options/config objects handle karni ho</li>
+                            <li>Older browser support chahiye</li>
+                        </ul>
+                        <div class="code-block">
+<span class="keyword">let</span> defaults = { a: <span class="number">1</span> };
+<span class="keyword">let</span> options = { b: <span class="number">2</span> };
+<span class="keyword">let</span> final = <span class="function">Object.assign</span>({}, defaults, options);
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADVANCED TAB -->
+        <div id="advanced" class="content">
+            <div class="section">
+                <h2>🚀 Advanced Concepts</h2>
+                
+                <div class="hinglish">
+                    <strong>Pro level:</strong> Ab advanced concepts dekhte hain jo real-world projects mein kaam aate hain!
+                </div>
+
+                <h3>1️⃣ Custom Deep Clone Function</h3>
+                <div class="hinglish">
+                    Apna khud ka deep clone function banao jo sab kuch handle kare!
+                </div>
+                <div class="code-block">
+<span class="keyword">function</span> <span class="function">deepClone</span>(obj, hash = <span class="keyword">new</span> <span class="function">WeakMap</span>()) {
+    <span class="comment">// Null ya primitive values</span>
+    <span class="keyword">if</span> (obj === <span class="keyword">null</span> || <span class="keyword">typeof</span> obj !== <span class="string">'object'</span>) {
+        <span class="keyword">return</span> obj;
+    }
+    
+    <span class="comment">// Circular reference check</span>
+    <span class="keyword">if</span> (hash.<span class="function">has</span>(obj)) {
+        <span class="keyword">return</span> hash.<span class="function">get</span>(obj);
+    }
+    
+    <span class="comment">// Date object</span>
+    <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="function">Date</span>) {
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Date</span>(obj.<span class="function">getTime</span>());
+    }
+    
+    <span class="comment">// RegExp object</span>
+    <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="function">RegExp</span>) {
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">RegExp</span>(obj);
+    }
+    
+    <span class="comment">// Array</span>
+    <span class="keyword">if</span> (<span class="function">Array.isArray</span>(obj)) {
+        <span class="keyword">const</span> arrCopy = [];
+        hash.<span class="function">set</span>(obj, arrCopy);
+        obj.<span class="function">forEach</span>((item, index) => {
+            arrCopy[index] = <span class="function">deepClone</span>(item, hash);
+        });
+        <span class="keyword">return</span> arrCopy;
+    }
+    
+    <span class="comment">// Object</span>
+    <span class="keyword">const</span> objCopy = {};
+    hash.<span class="function">set</span>(obj, objCopy);
+    
+    <span class="function">Object.keys</span>(obj).<span class="function">forEach</span>(key => {
+        objCopy[key] = <span class="function">deepClone</span>(obj[key], hash);
+    });
+    
+    <span class="keyword">return</span> objCopy;
+}
+                </div>
+
+                <h3>2️⃣ Circular Reference Handling</h3>
+                <div class="hinglish">
+                    Jab object khud ko reference kare (circular reference), tab kya karein?
+                </div>
+                <div class="code-block">
+<span class="keyword">let</span> obj = { name: <span class="string">"Test"</span> };
+obj.self = obj; <span class="comment">// Circular reference!</span>
+
+<span class="comment">// JSON method fail ho jayega</span>
+<span class="keyword">try</span> {
+    <span class="function">JSON.parse</span>(<span class="function">JSON.stringify</span>(obj));
+} <span class="keyword">catch</span>(e) {
+    <span class="function">console.log</span>(<span class="string">"Error: Circular reference!"</span>);
+}
+
+<span class="comment">// structuredClone() handle kar lega</span>
+<span class="keyword">let</span> copy = <span class="function">structuredClone</span>(obj); <span class="comment">// ✅ Works!</span>
+                </div>
+
+                <h3>3️⃣ Performance Comparison</h3>
+                <button class="run-btn" onclick="runPerformanceTest()">⚡ Run Performance Test</button>
+                <div class="output" id="performanceOutput">Click to see performance comparison! ⏱️</div>
+
+                <h3>4️⃣ Immutability Pattern (React/Redux)</h3>
+                <div class="hinglish">
+                    React aur Redux mein immutability bahut important hai. State ko directly modify nahi karte!
+                </div>
+                <div class="code-block">
+<span class="comment">// ❌ Wrong way - Direct mutation</span>
+<span class="keyword">const</span> state = { count: <span class="number">0</span>, user: { name: <span class="string">"Raj"</span> } };
+state.count++; <span class="comment">// Bad!</span>
+
+<span class="comment">// ✅ Right way - Create new object</span>
+<span class="keyword">const</span> newState = {
+    ...state,
+    count: state.count + <span class="number">1</span>
+};
+
+<span class="comment">// ✅ Nested object update</span>
+<span class="keyword">const</span> updatedState = {
+    ...state,
+    user: {
+        ...state.user,
+        name: <span class="string">"Rahul"</span>
+    }
+};
+                </div>
+
+                <h3>5️⃣ Array of Objects Copy</h3>
+                <div class="code-block">
+<span class="keyword">let</span> users = [
+    { id: <span class="number">1</span>, name: <span class="string">"Amit"</span>, address: { city: <span class="string">"Delhi"</span> } },
+    { id: <span class="number">2</span>, name: <span class="string">"Priya"</span>, address: { city: <span class="string">"Mumbai"</span> } }
+];
+
+<span class="comment">// Shallow copy - Nested objects shared!</span>
+<span class="keyword">let</span> shallowCopy = [...users];
+shallowCopy[<span class="number">0</span>].address.city = <span class="string">"Pune"</span>;
+<span class="function">console.log</span>(users[<span class="number">0</span>].address.city); <span class="comment">// "Pune" ❌</span>
+
+<span class="comment">// Deep copy - Completely independent!</span>
+<span class="keyword">let</span> deepCopy = <span class="function">structuredClone</span>(users);
+deepCopy[<span class="number">0</span>].address.city = <span class="string">"Bangalore"</span>;
+<span class="function">console.log</span>(users[<span class="number">0</span>].address.city); <span class="comment">// "Delhi" ✅</span>
+                </div>
+
+                <h3>6️⃣ Lodash Deep Clone</h3>
+                <div class="hinglish">
+                    Production apps mein Lodash library ka _.cloneDeep() bahut popular hai!
+                </div>
+                <div class="code-block">
+<span class="comment">// Install: npm install lodash</span>
+<span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">'lodash'</span>;
+
+<span class="keyword">let</span> original = {
+    name: <span class="string">"Complex"</span>,
+    nested: { deep: { value: <span class="number">42</span> } },
+    func: <span class="keyword">function</span>() { <span class="keyword">return</span> <span class="string">"Hello"</span>; },
+    date: <span class="keyword">new</span> <span class="function">Date</span>()
+};
+
+<span class="keyword">let</span> clone = _.cloneDeep(original);
+<span class="comment">// Sab kuch perfectly copy ho jayega! 🎉</span>
+                </div>
+
+                <h3>7️⃣ Real-World Example: Shopping Cart</h3>
+                <button class="run-btn" onclick="runShoppingCartDemo()">🛒 Run Shopping Cart Demo</button>
+                <div class="output" id="cartOutput">Click to see real-world example! 🛍️</div>
+
+                <div class="success">
+                    🎓 Pro Tip: Production code mein structuredClone() ya Lodash's _.cloneDeep() use karo. JSON method sirf simple cases ke liye theek hai!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all contents
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // BASICS DEMO
+        function runBasicDemo() {
+            const output = document.getElementById('basicOutput');
+            const originalDiv = document.getElementById('basicOriginal');
+            const copyDiv = document.getElementById('basicCopy');
+            
+            let log = '🎬 Starting Basic Demo...\n\n';
+            
+            let original = {
+                name: "Rajesh",
+                age: 25,
+                city: "Mumbai"
+            };
+            
+            log += '📦 Original object created:\n';
+            log += JSON.stringify(original, null, 2) + '\n\n';
+            
+            let copy = original; // Reference copy
+            
+            log += '📋 Copy = original (Reference assignment)\n\n';
+            log += '🔍 Checking if both point to same object:\n';
+            log += `copy === original: ${copy === original}\n\n`;
+            
+            log += '✏️ Changing copy.name to "Suresh"...\n\n';
+            copy.name = "Suresh";
+            
+            log += '😱 SURPRISE! Original bhi change ho gaya:\n';
+            log += `original.name: "${original.name}"\n`;
+            log += `copy.name: "${copy.name}"\n\n`;
+            
+            log += '💡 Reason: Dono same object ko point kar rahe hain!\n';
+            log += '   Memory mein sirf ek object hai, do references hain.\n';
+            
+            // Update visual
+            originalDiv.innerHTML = `name: "${original.name}"<br>age: ${original.age}<br>city: "${original.city}"`;
+            originalDiv.style.background = 'rgba(255, 0, 0, 0.3)';
+            
+            copyDiv.innerHTML = `name: "${copy.name}"<br>age: ${copy.age}<br>city: "${copy.city}"`;
+            copyDiv.style.background = 'rgba(255, 0, 0, 0.3)';
+            
+            output.textContent = log;
+        }
+
+        function resetBasicDemo() {
+            const output = document.getElementById('basicOutput');
+            const originalDiv = document.getElementById('basicOriginal');
+            const copyDiv = document.getElementById('basicCopy');
+            
+            originalDiv.innerHTML = 'name: "Rajesh"<br>age: 25<br>city: "Mumbai"';
+            originalDiv.style.background = 'rgba(255,255,255,0.2)';
+            
+            copyDiv.innerHTML = 'name: "Rajesh"<br>age: 25<br>city: "Mumbai"';
+            copyDiv.style.background = 'rgba(255,255,255,0.2)';
+            
+            output.textContent = 'Click "Run Demo" to see the magic! ✨';
+        }
+
+        // SHALLOW COPY DEMO
+        function runShallowDemo() {
+            const output = document.getElementById('shallowOutput');
+            const originalDiv = document.getElementById('shallowOriginal');
+            const copyDiv = document.getElementById('shallowCopy');
+            
+            let log = '🎬 Starting Shallow Copy Demo...\n\n';
+            
+            let person = {
+                name: "Rahul",
+                age: 28,
+                address: {
+                    city: "Delhi",
+                    pincode: 110001
+                }
+            };
+            
+            log += '📦 Original object:\n';
+            log += JSON.stringify(person, null, 2) + '\n\n';
+            
+            let shallowCopy = { ...person };
+            
+            log += '📋 Shallow copy created using spread operator {...person}\n\n';
+            
+            log += '✏️ Test 1: Changing top-level property\n';
+            log += '   shallowCopy.name = "Rohan"\n\n';
+            shallowCopy.name = "Rohan";
+            
+            log += `   ✅ Original name: "${person.name}"\n`;
+            log += `   ✅ Copy name: "${shallowCopy.name}"\n`;
+            log += '   Result: Top-level independent hai! 🎉\n\n';
+            
+            log += '✏️ Test 2: Changing nested property\n';
+            log += '   shallowCopy.address.city = "Bangalore"\n\n';
+            shallowCopy.address.city = "Bangalore";
+            
+            log += `   ❌ Original city: "${person.address.city}"\n`;
+            log += `   ❌ Copy city: "${shallowCopy.address.city}"\n`;
+            log += '   Result: Nested object shared hai! 😱\n\n';
+            
+            log += '💡 Conclusion: Shallow copy sirf first level ko copy karta hai.\n';
+            log += '   Nested objects ka reference copy hota hai!\n';
+            
+            // Update visual
+            originalDiv.innerHTML = `
+                <div class="property">name: "${person.name}"</div>
+                <div class="property">age: ${person.age}</div>
+                <div class="property nested" style="background: rgba(255, 0, 0, 0.3);">
+                    address: {<br>
+                    &nbsp;&nbsp;city: "${person.address.city}"<br>
+                    &nbsp;&nbsp;pincode: ${person.address.pincode}<br>
+                    }
+                </div>
+            `;
+            
+            copyDiv.innerHTML = `
+                <div class="property" style="background: rgba(0, 255, 0, 0.3);">name: "${shallowCopy.name}"</div>
+                <div class="property">age: ${shallowCopy.age}</div>
+                <div class="property nested" style="background: rgba(255, 0, 0, 0.3);">
+                    address: {<br>
+                    &nbsp;&nbsp;city: "${shallowCopy.address.city}"<br>
+                    &nbsp;&nbsp;pincode: ${shallowCopy.address.pincode}<br>
+                    }
+                </div>
+            `;
+            
+            output.textContent = log;
+        }
+
+        function resetShallowDemo() {
+            const output = document.getElementById('shallowOutput');
+            const originalDiv = document.getElementById('shallowOriginal');
+            const copyDiv = document.getElementById('shallowCopy');
+            
+            originalDiv.innerHTML = `
+                <div class="property">name: "Rahul"</div>
+                <div class="property">age: 28</div>
+                <div class="property nested">
+                    address: {<br>
+                    &nbsp;&nbsp;city: "Delhi"<br>
+                    &nbsp;&nbsp;pincode: 110001<br>
+                    }
+                </div>
+            `;
+            
+            copyDiv.innerHTML = `
+                <div class="property">name: "Rahul"</div>
+                <div class="property">age: 28</div>
+                <div class="property nested">
+                    address: {<br>
+                    &nbsp;&nbsp;city: "Delhi"<br>
+                    &nbsp;&nbsp;pincode: 110001<br>
+                    }
+                </div>
+            `;
+            
+            output.textContent = 'Click "Run Demo" to see shallow copy in action! 🎬';
+        }
+
+        // DEEP COPY DEMO
+        function runDeepDemo() {
+            const output = document.getElementById('deepOutput');
+            const originalDiv = document.getElementById('deepOriginal');
+            const copyDiv = document.getElementById('deepCopy');
+            
+            let log = '🎬 Starting Deep Copy Demo...\n\n';
+            
+            let company = {
+                name: "TechCorp",
+                employees: 100,
+                ceo: {
+                    name: "Vikram",
+                    age: 45,
+                    address: {
+                        city: "Mumbai",
+                        country: "India"
+                    }
+                }
+            };
+            
+            log += '📦 Original complex object:\n';
+            log += JSON.stringify(company, null, 2) + '\n\n';
+            
+            let deepCopy = structuredClone(company);
+            
+            log += '📋 Deep copy created using structuredClone()\n\n';
+            
+            log += '✏️ Test 1: Changing top-level property\n';
+            log += '   deepCopy.name = "NewCorp"\n\n';
+            deepCopy.name = "NewCorp";
+            
+            log += `   ✅ Original name: "${company.name}"\n`;
+            log += `   ✅ Copy name: "${deepCopy.name}"\n`;
+            log += '   Result: Independent! 🎉\n\n';
+            
+            log += '✏️ Test 2: Changing deeply nested property\n';
+            log += '   deepCopy.ceo.address.city = "Bangalore"\n\n';
+            deepCopy.ceo.address.city = "Bangalore";
+            
+            log += `   ✅ Original city: "${company.ceo.address.city}"\n`;
+            log += `   ✅ Copy city: "${deepCopy.ceo.address.city}"\n`;
+            log += '   Result: Completely independent! 🎊\n\n';
+            
+            log += '💡 Conclusion: Deep copy mein sab kuch independent hai!\n';
+            log += '   Kisi bhi level par change karo, original safe rahega!\n';
+            
+            // Update visual
+            originalDiv.innerHTML = `
+                <div class="property">name: "${company.name}"</div>
+                <div class="property">employees: ${company.employees}</div>
+                <div class="property nested" style="background: rgba(0, 255, 0, 0.3);">
+                    ceo: {<br>
+                    &nbsp;&nbsp;name: "${company.ceo.name}"<br>
+                    &nbsp;&nbsp;age: ${company.ceo.age}<br>
+                    &nbsp;&nbsp;address: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;city: "${company.ceo.address.city}"<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;country: "${company.ceo.address.country}"<br>
+                    &nbsp;&nbsp;}<br>
+                    }
+                </div>
+            `;
+            
+            copyDiv.innerHTML = `
+                <div class="property" style="background: rgba(0, 255, 0, 0.3);">name: "${deepCopy.name}"</div>
+                <div class="property">employees: ${deepCopy.employees}</div>
+                <div class="property nested" style="background: rgba(0, 255, 0, 0.3);">
+                    ceo: {<br>
+                    &nbsp;&nbsp;name: "${deepCopy.ceo.name}"<br>
+                    &nbsp;&nbsp;age: ${deepCopy.ceo.age}<br>
+                    &nbsp;&nbsp;address: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;city: "${deepCopy.ceo.address.city}"<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;country: "${deepCopy.ceo.address.country}"<br>
+                    &nbsp;&nbsp;}<br>
+                    }
+                </div>
+            `;
+            
+            output.textContent = log;
+        }
+
+        function resetDeepDemo() {
+            const output = document.getElementById('deepOutput');
+            const originalDiv = document.getElementById('deepOriginal');
+            const copyDiv = document.getElementById('deepCopy');
+            
+            originalDiv.innerHTML = `
+                <div class="property">name: "TechCorp"</div>
+                <div class="property">employees: 100</div>
+                <div class="property nested">
+                    ceo: {<br>
+                    &nbsp;&nbsp;name: "Vikram"<br>
+                    &nbsp;&nbsp;age: 45<br>
+                    &nbsp;&nbsp;address: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;city: "Mumbai"<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;country: "India"<br>
+                    &nbsp;&nbsp;}<br>
+                    }
+                </div>
+            `;
+            
+            copyDiv.innerHTML = `
+                <div class="property">name: "TechCorp"</div>
+                <div class="property">employees: 100</div>
+                <div class="property nested">
+                    ceo: {<br>
+                    &nbsp;&nbsp;name: "Vikram"<br>
+                    &nbsp;&nbsp;age: 45<br>
+                    &nbsp;&nbsp;address: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;city: "Mumbai"<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;country: "India"<br>
+                    &nbsp;&nbsp;}<br>
+                    }
+                </div>
+            `;
+            
+            output.textContent = 'Click "Run Demo" to see deep copy magic! 🪄';
+        }
+
+        // OBJECT.ASSIGN DEMO
+        function runAssignDemo() {
+            const output = document.getElementById('assignOutput');
+            let log = '🎬 Starting Object.assign() Demo...\n\n';
+            
+            // Demo 1: Simple copy
+            log += '📝 Demo 1: Simple Object Copy\n';
+            log += '─────────────────────────────\n';
+            let original = { name: "Ankit", age: 25 };
+            let copy = Object.assign({}, original);
+            
+            log += 'Original: ' + JSON.stringify(original) + '\n';
+            log += 'Copy: ' + JSON.stringify(copy) + '\n';
+            
+            copy.name = "Sumit";
+            log += '\nAfter changing copy.name to "Sumit":\n';
+            log += `Original name: "${original.name}" ✅\n`;
+            log += `Copy name: "${copy.name}" ✅\n\n`;
+            
+            // Demo 2: Merging objects
+            log += '📝 Demo 2: Merging Multiple Objects\n';
+            log += '─────────────────────────────────────\n';
+            let obj1 = { a: 1, b: 2 };
+            let obj2 = { c: 3, d: 4 };
+            let obj3 = { e: 5, f: 6 };
+            
+            let merged = Object.assign({}, obj1, obj2, obj3);
+            
+            log += 'obj1: ' + JSON.stringify(obj1) + '\n';
+            log += 'obj2: ' + JSON.stringify(obj2) + '\n';
+            log += 'obj3: ' + JSON.stringify(obj3) + '\n';
+            log += 'Merged: ' + JSON.stringify(merged) + '\n\n';
+            
+            // Demo 3: Property overwrite
+            log += '📝 Demo 3: Property Overwrite\n';
+            log += '──────────────────────────────\n';
+            let base = { name: "Base", value: 1 };
+            let override = { value: 2, extra: "new" };
+            
+            let result = Object.assign({}, base, override);
+            
+            log += 'Base: ' + JSON.stringify(base) + '\n';
+            log += 'Override: ' + JSON.stringify(override) + '\n';
+            log += 'Result: ' + JSON.stringify(result) + '\n';
+            log += 'Note: "value" property override ho gaya! Last wala win karta hai.\n\n';
+            
+            // Demo 4: Default values
+            log += '📝 Demo 4: Default Values Pattern\n';
+            log += '──────────────────────────────────────\n';
+            function createUser(options) {
+                let defaults = {
+                    name: "Guest",
+                    age: 18,
+                    role: "user"
+                };
+                return Object.assign({}, defaults, options);
+            }
+            
+            let user1 = createUser({ name: "Raj" });
+            let user2 = createUser({ name: "Priya", age: 25 });
+            
+            log += 'User 1: ' + JSON.stringify(user1) + '\n';
+            log += 'User 2: ' + JSON.stringify(user2) + '\n\n';
+            
+            log += '💡 Summary:\n';
+            log += '• Object.assign() shallow copy karta hai\n';
+            log += '• Multiple objects merge kar sakte hain\n';
+            log += '• Same property name par last value win karti hai\n';
+            log += '• Default values pattern ke liye perfect hai!\n';
+            
+            output.textContent = log;
+        }
+
+        function resetAssignDemo() {
+            const output = document.getElementById('assignOutput');
+            output.textContent = 'Click "Run Demo" to see Object.assign() in action! 🚀';
+        }
+
+        // COMPARISON DEMO
+        function runComparisonDemo() {
+            const output = document.getElementById('comparisonOutput');
+            let log = '🔬 Complete Comparison of All Methods\n';
+            log += '═══════════════════════════════════════\n\n';
+            
+            let testObj = {
+                name: "Test",
+                value: 100,
+                nested: {
+                    deep: {
+                        data: "Important"
+                    }
+                }
+            };
+            
+            log += '📦 Test Object:\n';
+            log += JSON.stringify(testObj, null, 2) + '\n\n';
+            
+            // Method 1: Reference
+            log += '1️⃣ REFERENCE (=)\n';
+            log += '─────────────────\n';
+            let ref = testObj;
+            ref.nested.deep.data = "Changed by reference";
+            log += `Original affected: ${testObj.nested.deep.data === "Changed by reference"} ❌\n`;
+            log += 'Use case: Jab same object chahiye multiple places par\n\n';
+            
+            // Reset
+            testObj.nested.deep.data = "Important";
+            
+            // Method 2: Shallow Copy (Spread)
+            log += '2️⃣ SHALLOW COPY (Spread Operator)\n';
+            log += '──────────────────────────────────\n';
+            let shallow = { ...testObj };
+            shallow.name = "Changed";
+            shallow.nested.deep.data = "Changed by shallow";
+            log += `Top-level independent: ${testObj.name !== "Changed"} ✅\n`;
+            log += `Nested affected: ${testObj.nested.deep.data === "Changed by shallow"} ❌\n`;
+            log += 'Use case: Simple flat objects ke liye\n\n';
+            
+            // Reset
+            testObj.nested.deep.data = "Important";
+            
+            // Method 3: Object.assign()
+            log += '3️⃣ OBJECT.ASSIGN()\n';
+            log += '───────────────────\n';
+            let assigned = Object.assign({}, testObj);
+            assigned.name = "Changed";
+            assigned.nested.deep.data = "Changed by assign";
+            log += `Top-level independent: ${testObj.name !== "Changed"} ✅\n`;
+            log += `Nested affected: ${testObj.nested.deep.data === "Changed by assign"} ❌\n`;
+            log += 'Use case: Multiple objects merge karne ke liye\n\n';
+            
+            // Reset
+            testObj.nested.deep.data = "Important";
+            
+            // Method 4: Deep Copy (structuredClone)
+            log += '4️⃣ DEEP COPY (structuredClone)\n';
+            log += '───────────────────────────────\n';
+            let deep = structuredClone(testObj);
+            deep.name = "Changed";
+            deep.nested.deep.data = "Changed by deep";
+            log += `Top-level independent: ${testObj.name !== "Changed"} ✅\n`;
+            log += `Nested independent: ${testObj.nested.deep.data !== "Changed by deep"} ✅\n`;
+            log += 'Use case: Complex nested objects ke liye\n\n';
+            
+            // Method 5: JSON method
+            log += '5️⃣ DEEP COPY (JSON method)\n';
+            log += '───────────────────────────\n';
+            let jsonCopy = JSON.parse(JSON.stringify(testObj));
+            jsonCopy.nested.deep.data = "Changed by JSON";
+            log += `Completely independent: ${testObj.nested.deep.data !== "Changed by JSON"} ✅\n`;
+            log += 'Limitation: Functions, undefined, Date objects lost ho jate hain ⚠️\n\n';
+            
+            log += '🏆 WINNER for different scenarios:\n';
+            log += '• Simple objects: Spread operator {...obj}\n';
+            log += '• Merging objects: Object.assign()\n';
+            log += '• Complex nested: structuredClone()\n';
+            log += '• Same object needed: Reference (=)\n';
+            
+            output.textContent = log;
+        }
+
+        function resetComparisonDemo() {
+            const output = document.getElementById('comparisonOutput');
+            output.textContent = 'Click "Run All Methods" to see side-by-side comparison! 🔬';
+        }
+
+        // PERFORMANCE TEST
+        function runPerformanceTest() {
+            const output = document.getElementById('performanceOutput');
+            let log = '⚡ Performance Comparison Test\n';
+            log += '═══════════════════════════════\n\n';
+            
+            // Create test object
+            let testObj = {
+                name: "Performance Test",
+                data: Array(1000).fill(0).map((_, i) => ({
+                    id: i,
+                    value: Math.random(),
+                    nested: {
+                        deep: {
+                            value: i * 2
+                        }
+                    }
+                }))
+            };
+            
+            log += `Test object size: ${testObj.data.length} items with nested objects\n\n`;
+            
+            const iterations = 100;
+            
+            // Test 1: Spread operator
+            let start = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                let copy = { ...testObj };
+            }
+            let spreadTime = performance.now() - start;
+            log += `1️⃣ Spread Operator: ${spreadTime.toFixed(2)}ms\n`;
+            
+            // Test 2: Object.assign()
+            start = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                let copy = Object.assign({}, testObj);
+            }
+            let assignTime = performance.now() - start;
+            log += `2️⃣ Object.assign(): ${assignTime.toFixed(2)}ms\n`;
+            
+            // Test 3: JSON method
+            start = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                let copy = JSON.parse(JSON.stringify(testObj));
+            }
+            let jsonTime = performance.now() - start;
+            log += `3️⃣ JSON method: ${jsonTime.toFixed(2)}ms\n`;
+            
+            // Test 4: structuredClone
+            start = performance.now();
+            for (let i = 0; i < iterations; i++) {
+                let copy = structuredClone(testObj);
+            }
+            let structuredTime = performance.now() - start;
+            log += `4️⃣ structuredClone(): ${structuredTime.toFixed(2)}ms\n\n`;
+            
+            // Find fastest
+            let times = [
+                { name: 'Spread', time: spreadTime },
+                { name: 'Object.assign', time: assignTime },
+                { name: 'JSON', time: jsonTime },
+                { name: 'structuredClone', time: structuredTime }
+            ];
+            
+            times.sort((a, b) => a.time - b.time);
+            
+            log += '🏆 Performance Ranking:\n';
+            times.forEach((t, i) => {
+                log += `${i + 1}. ${t.name}: ${t.time.toFixed(2)}ms\n`;
+            });
+            
+            log += '\n💡 Note:\n';
+            log += '• Spread & Object.assign are fastest (shallow copy)\n';
+            log += '• structuredClone is slower but safest for deep copy\n';
+            log += '• JSON method is slowest and has limitations\n';
+            log += '• Choose based on your needs, not just speed!\n';
+            
+            output.textContent = log;
+        }
+
+        // SHOPPING CART DEMO
+        function runShoppingCartDemo() {
+            const output = document.getElementById('cartOutput');
+            let log = '🛒 Real-World Example: Shopping Cart\n';
+            log += '═══════════════════════════════════════\n\n';
+            
+            // Initial cart
+            let cart = {
+                user: {
+                    name: "Rajesh Kumar",
+                    email: "rajesh@example.com"
+                },
+                items: [
+                    { id: 1, name: "Laptop", price: 50000, quantity: 1 },
+                    { id: 2, name: "Mouse", price: 500, quantity: 2 }
+                ],
+                total: 51000
+            };
+            
+            log += '📦 Initial Cart:\n';
+            log += JSON.stringify(cart, null, 2) + '\n\n';
+            
+            // ❌ Wrong way - Direct mutation
+            log += '❌ WRONG WAY - Direct Mutation:\n';
+            log += '─────────────────────────────────\n';
+            let wrongCart = cart; // Reference!
+            wrongCart.items[0].quantity = 2;
+            log += 'Changed quantity in "copy"\n';
+            log += `Original cart affected: ${cart.items[0].quantity === 2} 😱\n\n`;
+            
+            // Reset
+            cart.items[0].quantity = 1;
+            
+            // ✅ Right way - Immutable update
+            log += '✅ RIGHT WAY - Immutable Update:\n';
+            log += '─────────────────────────────────\n';
+            
+            // Update item quantity
+            let updatedCart = {
+                ...cart,
+                items: cart.items.map(item => 
+                    item.id === 1 
+                        ? { ...item, quantity: 2 }
+                        : item
+                ),
+                total: cart.total + 50000
+            };
+            
+            log += 'Updated cart with increased quantity:\n';
+            log += JSON.stringify(updatedCart, null, 2) + '\n\n';
+            log += `Original cart unchanged: ${cart.items[0].quantity === 1} ✅\n\n`;
+            
+            // Add new item
+            log += '➕ Adding New Item:\n';
+            log += '───────────────────\n';
+            let cartWithNewItem = {
+                ...updatedCart,
+                items: [
+                    ...updatedCart.items,
+                    { id: 3, name: "Keyboard", price: 1500, quantity: 1 }
+                ],
+                total: updatedCart.total + 1500
+            };
+            
+            log += `Items in original cart: ${cart.items.length}\n`;
+            log += `Items in updated cart: ${cartWithNewItem.items.length}\n`;
+            log += 'Original cart safe hai! ✅\n\n';
+            
+            // Remove item
+            log += '➖ Removing Item:\n';
+            log += '──────────────────\n';
+            let cartAfterRemoval = {
+                ...cartWithNewItem,
+                items: cartWithNewItem.items.filter(item => item.id !== 2),
+                total: cartWithNewItem.total - 1000
+            };
+            
+            log += `Items after removal: ${cartAfterRemoval.items.length}\n`;
+            log += 'Mouse removed, original carts unchanged! ✅\n\n';
+            
+            log += '💡 Key Takeaways:\n';
+            log += '• Always create new objects for state updates\n';
+            log += '• Use spread operator for shallow properties\n';
+            log += '• Use map/filter for array updates\n';
+            log += '• Never mutate original state directly\n';
+            log += '• This pattern is essential for React/Redux!\n';
+            
+            output.textContent = log;
+        }
+    </script>
+</body>
+</html>
