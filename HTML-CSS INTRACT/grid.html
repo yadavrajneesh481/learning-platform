@@ -292,7 +292,7 @@
     
     <div class="section">
         <h2>🔍 Breaking Down the Code</h2>
-        <div class="code-example">grid-template-columns: repeat(2, 1fr);</div>
+        <div class="code-example"><pre><code>grid-template-columns: repeat(2, 1fr);</code></pre></div>
         <div class="explanation">
             <p><span class="highlight">grid-template-columns</span> = Defines column widths</p>
             <p><span class="highlight">repeat()</span> = Function to repeat a pattern</p>
@@ -315,7 +315,7 @@
     <div class="section">
         <h2>🎯 Basic Example: repeat(2, 1fr)</h2>
         <div class="explanation">This creates 2 columns, each taking equal space (50% each)</div>
-        <div class="code-example">grid-template-columns: repeat(2, 1fr);</div>
+        <div class="code-example"><pre><code>grid-template-columns: repeat(2, 1fr);</code></pre></div>
         <div class="grid-container grid-2-equal">
             <div class="grid-item">Item 1<br>(50% width)</div>
             <div class="grid-item">Item 2<br>(50% width)</div>
@@ -330,7 +330,7 @@
         <div class="comparison">
             <div>
                 <h3>3 Equal Columns</h3>
-                <div class="code-example">repeat(3, 1fr)</div>
+                <div class="code-example"><pre><code>repeat(3, 1fr)</code></pre></div>
                 <div class="grid-container grid-3-equal">
                     <div class="grid-item">33%</div>
                     <div class="grid-item">33%</div>
@@ -340,7 +340,7 @@
             
             <div>
                 <h3>4 Equal Columns</h3>
-                <div class="code-example">repeat(4, 1fr)</div>
+                <div class="code-example"><pre><code>repeat(4, 1fr)</code></pre></div>
                 <div class="grid-container grid-4-equal">
                     <div class="grid-item">25%</div>
                     <div class="grid-item">25%</div>
@@ -354,7 +354,7 @@
     <div class="section">
         <h2>⚖️ Different Fraction Sizes</h2>
         <div class="explanation">You don't have to use equal fractions!</div>
-        <div class="code-example">grid-template-columns: 1fr 2fr 1fr;</div>
+        <div class="code-example"><pre><code>grid-template-columns: 1fr 2fr 1fr;</code></pre></div>
         <div class="grid-container grid-mixed">
             <div class="grid-item">1fr<br>(25%)</div>
             <div class="grid-item">2fr<br>(50%)</div>
@@ -365,7 +365,7 @@
     <div class="section">
         <h2>🔧 Fixed vs Flexible</h2>
         <div class="explanation">You can mix fixed sizes with flexible ones!</div>
-        <div class="code-example">grid-template-columns: 200px 1fr 100px;</div>
+        <div class="code-example"><pre><code>grid-template-columns: 200px 1fr 100px;</code></pre></div>
         <div class="grid-container grid-fixed">
             <div class="grid-item">200px<br>(fixed)</div>
             <div class="grid-item">1fr<br>(flexible)</div>
@@ -376,7 +376,7 @@
     <div class="section">
         <h2>🔄 Auto-Fit Example</h2>
         <div class="explanation">This creates columns that automatically fit based on content size!</div>
-        <div class="code-example">grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));</div>
+        <div class="code-example"><pre><code>grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));</code></pre></div>
         <div class="grid-container grid-auto">
             <div class="grid-item">Auto 1</div>
             <div class="grid-item">Auto 2</div>

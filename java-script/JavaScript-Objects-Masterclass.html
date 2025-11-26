@@ -1,0 +1,2101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Objects - Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .topic-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .topic-section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .topic-section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .topic-section h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .theory-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .definition {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .hinglish-explanation {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .question-box {
+            background: #f1f8e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .question-box h4 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .interview-box {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #e91e63;
+        }
+
+        .interview-box h4 {
+            color: #c2185b;
+            margin-bottom: 10px;
+        }
+
+        code {
+            background: #263238;
+            color: #aed581;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        pre {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #667eea;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+        }
+
+        .back-to-top:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .nav-btn {
+                font-size: 12px;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 JavaScript Objects Masterclass</h1>
+            <p>Complete Guide with Theory, Coding Questions & Interview Prep</p>
+        </header>
+
+        <div class="nav-buttons" id="navButtons"></div>
+
+        <!-- Topic 1: CRUD Operations -->
+        <div class="topic-section" id="topic1">
+            <h2>1. CRUD Operations</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>CRUD</strong> stands for Create, Read, Update, and Delete. These are the four basic operations you can perform on objects in JavaScript. Creating means adding new properties, Reading means accessing property values, Updating means modifying existing properties, and Deleting means removing properties from an object.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    CRUD matlab Create, Read, Update aur Delete. Ye char basic operations hain jo hum objects pe perform karte hain. <br><br>
+                    <strong>Create:</strong> Jab hum naya object banate hain ya existing object mein naye properties add karte hain. Jaise ek student object banaya aur usme name, age add kiya.<br><br>
+                    <strong>Read:</strong> Jab hum object ki properties ko access karte hain ya read karte hain. Do tarike hain - dot notation (student.name) ya bracket notation (student['name']).<br><br>
+                    <strong>Update:</strong> Jab hum existing property ki value ko change karte hain. Jaise student.age = 25 karke age update kar diya.<br><br>
+                    <strong>Delete:</strong> Jab hum kisi property ko object se remove karte hain using delete keyword. Jaise delete student.age se age property hat jayegi.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Create an object representing a book with properties: title, author, year, and price.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Write a function that reads and returns all property values of an object as an array.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Create a function to update multiple properties of an object at once.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Write a function to delete all properties from an object that have null or undefined values.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Create a shopping cart object with methods to add items, remove items, and calculate total price.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Write a function that creates a new object by merging two objects, with the second object's properties overwriting the first.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Create a function to check if a property exists in an object before reading it.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Write a function to create a deep copy of an object and modify it without affecting the original.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Create a user management system with functions to create, read, update, and delete user profiles.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Write a function that takes an object and returns a new object with only the properties that pass a validation function.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What are the different ways to create an object in JavaScript?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: What is the difference between dot notation and bracket notation for accessing object properties?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: How does the delete operator work? What does it return?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: Can you delete a property that doesn't exist? What happens?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: What is the difference between setting a property to undefined and deleting it?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 2: Object Looping -->
+        <div class="topic-section" id="topic2">
+            <h2>2. Object Looping</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>Object Looping</strong> refers to iterating through the properties of an object. JavaScript provides several methods to loop through objects: for...in loop, Object.keys(), Object.values(), Object.entries(), and forEach with these methods. Each method serves different purposes depending on whether you need keys, values, or both.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    Object looping matlab object ki saari properties ko ek ek karke access karna. Arrays mein toh for loop simple hai, but objects mein keys aur values dono hote hain.<br><br>
+                    <strong>for...in loop:</strong> Ye sabse purana tarika hai. Isme object ki saari enumerable properties iterate hoti hain including prototype chain ki properties.<br><br>
+                    <strong>Object.keys():</strong> Ye object ki saari keys ka array return karta hai. Phir us array pe normal array methods use kar sakte hain.<br><br>
+                    <strong>Object.values():</strong> Ye sirf values ka array deta hai, keys nahi.<br><br>
+                    <strong>Object.entries():</strong> Ye [key, value] pairs ka array return karta hai. Destructuring ke saath bahut useful hai.<br><br>
+                    Performance aur use case ke hisaab se different methods use karte hain.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Write a function to count the number of properties in an object using for...in loop.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Create a function that returns an array of all keys in an object that have string values.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Write a function to sum all numeric values in an object.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Create a function that converts an object to a query string (e.g., {name: "John", age: 30} → "name=John&age=30").</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Write a function to find the key with the maximum value in an object.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Create a function that inverts an object (keys become values and values become keys).</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Write a function to filter an object based on a condition and return a new object.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Create a function that groups an array of objects by a specific property.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Write a function to merge multiple objects into one, combining values for duplicate keys into arrays.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Create a function that performs a deep iteration through nested objects and logs all leaf values.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What is the difference between for...in and Object.keys()?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: Does for...in loop iterate over inherited properties? How can you avoid that?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: What is the order of iteration in objects? Is it guaranteed?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: Can you use forEach directly on an object? Why or why not?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: What is the difference between Object.keys(), Object.values(), and Object.entries()?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 3: Object Methods and 'this' Keyword -->
+        <div class="topic-section" id="topic3">
+            <h2>3. Object Methods and 'this' Keyword</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>Object Methods</strong> are functions that are stored as object properties. The <strong>'this' keyword</strong> refers to the object that is executing the current function. In object methods, 'this' refers to the owner object. However, the value of 'this' can change depending on how the function is called (regular function call, method call, arrow function, etc.).
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    Object methods matlab wo functions jo object ke andar properties ki tarah store hote hain. Jaise ek calculator object mein add, subtract methods ho sakte hain.<br><br>
+                    <strong>'this' keyword:</strong> Ye bahut important hai. 'this' current execution context ko refer karta hai. Object method ke andar 'this' us object ko point karta hai jisne method call kiya.<br><br>
+                    <strong>Regular function:</strong> Agar normal function hai toh 'this' window object ko point karega (strict mode mein undefined).<br><br>
+                    <strong>Arrow function:</strong> Arrow functions mein 'this' lexically bind hota hai, matlab wo parent scope ka 'this' use karta hai, apna nahi banata.<br><br>
+                    <strong>Method call:</strong> obj.method() mein 'this' obj ko point karega.<br><br>
+                    <strong>bind, call, apply:</strong> Ye methods se hum explicitly 'this' set kar sakte hain.<br><br>
+                    'this' ka behavior samajhna JavaScript mein bahut zaroori hai kyunki ye context ke hisaab se change hota hai.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Create a person object with methods to get full name and introduce themselves using 'this'.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Write a counter object with increment, decrement, and reset methods that use 'this' to maintain state.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Create a calculator object with methods for basic arithmetic operations using 'this' to store the result.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Write a function that demonstrates the difference between regular function and arrow function regarding 'this'.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Create a bank account object with deposit, withdraw, and getBalance methods using 'this'.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Write a function that shows how 'this' behaves differently when a method is assigned to a variable.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Create a timer object with start, stop, and getElapsedTime methods using 'this'.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Write a function demonstrating the use of call(), apply(), and bind() to change 'this' context.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Create a shopping cart object with methods to add items, remove items, and calculate total using 'this'.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Write a function that shows how 'this' works in nested functions and how to preserve it.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What is 'this' keyword in JavaScript? How is its value determined?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: What is the difference between 'this' in regular functions vs arrow functions?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: Explain call(), apply(), and bind() methods. How do they differ?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: What happens to 'this' when you pass an object method as a callback?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: How does 'this' behave in strict mode vs non-strict mode?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 4: Object Destructuring -->
+        <div class="topic-section" id="topic4">
+            <h2>4. Object Destructuring</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>Object Destructuring</strong> is a JavaScript expression that allows you to extract multiple properties from an object and assign them to variables in a single statement. It provides a cleaner and more concise way to access object properties. You can also use default values, rename variables, and destructure nested objects.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    Object destructuring ek modern JavaScript feature hai jo ES6 mein aaya. Isse hum object ki properties ko easily variables mein extract kar sakte hain.<br><br>
+                    <strong>Basic syntax:</strong> const {name, age} = person; - Isse person object se name aur age properties nikal ke alag variables ban jayenge.<br><br>
+                    <strong>Renaming:</strong> const {name: userName} = person; - Agar hum property ka naam change karna chahte hain toh colon use karte hain.<br><br>
+                    <strong>Default values:</strong> const {name, age = 18} = person; - Agar property exist nahi karti toh default value use hogi.<br><br>
+                    <strong>Nested destructuring:</strong> Nested objects ko bhi destructure kar sakte hain: const {address: {city}} = person;<br><br>
+                    <strong>Rest operator:</strong> const {name, ...rest} = person; - Baki saari properties 'rest' object mein aa jayengi.<br><br>
+                    Ye code ko clean aur readable banata hai, especially function parameters mein bahut useful hai.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Destructure a user object to extract name, email, and age properties.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Write a function that uses destructuring in its parameters to accept an options object.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Destructure a nested object to extract city from address property.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Use destructuring with default values for properties that might not exist.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Destructure an object and rename the extracted variables.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Write a function that swaps two object properties using destructuring.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Use the rest operator with destructuring to separate specific properties from the rest.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Destructure an array of objects to extract specific properties from each object.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Create a function that uses destructuring to extract and validate required fields from an object.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Write a function that uses nested destructuring to extract deeply nested properties.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What is object destructuring? What are its benefits?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: How do you set default values in destructuring?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: Can you destructure and rename variables at the same time? How?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: What is the rest operator in destructuring? How is it different from spread?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: How do you destructure nested objects? What are the potential pitfalls?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 5: Shallow Copy vs Deep Copy -->
+        <div class="topic-section" id="topic5">
+            <h2>5. Shallow Copy vs Deep Copy</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>Shallow Copy</strong> creates a new object but copies only the first level of properties. Nested objects are still referenced, not copied. <strong>Deep Copy</strong> creates a completely independent copy of an object, including all nested objects. Changes to the deep copy don't affect the original object at any level.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    Ye concept bahut important hai JavaScript mein kyunki objects reference type hote hain.<br><br>
+                    <strong>Shallow Copy:</strong> Jab hum shallow copy banate hain toh sirf top level properties copy hoti hain. Agar object ke andar nested objects hain toh unka reference copy hota hai, actual object nahi. Matlab agar nested object change karoge toh original mein bhi change hoga.<br><br>
+                    <strong>Methods for shallow copy:</strong><br>
+                    - Object.assign({}, obj)<br>
+                    - Spread operator {...obj}<br>
+                    - Object.create()<br><br>
+                    <strong>Deep Copy:</strong> Isme poora object recursively copy hota hai. Nested objects bhi completely copy ho jate hain. Original aur copy completely independent ho jate hain.<br><br>
+                    <strong>Methods for deep copy:</strong><br>
+                    - JSON.parse(JSON.stringify(obj)) - Simple but limitations hain (functions, dates, undefined copy nahi hote)<br>
+                    - structuredClone() - Modern method, better than JSON method<br>
+                    - Lodash _.cloneDeep() - Library method, sabse reliable<br>
+                    - Custom recursive function<br><br>
+                    Interview mein ye bahut pucha jata hai kyunki ye JavaScript ki fundamental understanding check karta hai.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Create a shallow copy of an object using Object.assign() and demonstrate that nested objects are still referenced.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Create a shallow copy using the spread operator and show its limitations with nested objects.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Write a function to create a deep copy using JSON.parse(JSON.stringify()).</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Demonstrate the limitations of JSON method for deep copying (functions, dates, undefined).</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Write a custom recursive function to perform deep copy of an object.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Create a function that compares shallow copy vs deep copy behavior with nested objects.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Use structuredClone() to create a deep copy and compare it with JSON method.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Write a function that handles circular references while creating a deep copy.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Create a function that performs selective deep copy (only specific nested properties).</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Write a function to deep copy an array of objects with nested structures.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What is the difference between shallow copy and deep copy?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: What are the different ways to create a shallow copy of an object?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: What are the limitations of using JSON.parse(JSON.stringify()) for deep copying?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: What is structuredClone()? How is it better than JSON method?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: How would you handle circular references when creating a deep copy?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 6: Object.assign() -->
+        <div class="topic-section" id="topic6">
+            <h2>6. Object.assign()</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>Object.assign()</strong> is a method that copies all enumerable own properties from one or more source objects to a target object. It returns the modified target object. It's commonly used for object cloning, merging objects, and adding properties to objects. It performs a shallow copy, meaning nested objects are copied by reference.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    Object.assign() ek built-in method hai jo objects ko copy aur merge karne ke liye use hota hai.<br><br>
+                    <strong>Syntax:</strong> Object.assign(target, source1, source2, ...)<br><br>
+                    <strong>Working:</strong> Ye source objects ki saari enumerable properties ko target object mein copy kar deta hai. Agar same property multiple sources mein hai toh last wali value use hogi.<br><br>
+                    <strong>Use cases:</strong><br>
+                    1. <strong>Cloning:</strong> Object.assign({}, original) - Empty object mein copy karke clone banate hain<br>
+                    2. <strong>Merging:</strong> Object.assign({}, obj1, obj2) - Multiple objects ko merge karte hain<br>
+                    3. <strong>Adding properties:</strong> Object.assign(obj, {newProp: value})<br><br>
+                    <strong>Important points:</strong><br>
+                    - Ye shallow copy karta hai, nested objects reference se copy hote hain<br>
+                    - Target object modify ho jata hai aur return bhi hota hai<br>
+                    - Only enumerable aur own properties copy hoti hain<br>
+                    - Prototype chain ki properties copy nahi hoti<br>
+                    - Getters execute ho jate hain aur unki values copy hoti hain<br><br>
+                    Modern JavaScript mein spread operator {...obj} bhi same kaam karta hai aur zyada readable hai.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Use Object.assign() to clone an object.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Merge three objects using Object.assign() where later objects override earlier ones.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Write a function that uses Object.assign() to add default properties to an object.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Demonstrate that Object.assign() performs shallow copy with nested objects.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Use Object.assign() to create a new object by combining user input with default settings.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Write a function that uses Object.assign() to update multiple properties of an object at once.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Compare Object.assign() with spread operator for object merging.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Use Object.assign() to create a mixin pattern for adding methods to objects.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Write a function that uses Object.assign() to merge arrays stored as object properties.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Create a function that safely merges objects, handling null and undefined sources.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What does Object.assign() do? What does it return?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: Does Object.assign() modify the target object? How can you avoid that?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: What happens when multiple source objects have the same property?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: Does Object.assign() copy inherited properties? Why or why not?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: What is the difference between Object.assign() and spread operator?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 7: Object Freeze & Seal -->
+        <div class="topic-section" id="topic7">
+            <h2>7. Object Freeze & Seal</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>Object.freeze()</strong> makes an object immutable - you cannot add, delete, or modify properties. <strong>Object.seal()</strong> prevents adding or deleting properties but allows modification of existing properties. Both methods help in creating more predictable and secure code by controlling object mutability.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    Ye dono methods objects ko protect karne ke liye use hote hain, lekin different levels pe.<br><br>
+                    <strong>Object.freeze():</strong><br>
+                    - Object ko completely immutable bana deta hai<br>
+                    - Na naye properties add kar sakte, na delete kar sakte, na modify kar sakte<br>
+                    - Existing properties ki values change nahi ho sakti<br>
+                    - Property descriptors bhi change nahi ho sakte<br>
+                    - Shallow freeze hai - nested objects freeze nahi hote<br>
+                    - Object.isFrozen() se check kar sakte hain<br><br>
+                    <strong>Object.seal():</strong><br>
+                    - Object ko partially protect karta hai<br>
+                    - Naye properties add nahi kar sakte<br>
+                    - Existing properties delete nahi kar sakte<br>
+                    - BUT existing properties ki values modify kar sakte hain<br>
+                    - Property descriptors change nahi ho sakte (except writable)<br>
+                    - Object.isSealed() se check kar sakte hain<br><br>
+                    <strong>Comparison:</strong><br>
+                    - Freeze > Seal in terms of restriction<br>
+                    - Dono shallow operations hain<br>
+                    - Strict mode mein error throw hota hai, non-strict mein silently fail<br><br>
+                    <strong>Use cases:</strong><br>
+                    - Configuration objects ko protect karna<br>
+                    - Constants define karna<br>
+                    - Accidental modifications prevent karna<br>
+                    - Security improve karna
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Freeze an object and try to modify, add, and delete properties. Observe the behavior.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Seal an object and demonstrate that you can modify but not add or delete properties.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Write a function to deep freeze an object (including nested objects).</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Create a configuration object using Object.freeze() to prevent modifications.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Write a function that checks if an object is frozen, sealed, or extensible.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Demonstrate the difference between freeze and seal with practical examples.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Create a function that makes an object partially immutable (only specific properties).</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Write a function to deep seal an object recursively.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Use Object.preventExtensions() and compare it with freeze and seal.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Create a constants module using Object.freeze() for application-wide constants.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What is the difference between Object.freeze() and Object.seal()?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: Are freeze and seal operations deep or shallow? How would you implement deep freeze?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: What happens when you try to modify a frozen object in strict vs non-strict mode?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: Can you freeze an array? What are the implications?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: What is Object.preventExtensions()? How is it different from seal and freeze?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 8: Property Descriptors -->
+        <div class="topic-section" id="topic8">
+            <h2>8. Property Descriptors</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>Property Descriptors</strong> are objects that describe the configuration of a property. They contain metadata about properties including: value, writable (can be changed), enumerable (shows in loops), and configurable (can be deleted or modified). You can get descriptors using Object.getOwnPropertyDescriptor() and define them using Object.defineProperty().
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    Property descriptors JavaScript mein properties ki detailed configuration control karne ke liye use hote hain. Normally jab hum property create karte hain toh default settings hoti hain, but descriptors se hum fine-grained control kar sakte hain.<br><br>
+                    <strong>Types of descriptors:</strong><br>
+                    1. <strong>Data Descriptor:</strong> Value store karta hai<br>
+                    2. <strong>Accessor Descriptor:</strong> Getter/setter functions use karta hai<br><br>
+                    <strong>Attributes:</strong><br>
+                    - <strong>value:</strong> Property ki actual value<br>
+                    - <strong>writable:</strong> Kya value change ho sakti hai? (true/false)<br>
+                    - <strong>enumerable:</strong> Kya property loops mein dikhegi? (for...in, Object.keys)<br>
+                    - <strong>configurable:</strong> Kya property delete ho sakti hai ya descriptor change ho sakta hai?<br>
+                    - <strong>get:</strong> Getter function (accessor descriptor)<br>
+                    - <strong>set:</strong> Setter function (accessor descriptor)<br><br>
+                    <strong>Methods:</strong><br>
+                    - Object.getOwnPropertyDescriptor(obj, 'prop') - Descriptor get karna<br>
+                    - Object.defineProperty(obj, 'prop', descriptor) - Single property define karna<br>
+                    - Object.defineProperties(obj, descriptors) - Multiple properties define karna<br><br>
+                    <strong>Use cases:</strong><br>
+                    - Read-only properties banana (writable: false)<br>
+                    - Hidden properties banana (enumerable: false)<br>
+                    - Protected properties banana (configurable: false)<br>
+                    - Custom getters/setters implement karna<br><br>
+                    Ye advanced feature hai but powerful control deta hai object behavior pe.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Use Object.defineProperty() to create a read-only property (writable: false).</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Create a property that doesn't show up in for...in loops (enumerable: false).</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Write a function to get all property descriptors of an object.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Create a property that cannot be deleted (configurable: false).</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Use Object.defineProperties() to define multiple properties with custom descriptors at once.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Create a property with a getter that computes its value dynamically.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Write a function that makes all properties of an object read-only.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Create a property that validates its value using a setter.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Write a function to clone an object including its property descriptors.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Create a logging system using property descriptors that tracks all property changes.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What are property descriptors? What attributes do they have?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: What is the difference between data descriptors and accessor descriptors?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: What happens when you set writable to false? Can you still delete the property?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: What is the difference between enumerable: false and configurable: false?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: How do property descriptors relate to Object.freeze() and Object.seal()?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 9: Getters and Setters -->
+        <div class="topic-section" id="topic9">
+            <h2>9. Getters and Setters</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>Getters</strong> are methods that get the value of a specific property. <strong>Setters</strong> are methods that set the value of a specific property. They allow you to define custom behavior when accessing or modifying properties. They look like regular properties but are actually functions that execute when you access or assign values.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    Getters aur Setters special methods hain jo properties ki tarah behave karte hain but actually functions hain.<br><br>
+                    <strong>Getter (get):</strong><br>
+                    - Property ko read karte waqt execute hota hai<br>
+                    - Computed properties banane ke liye useful<br>
+                    - No parameters leta hai<br>
+                    - Value return karta hai<br>
+                    - Syntax: get propertyName() { return value; }<br><br>
+                    <strong>Setter (set):</strong><br>
+                    - Property ko assign karte waqt execute hota hai<br>
+                    - Validation aur side effects ke liye useful<br>
+                    - Exactly one parameter leta hai<br>
+                    - Kuch return nahi karta<br>
+                    - Syntax: set propertyName(value) { this._prop = value; }<br><br>
+                    <strong>Benefits:</strong><br>
+                    - Encapsulation - Internal implementation hide kar sakte hain<br>
+                    - Validation - Set karte waqt value validate kar sakte hain<br>
+                    - Computed properties - Dynamic values calculate kar sakte hain<br>
+                    - Side effects - Property change pe kuch aur bhi kar sakte hain<br>
+                    - Backward compatibility - Property ko method mein convert kar sakte hain<br><br>
+                    <strong>Common pattern:</strong><br>
+                    Private property ke liye underscore use karte hain (_name) aur public getter/setter banate hain (name).<br><br>
+                    <strong>Ways to define:</strong><br>
+                    1. Object literal mein: get name() {}<br>
+                    2. Class mein: get name() {}<br>
+                    3. Object.defineProperty() se<br><br>
+                    Modern JavaScript mein ye bahut common pattern hai, especially classes mein.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Create an object with a getter that returns a computed property (e.g., fullName from firstName and lastName).</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Write a setter that validates the value before setting it (e.g., age must be positive).</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Create a temperature object with getters and setters for Celsius and Fahrenheit that auto-convert.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Write a class with private properties (using _) and public getters/setters.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Create a rectangle object with width and height properties, and a getter for area.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Write a setter that logs every time a property is changed.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Create a user object with a password setter that hashes the password before storing.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Write a getter that caches its computed value for performance.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Create a bank account with a balance getter and deposit/withdraw setters with validation.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Write a class with a read-only property using only a getter (no setter).</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What are getters and setters? Why are they useful?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: What is the difference between a regular property and a getter/setter?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: Can you have a getter without a setter or vice versa?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: How do getters and setters help with encapsulation?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: What happens if you try to set a property that only has a getter?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 10: Constructor Functions -->
+        <div class="topic-section" id="topic10">
+            <h2>10. Constructor Functions</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>Constructor Functions</strong> are special functions used to create and initialize objects. They are called with the 'new' keyword and serve as templates for creating multiple objects with the same structure and behavior. By convention, constructor function names start with a capital letter. They use 'this' to set properties on the newly created object.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    Constructor functions JavaScript mein objects create karne ka traditional tarika hai (ES6 classes se pehle).<br><br>
+                    <strong>Syntax:</strong><br>
+                    function Person(name, age) {<br>
+                    &nbsp;&nbsp;this.name = name;<br>
+                    &nbsp;&nbsp;this.age = age;<br>
+                    }<br>
+                    const person1 = new Person('John', 25);<br><br>
+                    <strong>How it works:</strong><br>
+                    1. 'new' keyword se empty object create hota hai<br>
+                    2. Constructor function call hota hai with 'this' pointing to new object<br>
+                    3. Properties 'this' pe set hoti hain<br>
+                    4. Automatically new object return hota hai<br><br>
+                    <strong>Naming convention:</strong><br>
+                    - Capital letter se start karte hain (PascalCase)<br>
+                    - Ye indicate karta hai ki function constructor hai<br><br>
+                    <strong>Methods add karna:</strong><br>
+                    - Constructor ke andar: Memory inefficient (har object ka apna copy)<br>
+                    - Prototype pe: Memory efficient (shared across all instances)<br><br>
+                    <strong>'new' keyword kya karta hai:</strong><br>
+                    1. Empty object {} create karta hai<br>
+                    2. Object ki __proto__ ko constructor ke prototype se link karta hai<br>
+                    3. Constructor function execute karta hai with 'this' = new object<br>
+                    4. Object return karta hai (unless constructor explicitly kuch aur return kare)<br><br>
+                    <strong>Common mistakes:</strong><br>
+                    - 'new' keyword bhool jana - 'this' window object ban jata hai<br>
+                    - Methods constructor ke andar define karna - Memory waste<br>
+                    - Arrow functions use karna - 'this' binding nahi hoti<br><br>
+                    Modern JavaScript mein classes prefer kiye jate hain but constructor functions abhi bhi widely used hain aur interviews mein puche jate hain.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Create a constructor function for a Car with properties: brand, model, year.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Add a method to the Car prototype that returns car information.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Write a constructor function for a BankAccount with deposit and withdraw methods on the prototype.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Create multiple instances from a constructor and verify they share prototype methods.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Write a constructor function that validates input parameters before setting properties.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Demonstrate what happens when you call a constructor function without 'new' keyword.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Create a constructor function with private variables using closures.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Write a constructor function that returns a different object based on conditions.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Create a constructor function for a Counter with increment, decrement, and reset methods.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Write a function that checks if an object was created by a specific constructor.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What is a constructor function? How is it different from a regular function?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: What does the 'new' keyword do when calling a constructor function?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: Why should methods be added to the prototype instead of inside the constructor?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: What happens if you forget to use 'new' with a constructor function?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: Can you use arrow functions as constructors? Why or why not?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 11: Factory Functions -->
+        <div class="topic-section" id="topic11">
+            <h2>11. Factory Functions</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>Factory Functions</strong> are functions that return new objects. Unlike constructor functions, they don't require the 'new' keyword. They provide a simpler and more flexible way to create objects. Factory functions can easily implement private variables and methods using closures, making them useful for encapsulation.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    Factory functions objects create karne ka ek alternative tarika hai jo constructor functions se zyada flexible hai.<br><br>
+                    <strong>Basic syntax:</strong><br>
+                    function createPerson(name, age) {<br>
+                    &nbsp;&nbsp;return {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;name: name,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;age: age,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;greet() { return `Hi, I'm ${this.name}`; }<br>
+                    &nbsp;&nbsp;};<br>
+                    }<br>
+                    const person = createPerson('John', 25);<br><br>
+                    <strong>Key differences from constructors:</strong><br>
+                    - 'new' keyword ki zaroorat nahi<br>
+                    - 'this' keyword use nahi karte (usually)<br>
+                    - Explicitly object return karte hain<br>
+                    - Lowercase se naam start kar sakte hain<br><br>
+                    <strong>Advantages:</strong><br>
+                    1. <strong>Simplicity:</strong> 'new' keyword bhoolne ka risk nahi<br>
+                    2. <strong>Flexibility:</strong> Koi bhi object return kar sakte hain<br>
+                    3. <strong>Private variables:</strong> Closures use karke true private variables bana sakte hain<br>
+                    4. <strong>No prototype confusion:</strong> Simpler mental model<br>
+                    5. <strong>Composition:</strong> Multiple factories ko easily combine kar sakte hain<br><br>
+                    <strong>Private variables with closures:</strong><br>
+                    function createBankAccount(initialBalance) {<br>
+                    &nbsp;&nbsp;let balance = initialBalance; // Private!<br>
+                    &nbsp;&nbsp;return {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;deposit(amount) { balance += amount; },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;getBalance() { return balance; }<br>
+                    &nbsp;&nbsp;};<br>
+                    }<br><br>
+                    <strong>Disadvantages:</strong><br>
+                    - Memory: Har object ka apna methods ka copy (prototype sharing nahi)<br>
+                    - instanceof operator kaam nahi karta<br>
+                    - Slightly slower than constructor functions<br><br>
+                    <strong>When to use:</strong><br>
+                    - Jab true privacy chahiye<br>
+                    - Jab simple object creation chahiye<br>
+                    - Jab composition pattern use kar rahe ho<br>
+                    - Jab prototype chain ki zaroorat nahi<br><br>
+                    Modern JavaScript mein factory functions bahut popular hain, especially functional programming style mein.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Create a factory function that returns a person object with name and age properties.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Write a factory function with private variables using closures.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Create a factory function for a counter with private count variable and public methods.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Write a factory function that accepts configuration options with default values.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Create a factory function for a calculator with private history of operations.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Write a factory function that composes multiple smaller factories.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Create a factory function for a todo item with private ID generation.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Write a factory function that returns different objects based on input type.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Create a factory function for a bank account with private balance and transaction history.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Write a factory function that implements a simple state machine.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What is a factory function? How is it different from a constructor function?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: What are the advantages of factory functions over constructor functions?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: How do factory functions achieve true privacy using closures?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: What are the memory implications of using factory functions?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: When would you choose a factory function over a class?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 12: Prototype & OOP -->
+        <div class="topic-section" id="topic12">
+            <h2>12. Prototype & OOP</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>Prototype</strong> is a mechanism by which JavaScript objects inherit features from one another. Every JavaScript object has a prototype property that references another object. <strong>OOP (Object-Oriented Programming)</strong> in JavaScript is prototype-based, where objects can inherit properties and methods from other objects through the prototype chain.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    JavaScript mein OOP classical inheritance (Java, C++) se different hai - ye prototype-based inheritance use karta hai.<br><br>
+                    <strong>Prototype kya hai:</strong><br>
+                    - Har JavaScript object ke paas ek hidden property [[Prototype]] hoti hai<br>
+                    - Ye property kisi aur object ko point karti hai<br>
+                    - Jab hum koi property access karte hain jo object mein nahi hai, toh JavaScript prototype mein dhoondhta hai<br>
+                    - Ye chain tarike se chalta rehta hai (prototype chain)<br><br>
+                    <strong>Prototype vs __proto__ vs prototype property:</strong><br>
+                    - [[Prototype]]: Internal hidden property (actual prototype)<br>
+                    - __proto__: Getter/setter for [[Prototype]] (deprecated but widely used)<br>
+                    - prototype: Property on constructor functions (template for instances)<br><br>
+                    <strong>How it works:</strong><br>
+                    function Person(name) {<br>
+                    &nbsp;&nbsp;this.name = name;<br>
+                    }<br>
+                    Person.prototype.greet = function() {<br>
+                    &nbsp;&nbsp;return `Hi, I'm ${this.name}`;<br>
+                    };<br>
+                    const john = new Person('John');<br>
+                    // john.__proto__ === Person.prototype<br>
+                    // john.greet() works because of prototype chain<br><br>
+                    <strong>OOP Principles in JavaScript:</strong><br>
+                    1. <strong>Encapsulation:</strong> Data aur methods ko ek unit mein bundle karna<br>
+                    2. <strong>Inheritance:</strong> Prototype chain se properties inherit karna<br>
+                    3. <strong>Polymorphism:</strong> Same method different objects mein different behavior<br>
+                    4. <strong>Abstraction:</strong> Complex implementation hide karna<br><br>
+                    <strong>Benefits of prototype:</strong><br>
+                    - Memory efficient: Methods shared across all instances<br>
+                    - Dynamic: Runtime pe prototype modify kar sakte hain<br>
+                    - Inheritance: Easy code reuse<br><br>
+                    <strong>Common methods:</strong><br>
+                    - Object.getPrototypeOf(obj): Prototype get karna<br>
+                    - Object.setPrototypeOf(obj, proto): Prototype set karna<br>
+                    - obj.hasOwnProperty('prop'): Check if property is own or inherited<br>
+                    - obj.isPrototypeOf(other): Check prototype relationship<br><br>
+                    Ye JavaScript ki core concept hai aur interviews mein bahut important hai.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Create a constructor function and add methods to its prototype.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Write code to demonstrate prototype chain lookup.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Create a function that checks if a property is own or inherited.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Implement inheritance using prototypes (one constructor inheriting from another).</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Write code to add a method to Array.prototype that all arrays can use.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Create a function that prints the entire prototype chain of an object.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Demonstrate the difference between __proto__ and prototype property.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Write code to create an object with a null prototype.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Implement a simple inheritance hierarchy: Animal -> Dog -> Puppy.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Create a mixin pattern using prototypes to add functionality to multiple constructors.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What is a prototype in JavaScript? How does it work?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: What is the difference between __proto__ and prototype?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: How does JavaScript implement inheritance using prototypes?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: What is the prototype chain? How does property lookup work?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: Why is it not recommended to modify built-in prototypes like Array.prototype?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 13: Prototype Chain -->
+        <div class="topic-section" id="topic13">
+            <h2>13. Prototype Chain</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    The <strong>Prototype Chain</strong> is a series of links between objects through their prototypes. When you try to access a property on an object, JavaScript first looks on the object itself. If not found, it looks at the object's prototype, then the prototype's prototype, and so on, until it reaches Object.prototype (which has null as its prototype). This chain enables inheritance in JavaScript.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    Prototype chain JavaScript mein inheritance ka mechanism hai. Ye ek linked list ki tarah kaam karta hai.<br><br>
+                    <strong>How lookup works:</strong><br>
+                    1. Pehle object ki own properties mein dhoondhte hain<br>
+                    2. Nahi mila toh object.__proto__ mein dhoondhte hain<br>
+                    3. Phir __proto__.__proto__ mein<br>
+                    4. Ye chain tab tak chalti hai jab tak null nahi mil jata<br>
+                    5. Agar kahi nahi mila toh undefined return hota hai<br><br>
+                    <strong>Example chain:</strong><br>
+                    myArray -> Array.prototype -> Object.prototype -> null<br><br>
+                    <strong>Detailed example:</strong><br>
+                    const arr = [1, 2, 3];<br>
+                    // arr.push() - found in Array.prototype<br>
+                    // arr.toString() - found in Object.prototype<br>
+                    // arr.nonExistent - not found anywhere, returns undefined<br><br>
+                    <strong>Chain structure:</strong><br>
+                    Instance -> Constructor.prototype -> Object.prototype -> null<br><br>
+                    <strong>Important points:</strong><br>
+                    - Sabse end mein Object.prototype hota hai (almost always)<br>
+                    - Object.prototype ka prototype null hai<br>
+                    - Property lookup bottom-up hoti hai (instance se prototype ki taraf)<br>
+                    - Pehli match mil gayi toh search ruk jati hai<br>
+                    - Own properties prototype properties ko shadow/override kar deti hain<br><br>
+                    <strong>Performance consideration:</strong><br>
+                    - Long prototype chains slow ho sakte hain<br>
+                    - Own properties fast access hoti hain<br>
+                    - hasOwnProperty() use karke check kar sakte hain<br><br>
+                    <strong>Common patterns:</strong><br>
+                    - Inheritance implement karna<br>
+                    - Method sharing across instances<br>
+                    - Polyfills add karna<br><br>
+                    <strong>Debugging:</strong><br>
+                    - console.dir(obj) se pura chain dekh sakte hain<br>
+                    - Object.getPrototypeOf() se next prototype mil jata hai<br>
+                    - instanceof operator chain check karta hai<br><br>
+                    Ye concept JavaScript ki soul hai - isko samajhna bahut zaroori hai.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Write a function that traverses and prints the entire prototype chain of an object.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Create a custom inheritance chain: Vehicle -> Car -> SportsCar.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Demonstrate property shadowing in the prototype chain.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Write code to check at which level in the prototype chain a property exists.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Create an object with Object.create(null) and explain its prototype chain.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Implement a function that counts the length of the prototype chain.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Demonstrate how instanceof operator uses the prototype chain.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Write code showing the difference between own properties and inherited properties.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Create a function that lists all properties (own + inherited) of an object.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Implement a custom instanceof function that checks the prototype chain manually.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What is the prototype chain? How does it enable inheritance?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: What is at the end of every prototype chain?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: How does property lookup work in the prototype chain?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: What is property shadowing? How does it relate to the prototype chain?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: How can you create an object without a prototype chain?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 14: ES6 Classes -->
+        <div class="topic-section" id="topic14">
+            <h2>14. ES6 Classes</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>ES6 Classes</strong> are syntactic sugar over JavaScript's existing prototype-based inheritance. They provide a cleaner and more intuitive syntax for creating objects and implementing inheritance. Classes are declared using the 'class' keyword and can include a constructor, methods, static methods, getters, and setters. Despite the new syntax, they still use prototypes under the hood.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    ES6 Classes JavaScript mein 2015 mein aaye. Ye constructor functions ka modern aur clean syntax hai, but internally same prototype-based system use karte hain.<br><br>
+                    <strong>Basic syntax:</strong><br>
+                    class Person {<br>
+                    &nbsp;&nbsp;constructor(name, age) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;this.name = name;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;this.age = age;<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;greet() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;return `Hi, I'm ${this.name}`;<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    <strong>Key components:</strong><br>
+                    1. <strong>constructor:</strong> Special method jo object initialize karta hai (optional)<br>
+                    2. <strong>Methods:</strong> Automatically prototype pe add ho jate hain<br>
+                    3. <strong>Static methods:</strong> Class pe directly call hote hain, instances pe nahi<br>
+                    4. <strong>Getters/Setters:</strong> get aur set keywords se define karte hain<br><br>
+                    <strong>Important points:</strong><br>
+                    - Classes hoisted nahi hote (temporal dead zone)<br>
+                    - Strict mode mein automatically run hote hain<br>
+                    - 'new' keyword zaroori hai, bina error aayega<br>
+                    - Methods non-enumerable hote hain by default<br>
+                    - Class declarations aur expressions dono possible hain<br><br>
+                    <strong>Class vs Constructor Function:</strong><br>
+                    - Syntax: Classes zyada readable aur clean<br>
+                    - Hoisting: Functions hoist hote hain, classes nahi<br>
+                    - Strict mode: Classes mein automatic, functions mein manual<br>
+                    - 'new' required: Classes mein mandatory, functions mein optional<br>
+                    - Under the hood: Dono same prototype system use karte hain<br><br>
+                    <strong>Class expressions:</strong><br>
+                    const Person = class {<br>
+                    &nbsp;&nbsp;// class body<br>
+                    };<br><br>
+                    <strong>Benefits:</strong><br>
+                    - Cleaner syntax<br>
+                    - Better for inheritance (extends keyword)<br>
+                    - More familiar for developers from other languages<br>
+                    - Better tooling support<br><br>
+                    Modern JavaScript projects mein classes standard ban gaye hain.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Create a simple Person class with constructor and methods.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Write a class with static methods and demonstrate their usage.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Create a class with getters and setters for computed properties.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Write a class that validates constructor parameters.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Create a BankAccount class with private-like properties using naming conventions.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Write a class expression and compare it with class declaration.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Create a class with multiple methods that use 'this' to access properties.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Write a class that demonstrates method chaining.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Create a Calculator class with static utility methods.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Write a class that converts a constructor function to ES6 class syntax.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What are ES6 classes? Are they true classes or syntactic sugar?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: What is the difference between class declarations and class expressions?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: Are classes hoisted in JavaScript? Why or why not?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: What is the difference between static methods and instance methods?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: How do ES6 classes differ from constructor functions?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 15: Class Inheritance -->
+        <div class="topic-section" id="topic15">
+            <h2>15. Class Inheritance</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>Class Inheritance</strong> allows a class to inherit properties and methods from another class using the 'extends' keyword. The child class (subclass) inherits from the parent class (superclass). The 'super' keyword is used to call the parent class's constructor and methods. This enables code reuse and creates hierarchical relationships between classes.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    Class inheritance ES6 mein bahut clean aur simple ho gaya hai 'extends' keyword ki wajah se.<br><br>
+                    <strong>Basic syntax:</strong><br>
+                    class Animal {<br>
+                    &nbsp;&nbsp;constructor(name) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;this.name = name;<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;speak() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;return `${this.name} makes a sound`;<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    class Dog extends Animal {<br>
+                    &nbsp;&nbsp;constructor(name, breed) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;super(name); // Parent constructor call<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;this.breed = breed;<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;speak() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;return `${this.name} barks`;<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    <strong>'super' keyword:</strong><br>
+                    - Constructor mein: Parent class ka constructor call karta hai<br>
+                    - Methods mein: Parent class ke methods access karta hai<br>
+                    - super() call zaroori hai agar child class mein constructor hai<br>
+                    - super() se pehle 'this' use nahi kar sakte<br><br>
+                    <strong>Method overriding:</strong><br>
+                    - Child class parent ke methods ko override kar sakti hai<br>
+                    - super.methodName() se parent ka method call kar sakte hain<br>
+                    - Polymorphism implement karne ka tarika<br><br>
+                    <strong>Inheritance chain:</strong><br>
+                    - Multiple levels of inheritance possible<br>
+                    - GrandChild extends Child extends Parent<br>
+                    - Prototype chain automatically set up ho jati hai<br><br>
+                    <strong>Important rules:</strong><br>
+                    1. Agar child mein constructor hai toh super() call zaroori<br>
+                    2. super() call constructor mein sabse pehle honi chahiye<br>
+                    3. super() ke baad hi 'this' use kar sakte hain<br>
+                    4. Static methods bhi inherit hote hain<br><br>
+                    <strong>instanceof operator:</strong><br>
+                    - Child class ka instance parent class ka bhi instance hota hai<br>
+                    - dog instanceof Dog // true<br>
+                    - dog instanceof Animal // true<br><br>
+                    <strong>Benefits:</strong><br>
+                    - Code reuse<br>
+                    - Hierarchical organization<br>
+                    - Polymorphism<br>
+                    - Maintainability<br><br>
+                    <strong>Common patterns:</strong><br>
+                    - Base class with common functionality<br>
+                    - Specialized child classes<br>
+                    - Abstract-like base classes (no direct instantiation)<br><br>
+                    Ye OOP ka core concept hai aur real-world applications mein bahut use hota hai.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Create a Vehicle class and a Car class that extends it.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Implement method overriding in a child class.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Use super() to call parent class constructor and methods.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Create a three-level inheritance hierarchy: Shape -> Rectangle -> Square.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Write a child class that extends parent's method using super.methodName().</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Create an Employee class and Manager class with inheritance.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Demonstrate that static methods are also inherited.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Write code showing instanceof working with inheritance.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Create a base class with common validation logic inherited by multiple child classes.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Implement a polymorphic method that behaves differently in parent and child classes.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What is class inheritance? How does the 'extends' keyword work?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: What is the 'super' keyword? When and how is it used?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: What happens if you don't call super() in a child class constructor?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: Can you use 'this' before calling super()? Why or why not?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: How does method overriding work in class inheritance?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 16: Static Methods -->
+        <div class="topic-section" id="topic16">
+            <h2>16. Static Methods</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>Static Methods</strong> are methods that belong to the class itself rather than to instances of the class. They are defined using the 'static' keyword and are called directly on the class, not on instances. Static methods cannot access instance properties or methods using 'this', but they can access other static members. They're commonly used for utility functions and factory methods.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    Static methods class ke methods hain jo instances pe nahi, directly class pe call hote hain.<br><br>
+                    <strong>Syntax:</strong><br>
+                    class MathUtils {<br>
+                    &nbsp;&nbsp;static add(a, b) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;return a + b;<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br>
+                    MathUtils.add(5, 3); // 8<br><br>
+                    <strong>Key characteristics:</strong><br>
+                    - 'static' keyword se define karte hain<br>
+                    - Class name se call karte hain, instance se nahi<br>
+                    - 'this' instance ko refer nahi karta, class ko karta hai<br>
+                    - Instance properties access nahi kar sakte<br>
+                    - Other static methods access kar sakte hain<br><br>
+                    <strong>Common use cases:</strong><br>
+                    1. <strong>Utility functions:</strong> Math.max(), Array.from()<br>
+                    2. <strong>Factory methods:</strong> Objects create karne ke alternative ways<br>
+                    3. <strong>Helper functions:</strong> Class-related but instance-independent<br>
+                    4. <strong>Constants:</strong> Class-level constants define karna<br>
+                    5. <strong>Validation:</strong> Input validation before object creation<br><br>
+                    <strong>Example - Factory pattern:</strong><br>
+                    class User {<br>
+                    &nbsp;&nbsp;constructor(name, role) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;this.name = name;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;this.role = role;<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;static createAdmin(name) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;return new User(name, 'admin');<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;static createGuest(name) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;return new User(name, 'guest');<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    <strong>Static vs Instance methods:</strong><br>
+                    - Static: Class pe call, instance data access nahi<br>
+                    - Instance: Object pe call, instance data access kar sakte<br>
+                    - Static: Shared functionality<br>
+                    - Instance: Object-specific behavior<br><br>
+                    <strong>Inheritance:</strong><br>
+                    - Static methods bhi inherit hote hain<br>
+                    - Child class parent ki static methods use kar sakti hai<br>
+                    - Override bhi kar sakte hain<br><br>
+                    <strong>Real-world examples:</strong><br>
+                    - Array.from() - Array banane ka static method<br>
+                    - Object.keys() - Object ki keys nikalne ka static method<br>
+                    - Math.random() - Random number generate karna<br>
+                    - Date.now() - Current timestamp<br><br>
+                    <strong>When to use:</strong><br>
+                    - Jab functionality instance-specific nahi hai<br>
+                    - Utility functions ke liye<br>
+                    - Factory patterns implement karne ke liye<br>
+                    - Class-level operations ke liye<br><br>
+                    Static methods code organization aur reusability improve karte hain.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Create a class with static utility methods for string manipulation.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Write a class with static factory methods to create different types of objects.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Implement a static method that counts how many instances of a class have been created.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Create a MathUtils class with static methods for common mathematical operations.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Write a class with both static and instance methods, demonstrating their differences.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Implement a static validation method that checks data before object creation.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Create a class with static methods that call other static methods.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Write a static method that compares two instances of a class.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Demonstrate static method inheritance in a parent-child class relationship.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Create a Configuration class with static methods to manage app-wide settings.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What are static methods? How are they different from instance methods?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: Can you call a static method on an instance? What happens?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: Can static methods access instance properties? Why or why not?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: What does 'this' refer to inside a static method?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: When should you use static methods vs instance methods?</h4>
+            </div>
+        </div>
+
+        <!-- Topic 17: Encapsulation with Private Fields -->
+        <div class="topic-section" id="topic17">
+            <h2>17. Encapsulation with Private Fields</h2>
+            
+            <div class="theory-box">
+                <h3>📚 Definition (English)</h3>
+                <div class="definition">
+                    <strong>Encapsulation</strong> is the bundling of data and methods that operate on that data within a single unit (class), while restricting direct access to some components. <strong>Private Fields</strong> (introduced in ES2022) are class fields that cannot be accessed from outside the class. They are declared using the # prefix. This provides true privacy, unlike the older convention of using underscore (_) prefix.
+                </div>
+
+                <h3>🗣️ Deep Explanation (Hinglish)</h3>
+                <div class="hinglish-explanation">
+                    Encapsulation OOP ka ek fundamental principle hai - data aur methods ko ek saath bundle karna aur kuch cheezein private rakhna.<br><br>
+                    <strong>Private Fields (# syntax):</strong><br>
+                    class BankAccount {<br>
+                    &nbsp;&nbsp;#balance = 0; // Private field<br>
+                    &nbsp;&nbsp;#pin; // Private field<br><br>
+                    &nbsp;&nbsp;constructor(initialBalance, pin) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;this.#balance = initialBalance;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;this.#pin = pin;<br>
+                    &nbsp;&nbsp;}<br><br>
+                    &nbsp;&nbsp;deposit(amount) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;this.#balance += amount;<br>
+                    &nbsp;&nbsp;}<br><br>
+                    &nbsp;&nbsp;getBalance(pin) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;if (pin === this.#pin) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return this.#balance;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;throw new Error('Invalid PIN');<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    <strong>Key features:</strong><br>
+                    - # symbol se start hote hain<br>
+                    - Class ke bahar se access nahi ho sakte<br>
+                    - Syntax error agar access karne ki koshish karo<br>
+                    - True privacy provide karte hain<br>
+                    - Class definition mein declare karne zaroori hain<br><br>
+                    <strong>Private Methods:</strong><br>
+                    class Example {<br>
+                    &nbsp;&nbsp;#privateMethod() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;return 'This is private';<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;publicMethod() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;return this.#privateMethod();<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    <strong>Old convention (underscore):</strong><br>
+                    - _propertyName - Convention for "private"<br>
+                    - Actually public, just naming convention<br>
+                    - Developers ko signal karta hai ki touch mat karo<br>
+                    - Real privacy nahi hai<br><br>
+                    <strong>Comparison:</strong><br>
+                    | Feature | # (Private) | _ (Convention) |<br>
+                    |---------|-------------|----------------|<br>
+                    | True privacy | Yes | No |<br>
+                    | Syntax error if accessed | Yes | No |<br>
+                    | Browser support | Modern only | All |<br>
+                    | Inheritance | Not inherited | Inherited |<br><br>
+                    <strong>Benefits of encapsulation:</strong><br>
+                    1. <strong>Data hiding:</strong> Internal implementation hide kar sakte hain<br>
+                    2. <strong>Controlled access:</strong> Getters/setters se controlled access<br>
+                    3. <strong>Validation:</strong> Data set karte waqt validate kar sakte hain<br>
+                    4. <strong>Flexibility:</strong> Internal implementation change kar sakte hain without breaking external code<br>
+                    5. <strong>Security:</strong> Sensitive data protect kar sakte hain<br><br>
+                    <strong>Use cases:</strong><br>
+                    - Sensitive data (passwords, API keys)<br>
+                    - Internal state management<br>
+                    - Implementation details hiding<br>
+                    - Preventing accidental modifications<br><br>
+                    <strong>Static private fields:</strong><br>
+                    class Counter {<br>
+                    &nbsp;&nbsp;static #count = 0;<br>
+                    &nbsp;&nbsp;static increment() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;this.#count++;<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    Private fields modern JavaScript ka powerful feature hai jo true encapsulation enable karta hai.
+                </div>
+            </div>
+
+            <h3>💻 Coding Questions</h3>
+            
+            <div class="question-box">
+                <h4>Q1: Create a class with private fields using # syntax.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q2: Write a BankAccount class with private balance and methods to deposit/withdraw.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q3: Implement a User class with private password field and validation.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q4: Create a class with private methods that are only used internally.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q5: Write a Counter class with private static field to track total instances.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q6: Demonstrate the difference between # private fields and _ convention.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q7: Create a class with private fields and public getters/setters for controlled access.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q8: Write a class that validates data in private setters before storing.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q9: Implement a shopping cart with private items array and public methods to manage it.</h4>
+            </div>
+
+            <div class="question-box">
+                <h4>Q10: Create a class demonstrating that private fields are not inherited by child classes.</h4>
+            </div>
+
+            <h3>🎤 Interview Questions</h3>
+
+            <div class="interview-box">
+                <h4>Q1: What is encapsulation? Why is it important in OOP?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q2: What are private fields in JavaScript? How do you declare them?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q3: What is the difference between # private fields and _ naming convention?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q4: Can private fields be accessed by child classes? Why or why not?</h4>
+            </div>
+
+            <div class="interview-box">
+                <h4>Q5: What happens if you try to access a private field from outside the class?</h4>
+            </div>
+        </div>
+
+        <button class="back-to-top" onclick="scrollToTop()">↑</button>
+    </div>
+
+    <script>
+        const topics = [
+            'CRUD Operations',
+            'Object Looping',
+            'Object Methods & this',
+            'Object Destructuring',
+            'Shallow vs Deep Copy',
+            'Object.assign()',
+            'Object Freeze & Seal',
+            'Property Descriptors',
+            'Getters and Setters',
+            'Constructor Functions',
+            'Factory Functions',
+            'Prototype & OOP',
+            'Prototype Chain',
+            'ES6 Classes',
+            'Class Inheritance',
+            'Static Methods',
+            'Encapsulation with Private Fields'
+        ];
+
+        // Generate navigation buttons
+        const navButtons = document.getElementById('navButtons');
+        topics.forEach((topic, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'nav-btn';
+            btn.textContent = topic;
+            btn.onclick = () => showTopic(index + 1);
+            navButtons.appendChild(btn);
+        });
+
+        // Show specific topic
+        function showTopic(topicNumber) {
+            const sections = document.querySelectorAll('.topic-section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(`topic${topicNumber}`).classList.add('active');
+            scrollToTop();
+        }
+
+        // Scroll to top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Show first topic by default
+        showTopic(1);
+
+        // Show/hide back to top button
+        window.addEventListener('scroll', () => {
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.pageYOffset > 300) {
+                backToTop.style.display = 'block';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

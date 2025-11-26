@@ -302,13 +302,12 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px; margin: 15px 0;">
                 <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; border: 1px solid #007bff;">
                     <h4>🔵 Function Declaration</h4>
-                    <div class="code-example"><pre><code>function functionName(parameters) {
-
-  // function body
-
-  return value;
-
-}</code></pre></div>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; font-size: 12px; margin: 10px 0;">
+function functionName(parameters) {<br>
+&nbsp;&nbsp;// function body<br>
+&nbsp;&nbsp;return value;<br>
+}
+                    </div>
                     <p><strong>Hoisting:</strong> ✅ Fully hoisted</p>
                     <p><strong>this Binding:</strong> Dynamic</p>
                     <p><strong>Constructor:</strong> ✅ Can be used with 'new'</p>
@@ -316,13 +315,12 @@
                 </div>
                 <div style="background: #f0f8e7; padding: 15px; border-radius: 8px; border: 1px solid #28a745;">
                     <h4>🟢 Function Expression</h4>
-                    <div class="code-example"><pre><code>const functionName = function(parameters) {
-
-  // function body
-
-  return value;
-
-};</code></pre></div>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; font-size: 12px; margin: 10px 0;">
+const functionName = function(parameters) {<br>
+&nbsp;&nbsp;// function body<br>
+&nbsp;&nbsp;return value;<br>
+};
+                    </div>
                     <p><strong>Hoisting:</strong> ❌ Variable hoisted, function not</p>
                     <p><strong>this Binding:</strong> Dynamic</p>
                     <p><strong>Constructor:</strong> ✅ Can be used with 'new'</p>
@@ -330,15 +328,13 @@
                 </div>
                 <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffc107;">
                     <h4>🟡 Arrow Function (ES6)</h4>
-                    <div class="code-example"><pre><code>const functionName = (parameters) => {
-
-  // function body
-
-  return value;
-
-};
-
-// Short: const fn = x => x * 2;</code></pre></div>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; font-size: 12px; margin: 10px 0;">
+const functionName = (parameters) => {<br>
+&nbsp;&nbsp;// function body<br>
+&nbsp;&nbsp;return value;<br>
+};<br>
+// Short: const fn = x => x * 2;
+                    </div>
                     <p><strong>Hoisting:</strong> ❌ Not hoisted</p>
                     <p><strong>this Binding:</strong> Lexical (inherited)</p>
                     <p><strong>Constructor:</strong> ❌ Cannot use with 'new'</p>
@@ -346,15 +342,13 @@
                 </div>
                 <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border: 1px solid #dc3545;">
                     <h4>🔴 IIFE (Immediately Invoked)</h4>
-                    <div class="code-example"><pre><code>(function(parameters) {
-
-  // function body
-
-  // executes immediately
-
-})(arguments);
-
-// Arrow IIFE: (() => {})();</code></pre></div>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; font-size: 12px; margin: 10px 0;">
+(function(parameters) {<br>
+&nbsp;&nbsp;// function body<br>
+&nbsp;&nbsp;// executes immediately<br>
+})(arguments);<br>
+// Arrow IIFE: (() => {})();
+                    </div>
                     <p><strong>Hoisting:</strong> N/A (executes immediately)</p>
                     <p><strong>this Binding:</strong> Depends on type</p>
                     <p><strong>Constructor:</strong> ❌ Cannot use</p>
@@ -418,16 +412,13 @@
             <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;">
                 <h4>🔗 Function Composition:</h4>
                 <p>Multiple functions ko combine karke complex operations banana:</p>
-                <div class="code-example"><pre><code>const add = x => y => x + y;
-
-const multiply = x => y => x * y;
-
-const compose = (f, g) => x => f(g(x));
-
-
-const addThenMultiply = compose(multiply(2), add(3));
-
-console.log(addThenMultiply(5)); // (5 + 3) * 2 = 16</code></pre></div>
+                <div style="background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; margin: 10px 0;">
+const add = x => y => x + y;<br>
+const multiply = x => y => x * y;<br>
+const compose = (f, g) => x => f(g(x));<br><br>
+const addThenMultiply = compose(multiply(2), add(3));<br>
+console.log(addThenMultiply(5)); // (5 + 3) * 2 = 16
+                </div>
             </div>
             
             <h3>Callback Functions aur Event Handling:</h3>

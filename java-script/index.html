@@ -302,9 +302,9 @@
                 padding: 15px;
             }
         }
-    
 
-    
+
+
         /* Code Block Formatting - Universal Styles */
         pre {
             background: #282c34 !important;
@@ -344,15 +344,43 @@
         }
 
         /* Syntax Highlighting Classes */
-        .syntax-keyword { color: #c678dd; font-weight: bold; }
-        .syntax-tag { color: #e06c75; }
-        .syntax-attr { color: #d19a66; }
-        .syntax-string { color: #98c379; }
-        .syntax-comment { color: #5c6370; font-style: italic; }
-        .syntax-number { color: #d19a66; }
-        .syntax-function { color: #61afef; }
-        .syntax-operator { color: #56b6c2; }
-        .syntax-variable { color: #e5c07b; }
+        .syntax-keyword {
+            color: #c678dd;
+            font-weight: bold;
+        }
+
+        .syntax-tag {
+            color: #e06c75;
+        }
+
+        .syntax-attr {
+            color: #d19a66;
+        }
+
+        .syntax-string {
+            color: #98c379;
+        }
+
+        .syntax-comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+
+        .syntax-number {
+            color: #d19a66;
+        }
+
+        .syntax-function {
+            color: #61afef;
+        }
+
+        .syntax-operator {
+            color: #56b6c2;
+        }
+
+        .syntax-variable {
+            color: #e5c07b;
+        }
 
         /* Code Block Container */
         .code-block {
@@ -395,7 +423,10 @@
         }
 
         /* Inline Code */
-        p code, li code, td code, th code {
+        p code,
+        li code,
+        td code,
+        th code {
             background: rgba(0, 0, 0, 0.1);
             padding: 2px 6px;
             border-radius: 3px;
@@ -431,7 +462,6 @@
         pre::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.5);
         }
-
     </style>
 </head>
 
@@ -460,7 +490,7 @@
 
             <!-- Tutorial Navigation Grid -->
             <section class="tutorials-section">
-                <h2>🚀 INDEX  to Tutorials</h2>
+                <h2>🚀 INDEX to Tutorials</h2>
                 <div class="navigation-grid" id="navigation-grid">
                     <!-- Tutorial categories will be dynamically generated here -->
                 </div>
@@ -487,21 +517,22 @@
                     { title: "Day 5: Loops & Iterations", file: "day5-loops-iterations.html" },
                     { title: "Day 6: Functions in JavaScript", file: "day6-functions-javascript.html" },
                     { title: "Day 7: Scope & Hoisting", file: "day7-scope-hoisting.html" },
-                   
+
                 ]
             },
             week2: {
                 title: "🗓 Week 2: Working with Data & Modern Syntax",
                 description: "Days 8-14: Arrays, objects, ES6+ features, regex, and error handling",
                 tutorials: [
-                { title: "Day 8: Arrays Learning Page", file: "arrays_learning_page.html" },
+                    { title: "Day 8: Arrays Learning Page", file: "arrays_learning_page.html" },
                     { title: "Day 9: JavaScript Objects Learning", file: "js_objects_learning.html" },
                     { title: " JavaScript Objects In Detail", file: "objctes-details.html" },
+                    { title: " JavaScript-Objects-Masterclass", file: "JavaScript-Objects-Masterclass.html" },
                     { title: "Day 10-11: ES6+ Features Tutorial", file: "es6-features-tutorial.html" },
                     { title: "Day 10-11: Modern JS Features (Hindi)", file: "modern-js-features-hindi.html" },
-                    
+
                     { title: "Day 12: Array Methods Learning", file: "array_methods_learning.html" },
-                   { title: "Day 13: Regex Learning Tool", file: "regex_learning_tool.html" },
+                    { title: "Day 13: Regex Learning Tool", file: "regex_learning_tool.html" },
                     { title: "Day 14: Error Handling Tutorial", file: "error_handling_tutorial.html" }
                 ]
             },
@@ -512,7 +543,7 @@
                     { title: "Day 16: Promises Learning", file: "promises_learning.html" },
                     { title: "Day 17: Async/Await Tutorial", file: "async-await.html" },
                     { title: "Day 15,17: Async JS Learning", file: "async-js-learning.html" },
-              
+
                     { title: "Day 18-19: DOM Manipulation Tutorial", file: "dom_manipulation_tutorial.html" },
                     { title: "Day 20: Browser Storage Tutorial", file: "browser_storage_tutorial.html" },
                     { title: "Day 21: Fetch API & AJAX Tutorial", file: "fetch-api-ajax-tutorial.html" },

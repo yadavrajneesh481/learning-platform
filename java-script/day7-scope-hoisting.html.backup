@@ -420,35 +420,22 @@ export const publicVar = "Public";
                     <li><strong>Chain Traversal:</strong> Global scope tak chain follow karo</li>
                     <li><strong>ReferenceError:</strong> Agar global mein bhi nahi mila to error throw karo</li>
                 </ol>
-                <div class="code-example"><pre><code>let global = "I'm global";
-
-
-function outer() {
-
-  let outerVar = "I'm outer";
-
-  
-
-  function inner() {
-
-    let innerVar = "I'm inner";
-
-    console.log(innerVar);  // Found in current scope
-
-    console.log(outerVar);  // Found in parent scope
-
-    console.log(global);    // Found in global scope
-
-  }
-
-  
-
-  inner();
-
-}
-
-
-outer();</code></pre></div>
+                <div style="background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; margin: 10px 0;">
+let global = "I'm global";<br><br>
+function outer() {<br>
+&nbsp;&nbsp;let outerVar = "I'm outer";<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;function inner() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;let innerVar = "I'm inner";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;console.log(innerVar);  // Found in current scope<br>
+&nbsp;&nbsp;&nbsp;&nbsp;console.log(outerVar);  // Found in parent scope<br>
+&nbsp;&nbsp;&nbsp;&nbsp;console.log(global);    // Found in global scope<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;inner();<br>
+}<br><br>
+outer();
+                </div>
             </div>
             
             <div class="demo">

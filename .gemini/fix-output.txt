@@ -1,0 +1,93 @@
+≡ƒöº Starting code block structure fix...
+
+This will wrap code in <div class="code-example"> with proper <pre><code> tags
+
+  Skipped code-formatting-test.html - no issues found
+  Skipped ani.html - no issues found
+  Skipped clippart.html - no issues found
+  Skipped combinators.html - no issues found
+  Skipped CSS Shadow Effects.html - no issues found
+  Skipped display.html - no issues found
+  Skipped float.html - no issues found
+  Skipped grid.html - no issues found
+  Skipped index.html - no issues found
+  Skipped input.html - no issues found
+  Skipped overflow.html - no issues found
+  Skipped postion.html - no issues found
+  Skipped pseudo-class-element.html - no issues found
+  Skipped transtion-transform.html - no issues found
+  Skipped type_of_ani.html - no issues found
+  Skipped week1.html - no issues found
+  Skipped week2.html - no issues found
+  Skipped week3.html - no issues found
+  Skipped week4.html - no issues found
+  Skipped z-index.html - no issues found
+  Skipped index.html - no issues found
+  Skipped arrays_learning_page.html - no issues found
+  Skipped array_methods_learning.html - no issues found
+  Skipped async-await.html - no issues found
+  Skipped async-js-learning.html - no issues found
+  Skipped browser_storage_tutorial.html - no issues found
+  Skipped closures-advanced-functions.html - no issues found
+  Skipped day1-introduction-to-javascript.html - no issues found
+  Skipped day2-variables-data-types.html - no issues found
+  Skipped day3-operators-expressions.html - no issues found
+  Skipped day31-javascript-security.html - no issues found
+  Skipped day32-accessibility-a11y.html - no issues found
+  Skipped day33-build-tools-workflow.html - no issues found
+  Skipped day34-typescript-essentials.html - no issues found
+  Skipped day35-final-project-beyond.html - no issues found
+  Skipped day4-conditional-logic.html - no issues found
+  Skipped day5-loops-iterations.html - no issues found
+  Skipped day6-functions-javascript.html - no issues found
+  Skipped day7-scope-hoisting.html - no issues found
+  Skipped dom_manipulation_tutorial.html - no issues found
+  Skipped error_handling_tutorial.html - no issues found
+  Skipped es6-features-tutorial.html - no issues found
+  Skipped fetch-api-ajax-tutorial.html - no issues found
+  Skipped index.html - no issues found
+  Skipped JavaScript Design Patterns II.html - no issues found
+  Skipped JavaScript Design Patterns ΓÇö I.html - no issues found
+  Skipped JavaScript Modules - Interactive Learning Guide.html - no issues found
+  Skipped js_objects_learning.html - no issues found
+  Skipped modern-js-features-hindi.html - no issues found
+  Skipped objctes-details.html - no issues found
+  Skipped object-copy.html - no issues found
+  Skipped oop_learning_page.html - no issues found
+  Skipped Performance Optimization.html - no issues found
+  Skipped promises_learning.html - no issues found
+  Skipped prototypal-inheritance-tutorial.html - no issues found
+  Skipped regex_learning_tool.html - no issues found
+  Skipped Testing JavaScript.html - no issues found
+  Skipped this-context-tutorial.html - no issues found
+  Skipped day17-19.html - no issues found
+  Skipped day20-21.html - no issues found
+  Skipped day22-24.html - no issues found
+  Skipped day25-26.html - no issues found
+  Skipped day27-30.html - no issues found
+  Skipped day31.html - no issues found
+  Skipped day32-33.html - no issues found
+  Skipped day34-35.html - no issues found
+  Skipped day36-38.html - no issues found
+  Skipped day39-41.html - no issues found
+  Skipped day42-44.html - no issues found
+  Skipped day45.html - no issues found
+  Skipped day46-48.html - no issues found
+  Skipped day49-50.html - no issues found
+  Skipped day51-54.html - no issues found
+  Skipped day55-56.html - no issues found
+  Skipped day57.html - no issues found
+  Skipped day58-60end.html - no issues found
+  Skipped index.html - no issues found
+  Skipped jsx_components_tutorial.html - no issues found
+  Skipped modern-js-learning.html - no issues found
+  Skipped react-events-forms-tutorial.html - no issues found
+  Skipped react_foundations_learning.html - no issues found
+  Skipped react_lists_keys_conditional.html - no issues found
+  Skipped react_props_state_learning.html - no issues found
+
+============================================================
+Γ£à COMPLETE!
+≡ƒôè Files processed: 0
+≡ƒöº Code blocks fixed: 0
+============================================================

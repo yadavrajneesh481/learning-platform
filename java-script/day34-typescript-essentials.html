@@ -319,8 +319,7 @@
                 <div class="ts-vs-js">
                     <div class="js-code" style="padding: 15px; border-radius: 8px;">
                         <h4>📄 JavaScript (Dynamic)</h4>
-                        <div class="code-example">
-// JavaScript - No type checking
+                        <div class="code-example"><pre><code>// JavaScript - No type checking
 let name = "John";
 let age = 25;
 let isStudent = true;
@@ -331,12 +330,11 @@ function greet(person) {
 
 // Runtime error possible
 greet("string"); // TypeError!
-                        </div>
+                        </code></pre></div>
                     </div>
                     <div class="ts-code" style="padding: 15px; border-radius: 8px;">
                         <h4>📘 TypeScript (Static)</h4>
-                        <div class="code-example">
-// TypeScript - Type annotations
+                        <div class="code-example"><pre><code>// TypeScript - Type annotations
 let name: string = "John";
 let age: number = 25;
 let isStudent: boolean = true;
@@ -347,7 +345,7 @@ function greet(person: {name: string}): string {
 
 // Compile-time error prevention
 // greet("string"); // Error caught!
-                        </div>
+                        </code></pre></div>
                     </div>
                 </div>
                 
@@ -373,8 +371,7 @@ function greet(person: {name: string}): string {
                 <div class="ts-vs-js">
                     <div style="background: #e7f3ff; padding: 15px; border-radius: 8px;">
                         <h4>🔷 Interface</h4>
-                        <div class="code-example">
-interface User {
+                        <div class="code-example"><pre><code>interface User {
     id: number;
     name: string;
     email: string;
@@ -392,12 +389,11 @@ const user: User = {
     name: "John",
     email: "john@example.com"
 };
-                        </div>
+                        </code></pre></div>
                     </div>
                     <div style="background: #f0f8e7; padding: 15px; border-radius: 8px;">
                         <h4>🏷️ Type Alias</h4>
-                        <div class="code-example">
-type User = {
+                        <div class="code-example"><pre><code>type User = {
     id: number;
     name: string;
     email: string;
@@ -415,7 +411,7 @@ type ApiResponse&lt;T&gt; = {
     data: T;
     status: number;
 };
-                        </div>
+                        </code></pre></div>
                     </div>
                 </div>
                 
@@ -560,7 +556,7 @@ let theme: "light" | "dark" = "light";`
             
             output.innerHTML = `
                 <h4>📝 ${type.charAt(0).toUpperCase() + type.slice(1)} Types Example:</h4>
-                <div class="code-example">${examples[type]}</div>
+                <div class="code-example"><pre><code>${examples[type]}</code></pre></div>
             `;
         }
 
@@ -603,7 +599,7 @@ ${interfaceProperties.map(prop =>
             
             output.innerHTML = `
                 <h4>🔷 Generated Interface:</h4>
-                <div class="code-example">${interfaceCode}</div>
+                <div class="code-example"><pre><code>${interfaceCode}</code></pre></div>
                 <p><strong>Properties:</strong> ${interfaceProperties.length}</p>
             `;
         }
@@ -659,7 +655,7 @@ console.log(calculateTotal(shoppingCart));`;
             
             output.innerHTML = `
                 <h4>🔄 TypeScript Conversion:</h4>
-                <div class="code-example">${tsCode}</div>
+                <div class="code-example"><pre><code>${tsCode}</code></pre></div>
                 <div style="background: #d4edda; padding: 10px; border-radius: 5px; margin-top: 10px;">
                     <strong>✅ Improvements Added:</strong><br>
                     • Interface definitions for CartItem and User<br>

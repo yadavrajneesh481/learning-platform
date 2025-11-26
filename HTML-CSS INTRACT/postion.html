@@ -448,7 +448,7 @@
                 <strong>What it does:</strong> Normal document flow. Elements appear in the order they're written. <br>
                 <strong>Key point:</strong> top, right, bottom, left properties have NO effect!
             </div>
-            <div class="code-example">position: static; /* Default behavior */</div>
+            <div class="code-example"><pre><code>position: static; /* Default behavior */</code></pre></div>
             <div class="demo-container static-demo">
                 <div class="demo-box">Normal Box 1</div>
                 <div class="demo-box blue positioned">Static Box (positioned)</div>
@@ -463,7 +463,7 @@
                 <strong>What it does:</strong> Moves element relative to its normal position. <br>
                 <strong>Key point:</strong> Original space is preserved! Other elements don't move.
             </div>
-            <div class="code-example">position: relative;<br>top: 20px;<br>left: 30px;</div>
+            <div class="code-example"><pre><code>position: relative;<br>top: 20px;<br>left: 30px;</code></pre></div>
             <div class="demo-container relative-demo">
                 <div class="demo-box">Normal Box 1</div>
                 <div class="demo-box blue positioned">Relative Box</div>
@@ -478,7 +478,7 @@
                 <strong>What it does:</strong> Removes element from normal flow. Positions relative to nearest positioned parent. <br>
                 <strong>Key point:</strong> If no positioned parent exists, it uses the document body.
             </div>
-            <div class="code-example">position: absolute;<br>top: 50px;<br>right: 20px;</div>
+            <div class="code-example"><pre><code>position: absolute;<br>top: 50px;<br>right: 20px;</code></pre></div>
             <div class="demo-container absolute-demo">
                 <div class="demo-box">Normal Box 1</div>
                 <div class="demo-box blue positioned">Absolute Box</div>
@@ -493,7 +493,7 @@
                 <strong>What it does:</strong> Fixes element to the viewport (browser window). <br>
                 <strong>Key point:</strong> Stays in same position even when scrolling!
             </div>
-            <div class="code-example">position: fixed;<br>top: 10px;<br>right: 10px;</div>
+            <div class="code-example"><pre><code>position: fixed;<br>top: 10px;<br>right: 10px;</code></pre></div>
             <div class="demo-container">
                 <div class="demo-box">Normal Box 1</div>
                 <div class="demo-box green">Normal Box 2</div>
@@ -508,7 +508,7 @@
                 <strong>What it does:</strong> Switches between relative and fixed based on scroll position. <br>
                 <strong>Key point:</strong> Sticks to top when scrolling, but only within its container!
             </div>
-            <div class="code-example">position: sticky;<br>top: 0;</div>
+            <div class="code-example"><pre><code>position: sticky;<br>top: 0;</code></pre></div>
             <div class="demo-container sticky-demo">
                 <div class="demo-box">Normal Box 1</div>
                 <div class="demo-box blue positioned">Sticky Box - Scroll Me!</div>
@@ -532,7 +532,7 @@
                 <strong>What it does:</strong> Controls which element appears on top when they overlap. <br>
                 <strong>Key point:</strong> Higher z-index = appears on top. Only works with positioned elements!
             </div>
-            <div class="code-example">z-index: 1; /* Lower */<br>z-index: 2; /* Middle */<br>z-index: 3; /* Higher = on top */</div>
+            <div class="code-example"><pre><code>z-index: 1; /* Lower */<br>z-index: 2; /* Middle */<br>z-index: 3; /* Higher = on top */</code></pre></div>
             <div class="demo-container z-index-demo">
                 <div class="z-box red">z-index: 1</div>
                 <div class="z-box blue">z-index: 2</div>

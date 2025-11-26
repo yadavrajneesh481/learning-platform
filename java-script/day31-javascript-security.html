@@ -500,8 +500,7 @@ function validateInput(input, type) {
             
             <div class="csp-demo">
                 <h3>CSP Header Examples:</h3>
-                <div class="code-example">
-<!-- Basic CSP -->
+                <div class="code-example"><pre><code><!-- Basic CSP -->
 Content-Security-Policy: default-src 'self'
 
 <!-- Allow specific domains -->
@@ -515,7 +514,7 @@ Content-Security-Policy:
     img-src 'self' data: https:;
     connect-src 'self';
     font-src 'self';
-                </div>
+                </code></pre></div>
                 
                 <h4>CSP Directives:</h4>
                 <ul>
@@ -709,7 +708,7 @@ Content-Security-Policy:
             
             document.getElementById('csp-output').innerHTML = `
                 <h4>Generated CSP Header:</h4>
-                <div class="code-example">${csp}</div>
+                <div class="code-example"><pre><code>${csp}</code></pre></div>
                 <p><strong>Security Level:</strong> ${
                     document.getElementById('csp-inline').checked || document.getElementById('csp-eval').checked 
                     ? '⚠️ Medium (unsafe directives used)' 
