@@ -1,0 +1,2503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js Complete Study Notes - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #68a063;
+            --primary-dark: #4a7c47;
+            --secondary: #333333;
+            --accent: #f0db4f;
+            --bg-light: #f5f7fa;
+            --bg-white: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --border: #e1e8ed;
+            --success: #27ae60;
+            --info: #3498db;
+            --warning: #f39c12;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--bg-white);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px var(--shadow);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 15s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            background: var(--bg-light);
+            padding: 20px;
+            gap: 10px;
+            border-bottom: 3px solid var(--primary);
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text-dark);
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
+            border-color: var(--primary);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .topic-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .topic-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .topic-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .topic-title {
+            font-size: 1.8em;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topic-title::before {
+            content: '📚';
+            font-size: 1.2em;
+        }
+
+        .section-header {
+            font-size: 1.3em;
+            color: var(--secondary);
+            margin: 20px 0 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .simple-explanation {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid var(--info);
+        }
+
+        .definition {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #9c27b0;
+            font-style: italic;
+        }
+
+        .key-points {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid var(--warning);
+        }
+
+        .key-points ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .key-points li {
+            margin: 8px 0;
+            padding-left: 10px;
+        }
+
+        .key-points li::marker {
+            content: '✓ ';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .interview-section {
+            margin-top: 25px;
+        }
+
+        .question-card {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 5px solid var(--success);
+        }
+
+        .question {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question::before {
+            content: 'Q:';
+            color: var(--success);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .answer {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
+        }
+
+        .toggle-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .toggle-btn:hover {
+            background: #229954;
+            transform: scale(1.05);
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .example-box {
+            background: #fff9e6;
+            border: 2px dashed var(--warning);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: var(--warning);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .example-title::before {
+            content: '💡';
+        }
+
+        .search-box {
+            padding: 20px;
+            background: var(--bg-light);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(104, 160, 99, 0.1);
+        }
+
+        .progress-bar {
+            height: 5px;
+            background: var(--bg-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .nav-tabs {
+                padding: 15px;
+            }
+
+            .nav-tab {
+                padding: 10px 16px;
+                font-size: 0.9em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .topic-card {
+                padding: 20px;
+            }
+
+            .topic-title {
+                font-size: 1.5em;
+            }
+
+            .section-header {
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            header {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .subtitle {
+                font-size: 0.9em;
+            }
+
+            .nav-tabs {
+                padding: 10px;
+                gap: 8px;
+            }
+
+            .nav-tab {
+                padding: 8px 12px;
+                font-size: 0.85em;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .topic-card {
+                padding: 15px;
+            }
+
+            .code-block {
+                font-size: 0.8em;
+                padding: 15px;
+            }
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, var(--accent) 0%, var(--accent) 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 85%;
+            padding: 2px 4px;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 5px 5px 5px 0;
+        }
+
+        .badge-beginner {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-intermediate {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .badge-advanced {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px var(--shadow);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-5px);
+        }
+
+        .scroll-top.show {
+            display: flex;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>🚀 Node.js Complete Study Guide</h1>
+            <p class="subtitle">Interactive Learning Resource for Beginners to Advanced</p>
+        </header>
+
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput"
+                placeholder="🔍 Search topics, concepts, or keywords...">
+        </div>
+
+        <nav class="nav-tabs" id="navTabs">
+            <button class="nav-tab active" data-section="tutorial">Tutorial Basics</button>
+            <button class="nav-tab" data-section="async">Asynchronous</button>
+            <button class="nav-tab" data-section="modules">Modules</button>
+            <button class="nav-tab" data-section="core">Core Modules</button>
+            <button class="nav-tab" data-section="features">JS & TS Features</button>
+            <button class="nav-tab" data-section="apps">Building Apps</button>
+            <button class="nav-tab" data-section="database">Databases</button>
+            <button class="nav-tab" data-section="communication">Communication</button>
+            <button class="nav-tab" data-section="testing">Testing</button>
+            <button class="nav-tab" data-section="deployment">Deployment</button>
+            <button class="nav-tab" data-section="performance">Performance</button>
+            <button class="nav-tab" data-section="advanced">Advanced</button>
+        </nav>
+
+        <div class="content">
+            <!-- Tutorial Basics Section -->
+            <section class="topic-section active" id="tutorial">
+                <div class="topic-card">
+                    <h2 class="topic-title">Node.js Introduction</h2>
+                    <span class="badge badge-beginner">Beginner</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine you have a toy robot:</strong> This robot can only move when you wind it up
+                            (like websites that only work in browsers). But what if you want your robot to work anywhere
+                            - in your room, garden, or park?</p>
+                        <p><strong>Node.js is like giving your robot batteries!</strong> It lets JavaScript (the
+                            programming language) run anywhere on your computer, not just in web browsers. Before
+                            Node.js, JavaScript was like a fish that could only live in water (browsers). Node.js gave
+                            it legs to walk on land (servers and computers)!</p>
+                        <p><strong>Real-world example:</strong> Think of Netflix. When you click "Play", Node.js helps
+                            send the video from their computers to yours super fast. It's like a super-efficient
+                            delivery person who can handle thousands of deliveries at once!</p>
+                    </div>
+
+                    <div class="section-header">📖 Technical Definition</div>
+                    <div class="definition">
+                        <p><strong>Node.js</strong> is an open-source, cross-platform JavaScript runtime environment
+                            built on Chrome's V8 JavaScript engine. It enables JavaScript code execution outside of web
+                            browsers, primarily used for building scalable network applications and server-side
+                            programming. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight
+                            and efficient for data-intensive real-time applications.</p>
+                    </div>
+
+                    <div class="section-header">⭐ Key Points to Remember</div>
+                    <div class="key-points">
+                        <ul>
+                            <li><strong>JavaScript Everywhere:</strong> Write both frontend and backend code in the same
+                                language</li>
+                            <li><strong>Built on V8 Engine:</strong> Uses Google Chrome's super-fast JavaScript engine
+                            </li>
+                            <li><strong>Non-blocking I/O:</strong> Can handle many tasks at once without waiting</li>
+                            <li><strong>NPM Ecosystem:</strong> Access to over 1 million free packages/libraries</li>
+                            <li><strong>Single-threaded:</strong> Uses one main thread but handles multiple operations
+                                efficiently</li>
+                            <li><strong>Event-driven:</strong> Responds to events (like user clicks, file reads) as they
+                                happen</li>
+                            <li><strong>Cross-platform:</strong> Works on Windows, Mac, Linux, and more</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">Simple Node.js Example</div>
+                        <div class="code-block">
+                            // Your first Node.js program
+                            console.log("Hello from Node.js!");
+
+                            // Node.js can read files
+                            const fs = require('fs');
+                            fs.readFile('myfile.txt', 'utf8', (err, data) => {
+                            if (err) throw err;
+                            console.log(data);
+                            });
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <div class="section-header">💼 Interview Questions (Hinglish)</div>
+
+                        <div class="question-card">
+                            <div class="question">Node.js kya hai aur isko kyun use karte hain?</div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong> Node.js ek JavaScript runtime environment hai jo Chrome ke
+                                    V8 engine par based hai. Isko use karne ke main reasons hain:</p>
+                                <ul>
+                                    <li><strong>JavaScript har jagah:</strong> Frontend aur backend dono mein same
+                                        language use kar sakte hain</li>
+                                    <li><strong>Fast performance:</strong> V8 engine bahut fast hai, code ko machine
+                                        code mein compile karta hai</li>
+                                    <li><strong>Non-blocking:</strong> Ek time pe bahut saare requests handle kar sakta
+                                        hai bina wait kiye</li>
+                                    <li><strong>NPM:</strong> Lakhs ready-made packages milte hain jo development fast
+                                        banate hain</li>
+                                    <li><strong>Real-time apps:</strong> Chat apps, gaming, live streaming ke liye
+                                        perfect hai</li>
+                                </ul>
+                                <p><strong>Example:</strong> Agar aapko ek chat application banana hai jisme 10,000
+                                    users simultaneously chat kar rahe hain, to Node.js perfect choice hai kyunki ye
+                                    efficiently handle kar sakta hai.</p>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">Node.js aur browser JavaScript mein kya difference hai?</div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong> Main differences:</p>
+                                <ul>
+                                    <li><strong>Environment:</strong> Browser mein JavaScript sirf web pages ke andar
+                                        run hota hai. Node.js mein aap apne computer par kahin bhi run kar sakte ho</li>
+                                    <li><strong>DOM Access:</strong> Browser mein document, window objects milte hain.
+                                        Node.js mein ye nahi milte kyunki wahan HTML page nahi hota</li>
+                                    <li><strong>File System:</strong> Browser mein aap directly files read/write nahi
+                                        kar sakte security reasons se. Node.js mein full file system access hai</li>
+                                    <li><strong>Modules:</strong> Browser mein ES6 modules use hote hain. Node.js mein
+                                        CommonJS (require/module.exports) bhi use hota hai</li>
+                                    <li><strong>Global Objects:</strong> Browser mein 'window' global object hai.
+                                        Node.js mein 'global' object hai</li>
+                                </ul>
+                                <p><strong>Simple analogy:</strong> Browser JavaScript ek aquarium mein fish ki tarah
+                                    hai - safe but limited. Node.js ocean mein fish ki tarah hai - complete freedom!</p>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">V8 Engine kya hai aur Node.js isme kaise use hota hai?</div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong> V8 Engine Google ka open-source JavaScript engine hai jo C++
+                                    mein likha gaya hai.</p>
+                                <p><strong>Kaise kaam karta hai:</strong></p>
+                                <ul>
+                                    <li><strong>Compilation:</strong> JavaScript code ko directly machine code mein
+                                        convert karta hai (JIT - Just In Time compilation)</li>
+                                    <li><strong>Optimization:</strong> Code ko analyze karke optimize karta hai runtime
+                                        pe</li>
+                                    <li><strong>Memory Management:</strong> Automatic garbage collection provide karta
+                                        hai</li>
+                                    <li><strong>Fast Execution:</strong> Interpreted languages se kaafi fast hai</li>
+                                </ul>
+                                <p><strong>Node.js mein role:</strong> Node.js ne V8 engine ko liya aur uske saath
+                                    additional features add kiye jaise file system access, networking capabilities, etc.
+                                    Ye combination Node.js ko bahut powerful banata hai.</p>
+                                <p><strong>Real example:</strong> Jaise car mein engine hota hai jo power deta hai,
+                                    waise hi V8 engine Node.js ko power deta hai JavaScript code execute karne ke liye.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topic-card">
+                    <h2 class="topic-title">Event Loop & Architecture</h2>
+                    <span class="badge badge-intermediate">Intermediate</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine a restaurant with one waiter:</strong> The waiter (Event Loop) doesn't wait
+                            for one table's food to be cooked before taking another table's order. He takes orders from
+                            all tables, gives them to the kitchen, and when food is ready, he delivers it!</p>
+                        <p><strong>This is exactly how Node.js works!</strong> It doesn't wait for slow operations (like
+                            reading files or database queries) to finish. It starts them, moves to the next task, and
+                            comes back when they're done.</p>
+                        <p><strong>Real-world example:</strong> When you order food on Swiggy, the app doesn't freeze
+                            waiting for restaurant confirmation. It lets you browse other restaurants while processing
+                            your order in the background!</p>
+                    </div>
+
+                    <div class="section-header">📖 Technical Definition</div>
+                    <div class="definition">
+                        <p><strong>Event Loop</strong> is the core mechanism that enables Node.js to perform
+                            non-blocking I/O operations despite JavaScript being single-threaded. It continuously
+                            monitors the call stack and callback queue, executing callbacks when the call stack is
+                            empty. The architecture consists of phases: timers, pending callbacks, idle/prepare, poll,
+                            check, and close callbacks, each handling specific types of operations in a cyclical manner.
+                        </p>
+                    </div>
+
+                    <div class="section-header">⭐ Key Points to Remember</div>
+                    <div class="key-points">
+                        <ul>
+                            <li><strong>Single-threaded:</strong> One main thread handles all JavaScript execution</li>
+                            <li><strong>Non-blocking:</strong> Doesn't wait for slow operations to complete</li>
+                            <li><strong>Event-driven:</strong> Responds to events using callbacks</li>
+                            <li><strong>Phases:</strong> Event loop has 6 phases that execute in order</li>
+                            <li><strong>Callback Queue:</strong> Stores callbacks waiting to be executed</li>
+                            <li><strong>Libuv:</strong> C library that provides the event loop and async I/O</li>
+                            <li><strong>Microtasks:</strong> Promises and process.nextTick have higher priority</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">Event Loop Example</div>
+                        <div class="code-block">
+                            console.log('1: Start');
+
+                            setTimeout(() => {
+                            console.log('2: Timeout callback');
+                            }, 0);
+
+                            Promise.resolve().then(() => {
+                            console.log('3: Promise callback');
+                            });
+
+                            console.log('4: End');
+
+                            // Output order:
+                            // 1: Start
+                            // 4: End
+                            // 3: Promise callback (microtask - higher priority)
+                            // 2: Timeout callback (macrotask)
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <div class="section-header">💼 Interview Questions (Hinglish)</div>
+
+                        <div class="question-card">
+                            <div class="question">Event Loop kaise kaam karta hai? Step by step explain karo.</div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong> Event Loop ek continuous cycle hai jo 6 phases mein kaam
+                                    karta hai:</p>
+                                <ol>
+                                    <li><strong>Timers Phase:</strong> setTimeout aur setInterval ke callbacks execute
+                                        hote hain</li>
+                                    <li><strong>Pending Callbacks:</strong> Previous cycle ke pending I/O callbacks
+                                        execute hote hain</li>
+                                    <li><strong>Idle/Prepare:</strong> Internal use ke liye (developers ko concern nahi)
+                                    </li>
+                                    <li><strong>Poll Phase:</strong> New I/O events retrieve karta hai, I/O callbacks
+                                        execute karta hai</li>
+                                    <li><strong>Check Phase:</strong> setImmediate callbacks execute hote hain</li>
+                                    <li><strong>Close Callbacks:</strong> socket.on('close') jaise callbacks execute
+                                        hote hain</li>
+                                </ol>
+                                <p><strong>Important:</strong> Har phase ke beech mein microtasks (Promises,
+                                    process.nextTick) execute hote hain - inki priority sabse zyada hai!</p>
+                                <p><strong>Simple analogy:</strong> Jaise traffic signal ka cycle - red, yellow, green -
+                                    waise hi event loop apne phases mein cycle karta rehta hai.</p>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">Node.js single-threaded hai to multiple requests kaise handle karta
+                                hai?</div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong> Ye Node.js ka sabse interesting part hai!</p>
+                                <p><strong>Main thread single hai but:</strong></p>
+                                <ul>
+                                    <li><strong>Non-blocking I/O:</strong> Jab file read ya database query hoti hai,
+                                        Node.js wait nahi karta. Wo operation ko background mein daal deta hai aur next
+                                        request handle karne lagta hai</li>
+                                    <li><strong>Libuv Thread Pool:</strong> Heavy operations (file I/O, DNS lookup,
+                                        crypto) ke liye 4 background threads use hote hain by default</li>
+                                    <li><strong>Event Loop:</strong> Jab background operation complete hota hai,
+                                        callback queue mein aata hai aur event loop use execute karta hai</li>
+                                    <li><strong>Async Nature:</strong> Sab kuch asynchronous hai, isliye ek request
+                                        dusre ko block nahi karti</li>
+                                </ul>
+                                <p><strong>Example:</strong> Agar 1000 users simultaneously file download kar rahe hain,
+                                    to Node.js sabko start kar deta hai. Jaise hi kisi ka download complete hota hai,
+                                    usko response bhej deta hai. Kisi ko wait nahi karna padta!</p>
+                                <p><strong>Limitation:</strong> CPU-intensive tasks (heavy calculations) ke liye Node.js
+                                    best nahi hai kyunki wo main thread ko block kar dete hain.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Asynchronous Section -->
+            <section class="topic-section" id="async">
+                <div class="topic-card">
+                    <h2 class="topic-title">Asynchronous Programming</h2>
+                    <span class="badge badge-beginner">Beginner</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine you're cooking:</strong> You put rice on the stove (starts cooking), while it
+                            cooks, you chop vegetables, then you start the curry. You don't stand and stare at the rice
+                            until it's done - that would be synchronous (blocking)!</p>
+                        <p><strong>Asynchronous is multitasking!</strong> You start multiple tasks and handle them as
+                            they complete. In programming, this means your code doesn't wait for slow operations (file
+                            reading, API calls) to finish before moving to the next line.</p>
+                        <p><strong>Real-world example:</strong> When you send a WhatsApp message, you can immediately
+                            type another message. You don't wait for the first one to be delivered (that's async!). If
+                            you had to wait, that would be synchronous.</p>
+                    </div>
+
+                    <div class="section-header">📖 Technical Definition</div>
+                    <div class="definition">
+                        <p><strong>Asynchronous Programming</strong> is a programming paradigm that allows code
+                            execution to continue without waiting for long-running operations to complete. In Node.js,
+                            asynchronous operations are handled through callbacks, Promises, and async/await syntax,
+                            enabling non-blocking I/O operations and efficient resource utilization in single-threaded
+                            environments.</p>
+                    </div>
+
+                    <div class="section-header">⭐ Key Points to Remember</div>
+                    <div class="key-points">
+                        <ul>
+                            <li><strong>Non-blocking:</strong> Code continues executing without waiting</li>
+                            <li><strong>Callbacks:</strong> Functions passed as arguments, executed when operation
+                                completes</li>
+                            <li><strong>Promises:</strong> Objects representing eventual completion/failure of async
+                                operation</li>
+                            <li><strong>Async/Await:</strong> Syntactic sugar making async code look synchronous</li>
+                            <li><strong>Error Handling:</strong> Must handle errors differently than sync code</li>
+                            <li><strong>Callback Hell:</strong> Nested callbacks can become hard to read (pyramid of
+                                doom)</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">Three Ways to Handle Async</div>
+                        <div class="code-block">
+                            // 1. CALLBACKS (Old way)
+                            fs.readFile('file.txt', 'utf8', (err, data) => {
+                            if (err) console.error(err);
+                            else console.log(data);
+                            });
+
+                            // 2. PROMISES (Better)
+                            fs.promises.readFile('file.txt', 'utf8')
+                            .then(data => console.log(data))
+                            .catch(err => console.error(err));
+
+                            // 3. ASYNC/AWAIT (Best - Modern way)
+                            async function readMyFile() {
+                            try {
+                            const data = await fs.promises.readFile('file.txt', 'utf8');
+                            console.log(data);
+                            } catch (err) {
+                            console.error(err);
+                            }
+                            }
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <div class="section-header">💼 Interview Questions (Hinglish)</div>
+
+                        <div class="question-card">
+                            <div class="question">Callback, Promise aur Async/Await mein kya difference hai? Kab kaunsa
+                                use karein?</div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong> Ye teen tarike hain asynchronous code likhne ke:</p>
+                                <p><strong>1. CALLBACKS:</strong></p>
+                                <ul>
+                                    <li>Sabse purana tarika</li>
+                                    <li>Function ko argument mein pass karte hain</li>
+                                    <li>Problem: Callback hell (nested callbacks bahut complex ho jate hain)</li>
+                                    <li>Error handling mushkil hai</li>
+                                </ul>
+                                <p><strong>2. PROMISES:</strong></p>
+                                <ul>
+                                    <li>Callbacks se better, cleaner code</li>
+                                    <li>.then() aur .catch() use karte hain</li>
+                                    <li>Chaining possible hai</li>
+                                    <li>Error handling easier hai</li>
+                                </ul>
+                                <p><strong>3. ASYNC/AWAIT:</strong></p>
+                                <ul>
+                                    <li>Sabse modern aur readable</li>
+                                    <li>Synchronous code jaisa dikhta hai but asynchronous hai</li>
+                                    <li>try-catch se error handling</li>
+                                    <li>Debugging easy hai</li>
+                                </ul>
+                                <p><strong>Kab kya use karein:</strong> New projects mein hamesha async/await use karo.
+                                    Purane code mein callbacks mil sakte hain. Promises middle ground hai.</p>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">Promise.all() aur Promise.race() mein kya difference hai?</div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong></p>
+                                <p><strong>Promise.all():</strong></p>
+                                <ul>
+                                    <li>Multiple promises ko parallel run karta hai</li>
+                                    <li>Jab SAARE promises resolve ho jaye tab result deta hai</li>
+                                    <li>Agar ek bhi promise reject ho jaye, to pura reject ho jata hai</li>
+                                    <li>Result array mein milta hai same order mein</li>
+                                </ul>
+                                <div class="code-block">
+                                    const p1 = Promise.resolve(3);
+                                    const p2 = Promise.resolve(42);
+                                    const p3 = Promise.resolve("foo");
+
+                                    Promise.all([p1, p2, p3]).then(values => {
+                                    console.log(values); // [3, 42, "foo"]
+                                    });
+                                </div>
+                                <p><strong>Promise.race():</strong></p>
+                                <ul>
+                                    <li>Multiple promises ko parallel run karta hai</li>
+                                    <li>Jo PEHLA promise complete ho (resolve ya reject), uska result deta hai</li>
+                                    <li>Baaki promises ignore ho jate hain</li>
+                                    <li>Timeout implement karne ke liye useful</li>
+                                </ul>
+                                <p><strong>Use case:</strong> Promise.all() jab sabka result chahiye (jaise 3 APIs se
+                                    data fetch karna). Promise.race() jab fastest result chahiye (jaise timeout lagana).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topic-card">
+                    <h2 class="topic-title">Error Handling in Async Code</h2>
+                    <span class="badge badge-intermediate">Intermediate</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine you're ordering food online:</strong> Many things can go wrong - restaurant
+                            closed, delivery person unavailable, payment failed. Good apps show you proper error
+                            messages instead of just crashing!</p>
+                        <p><strong>In async code, errors happen differently:</strong> Since code doesn't wait, errors
+                            can occur later. You need special ways to catch them - like having a safety net for a
+                            trapeze artist!</p>
+                        <p><strong>Real-world example:</strong> When you try to upload a photo on Instagram and internet
+                            disconnects, the app catches the error and shows "Upload failed. Retry?" instead of
+                            crashing.</p>
+                    </div>
+
+                    <div class="section-header">📖 Technical Definition</div>
+                    <div class="definition">
+                        <p><strong>Asynchronous Error Handling</strong> involves managing errors that occur during
+                            non-blocking operations. In Node.js, this includes callback error-first pattern, Promise
+                            rejection handling with .catch() or try-catch with async/await, and global error handlers
+                            for unhandled rejections and uncaught exceptions.</p>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">Error Handling Patterns</div>
+                        <div class="code-block">
+                            // 1. CALLBACK ERROR-FIRST PATTERN
+                            fs.readFile('file.txt', (err, data) => {
+                            if (err) {
+                            console.error('Error reading file:', err);
+                            return;
+                            }
+                            console.log(data);
+                            });
+
+                            // 2. PROMISE ERROR HANDLING
+                            fetch('https://api.example.com/data')
+                            .then(response => response.json())
+                            .then(data => console.log(data))
+                            .catch(error => console.error('API Error:', error));
+
+                            // 3. ASYNC/AWAIT WITH TRY-CATCH
+                            async function fetchData() {
+                            try {
+                            const response = await fetch('https://api.example.com/data');
+                            const data = await response.json();
+                            console.log(data);
+                            } catch (error) {
+                            console.error('Error:', error.message);
+                            }
+                            }
+
+                            // 4. GLOBAL ERROR HANDLERS
+                            process.on('unhandledRejection', (reason, promise) => {
+                            console.error('Unhandled Rejection:', reason);
+                            });
+
+                            process.on('uncaughtException', (error) => {
+                            console.error('Uncaught Exception:', error);
+                            process.exit(1); // Exit gracefully
+                            });
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <div class="section-header">💼 Interview Questions (Hinglish)</div>
+
+                        <div class="question-card">
+                            <div class="question">Unhandled Promise Rejection kya hai aur isko kaise handle karein?
+                            </div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong> Jab Promise reject hota hai aur uske liye .catch() ya
+                                    try-catch nahi hai, to wo unhandled rejection ban jata hai.</p>
+                                <p><strong>Problem:</strong></p>
+                                <ul>
+                                    <li>Application crash ho sakta hai</li>
+                                    <li>Silent failures ho sakti hain (error dikhta nahi)</li>
+                                    <li>Debugging mushkil ho jati hai</li>
+                                    <li>Production mein serious issues create kar sakta hai</li>
+                                </ul>
+                                <p><strong>Solution:</strong></p>
+                                <div class="code-block">
+                                    // 1. Always use .catch()
+                                    myPromise()
+                                    .then(result => console.log(result))
+                                    .catch(err => console.error(err));
+
+                                    // 2. Use try-catch with async/await
+                                    async function myFunction() {
+                                    try {
+                                    await myPromise();
+                                    } catch (err) {
+                                    console.error(err);
+                                    }
+                                    }
+
+                                    // 3. Global handler (last resort)
+                                    process.on('unhandledRejection', (reason, promise) => {
+                                    console.error('Unhandled Rejection at:', promise);
+                                    console.error('Reason:', reason);
+                                    // Log to error tracking service
+                                    });
+                                </div>
+                                <p><strong>Best Practice:</strong> Har Promise ke saath error handling honi chahiye.
+                                    Global handler sirf backup ke liye use karo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Modules Section -->
+            <section class="topic-section" id="modules">
+                <div class="topic-card">
+                    <h2 class="topic-title">Node.js Modules System</h2>
+                    <span class="badge badge-beginner">Beginner</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine building with LEGO blocks:</strong> Instead of creating one giant piece, you
+                            make small blocks that fit together. Each block has a specific purpose - wheels, windows,
+                            doors. You can reuse these blocks in different projects!</p>
+                        <p><strong>Modules are like LEGO blocks for code!</strong> Instead of writing all code in one
+                            file, you split it into smaller files (modules). Each module does one thing well. You can
+                            use these modules in different projects.</p>
+                        <p><strong>Real-world example:</strong> Think of a smartphone - camera module, battery module,
+                            screen module. Each works independently but together they make a phone. If camera breaks,
+                            you replace just that module!</p>
+                    </div>
+
+                    <div class="section-header">📖 Technical Definition</div>
+                    <div class="definition">
+                        <p><strong>Node.js Modules</strong> are reusable blocks of code whose existence does not impact
+                            other code unless explicitly imported. Node.js supports two module systems: CommonJS
+                            (require/module.exports) and ES Modules (import/export). Modules provide encapsulation,
+                            reusability, and maintainability by organizing code into logical units with defined
+                            interfaces.</p>
+                    </div>
+
+                    <div class="section-header">⭐ Key Points to Remember</div>
+                    <div class="key-points">
+                        <ul>
+                            <li><strong>Three Types:</strong> Core modules (built-in), Local modules (your files),
+                                Third-party modules (npm packages)</li>
+                            <li><strong>CommonJS:</strong> Uses require() and module.exports (traditional Node.js way)
+                            </li>
+                            <li><strong>ES Modules:</strong> Uses import/export (modern JavaScript standard)</li>
+                            <li><strong>Encapsulation:</strong> Variables in modules are private by default</li>
+                            <li><strong>Caching:</strong> Modules are cached after first load for performance</li>
+                            <li><strong>NPM:</strong> Node Package Manager - world's largest software registry</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">Module Examples</div>
+                        <div class="code-block">
+                            // ========== COMMONJS (Traditional) ==========
+
+                            // math.js - Creating a module
+                            function add(a, b) {
+                            return a + b;
+                            }
+
+                            function subtract(a, b) {
+                            return a - b;
+                            }
+
+                            module.exports = { add, subtract };
+
+                            // app.js - Using the module
+                            const math = require('./math');
+                            console.log(math.add(5, 3)); // 8
+
+                            // ========== ES MODULES (Modern) ==========
+
+                            // math.mjs - Creating a module
+                            export function add(a, b) {
+                            return a + b;
+                            }
+
+                            export function subtract(a, b) {
+                            return a - b;
+                            }
+
+                            // app.mjs - Using the module
+                            import { add, subtract } from './math.mjs';
+                            console.log(add(5, 3)); // 8
+
+                            // ========== CORE MODULES ==========
+                            const fs = require('fs'); // File System
+                            const http = require('http'); // HTTP Server
+                            const path = require('path'); // Path utilities
+
+                            // ========== NPM MODULES ==========
+                            const express = require('express'); // Web framework
+                            const axios = require('axios'); // HTTP client
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <div class="section-header">💼 Interview Questions (Hinglish)</div>
+
+                        <div class="question-card">
+                            <div class="question">CommonJS aur ES Modules mein kya difference hai? Kaunsa better hai?
+                            </div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong></p>
+                                <p><strong>COMMONJS (require/module.exports):</strong></p>
+                                <ul>
+                                    <li>Node.js ka original module system</li>
+                                    <li>Synchronous loading - modules load hone tak wait karta hai</li>
+                                    <li>Runtime pe modules load hote hain</li>
+                                    <li>Dynamic imports possible - conditional require() kar sakte ho</li>
+                                    <li>File extension: .js</li>
+                                    <li>Default in Node.js</li>
+                                </ul>
+                                <p><strong>ES MODULES (import/export):</strong></p>
+                                <ul>
+                                    <li>JavaScript ka official standard (ECMAScript)</li>
+                                    <li>Asynchronous loading - non-blocking</li>
+                                    <li>Compile time pe analyze hote hain (tree-shaking possible)</li>
+                                    <li>Static imports - top level pe hone chahiye</li>
+                                    <li>File extension: .mjs ya package.json mein "type": "module"</li>
+                                    <li>Browser aur Node.js dono mein same syntax</li>
+                                </ul>
+                                <p><strong>Kaunsa better hai?</strong></p>
+                                <ul>
+                                    <li><strong>New projects:</strong> ES Modules use karo - future standard hai</li>
+                                    <li><strong>Old projects:</strong> CommonJS already use ho raha to continue karo
+                                    </li>
+                                    <li><strong>Libraries:</strong> Dono support karo for maximum compatibility</li>
+                                </ul>
+                                <p><strong>Practical tip:</strong> Modern Node.js (v12+) dono support karta hai. Tum
+                                    choose kar sakte ho based on project needs.</p>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">NPM kya hai aur package.json file ka kya role hai?</div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong></p>
+                                <p><strong>NPM (Node Package Manager):</strong></p>
+                                <ul>
+                                    <li>World's largest software registry - 2 million+ packages</li>
+                                    <li>Command-line tool jo Node.js ke saath aata hai</li>
+                                    <li>Packages install, update, remove karne ke liye</li>
+                                    <li>Dependencies manage karta hai automatically</li>
+                                </ul>
+                                <p><strong>package.json - Project ka blueprint:</strong></p>
+                                <ul>
+                                    <li><strong>Metadata:</strong> Project name, version, description, author</li>
+                                    <li><strong>Dependencies:</strong> Konse packages chahiye production mein</li>
+                                    <li><strong>DevDependencies:</strong> Development ke liye packages (testing,
+                                        linting)</li>
+                                    <li><strong>Scripts:</strong> Custom commands (npm start, npm test)</li>
+                                    <li><strong>Entry Point:</strong> Main file konsi hai</li>
+                                </ul>
+                                <div class="code-block">
+                                    {
+                                    "name": "my-app",
+                                    "version": "1.0.0",
+                                    "description": "My awesome app",
+                                    "main": "index.js",
+                                    "scripts": {
+                                    "start": "node index.js",
+                                    "test": "jest",
+                                    "dev": "nodemon index.js"
+                                    },
+                                    "dependencies": {
+                                    "express": "^4.18.0",
+                                    "mongoose": "^6.0.0"
+                                    },
+                                    "devDependencies": {
+                                    "nodemon": "^2.0.0",
+                                    "jest": "^27.0.0"
+                                    }
+                                    }
+                                </div>
+                                <p><strong>Kyun important hai:</strong> Agar tum project share karo, dusra person sirf
+                                    `npm install` run karega aur saare dependencies automatically install ho jayenge!
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">Module caching kya hai aur kaise kaam karta hai?</div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong> Module caching ek optimization technique hai jo Node.js use
+                                    karta hai.</p>
+                                <p><strong>Kaise kaam karta hai:</strong></p>
+                                <ul>
+                                    <li>Jab pehli baar module require karte ho, Node.js use load aur execute karta hai
+                                    </li>
+                                    <li>Result ko cache mein store kar leta hai</li>
+                                    <li>Agli baar same module require karo to cache se return kar deta hai</li>
+                                    <li>Module ka code dobara execute nahi hota</li>
+                                </ul>
+                                <div class="code-block">
+                                    // counter.js
+                                    let count = 0;
+                                    module.exports = {
+                                    increment: () => ++count,
+                                    getCount: () => count
+                                    };
+
+                                    // app.js
+                                    const counter1 = require('./counter');
+                                    const counter2 = require('./counter');
+
+                                    counter1.increment(); // count = 1
+                                    console.log(counter2.getCount()); // 1 (same instance!)
+
+                                    // Both counter1 and counter2 point to SAME cached module
+                                    console.log(counter1 === counter2); // true
+                                </div>
+                                <p><strong>Benefits:</strong></p>
+                                <ul>
+                                    <li>Performance improvement - fast loading</li>
+                                    <li>Memory efficient - ek hi copy memory mein</li>
+                                    <li>Singleton pattern automatically</li>
+                                </ul>
+                                <p><strong>Cache clear karna:</strong></p>
+                                <div class="code-block">
+                                    // Cache se module delete karna
+                                    delete require.cache[require.resolve('./counter')];
+
+                                    // Ab dobara require karne pe fresh load hoga
+                                    const freshCounter = require('./counter');
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Core Modules Section -->
+            <section class="topic-section" id="core">
+                <div class="topic-card">
+                    <h2 class="topic-title">Core Modules Overview</h2>
+                    <span class="badge badge-beginner">Beginner</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine a Swiss Army knife:</strong> It comes with many built-in tools - knife,
+                            scissors, screwdriver, bottle opener. You don't need to buy these separately!</p>
+                        <p><strong>Node.js Core Modules are like that!</strong> They're built-in tools that come with
+                            Node.js. You don't need to install them - just require and use! Each module does specific
+                            tasks like reading files, creating servers, working with paths, etc.</p>
+                        <p><strong>Real-world example:</strong> Your smartphone has built-in apps - Camera, Calculator,
+                            Clock. You don't download these, they come pre-installed. Core modules are pre-installed
+                            tools in Node.js!</p>
+                    </div>
+
+                    <div class="section-header">📖 Technical Definition</div>
+                    <div class="definition">
+                        <p><strong>Core Modules</strong> are built-in modules compiled into the Node.js binary,
+                            providing essential functionality for common programming tasks. They include modules for
+                            file system operations (fs), networking (http, https, net), path manipulation (path),
+                            operating system interaction (os), cryptography (crypto), streams, buffers, and more. These
+                            modules are optimized, well-tested, and maintained by the Node.js core team.</p>
+                    </div>
+
+                    <div class="section-header">⭐ Key Points to Remember</div>
+                    <div class="key-points">
+                        <ul>
+                            <li><strong>No Installation:</strong> Built-in, just require them</li>
+                            <li><strong>Optimized:</strong> Written in C/C++ for performance</li>
+                            <li><strong>Stable:</strong> Well-tested and maintained</li>
+                            <li><strong>Essential:</strong> Cover most common programming needs</li>
+                            <li><strong>Documentation:</strong> Official Node.js docs have complete reference</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">Common Core Modules</div>
+                        <div class="code-block">
+                            // ========== FILE SYSTEM (fs) ==========
+                            const fs = require('fs');
+
+                            // Read file
+                            fs.readFile('file.txt', 'utf8', (err, data) => {
+                            if (err) throw err;
+                            console.log(data);
+                            });
+
+                            // Write file
+                            fs.writeFile('output.txt', 'Hello World!', (err) => {
+                            if (err) throw err;
+                            console.log('File written!');
+                            });
+
+                            // ========== HTTP MODULE ==========
+                            const http = require('http');
+
+                            const server = http.createServer((req, res) => {
+                            res.writeHead(200, {'Content-Type': 'text/plain'});
+                            res.end('Hello World!');
+                            });
+
+                            server.listen(3000, () => {
+                            console.log('Server running on port 3000');
+                            });
+
+                            // ========== PATH MODULE ==========
+                            const path = require('path');
+
+                            console.log(path.join('/users', 'john', 'documents'));
+                            // /users/john/documents
+
+                            console.log(path.extname('file.txt')); // .txt
+
+                            // ========== OS MODULE ==========
+                            const os = require('os');
+
+                            console.log(os.platform()); // win32, darwin, linux
+                            console.log(os.cpus().length); // Number of CPU cores
+                            console.log(os.freemem()); // Free memory in bytes
+
+                            // ========== EVENTS MODULE ==========
+                            const EventEmitter = require('events');
+
+                            class MyEmitter extends EventEmitter {}
+                            const myEmitter = new MyEmitter();
+
+                            myEmitter.on('event', () => {
+                            console.log('Event occurred!');
+                            });
+
+                            myEmitter.emit('event');
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topic-card">
+                    <h2 class="topic-title">File System (fs) Module</h2>
+                    <span class="badge badge-beginner">Beginner</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine a filing cabinet:</strong> You can open it, read documents, add new papers,
+                            delete old ones, organize folders. The fs module lets your code do the same with computer
+                            files!</p>
+                        <p><strong>fs module is your file manager!</strong> It can read files (like opening a book),
+                            write files (like writing in a notebook), delete files (like throwing paper in trash),
+                            create folders, and much more.</p>
+                        <p><strong>Real-world example:</strong> When you save a Word document, the application uses file
+                            system operations to write data to your hard drive. Node.js fs module gives you the same
+                            power!</p>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">File System Operations</div>
+                        <div class="code-block">
+                            const fs = require('fs');
+                            const fsPromises = require('fs').promises;
+
+                            // ========== READING FILES ==========
+
+                            // Async (callback)
+                            fs.readFile('input.txt', 'utf8', (err, data) => {
+                            if (err) throw err;
+                            console.log(data);
+                            });
+
+                            // Sync (blocking)
+                            const data = fs.readFileSync('input.txt', 'utf8');
+                            console.log(data);
+
+                            // Promise-based (modern)
+                            async function readFile() {
+                            try {
+                            const data = await fsPromises.readFile('input.txt', 'utf8');
+                            console.log(data);
+                            } catch (err) {
+                            console.error(err);
+                            }
+                            }
+
+                            // ========== WRITING FILES ==========
+
+                            // Write (overwrites existing)
+                            fs.writeFile('output.txt', 'Hello World!', (err) => {
+                            if (err) throw err;
+                            console.log('File written!');
+                            });
+
+                            // Append (adds to existing)
+                            fs.appendFile('log.txt', 'New log entry\n', (err) => {
+                            if (err) throw err;
+                            console.log('Log appended!');
+                            });
+
+                            // ========== FILE/DIRECTORY OPERATIONS ==========
+
+                            // Check if file exists
+                            fs.access('file.txt', fs.constants.F_OK, (err) => {
+                            console.log(err ? 'File does not exist' : 'File exists');
+                            });
+
+                            // Delete file
+                            fs.unlink('oldfile.txt', (err) => {
+                            if (err) throw err;
+                            console.log('File deleted!');
+                            });
+
+                            // Create directory
+                            fs.mkdir('newFolder', { recursive: true }, (err) => {
+                            if (err) throw err;
+                            console.log('Directory created!');
+                            });
+
+                            // Read directory contents
+                            fs.readdir('./', (err, files) => {
+                            if (err) throw err;
+                            console.log('Files:', files);
+                            });
+
+                            // Get file info
+                            fs.stat('file.txt', (err, stats) => {
+                            if (err) throw err;
+                            console.log('Size:', stats.size);
+                            console.log('Is file:', stats.isFile());
+                            console.log('Is directory:', stats.isDirectory());
+                            });
+
+                            // ========== STREAMS (for large files) ==========
+
+                            // Read stream
+                            const readStream = fs.createReadStream('large-file.txt', 'utf8');
+                            readStream.on('data', (chunk) => {
+                            console.log('Chunk:', chunk);
+                            });
+
+                            // Write stream
+                            const writeStream = fs.createWriteStream('output.txt');
+                            writeStream.write('Line 1\n');
+                            writeStream.write('Line 2\n');
+                            writeStream.end();
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <div class="section-header">💼 Interview Questions (Hinglish)</div>
+
+                        <div class="question-card">
+                            <div class="question">fs.readFile() aur fs.readFileSync() mein kya difference hai? Kaunsa
+                                use karna chahiye?</div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong></p>
+                                <p><strong>fs.readFile() - ASYNCHRONOUS:</strong></p>
+                                <ul>
+                                    <li>Non-blocking - file read hone tak code aage badhta rehta hai</li>
+                                    <li>Callback function use karta hai</li>
+                                    <li>Other operations block nahi hote</li>
+                                    <li>Production code ke liye recommended</li>
+                                    <li>Multiple files parallel mein read kar sakte ho</li>
+                                </ul>
+                                <div class="code-block">
+                                    fs.readFile('file.txt', 'utf8', (err, data) => {
+                                    console.log('File content:', data);
+                                    });
+                                    console.log('This runs immediately!');
+                                    // Output order:
+                                    // "This runs immediately!"
+                                    // "File content: ..."
+                                </div>
+                                <p><strong>fs.readFileSync() - SYNCHRONOUS:</strong></p>
+                                <ul>
+                                    <li>Blocking - file read hone tak wait karta hai</li>
+                                    <li>Direct value return karta hai</li>
+                                    <li>Baaki sab operations ruk jate hain</li>
+                                    <li>Sirf simple scripts ya startup code mein use karo</li>
+                                    <li>Server code mein AVOID karo</li>
+                                </ul>
+                                <div class="code-block">
+                                    const data = fs.readFileSync('file.txt', 'utf8');
+                                    console.log('File content:', data);
+                                    console.log('This runs after file is read');
+                                    // Output order:
+                                    // "File content: ..."
+                                    // "This runs after file is read"
+                                </div>
+                                <p><strong>Kaunsa use karein:</strong></p>
+                                <ul>
+                                    <li><strong>Production/Server:</strong> Hamesha async (readFile) use karo</li>
+                                    <li><strong>Simple scripts:</strong> Sync use kar sakte ho</li>
+                                    <li><strong>Config files:</strong> Startup pe sync OK hai</li>
+                                    <li><strong>Best:</strong> Promises/async-await use karo (fs.promises.readFile)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">Streams kya hain aur large files ke liye kyun use karte hain?</div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong> Streams data ko chunks (small pieces) mein process karne ka
+                                    tarika hai.</p>
+                                <p><strong>Simple analogy:</strong> Imagine ek bucket se dusre bucket mein paani
+                                    transfer karna hai:</p>
+                                <ul>
+                                    <li><strong>Without streams:</strong> Pura bucket uthao, le jao, dalo (heavy, slow)
+                                    </li>
+                                    <li><strong>With streams:</strong> Pipe laga do, paani flow hota rahega (efficient,
+                                        continuous)</li>
+                                </ul>
+                                <p><strong>Kyun use karein:</strong></p>
+                                <ul>
+                                    <li><strong>Memory efficient:</strong> Puri file memory mein load nahi hoti, chunks
+                                        process hote hain</li>
+                                    <li><strong>Fast:</strong> Processing start ho jati hai pehle chunk se hi</li>
+                                    <li><strong>Large files:</strong> GB size ki files bhi handle kar sakte ho</li>
+                                    <li><strong>Real-time:</strong> Data aate hi process hota hai</li>
+                                </ul>
+                                <div class="code-block">
+                                    // WITHOUT STREAMS (Bad for large files)
+                                    fs.readFile('large-video.mp4', (err, data) => {
+                                    // Puri file memory mein load hogi (may crash!)
+                                    res.send(data);
+                                    });
+
+                                    // WITH STREAMS (Good for large files)
+                                    const readStream = fs.createReadStream('large-video.mp4');
+                                    readStream.pipe(res); // Chunks mein send hoga
+
+                                    // EXAMPLE: Copy large file
+                                    const readStream = fs.createReadStream('source.txt');
+                                    const writeStream = fs.createWriteStream('destination.txt');
+                                    readStream.pipe(writeStream);
+
+                                    // With progress tracking
+                                    readStream.on('data', (chunk) => {
+                                    console.log(`Received ${chunk.length} bytes`);
+                                    });
+
+                                    readStream.on('end', () => {
+                                    console.log('File copy complete!');
+                                    });
+                                </div>
+                                <p><strong>Types of streams:</strong></p>
+                                <ul>
+                                    <li><strong>Readable:</strong> Data read karne ke liye (fs.createReadStream)</li>
+                                    <li><strong>Writable:</strong> Data write karne ke liye (fs.createWriteStream)</li>
+                                    <li><strong>Duplex:</strong> Read aur write dono (TCP sockets)</li>
+                                    <li><strong>Transform:</strong> Data modify karte hue pass karna (compression)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topic-card">
+                    <h2 class="topic-title">HTTP & HTTPS Modules</h2>
+                    <span class="badge badge-beginner">Beginner</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine a restaurant:</strong> Customers (clients) place orders (requests), waiters
+                            take orders to kitchen (server), kitchen prepares food, waiters bring food back (response).
+                            HTTP module helps you create this restaurant in code!</p>
+                        <p><strong>HTTP module creates web servers!</strong> It listens for requests from browsers/apps,
+                            processes them, and sends back responses. HTTPS is the secure version - like having security
+                            guards at your restaurant!</p>
+                        <p><strong>Real-world example:</strong> When you visit google.com, your browser sends an HTTP
+                            request. Google's servers (built with tools like HTTP module) receive it and send back the
+                            webpage!</p>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">Creating HTTP Server</div>
+                        <div class="code-block">
+                            const http = require('http');
+                            const https = require('https');
+                            const fs = require('fs');
+
+                            // ========== BASIC HTTP SERVER ==========
+                            const server = http.createServer((req, res) => {
+                            // req = request from client
+                            // res = response to send back
+
+                            res.writeHead(200, {'Content-Type': 'text/html'});
+                            res.write('<h1>Hello World!</h1>');
+                            res.end();
+                            });
+
+                            server.listen(3000, () => {
+                            console.log('Server running on http://localhost:3000');
+                            });
+
+                            // ========== ROUTING (Different URLs) ==========
+                            const serverWithRouting = http.createServer((req, res) => {
+                            if (req.url === '/') {
+                            res.writeHead(200, {'Content-Type': 'text/html'});
+                            res.end('<h1>Home Page</h1>');
+                            }
+                            else if (req.url === '/about') {
+                            res.writeHead(200, {'Content-Type': 'text/html'});
+                            res.end('<h1>About Page</h1>');
+                            }
+                            else if (req.url === '/api/users') {
+                            res.writeHead(200, {'Content-Type': 'application/json'});
+                            res.end(JSON.stringify({ users: ['John', 'Jane'] }));
+                            }
+                            else {
+                            res.writeHead(404, {'Content-Type': 'text/html'});
+                            res.end('<h1>404 - Page Not Found</h1>');
+                            }
+                            });
+
+                            serverWithRouting.listen(3000);
+
+                            // ========== HTTPS SERVER (Secure) ==========
+                            const options = {
+                            key: fs.readFileSync('private-key.pem'),
+                            cert: fs.readFileSync('certificate.pem')
+                            };
+
+                            const httpsServer = https.createServer(options, (req, res) => {
+                            res.writeHead(200);
+                            res.end('Secure connection!');
+                            });
+
+                            httpsServer.listen(443);
+
+                            // ========== MAKING HTTP REQUESTS ==========
+
+                            // GET request
+                            http.get('http://api.example.com/data', (res) => {
+                            let data = '';
+
+                            res.on('data', (chunk) => {
+                            data += chunk;
+                            });
+
+                            res.on('end', () => {
+                            console.log(JSON.parse(data));
+                            });
+                            });
+
+                            // POST request
+                            const postData = JSON.stringify({ name: 'John' });
+
+                            const options = {
+                            hostname: 'api.example.com',
+                            port: 80,
+                            path: '/users',
+                            method: 'POST',
+                            headers: {
+                            'Content-Type': 'application/json',
+                            'Content-Length': postData.length
+                            }
+                            };
+
+                            const req = http.request(options, (res) => {
+                            console.log(`Status: ${res.statusCode}`);
+
+                            res.on('data', (chunk) => {
+                            console.log(chunk.toString());
+                            });
+                            });
+
+                            req.write(postData);
+                            req.end();
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <div class="section-header">💼 Interview Questions (Hinglish)</div>
+
+                        <div class="question-card">
+                            <div class="question">HTTP aur HTTPS mein kya difference hai? HTTPS kyun secure hai?</div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong></p>
+                                <p><strong>HTTP (HyperText Transfer Protocol):</strong></p>
+                                <ul>
+                                    <li>Plain text mein data transfer hota hai</li>
+                                    <li>Koi bhi beech mein data dekh sakta hai (man-in-the-middle attack)</li>
+                                    <li>Port 80 use karta hai</li>
+                                    <li>Fast hai kyunki encryption nahi hai</li>
+                                    <li>Non-sensitive data ke liye OK</li>
+                                </ul>
+                                <p><strong>HTTPS (HTTP Secure):</strong></p>
+                                <ul>
+                                    <li>Encrypted data transfer - SSL/TLS use karta hai</li>
+                                    <li>Data scrambled hai, koi beech mein nahi dekh sakta</li>
+                                    <li>Port 443 use karta hai</li>
+                                    <li>Thoda slow (encryption overhead)</li>
+                                    <li>Passwords, payments, personal info ke liye MUST</li>
+                                    <li>Green padlock browser mein dikhta hai</li>
+                                </ul>
+                                <p><strong>Kaise secure hai:</strong></p>
+                                <ul>
+                                    <li><strong>Encryption:</strong> Data ko code mein convert karta hai</li>
+                                    <li><strong>Authentication:</strong> Verify karta hai ki server genuine hai</li>
+                                    <li><strong>Integrity:</strong> Data tamper nahi ho sakta beech mein</li>
+                                </ul>
+                                <p><strong>Example:</strong> Jab tum bank website pe login karte ho, HTTPS ensure karta
+                                    hai ki tumhara password encrypted form mein jaye. HTTP use karo to password plain
+                                    text mein jayega - bahut dangerous!</p>
+                                <p><strong>Modern web:</strong> Google ab HTTPS ko ranking factor banata hai. Sabhi
+                                    websites ko HTTPS use karna chahiye.</p>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question">req aur res objects mein kya hota hai? Important properties batao.
+                            </div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong></p>
+                                <p><strong>req (Request Object) - Client se aane wali information:</strong></p>
+                                <ul>
+                                    <li><strong>req.url:</strong> Konsa URL request kiya (e.g., '/about', '/api/users')
+                                    </li>
+                                    <li><strong>req.method:</strong> HTTP method (GET, POST, PUT, DELETE)</li>
+                                    <li><strong>req.headers:</strong> Request headers (cookies, auth tokens,
+                                        content-type)</li>
+                                    <li><strong>req.body:</strong> POST/PUT data (form data, JSON) - middleware chahiye
+                                    </li>
+                                    <li><strong>req.query:</strong> URL query parameters (?name=John&age=25)</li>
+                                    <li><strong>req.params:</strong> Route parameters (/users/:id)</li>
+                                </ul>
+                                <div class="code-block">
+                                    // Request example
+                                    http.createServer((req, res) => {
+                                    console.log('URL:', req.url); // /about
+                                    console.log('Method:', req.method); // GET
+                                    console.log('Headers:', req.headers);
+                                    console.log('User-Agent:', req.headers['user-agent']);
+                                    });
+                                </div>
+                                <p><strong>res (Response Object) - Client ko bhejne wali information:</strong></p>
+                                <ul>
+                                    <li><strong>res.writeHead():</strong> Status code aur headers set karta hai</li>
+                                    <li><strong>res.write():</strong> Response body mein data likhta hai</li>
+                                    <li><strong>res.end():</strong> Response complete karta hai aur send karta hai</li>
+                                    <li><strong>res.statusCode:</strong> HTTP status code set karta hai (200, 404, 500)
+                                    </li>
+                                    <li><strong>res.setHeader():</strong> Individual header set karta hai</li>
+                                </ul>
+                                <div class="code-block">
+                                    // Response example
+                                    http.createServer((req, res) => {
+                                    // Set status and headers
+                                    res.writeHead(200, {
+                                    'Content-Type': 'application/json',
+                                    'X-Custom-Header': 'MyValue'
+                                    });
+
+                                    // Send data
+                                    const data = { message: 'Success', user: 'John' };
+                                    res.end(JSON.stringify(data));
+                                    });
+                                </div>
+                                <p><strong>Common status codes:</strong></p>
+                                ```html
+                                processes them, and sends back responses. HTTPS is the secure version - like having
+                                security
+                                guards at your restaurant!</p>
+                                <p><strong>Real-world example:</strong> When you visit google.com, your browser sends an
+                                    HTTP
+                                    request. Google's servers (built with tools like HTTP module) receive it and send
+                                    back the
+                                    webpage!</p>
+                            </div>
+
+                            <div class="example-box">
+                                <div class="example-title">Creating HTTP Server</div>
+                                <div class="code-block">
+                                    const http = require('http');
+                                    const https = require('https');
+                                    const fs = require('fs');
+
+                                    // ========== BASIC HTTP SERVER ==========
+                                    const server = http.createServer((req, res) => {
+                                    // req = request from client
+                                    // res = response to send back
+
+                                    res.writeHead(200, {'Content-Type': 'text/html'});
+                                    res.write('<h1>Hello World!</h1>');
+                                    res.end();
+                                    });
+
+                                    server.listen(3000, () => {
+                                    console.log('Server running on http://localhost:3000');
+                                    });
+
+                                    // ========== ROUTING (Different URLs) ==========
+                                    const serverWithRouting = http.createServer((req, res) => {
+                                    if (req.url === '/') {
+                                    res.writeHead(200, {'Content-Type': 'text/html'});
+                                    res.end('<h1>Home Page</h1>');
+                                    }
+                                    else if (req.url === '/about') {
+                                    res.writeHead(200, {'Content-Type': 'text/html'});
+                                    res.end('<h1>About Page</h1>');
+                                    }
+                                    else if (req.url === '/api/users') {
+                                    res.writeHead(200, {'Content-Type': 'application/json'});
+                                    res.end(JSON.stringify({ users: ['John', 'Jane'] }));
+                                    }
+                                    else {
+                                    res.writeHead(404, {'Content-Type': 'text/html'});
+                                    res.end('<h1>404 - Page Not Found</h1>');
+                                    }
+                                    });
+
+                                    serverWithRouting.listen(3000);
+
+                                    // ========== HTTPS SERVER (Secure) ==========
+                                    const options = {
+                                    key: fs.readFileSync('private-key.pem'),
+                                    cert: fs.readFileSync('certificate.pem')
+                                    };
+
+                                    const httpsServer = https.createServer(options, (req, res) => {
+                                    res.writeHead(200);
+                                    res.end('Secure connection!');
+                                    });
+
+                                    httpsServer.listen(443);
+
+                                    // ========== MAKING HTTP REQUESTS ==========
+
+                                    // GET request
+                                    http.get('http://api.example.com/data', (res) => {
+                                    let data = '';
+
+                                    res.on('data', (chunk) => {
+                                    data += chunk;
+                                    });
+
+                                    res.on('end', () => {
+                                    console.log(JSON.parse(data));
+                                    });
+                                    });
+
+                                    // POST request
+                                    const postData = JSON.stringify({ name: 'John' });
+
+                                    const options = {
+                                    hostname: 'api.example.com',
+                                    port: 80,
+                                    path: '/users',
+                                    method: 'POST',
+                                    headers: {
+                                    'Content-Type': 'application/json',
+                                    'Content-Length': postData.length
+                                    }
+                                    };
+
+                                    const req = http.request(options, (res) => {
+                                    console.log(`Status: ${res.statusCode}`);
+
+                                    res.on('data', (chunk) => {
+                                    console.log(chunk.toString());
+                                    });
+                                    });
+
+                                    req.write(postData);
+                                    req.end();
+                                </div>
+                            </div>
+
+                            <div class="interview-section">
+                                <div class="section-header">💼 Interview Questions (Hinglish)</div>
+
+                                <div class="question-card">
+                                    <div class="question">HTTP aur HTTPS mein kya difference hai? HTTPS kyun secure hai?
+                                    </div>
+                                    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                                    <div class="answer">
+                                        <p><strong>Answer:</strong></p>
+                                        <p><strong>HTTP (HyperText Transfer Protocol):</strong></p>
+                                        <ul>
+                                            <li>Plain text mein data transfer hota hai</li>
+                                            <li>Koi bhi beech mein data dekh sakta hai (man-in-the-middle attack)</li>
+                                            <li>Port 80 use karta hai</li>
+                                            <li>Fast hai kyunki encryption nahi hai</li>
+                                            <li>Non-sensitive data ke liye OK</li>
+                                        </ul>
+                                        <p><strong>HTTPS (HTTP Secure):</strong></p>
+                                        <ul>
+                                            <li>Encrypted data transfer - SSL/TLS use karta hai</li>
+                                            <li>Data scrambled hai, koi beech mein nahi dekh sakta</li>
+                                            <li>Port 443 use karta hai</li>
+                                            <li>Thoda slow (encryption overhead)</li>
+                                            <li>Passwords, payments, personal info ke liye MUST</li>
+                                            <li>Green padlock browser mein dikhta hai</li>
+                                        </ul>
+                                        <p><strong>Kaise secure hai:</strong></p>
+                                        <ul>
+                                            <li><strong>Encryption:</strong> Data ko code mein convert karta hai</li>
+                                            <li><strong>Authentication:</strong> Verify karta hai ki server genuine hai
+                                            </li>
+                                            <li><strong>Integrity:</strong> Data tamper nahi ho sakta beech mein</li>
+                                        </ul>
+                                        <p><strong>Example:</strong> Jab tum bank website pe login karte ho, HTTPS
+                                            ensure karta
+                                            hai ki tumhara password encrypted form mein jaye. HTTP use karo to password
+                                            plain
+                                            text mein jayega - bahut dangerous!</p>
+                                        <p><strong>Modern web:</strong> Google ab HTTPS ko ranking factor banata hai.
+                                            Sabhi
+                                            websites ko HTTPS use karna chahiye.</p>
+                                    </div>
+                                </div>
+
+                                <div class="question-card">
+                                    <div class="question">req aur res objects mein kya hota hai? Important properties
+                                        batao.
+                                    </div>
+                                    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                                    <div class="answer">
+                                        <p><strong>Answer:</strong></p>
+                                        <p><strong>req (Request Object) - Client se aane wali information:</strong></p>
+                                        <ul>
+                                            <li><strong>req.url:</strong> Konsa URL request kiya (e.g., '/about',
+                                                '/api/users')
+                                            </li>
+                                            <li><strong>req.method:</strong> HTTP method (GET, POST, PUT, DELETE)</li>
+                                            <li><strong>req.headers:</strong> Request headers (cookies, auth tokens,
+                                                content-type)</li>
+                                            <li><strong>req.body:</strong> POST/PUT data (form data, JSON) - middleware
+                                                chahiye
+                                            </li>
+                                            <li><strong>req.query:</strong> URL query parameters (?name=John&age=25)
+                                            </li>
+                                            <li><strong>req.params:</strong> Route parameters (/users/:id)</li>
+                                        </ul>
+                                        <div class="code-block">
+                                            // Request example
+                                            http.createServer((req, res) => {
+                                            console.log('URL:', req.url); // /about
+                                            console.log('Method:', req.method); // GET
+                                            console.log('Headers:', req.headers);
+                                            console.log('User-Agent:', req.headers['user-agent']);
+                                            });
+                                        </div>
+                                        <p><strong>res (Response Object) - Client ko bhejne wali information:</strong>
+                                        </p>
+                                        <ul>
+                                            <li><strong>res.writeHead():</strong> Status code aur headers set karta hai
+                                            </li>
+                                            <li><strong>res.write():</strong> Response body mein data likhta hai</li>
+                                            <li><strong>res.end():</strong> Response complete karta hai aur send karta
+                                                hai</li>
+                                            <li><strong>res.statusCode:</strong> HTTP status code set karta hai (200,
+                                                404, 500)
+                                            </li>
+                                            <li><strong>res.setHeader():</strong> Individual header set karta hai</li>
+                                        </ul>
+                                        <div class="code-block">
+                                            // Response example
+                                            http.createServer((req, res) => {
+                                            // Set status and headers
+                                            res.writeHead(200, {
+                                            'Content-Type': 'application/json',
+                                            'X-Custom-Header': 'MyValue'
+                                            });
+
+                                            // Send data
+                                            const data = { message: 'Success', user: 'John' };
+                                            res.end(JSON.stringify(data));
+                                            });
+                                        </div>
+                                        <p><strong>Common status codes:</strong></p>
+                                        <ul>
+                                            <li><strong>200:</strong> OK - Success</li>
+                                            <li><strong>201:</strong> Created - Resource created successfully</li>
+                                            <li><strong>400:</strong> Bad Request - Invalid data</li>
+                                            <li><strong>401:</strong> Unauthorized - Login required</li>
+                                            <li><strong>404:</strong> Not Found - Resource doesn't exist</li>
+                                            <li><strong>500:</strong> Internal Server Error - Server crash</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            </section>
+
+            <!-- JS & TS Features Section -->
+            <section class="topic-section" id="features">
+                <div class="topic-card">
+                    <h2 class="topic-title">Modern JavaScript (ES6+) Features</h2>
+                    <span class="badge badge-intermediate">Intermediate</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine upgrading from a bicycle to a sports car:</strong> Old JavaScript (ES5) was
+                            like a bicycle - it worked, but was slow and limited. Modern JavaScript (ES6+) is like a
+                            sports car - faster, more features, easier to drive!</p>
+                        <p><strong>ES6+ brought superpowers to JavaScript!</strong> Arrow functions make code shorter,
+                            destructuring unpacks data easily, template literals make strings better, and async/await
+                            makes asynchronous code readable.</p>
+                    </div>
+
+                    <div class="section-header">⭐ Key Points to Remember</div>
+                    <div class="key-points">
+                        <ul>
+                            <li><strong>Arrow Functions:</strong> Shorter syntax, lexical 'this' binding</li>
+                            <li><strong>Destructuring:</strong> Extract values from arrays/objects easily</li>
+                            <li><strong>Template Literals:</strong> String interpolation with backticks</li>
+                            <li><strong>Spread/Rest:</strong> ... operator for arrays and objects</li>
+                            <li><strong>Let/Const:</strong> Block-scoped variables, const for constants</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">ES6+ Features Examples</div>
+                        <div class="code-block">
+                            // Arrow Functions
+                            const add = (a, b) => a + b;
+
+                            // Destructuring
+                            const { name, age } = user;
+                            const [first, second] = array;
+
+                            // Template Literals
+                            const message = `Hello, ${name}!`;
+
+                            // Spread Operator
+                            const combined = [...arr1, ...arr2];
+                            const merged = { ...obj1, ...obj2 };
+
+                            // Async/Await
+                            async function fetchData() {
+                            const data = await fetch(url);
+                            return data.json();
+                            }
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Building Apps Section -->
+            <section class="topic-section" id="apps">
+                <div class="topic-card">
+                    <h2 class="topic-title">Express.js Framework</h2>
+                    <span class="badge badge-intermediate">Intermediate</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine building a house:</strong> You could make every brick yourself (plain
+                            Node.js), or use pre-made materials and tools (Express.js). Express gives you ready-made
+                            tools to build web servers faster!</p>
+                        <p><strong>Express.js is like a power tool for Node.js!</strong> It makes creating web servers,
+                            handling routes, managing requests super easy. Instead of writing 100 lines of code, you
+                            write 10 lines!</p>
+                    </div>
+
+                    <div class="section-header">⭐ Key Points to Remember</div>
+                    <div class="key-points">
+                        <ul>
+                            <li><strong>Minimalist Framework:</strong> Fast, unopinionated web framework</li>
+                            <li><strong>Middleware:</strong> Functions that process requests before routes</li>
+                            <li><strong>Routing:</strong> Easy URL pattern matching</li>
+                            <li><strong>REST APIs:</strong> Perfect for building RESTful services</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">Express.js Basics</div>
+                        <div class="code-block">
+                            const express = require('express');
+                            const app = express();
+
+                            // Middleware
+                            app.use(express.json());
+
+                            // Routes
+                            app.get('/', (req, res) => {
+                            res.send('Hello World!');
+                            });
+
+                            app.post('/api/users', (req, res) => {
+                            const newUser = req.body;
+                            res.status(201).json({ user: newUser });
+                            });
+
+                            app.listen(3000, () => {
+                            console.log('Server running on port 3000');
+                            });
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <div class="section-header">💼 Interview Questions (Hinglish)</div>
+
+                        <div class="question-card">
+                            <div class="question">Middleware kya hai aur kaise kaam karta hai?</div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>Answer:</strong> Middleware functions hain jo request aur response ke beech
+                                    mein execute hote hain. Ye request/response modify kar sakte hain ya next middleware
+                                    ko call kar sakte hain using next().</p>
+                                <p><strong>Use cases:</strong> Authentication, Logging, Body parsing, CORS, Error
+                                    handling</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Database Section -->
+            <section class="topic-section" id="database">
+                <div class="topic-card">
+                    <h2 class="topic-title">MongoDB with Node.js</h2>
+                    <span class="badge badge-intermediate">Intermediate</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine a digital filing cabinet:</strong> Instead of paper files, you store data as
+                            JSON-like documents. MongoDB is like a super-smart filing cabinet that can find, sort, and
+                            organize millions of documents instantly!</p>
+                        <p><strong>MongoDB is a NoSQL database!</strong> Unlike traditional databases with tables,
+                            MongoDB stores flexible JSON-like documents. Perfect for modern applications!</p>
+                    </div>
+
+                    <div class="section-header">⭐ Key Points to Remember</div>
+                    <div class="key-points">
+                        <ul>
+                            <li><strong>Document-based:</strong> Stores data as BSON documents</li>
+                            <li><strong>Flexible Schema:</strong> No fixed structure</li>
+                            <li><strong>Mongoose:</strong> ODM library for MongoDB</li>
+                            <li><strong>CRUD Operations:</strong> Create, Read, Update, Delete</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">Mongoose Example</div>
+                        <div class="code-block">
+                            const mongoose = require('mongoose');
+
+                            // Define Schema
+                            const userSchema = new mongoose.Schema({
+                            name: { type: String, required: true },
+                            email: { type: String, unique: true },
+                            age: Number
+                            });
+
+                            // Create Model
+                            const User = mongoose.model('User', userSchema);
+
+                            // CREATE
+                            const newUser = await User.create({ name: 'John', email: 'john@example.com' });
+
+                            // READ
+                            const users = await User.find();
+                            const user = await User.findById(id);
+
+                            // UPDATE
+                            await User.findByIdAndUpdate(id, { age: 31 });
+
+                            // DELETE
+                            await User.findByIdAndDelete(id);
+                        </div>
+                    </div>
+
+                    <div class="interview-section">
+                        <div class="section-header">💼 Interview Questions (Hinglish)</div>
+
+                        <div class="question-card">
+                            <div class="question">SQL aur NoSQL mein kya difference hai?</div>
+                            <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+                            <div class="answer">
+                                <p><strong>SQL:</strong> Structured data, fixed schema, tables/rows, ACID properties,
+                                    vertical scaling</p>
+                                <p><strong>NoSQL:</strong> Flexible data, dynamic schema, documents, eventual
+                                    consistency, horizontal scaling</p>
+                                <p><strong>Use SQL for:</strong> Banking, finance (strict structure). <strong>NoSQL
+                                        for:</strong> Social media, real-time apps (flexible, scalable)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Communication Section -->
+            <section class="topic-section" id="communication">
+                <div class="topic-card">
+                    <h2 class="topic-title">WebSockets & Real-time Communication</h2>
+                    <span class="badge badge-advanced">Advanced</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine a phone call vs sending letters:</strong> HTTP is like sending letters - you
+                            send, wait for reply. WebSocket is like a phone call - continuous two-way conversation!</p>
+                        <p><strong>WebSockets enable real-time communication!</strong> Server can push data to client
+                            instantly. Perfect for chat apps, live updates, gaming!</p>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">Socket.IO Chat Example</div>
+                        <div class="code-block">
+                            // Server
+                            const io = require('socket.io')(http);
+
+                            io.on('connection', (socket) => {
+                            console.log('User connected');
+
+                            socket.on('chat message', (msg) => {
+                            io.emit('chat message', msg); // Broadcast to all
+                            });
+
+                            socket.on('disconnect', () => {
+                            console.log('User disconnected');
+                            });
+                            });
+
+                            // Client
+                            const socket = io();
+                            socket.emit('chat message', 'Hello!');
+                            socket.on('chat message', (msg) => console.log(msg));
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testing Section -->
+            <section class="topic-section" id="testing">
+                <div class="topic-card">
+                    <h2 class="topic-title">Testing with Jest</h2>
+                    <span class="badge badge-intermediate">Intermediate</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine testing a car before selling:</strong> You check brakes, engine, lights. Code
+                            testing is the same - verify everything works before deployment!</p>
+                        <p><strong>Testing catches bugs early!</strong> Write tests to automatically verify your code
+                            works. If something breaks, tests fail immediately!</p>
+                    </div>
+
+                    <div class="example-box">
+                        <div class="example-title">Jest Testing Example</div>
+                        <div class="code-block">
+                            // math.js
+                            function add(a, b) {
+                            return a + b;
+                            }
+                            module.exports = { add };
+
+                            // math.test.js
+                            const { add } = require('./math');
+
+                            test('adds 1 + 2 to equal 3', () => {
+                            expect(add(1, 2)).toBe(3);
+                            });
+
+                            // Async testing
+                            test('fetches user data', async () => {
+                            const data = await fetchUser(1);
+                            expect(data.name).toBe('John');
+                            });
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Deployment Section -->
+            <section class="topic-section" id="deployment">
+                <div class="topic-card">
+                    <h2 class="topic-title">Deployment & Production</h2>
+                    <span class="badge badge-advanced">Advanced</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine opening a restaurant:</strong> You test recipes at home (development), then
+                            open to public (production). Deployment is moving your app from your computer to the
+                            internet!</p>
+                        <p><strong>Production means real users!</strong> Your app needs to be secure, fast, and always
+                            available. Use proper hosting, environment variables, and monitoring!</p>
+                    </div>
+
+                    <div class="section-header">⭐ Key Points to Remember</div>
+                    <div class="key-points">
+                        <ul>
+                            <li><strong>Environment Variables:</strong> Store secrets safely (.env files)</li>
+                            <li><strong>PM2:</strong> Process manager, auto-restart on crash</li>
+                            <li><strong>HTTPS:</strong> Always use SSL certificates</li>
+                            <li><strong>Logging:</strong> Track errors and monitor performance</li>
+                            <li><strong>Platforms:</strong> Heroku, AWS, Vercel, DigitalOcean</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Performance Section -->
+            <section class="topic-section" id="performance">
+                <div class="topic-card">
+                    <h2 class="topic-title">Performance Optimization</h2>
+                    <span class="badge badge-advanced">Advanced</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine a highway:</strong> One lane = slow traffic. Multiple lanes = fast traffic.
+                            Clustering creates multiple lanes for your Node.js app!</p>
+                        <p><strong>Optimization makes apps faster!</strong> Use caching, compression, clustering, and
+                            efficient code. Users love fast apps!</p>
+                    </div>
+
+                    <div class="section-header">⭐ Key Points to Remember</div>
+                    <div class="key-points">
+                        <ul>
+                            <li><strong>Clustering:</strong> Use all CPU cores, handle more requests</li>
+                            <li><strong>Caching:</strong> Store frequently used data (Redis)</li>
+                            <li><strong>Compression:</strong> Gzip responses to reduce bandwidth</li>
+                            <li><strong>Database Indexing:</strong> Speed up queries dramatically</li>
+                            <li><strong>Load Balancing:</strong> Distribute traffic across servers</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Advanced Topics Section -->
+            <section class="topic-section" id="advanced">
+                <div class="topic-card">
+                    <h2 class="topic-title">Microservices Architecture</h2>
+                    <span class="badge badge-advanced">Advanced</span>
+
+                    <div class="section-header">🎯 Simple Explanation</div>
+                    <div class="simple-explanation">
+                        <p><strong>Imagine a restaurant:</strong> Monolith = one person does everything (slow!).
+                            Microservices = chef cooks, waiter serves, cashier handles payment (efficient!)</p>
+                        <p><strong>Microservices break apps into small services!</strong> Each service does one thing
+                            well. They communicate via APIs. Easy to scale and maintain!</p>
+                    </div>
+
+                    <div class="section-header">⭐ Key Points to Remember</div>
+                    <div class="key-points">
+                        <ul>
+                            <li><strong>Independent Services:</strong> Each can be deployed separately</li>
+                            <li><strong>API Gateway:</strong> Single entry point for all services</li>
+                            <li><strong>Service Discovery:</strong> Services find each other dynamically</li>
+                            <li><strong>Docker:</strong> Containerize services for consistency</li>
+                            <li><strong>Kubernetes:</strong> Orchestrate and manage containers</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>📚 Node.js Complete Study Guide | Made with ❤️ for Learners</p>
+            <p>Keep Learning, Keep Growing! 🚀</p>
+        </footer>
+    </div>
+
+    <div class="scroll-top" id="scrollTop">↑</div>
+
+    <script>
+        // Navigation functionality
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const sections = document.querySelectorAll('.topic-section');
+
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetSection = tab.getAttribute('data-section');
+
+                // Remove active class from all tabs and sections
+                navTabs.forEach(t => t.classList.remove('active'));
+                sections.forEach(s => s.classList.remove('active'));
+
+                // Add active class to clicked tab and corresponding section
+                tab.classList.add('active');
+                document.getElementById(targetSection).classList.add('active');
+
+                // Scroll to top of content
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // Update progress bar
+                updateProgress();
+            });
+        });
+
+        // Toggle answer functionality
+        function toggleAnswer(button) {
+            const answer = button.nextElementSibling;
+            answer.classList.toggle('show');
+            button.textContent = answer.classList.contains('show') ? 'Hide Answer' : 'Show Answer';
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const allCards = document.querySelectorAll('.topic-card');
+
+            allCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Progress bar
+        function updateProgress() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = (scrollTop / scrollHeight) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        window.addEventListener('scroll', updateProgress);
+
+        // Scroll to top button
+        const scrollTopBtn = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + K for search focus
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+
+            // Escape to clear search
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                searchInput.dispatchEvent(new Event('input'));
+            }
+        });
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+
+</html>
