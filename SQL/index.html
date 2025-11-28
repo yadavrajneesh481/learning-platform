@@ -1,0 +1,2469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL Learning Dashboard - Interactive Study Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 50px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .main-content {
+            display: flex;
+            min-height: 40dvh;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: #2d3748;
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 100%;
+            flex-shrink: 0;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+            font-size: 1.3em;
+        }
+
+        .category-label {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #a0aec0;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: #4a5568;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background: #667eea;
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 100%;
+        }
+
+        .topic-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .topic-card.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .topic-title {
+            font-size: 2em;
+            color: #2d3748;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "▶";
+            margin-right: 10px;
+            font-size: 0.8em;
+        }
+
+        .simple-explanation {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #2196f3;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .definition {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #9c27b0;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .key-points {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ff9800;
+            margin-bottom: 15px;
+        }
+
+        .key-points ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .key-points li {
+            margin-bottom: 10px;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .code-example {
+            background: #263238;
+            color: #aed581;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .code-example pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .interview-section {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .interview-question {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .interview-question:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .question-text {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .toggle-icon {
+            background: #4caf50;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+
+        .answer {
+            display: none;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid #e0e0e0;
+            color: #555;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .answer.show {
+            display: block;
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from { 
+                opacity: 0; 
+                max-height: 0; 
+            }
+            to { 
+                opacity: 1; 
+                max-height: 1000px; 
+            }
+        }
+
+        .tab-container {
+            display: none;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .tab-btn:hover, 
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 1.2em;
+        }
+
+        /* Scrollbar styling */
+        .sidebar::-webkit-scrollbar,
+        .content-area::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #1a202c;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #667eea;
+        }
+
+        .content-area::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .content-area::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .content-area::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+
+            .main-content {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .tab-container {
+                display: flex;
+            }
+
+            .content-area {
+                padding: 15px;
+                max-height: none;
+            }
+
+            .topic-title {
+                font-size: 1.5em;
+            }
+
+            .section-title {
+                font-size: 1.1em;
+            }
+
+            .search-container {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .topic-title {
+                font-size: 1.3em;
+            }
+
+            .badge {
+                font-size: 12px;
+                padding: 4px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗄️ MySQL Learning Dashboard</h1>
+            <p>Your Complete Interactive Study Guide & Interview Prep Resource</p>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search topics, keywords, or concepts...">
+        </div>
+
+        <div class="tab-container" id="tabContainer"></div>
+
+        <div class="main-content">
+            <div class="sidebar" id="sidebar"></div>
+            <div class="content-area" id="contentArea"></div>
+        </div>
+    </div>
+
+    <script>
+        const topics = [
+            {
+                id: 'mysql-intro',
+                title: 'MySQL Introduction',
+                category: 'Basics',
+                simpleExplanation: 'Imagine MySQL as a super organized library where you can store all your information in neat tables, like keeping your toys in different boxes. Each box (table) has labels telling you what\'s inside, and you can quickly find, add, or remove things whenever you want!',
+                definition: 'MySQL is an open-source Relational Database Management System (RDBMS) that uses Structured Query Language (SQL) to manage and manipulate data stored in tables with predefined relationships.',
+                keyPoints: [
+                    'MySQL is free and open-source, making it accessible for everyone',
+                    'It stores data in tables with rows and columns, similar to Excel spreadsheets',
+                    'Used by major companies like Facebook, Twitter, and YouTube for managing massive amounts of data'
+                ],
+                codeExample: `-- Connecting to MySQL and creating your first database
+mysql -u root -p
+
+-- Create a database
+CREATE DATABASE school;
+
+-- Use the database
+USE school;
+
+-- Create a simple table
+CREATE TABLE students (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    age INT
+);`,
+                interviewQuestions: [
+                    {
+                        question: 'MySQL kya hai aur iska use kyu karte hain?',
+                        answer: 'MySQL ek database management system hai jo data ko organized tarike se store karta hai. Iska use isliye karte hain kyunki ye fast, reliable aur free hai. Jaise aap apne phone mein contacts save karte ho, waise hi MySQL mein hum large scale pe data store karte hain. Ye relational database hai matlab data tables mein store hota hai aur tables ke beech relationships bana sakte hain. Facebook, YouTube jaise bade applications MySQL use karte hain apna data manage karne ke liye.'
+                    },
+                    {
+                        question: 'MySQL aur SQL mein kya difference hai?',
+                        answer: 'SQL ek language hai aur MySQL ek software hai. Samjho SQL ek language hai jaise Hindi ya English, aur MySQL ek tool hai jo us language ko samajhta hai. SQL se hum commands likhte hain jaise SELECT, INSERT, UPDATE, aur MySQL un commands ko execute karta hai. Matlab SQL se hum bataते hain KYA karna hai, aur MySQL wo kaam karta hai. Aur bhi database systems hain jaise PostgreSQL, Oracle jo SQL use karte hain.'
+                    }
+                ]
+            },
+            {
+                id: 'rdbms',
+                title: 'RDBMS (Relational Database Management System)',
+                category: 'Basics',
+                simpleExplanation: 'Think of RDBMS like a smart filing cabinet where different drawers (tables) are connected to each other. If you have a drawer for students and another for their grades, RDBMS helps you connect them so you can see which student got which grade!',
+                definition: 'RDBMS is a database management system based on the relational model where data is organized into tables (relations) with rows and columns, and relationships can be established between tables using keys.',
+                keyPoints: [
+                    'Data is stored in tables with rows (records) and columns (fields)',
+                    'Tables can be related to each other using Primary Keys and Foreign Keys',
+                    'Ensures data integrity through ACID properties (Atomicity, Consistency, Isolation, Durability)'
+                ],
+                codeExample: `-- Creating related tables in RDBMS
+CREATE TABLE departments (
+    dept_id INT PRIMARY KEY,
+    dept_name VARCHAR(50)
+);
+
+CREATE TABLE employees (
+    emp_id INT PRIMARY KEY,
+    emp_name VARCHAR(50),
+    dept_id INT,
+    FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+);
+
+-- This creates a relationship between employees and departments`,
+                interviewQuestions: [
+                    {
+                        question: 'RDBMS ke main features kya hain?',
+                        answer: 'RDBMS ke main features hain: 1) Data tables mein store hota hai rows aur columns ke form mein. 2) Tables ke beech relationships bana sakte hain using foreign keys. 3) ACID properties follow karta hai jo data ki safety ensure karta hai. 4) Data redundancy kam hoti hai normalization ki wajah se. 5) Multiple users ek saath data access kar sakte hain. 6) Security features hain jaise user authentication aur authorization. Ye sab features milke data ko organized, safe aur accessible banate hain.'
+                    },
+                    {
+                        question: 'Primary Key aur Foreign Key mein kya farak hai?',
+                        answer: 'Primary Key ek unique identifier hai jo har row ko uniquely identify karta hai. Ek table mein sirf ek hi primary key ho sakti hai aur wo NULL nahi ho sakti. Jaise student table mein student_id primary key hai. Foreign Key dusri table ki primary key hoti hai jo relationship banane ke liye use hoti hai. Ek table mein multiple foreign keys ho sakti hain. Jaise agar enrollment table mein student_id foreign key hai jo student table se link karti hai. Primary key uniqueness ensure karti hai, foreign key relationship ensure karti hai.'
+                    }
+                ]
+            },
+            {
+                id: 'select',
+                title: 'SELECT Statement',
+                category: 'SQL Basics',
+                simpleExplanation: 'SELECT is like asking your toy box to show you specific toys. You can ask for all toys, or just the red ones, or just the cars. It\'s how you look at your data without changing anything!',
+                definition: 'The SELECT statement is used to query and retrieve data from one or more tables in a database. It is the most commonly used SQL command for data retrieval.',
+                keyPoints: [
+                    'SELECT * retrieves all columns from a table',
+                    'You can specify particular columns to retrieve only needed data',
+                    'Can be combined with other clauses like WHERE, ORDER BY, GROUP BY for advanced queries'
+                ],
+                codeExample: `-- Select all columns from students table
+SELECT * FROM students;
+
+-- Select specific columns
+SELECT name, age FROM students;
+
+-- Select with calculated column
+SELECT name, age, age + 5 AS age_after_5_years FROM students;
+
+-- Select distinct values
+SELECT DISTINCT city FROM students;`,
+                interviewQuestions: [
+                    {
+                        question: 'SELECT * use karna chahiye ya specific columns? Kyu?',
+                        answer: 'Production mein SELECT * use karna avoid karna chahiye. Kyunki jab aap SELECT * use karte ho to saare columns fetch hote hain chahe aapko unki zarurat ho ya na ho. Isse performance slow hoti hai aur unnecessary data transfer hota hai. Specific columns select karne se query fast hoti hai, network bandwidth kam use hota hai, aur code bhi readable hota hai. Haan, development ya testing mein quick check ke liye SELECT * use kar sakte hain, but production code mein hamesha specific columns hi select karo jo actually chahiye.'
+                    },
+                    {
+                        question: 'DISTINCT keyword ka kya use hai?',
+                        answer: 'DISTINCT keyword duplicate values ko remove karta hai result se. Jaise agar students table mein 100 students hain aur aap unki cities dekhna chahte ho, to bina DISTINCT ke agar 20 students Delhi se hain to Delhi 20 baar show hoga. But SELECT DISTINCT city FROM students likhoge to har city sirf ek baar show hogi. Ye useful hai jab aapko unique values chahiye. Dhyan rahe ki DISTINCT use karne se query thodi slow ho sakti hai kyunki database ko duplicates check karke remove karne padte hain.'
+                    }
+                ]
+            },
+            {
+                id: 'where',
+                title: 'WHERE Clause',
+                category: 'SQL Basics',
+                simpleExplanation: 'WHERE is like a filter for your data. Imagine you have 100 toys but you only want to see the red cars. WHERE helps you filter and show only what matches your condition!',
+                definition: 'The WHERE clause is used to filter records based on specified conditions. It extracts only those records that fulfill the given criteria.',
+                keyPoints: [
+                    'WHERE clause filters rows before they are retrieved',
+                    'Can use comparison operators (=, !=, <, >, <=, >=)',
+                    'Can combine multiple conditions using AND, OR, NOT operators'
+                ],
+                codeExample: `-- Simple WHERE clause
+SELECT * FROM students WHERE age > 18;
+
+-- WHERE with string comparison
+SELECT * FROM students WHERE name = 'John';
+
+-- WHERE with multiple conditions
+SELECT * FROM students WHERE age > 18 AND city = 'Mumbai';
+
+-- WHERE with IN operator
+SELECT * FROM students WHERE city IN ('Delhi', 'Mumbai', 'Bangalore');
+
+-- WHERE with LIKE for pattern matching
+SELECT * FROM students WHERE name LIKE 'A%';`,
+                interviewQuestions: [
+                    {
+                        question: 'WHERE aur HAVING clause mein kya difference hai?',
+                        answer: 'WHERE clause individual rows ko filter karta hai GROUP BY se pehle, jabki HAVING clause groups ko filter karta hai GROUP BY ke baad. Jaise agar aapko 18 saal se bade students chahiye to WHERE use karoge: WHERE age > 18. Lekin agar aapko wo cities chahiye jahan 10 se zyada students hain, to pehle GROUP BY city karoge phir HAVING COUNT(*) > 10 use karoge. Simple rule: WHERE aggregate functions ke saath nahi use hota, HAVING aggregate functions ke saath use hota hai. WHERE fast hai kyunki ye pehle filter karta hai, HAVING baad mein filter karta hai.'
+                    },
+                    {
+                        question: 'WHERE clause mein NULL values ko kaise check karte hain?',
+                        answer: 'NULL values ko check karne ke liye IS NULL ya IS NOT NULL use karte hain, = ya != nahi. Kyunki NULL ek special value hai jo "unknown" represent karti hai. Agar aap WHERE age = NULL likhoge to koi result nahi aayega, chahe table mein NULL values ho. Sahi tarika hai: WHERE age IS NULL ya WHERE age IS NOT NULL. Ye isliye kyunki NULL kisi bhi value ke equal nahi hota, khud NULL ke bhi equal nahi. Ye SQL ka important concept hai jo interviews mein frequently puchha jata hai.'
+                    }
+                ]
+            },
+            {
+                id: 'and-or-not',
+                title: 'AND, OR, NOT Operators',
+                category: 'SQL Basics',
+                simpleExplanation: 'These are like making rules for your toy selection. AND means both rules must be true (red AND car), OR means at least one rule must be true (red OR blue), NOT means the opposite (NOT broken)!',
+                definition: 'Logical operators used in WHERE clause to combine multiple conditions. AND requires all conditions to be true, OR requires at least one condition to be true, and NOT negates a condition.',
+                keyPoints: [
+                    'AND operator returns true when all conditions are true',
+                    'OR operator returns true when at least one condition is true',
+                    'NOT operator reverses the result of a condition'
+                ],
+                codeExample: `-- AND operator - both conditions must be true
+SELECT * FROM students 
+WHERE age > 18 AND city = 'Delhi';
+
+-- OR operator - at least one condition must be true
+SELECT * FROM students 
+WHERE city = 'Delhi' OR city = 'Mumbai';
+
+-- NOT operator - negates the condition
+SELECT * FROM students 
+WHERE NOT city = 'Delhi';
+
+-- Combining multiple operators with parentheses
+SELECT * FROM students 
+WHERE (city = 'Delhi' OR city = 'Mumbai') 
+AND age > 18 
+AND NOT name LIKE 'A%';`,
+                interviewQuestions: [
+                    {
+                        question: 'AND aur OR operators ki precedence kya hai?',
+                        answer: 'AND operator ki precedence OR se zyada hoti hai, matlab AND pehle evaluate hota hai. Jaise agar aap likhte ho: WHERE a = 1 OR b = 2 AND c = 3, to ye evaluate hoga as: WHERE a = 1 OR (b = 2 AND c = 3). Agar aapko different order chahiye to parentheses use karo: WHERE (a = 1 OR b = 2) AND c = 3. Ye bahut important hai kyunki galat precedence se galat results aa sakte hain. Best practice hai ki complex conditions mein hamesha parentheses use karo clarity ke liye, chahe zarurat na ho.'
+                    },
+                    {
+                        question: 'NOT operator ko kahan kahan use kar sakte hain?',
+                        answer: 'NOT operator ko multiple jagah use kar sakte hain: 1) NOT with comparison: WHERE NOT age > 18 (same as age <= 18). 2) NOT with IN: WHERE city NOT IN ("Delhi", "Mumbai"). 3) NOT with BETWEEN: WHERE age NOT BETWEEN 18 AND 25. 4) NOT with LIKE: WHERE name NOT LIKE "A%". 5) NOT with EXISTS: WHERE NOT EXISTS (subquery). 6) NOT with IS NULL: WHERE email IS NOT NULL. NOT operator condition ko reverse kar deta hai. Lekin readability ke liye sometimes direct opposite operator use karna better hota hai, jaise NOT age > 18 ki jagah age <= 18.'
+                    }
+                ]
+            },
+            {
+                id: 'order-by',
+                title: 'ORDER BY Clause',
+                category: 'SQL Basics',
+                simpleExplanation: 'ORDER BY is like arranging your toys in a line. You can arrange them by size (smallest to biggest), by color (alphabetically), or any way you want. ASC means smallest first, DESC means biggest first!',
+                definition: 'The ORDER BY clause is used to sort the result set in ascending or descending order based on one or more columns.',
+                keyPoints: [
+                    'ASC (ascending) is the default sort order',
+                    'DESC sorts in descending (reverse) order',
+                    'Can sort by multiple columns with different sort orders'
+                ],
+                codeExample: `-- Sort by single column (ascending by default)
+SELECT * FROM students ORDER BY age;
+
+-- Sort in descending order
+SELECT * FROM students ORDER BY age DESC;
+
+-- Sort by multiple columns
+SELECT * FROM students 
+ORDER BY city ASC, age DESC;
+
+-- Sort by column position
+SELECT name, age FROM students ORDER BY 2 DESC;
+
+-- Sort with NULL values
+SELECT * FROM students 
+ORDER BY email DESC;`,
+                interviewQuestions: [
+                    {
+                        question: 'ORDER BY clause query ke performance ko kaise affect karta hai?',
+                        answer: 'ORDER BY clause performance ko significantly affect kar sakta hai, especially large datasets pe. Jab aap ORDER BY use karte ho, database ko saare rows ko sort karna padta hai jo time aur memory consuming hai. Agar column pe index hai to sorting fast hoti hai. Bina index ke, database ko filesort operation karna padta hai jo slow hai. Multiple columns pe sorting aur zyada expensive hai. Performance improve karne ke liye: 1) Sorting columns pe index banao, 2) Sirf zaruri columns select karo, 3) WHERE clause se pehle rows filter karo, 4) LIMIT use karo agar limited results chahiye. Production mein large tables pe ORDER BY use karte waqt hamesha performance consider karo.'
+                    },
+                    {
+                        question: 'Multiple columns pe ORDER BY kaise kaam karta hai?',
+                        answer: 'Multiple columns pe ORDER BY mein pehle first column se sort hota hai, phir jahan first column ki values same hain wahan second column se sort hota hai, aur aise hi aage. Example: ORDER BY city ASC, age DESC - pehle city alphabetically sort hogi, phir har city ke andar students age ke hisaab se descending order mein arrange honge. Har column ka apna sort order ho sakta hai - kuch ASC, kuch DESC. Columns ka order matter karta hai - pehle likha column pehle sort hoga. Ye useful hai jab aapko hierarchical sorting chahiye, jaise pehle department se sort karo, phir salary se.'
+                    }
+                ]
+            },
+            {
+                id: 'insert',
+                title: 'INSERT INTO Statement',
+                category: 'SQL Basics',
+                simpleExplanation: 'INSERT is like adding a new toy to your toy box. You tell which box (table) to add it to and describe the toy (data). You can add one toy at a time or many toys together!',
+                definition: 'The INSERT INTO statement is used to add new rows of data into a table in the database.',
+                keyPoints: [
+                    'Can insert a single row or multiple rows in one statement',
+                    'Column names can be specified or omitted (if inserting into all columns)',
+                    'Values must match the data type of the columns'
+                ],
+                codeExample: `-- Insert single row with all columns
+INSERT INTO students (id, name, age, city) 
+VALUES (1, 'Rahul', 20, 'Delhi');
+
+-- Insert without specifying column names (must provide all values)
+INSERT INTO students 
+VALUES (2, 'Priya', 22, 'Mumbai');
+
+-- Insert multiple rows at once
+INSERT INTO students (id, name, age, city) 
+VALUES 
+    (3, 'Amit', 21, 'Bangalore'),
+    (4, 'Sneha', 23, 'Chennai'),
+    (5, 'Vikram', 19, 'Pune');
+
+-- Insert with some columns (others will be NULL or default)
+INSERT INTO students (id, name) 
+VALUES (6, 'Anjali');`,
+                interviewQuestions: [
+                    {
+                        question: 'INSERT statement mein column names specify karna zaroori hai kya?',
+                        answer: 'Column names specify karna zaroori nahi hai agar aap table ke saare columns mein values insert kar rahe ho, wo bhi sahi order mein. Lekin best practice hai ki hamesha column names specify karo. Kyunki: 1) Code readable aur maintainable hota hai, 2) Agar table structure change ho jaye (new column add ho) to query break nahi hogi, 3) Aap kuch columns skip kar sakte ho jo NULL ya default values accept karte hain, 4) Order matter nahi karta jab column names specify karte ho. Production code mein hamesha column names likho, sirf quick testing mein skip kar sakte ho.'
+                    },
+                    {
+                        question: 'Ek saath multiple rows insert karne ke kya benefits hain?',
+                        answer: 'Multiple rows ek saath insert karna bahut zyada efficient hai. Benefits: 1) Performance - ek hi query mein multiple rows insert hone se database ko baar baar connect nahi karna padta, 2) Transaction overhead kam hota hai, 3) Network round trips kam hote hain, 4) Faster execution - 1000 rows insert karne mein 1000 separate queries se 10-20 guna fast ho sakta hai. Syntax: INSERT INTO table VALUES (row1), (row2), (row3). Lekin dhyan rahe ki ek query mein bahut zyada rows (jaise 10000+) insert karne se query timeout ho sakti hai, to batches mein insert karo. Bulk insert operations ke liye ye best approach hai.'
+                    }
+                ]
+            },
+            {
+                id: 'update',
+                title: 'UPDATE Statement',
+                category: 'SQL Basics',
+                simpleExplanation: 'UPDATE is like changing something about your toy. Maybe you want to paint your red car blue, or fix a broken wheel. You find the toy (using WHERE) and then change what you want!',
+                definition: 'The UPDATE statement is used to modify existing records in a table. It changes the values of specified columns for rows that match a given condition.',
+                keyPoints: [
+                    'Always use WHERE clause to specify which rows to update (without it, ALL rows will be updated!)',
+                    'Can update single or multiple columns in one statement',
+                    'Can use expressions and calculations in SET clause'
+                ],
+                codeExample: `-- Update single column for specific row
+UPDATE students 
+SET age = 21 
+WHERE id = 1;
+
+-- Update multiple columns
+UPDATE students 
+SET age = 22, city = 'Bangalore' 
+WHERE name = 'Rahul';
+
+-- Update with calculation
+UPDATE students 
+SET age = age + 1 
+WHERE city = 'Delhi';
+
+-- Update all rows (DANGEROUS - use carefully!)
+UPDATE students 
+SET status = 'active';
+
+-- Update with subquery
+UPDATE students 
+SET city = (SELECT city FROM addresses WHERE addresses.student_id = students.id)
+WHERE id IN (1, 2, 3);`,
+                interviewQuestions: [
+                    {
+                        question: 'UPDATE statement mein WHERE clause na use karne se kya hoga?',
+                        answer: 'Agar UPDATE statement mein WHERE clause nahi use karoge to table ke SAARE rows update ho jayenge! Ye bahut dangerous hai aur production mein disaster ban sakta hai. Example: UPDATE students SET city = "Delhi" - ye query saare students ki city Delhi kar degi. Isliye hamesha WHERE clause use karo jab tak aapko specifically saare rows update nahi karne. Best practices: 1) Pehle SELECT query run karke dekho ki kitne rows affect honge, 2) Transaction use karo taaki rollback kar sako agar galti ho jaye, 3) Production mein UPDATE queries ko carefully review karo, 4) Backup rakho important data ka. Ek chhoti si galti se poora data corrupt ho sakta hai.'
+                    },
+                    {
+                        question: 'UPDATE statement ko safe kaise banaye?',
+                        answer: 'UPDATE statement ko safe banane ke liye: 1) Hamesha WHERE clause use karo specific rows target karne ke liye, 2) Pehle SELECT query run karo same WHERE condition ke saath to verify karo ki sahi rows select ho rahe hain, 3) Transaction use karo: BEGIN; UPDATE...; check results; COMMIT ya ROLLBACK, 4) LIMIT clause use kar sakte ho to restrict number of rows: UPDATE students SET age=20 WHERE city="Delhi" LIMIT 10, 5) Production database pe directly UPDATE na karo, pehle staging pe test karo, 6) Important updates se pehle backup lo, 7) SQL_SAFE_UPDATES mode enable karo jo bina WHERE ke UPDATE prevent karta hai. Ye practices follow karke aap data loss se bach sakte ho.'
+                    }
+                ]
+            },
+            {
+                id: 'delete',
+                title: 'DELETE Statement',
+                category: 'SQL Basics',
+                simpleExplanation: 'DELETE is like throwing away toys you don\'t want anymore. You pick which toys to throw away (using WHERE). Be careful - once deleted, they\'re gone forever unless you have a backup!',
+                definition: 'The DELETE statement is used to remove existing records from a table. It permanently deletes rows that match the specified condition.',
+                keyPoints: [
+                    'Always use WHERE clause to specify which rows to delete (without it, ALL rows will be deleted!)',
+                    'DELETE removes entire rows, not individual column values',
+                    'Cannot be undone unless within a transaction or you have backups'
+                ],
+                codeExample: `-- Delete specific row
+DELETE FROM students 
+WHERE id = 1;
+
+-- Delete multiple rows with condition
+DELETE FROM students 
+WHERE age < 18;
+
+-- Delete with multiple conditions
+DELETE FROM students 
+WHERE city = 'Delhi' AND age > 25;
+
+-- Delete all rows (VERY DANGEROUS!)
+DELETE FROM students;
+
+-- Delete with subquery
+DELETE FROM students 
+WHERE id IN (SELECT student_id FROM inactive_list);
+
+-- Delete with LIMIT (MySQL specific)
+DELETE FROM students 
+WHERE city = 'Mumbai' 
+LIMIT 5;`,
+                interviewQuestions: [
+                    {
+                        question: 'DELETE aur TRUNCATE mein kya difference hai?',
+                        answer: 'DELETE aur TRUNCATE dono rows remove karte hain but bahut differences hain: 1) DELETE ek DML command hai, TRUNCATE DDL command hai, 2) DELETE mein WHERE clause use kar sakte ho specific rows delete karne ke liye, TRUNCATE saare rows delete karta hai, 3) DELETE slow hai kyunki ye row by row delete karta hai aur log maintain karta hai, TRUNCATE fast hai kyunki ye table ko deallocate kar deta hai, 4) DELETE ko ROLLBACK kar sakte ho transaction mein, TRUNCATE ko rollback nahi kar sakte (mostly), 5) DELETE triggers fire karta hai, TRUNCATE nahi karta, 6) DELETE auto-increment value reset nahi karta, TRUNCATE reset kar deta hai. Large tables ke saare rows delete karne ho to TRUNCATE use karo, specific rows ke liye DELETE.'
+                    },
+                    {
+                        question: 'DELETE operation ko safe kaise banaye?',
+                        answer: 'DELETE operation bahut risky hai, isliye safety measures zaroori hain: 1) Hamesha pehle SELECT query run karo same WHERE condition ke saath to verify karo ki sahi rows delete ho rahe hain, 2) Transaction use karo: BEGIN; DELETE...; check; COMMIT ya ROLLBACK, 3) Production mein delete karne se pehle backup lo, 4) Soft delete implement karo - actual delete ki jagah ek "deleted" flag set karo, baad mein permanently delete kar sakte ho, 5) Foreign key constraints check karo - dependent data ho to pehle wo handle karo, 6) LIMIT clause use karo batches mein delete karne ke liye, 7) SQL_SAFE_UPDATES mode enable rakho. Critical data ke liye soft delete best practice hai kyunki data recover kar sakte ho agar zarurat pade.'
+                    }
+                ]
+            },
+            {
+                id: 'limit',
+                title: 'LIMIT Clause',
+                category: 'SQL Basics',
+                simpleExplanation: 'LIMIT is like saying "I only want to see 5 toys, not all 100!" It helps you see just a few results instead of everything. Great for when you have lots of data but only need a small sample!',
+                definition: 'The LIMIT clause is used to specify the maximum number of records to return from a query result. It is useful for pagination and retrieving a subset of results.',
+                keyPoints: [
+                    'LIMIT restricts the number of rows returned by a query',
+                    'Can use OFFSET to skip a certain number of rows (for pagination)',
+                    'Very useful for performance when dealing with large datasets'
+                ],
+                codeExample: `-- Get first 5 students
+SELECT * FROM students LIMIT 5;
+
+-- Get top 10 oldest students
+SELECT * FROM students 
+ORDER BY age DESC 
+LIMIT 10;
+
+-- Pagination: Skip first 10, get next 5
+SELECT * FROM students 
+LIMIT 5 OFFSET 10;
+
+-- Alternative pagination syntax
+SELECT * FROM students 
+LIMIT 10, 5;  -- Skip 10, get 5
+
+-- Get one random student
+SELECT * FROM students 
+ORDER BY RAND() 
+LIMIT 1;`,
+                interviewQuestions: [
+                    {
+                        question: 'LIMIT aur OFFSET ko pagination mein kaise use karte hain?',
+                        answer: 'Pagination mein LIMIT aur OFFSET ka use karke data ko pages mein divide karte hain. Formula: LIMIT = page_size, OFFSET = (page_number - 1) * page_size. Example: Agar har page pe 10 records chahiye aur aap page 3 dekhna chahte ho to: LIMIT 10 OFFSET 20 (kyunki pehle 20 records skip karne hain). Ya short syntax: LIMIT 20, 10. Lekin OFFSET ki problem hai ki large offsets pe performance slow ho jati hai kyunki database ko pehle saare rows scan karne padte hain. Better approach hai cursor-based pagination jisme last record ki ID use karte ho: WHERE id > last_id LIMIT 10. Ye fast hai aur consistent results deta hai even jab data change ho raha ho.'
+                    },
+                    {
+                        question: 'LIMIT clause performance ko kaise improve karta hai?',
+                        answer: 'LIMIT clause performance ko significantly improve karta hai kyunki: 1) Database ko sirf specified number of rows return karne padte hain, baaki rows process nahi karne padte, 2) Memory usage kam hoti hai kyunki kam data load hota hai, 3) Network transfer time kam hota hai, 4) Application ko bhi kam data process karna padta hai. Example: Agar table mein 1 million rows hain aur aapko sirf 10 chahiye, to LIMIT 10 use karne se database 10 rows milte hi query stop kar deta hai. Lekin dhyan rahe ki agar ORDER BY use kar rahe ho to database ko pehle saare rows sort karne padenge phir LIMIT apply hoga. Isliye sorting columns pe index hona chahiye. LIMIT without ORDER BY fastest hai but results unpredictable ho sakte hain.'
+                    }
+                ]
+            },
+            {
+                id: 'null-values',
+                title: 'NULL Values',
+                category: 'SQL Basics',
+                simpleExplanation: 'NULL is like an empty box - it\'s not zero, it\'s not blank, it\'s just... nothing! It means "I don\'t know" or "no value here yet". Like when you haven\'t decided what toy to put in a box!',
+                definition: 'NULL represents the absence of a value or unknown value in a database. It is not the same as zero, empty string, or any other value - it specifically means "no data".',
+                keyPoints: [
+                    'NULL is not equal to anything, not even another NULL',
+                    'Use IS NULL or IS NOT NULL to check for NULL values, not = or !=',
+                    'NULL values are ignored in aggregate functions (except COUNT(*))'
+                ],
+                codeExample: `-- Check for NULL values
+SELECT * FROM students WHERE email IS NULL;
+
+-- Check for NOT NULL values
+SELECT * FROM students WHERE email IS NOT NULL;
+
+-- Insert NULL value
+INSERT INTO students (id, name, email) 
+VALUES (1, 'Rahul', NULL);
+
+-- Update to NULL
+UPDATE students SET email = NULL WHERE id = 1;
+
+-- NULL in calculations (result is NULL)
+SELECT name, age, age + NULL AS calculated FROM students;
+
+-- COALESCE to handle NULL (returns first non-NULL value)
+SELECT name, COALESCE(email, 'No email') AS email_display 
+FROM students;
+
+-- IFNULL to provide default value
+SELECT name, IFNULL(phone, 'No phone') AS phone_display 
+FROM students;`,
+                interviewQuestions: [
+                    {
+                        question: 'NULL aur empty string ("") mein kya difference hai?',
+                        answer: 'NULL aur empty string bilkul alag hain. NULL matlab "value nahi hai" ya "unknown", jabki empty string ek actual value hai jo blank hai. Example: Agar email column NULL hai to matlab email provide nahi kiya gaya, agar empty string hai to matlab email field submit kiya gaya but blank tha. Technical differences: 1) NULL ko IS NULL se check karte hain, empty string ko = "" se, 2) NULL kisi bhi comparison mein NULL return karta hai (NULL = NULL bhi false hai), empty string normal comparison karta hai, 3) NULL aggregate functions mein ignore hota hai, empty string count hota hai, 4) NULL storage mein kam space leta hai. Best practice: NULL use karo jab value unknown ho, empty string use karo jab value intentionally blank ho.'
+                    },
+                    {
+                        question: 'NULL values calculations aur comparisons ko kaise affect karte hain?',
+                        answer: 'NULL values calculations aur comparisons mein special behavior karte hain: 1) Koi bhi arithmetic operation NULL ke saath NULL return karta hai: 5 + NULL = NULL, 2) Koi bhi comparison NULL ke saath NULL return karta hai (true/false nahi): age > 18 agar age NULL hai to result NULL hai, not false, 3) NULL = NULL bhi NULL return karta hai, not true, 4) Aggregate functions NULL values ko ignore karte hain: AVG(salary) NULL values ko skip karega, 5) COUNT(*) NULL count karta hai but COUNT(column) NULL ignore karta hai. Isliye NULL handling ke liye special functions use karo: COALESCE, IFNULL, NULLIF. WHERE clause mein NULL comparisons hamesha false treat hote hain, isliye IS NULL use karna padta hai.'
+                    }
+                ]
+            },
+            {
+                id: 'min-max',
+                title: 'MIN and MAX Functions',
+                category: 'Aggregation',
+                simpleExplanation: 'MIN finds the smallest value (like the youngest kid in class) and MAX finds the biggest value (like the tallest kid). They help you quickly find the extremes in your data!',
+                definition: 'MIN() and MAX() are aggregate functions that return the minimum and maximum values from a set of values in a column, respectively.',
+                keyPoints: [
+                    'MIN() returns the smallest value, MAX() returns the largest value',
+                    'Work with numbers, dates, and even strings (alphabetical order)',
+                    'NULL values are ignored in the calculation'
+                ],
+                codeExample: `-- Find youngest student
+SELECT MIN(age) AS youngest_age FROM students;
+
+-- Find oldest student
+SELECT MAX(age) AS oldest_age FROM students;
+
+-- Find both min and max
+SELECT MIN(age) AS min_age, MAX(age) AS max_age FROM students;
+
+-- MIN/MAX with strings (alphabetical)
+SELECT MIN(name) AS first_name, MAX(name) AS last_name FROM students;
+
+-- MIN/MAX with dates
+SELECT MIN(enrollment_date) AS first_enrollment,
+       MAX(enrollment_date) AS latest_enrollment 
+FROM students;
+
+-- MIN/MAX with GROUP BY
+SELECT city, MIN(age) AS youngest, MAX(age) AS oldest 
+FROM students 
+GROUP BY city;`,
+                interviewQuestions: [
+                    {
+                        question: 'MIN aur MAX functions strings pe kaise kaam karte hain?',
+                        answer: 'MIN aur MAX functions strings pe alphabetical order se kaam karte hain. MIN() alphabetically pehla value return karta hai aur MAX() last value. Example: Agar names hain "Amit", "Rahul", "Zara" to MIN(name) "Amit" return karega aur MAX(name) "Zara". Ye case-sensitive ho sakta hai depending on collation. Numbers ko strings ki tarah treat karne pe unexpected results aa sakte hain: "9" > "10" alphabetically kyunki "9" character "1" se bada hai. Dates ko bhi MIN/MAX se compare kar sakte ho - MIN earliest date dega, MAX latest date. NULL values ignore hote hain. Practical use: Alphabetically first/last customer name find karna, earliest/latest date find karna.'
+                    },
+                    {
+                        question: 'MIN/MAX functions ko optimize kaise kare?',
+                        answer: 'MIN/MAX functions ko optimize karne ke liye: 1) Column pe index hona chahiye - indexed column pe MIN/MAX bahut fast hai kyunki database directly first/last value access kar sakta hai bina puri table scan kiye, 2) WHERE clause use karke pehle rows filter karo, phir MIN/MAX apply karo, 3) Agar sirf MIN ya MAX chahiye (dono nahi) to ek hi query mein dono calculate karne se avoid karo, 4) Composite index use karo agar GROUP BY ke saath MIN/MAX use kar rahe ho. Example: INDEX(city, age) agar query hai SELECT city, MIN(age) FROM students GROUP BY city. Bina index ke, database ko full table scan karna padta hai jo slow hai. Index ke saath, query milliseconds mein execute hoti hai even large tables pe.'
+                    }
+                ]
+            },
+            {
+                id: 'count-avg-sum',
+                title: 'COUNT, AVG, and SUM Functions',
+                category: 'Aggregation',
+                simpleExplanation: 'COUNT tells you how many toys you have, SUM adds up all the prices, and AVG tells you the average price. Like counting your money and figuring out the average cost of each toy!',
+                definition: 'COUNT(), AVG(), and SUM() are aggregate functions. COUNT() returns the number of rows, SUM() returns the total sum of a numeric column, and AVG() returns the average value.',
+                keyPoints: [
+                    'COUNT(*) counts all rows including NULLs, COUNT(column) counts non-NULL values',
+                    'SUM() and AVG() work only with numeric columns',
+                    'All three functions ignore NULL values (except COUNT(*))'
+                ],
+                codeExample: `-- Count all students
+SELECT COUNT(*) AS total_students FROM students;
+
+-- Count non-NULL emails
+SELECT COUNT(email) AS students_with_email FROM students;
+
+-- Count distinct cities
+SELECT COUNT(DISTINCT city) AS unique_cities FROM students;
+
+-- Calculate average age
+SELECT AVG(age) AS average_age FROM students;
+
+-- Calculate total of all ages
+SELECT SUM(age) AS total_age FROM students;
+
+-- Multiple aggregations together
+SELECT 
+    COUNT(*) AS total,
+    AVG(age) AS avg_age,
+    SUM(age) AS sum_age,
+    MIN(age) AS min_age,
+    MAX(age) AS max_age
+FROM students;
+
+-- With GROUP BY
+SELECT city, COUNT(*) AS student_count, AVG(age) AS avg_age
+FROM students
+GROUP BY city;`,
+                interviewQuestions: [
+                    {
+                        question: 'COUNT(*) aur COUNT(column_name) mein kya difference hai?',
+                        answer: 'COUNT(*) aur COUNT(column_name) mein important difference hai: COUNT(*) table ke saare rows count karta hai including NULL values. Ye fastest hai kyunki ye actual column values check nahi karta, sirf rows count karta hai. COUNT(column_name) sirf non-NULL values count karta hai us specific column mein. Example: Agar 100 students hain aur 20 ki email NULL hai, to COUNT(*) = 100 but COUNT(email) = 80. COUNT(DISTINCT column) unique non-NULL values count karta hai. Performance wise, COUNT(*) fastest hai, phir COUNT(indexed_column), phir COUNT(non_indexed_column). Interview mein ye frequently puchha jata hai kyunki ye NULL handling aur performance dono concepts test karta hai.'
+                    },
+                    {
+                        question: 'AVG function NULL values ko kaise handle karta hai aur iska kya impact hai?',
+                        answer: 'AVG function NULL values ko completely ignore karta hai calculation mein. Ye important hai kyunki result affect ho sakta hai. Example: Agar 5 students hain with ages 20, 22, NULL, 24, 26, to AVG(age) = (20+22+24+26)/4 = 23, not (20+22+0+24+26)/5. NULL ko zero nahi treat kiya jata. Agar aap NULL ko zero treat karna chahte ho to COALESCE use karo: AVG(COALESCE(age, 0)). Lekin dhyan rahe ki ye mathematically different result dega. Best practice: Pehle decide karo ki NULL ka kya matlab hai - "unknown" hai to ignore karo (default AVG behavior), "zero" hai to COALESCE use karo. Production mein hamesha document karo ki NULL values ko kaise handle kar rahe ho.'
+                    }
+                ]
+            },
+            {
+                id: 'like-wildcards',
+                title: 'LIKE and Wildcards',
+                category: 'Pattern Matching',
+                simpleExplanation: 'LIKE is like a search tool with special powers! % means "anything can be here" and _ means "exactly one character". Like searching for toys: "car%" finds "car", "cars", "cartoon"!',
+                definition: 'The LIKE operator is used in a WHERE clause to search for a specified pattern in a column. Wildcards (% and _) are used with LIKE to match patterns.',
+                keyPoints: [
+                    '% (percent) matches zero or more characters',
+                    '_ (underscore) matches exactly one character',
+                    'LIKE is case-insensitive by default in MySQL (depends on collation)'
+                ],
+                codeExample: `-- Names starting with 'A'
+SELECT * FROM students WHERE name LIKE 'A%';
+
+-- Names ending with 'a'
+SELECT * FROM students WHERE name LIKE '%a';
+
+-- Names containing 'kumar'
+SELECT * FROM students WHERE name LIKE '%kumar%';
+
+-- Names with exactly 5 characters
+SELECT * FROM students WHERE name LIKE '_____';
+
+-- Names starting with 'R' and ending with 'l'
+SELECT * FROM students WHERE name LIKE 'R%l';
+
+-- Second character is 'a'
+SELECT * FROM students WHERE name LIKE '_a%';
+
+-- NOT LIKE for exclusion
+SELECT * FROM students WHERE name NOT LIKE 'A%';
+
+-- Escape special characters
+SELECT * FROM products WHERE name LIKE '%50\\%%';  -- Finds "50%"`,
+                interviewQuestions: [
+                    {
+                        question: 'LIKE operator ki performance issues kya hain aur kaise solve karein?',
+                        answer: 'LIKE operator, especially wildcards ke saath, performance issues create kar sakta hai: 1) Leading wildcard (LIKE "%abc") index use nahi kar sakta, full table scan hota hai jo slow hai, 2) Trailing wildcard (LIKE "abc%") index use kar sakta hai aur fast hai, 3) Both sides wildcard (LIKE "%abc%") sabse slow hai. Solutions: 1) Agar possible ho to leading wildcard avoid karo, 2) Full-text search index use karo text searching ke liye - ye LIKE se bahut fast hai, 3) Elasticsearch jaise specialized search engines use karo large scale searching ke liye, 4) Agar limited patterns hain to IN operator use karo LIKE ki jagah, 5) Application level pe caching implement karo frequently searched patterns ke liye. Production mein large tables pe LIKE with leading wildcard avoid karo.'
+                    },
+                    {
+                        question: 'LIKE operator mein special characters ko kaise search karein?',
+                        answer: 'LIKE operator mein % aur _ special characters hain (wildcards). Agar aapko actual % ya _ character search karna hai to escape karna padega. MySQL mein backslash (\\) escape character hai. Examples: 1) "50%" string search karne ke liye: LIKE "%50\\%%" - pehla aur last % wildcard hai, beech wala \\% actual percent sign hai, 2) Underscore search: LIKE "%\\_%", 3) Backslash search: LIKE "%\\\\%". Alternative: ESCAPE clause use kar sakte ho custom escape character define karne ke liye: LIKE "%50!%%" ESCAPE "!" - yahan ! escape character hai. Best practice: Agar complex pattern matching chahiye to REGEXP use karo jo zyada powerful hai. User input se LIKE queries banate waqt hamesha input ko sanitize karo SQL injection se bachne ke liye.'
+                    }
+                ]
+            },
+            {
+                id: 'in-between',
+                title: 'IN and BETWEEN Operators',
+                category: 'Pattern Matching',
+                simpleExplanation: 'IN is like checking if your toy is in a specific list of toys. BETWEEN is like checking if a number is between two numbers, like "is your age between 5 and 10?"',
+                definition: 'IN operator allows you to specify multiple values in a WHERE clause. BETWEEN operator selects values within a given range (inclusive of boundary values).',
+                keyPoints: [
+                    'IN is shorthand for multiple OR conditions',
+                    'BETWEEN includes both boundary values (inclusive)',
+                    'Both operators can be negated with NOT'
+                ],
+                codeExample: `-- IN operator - check if value is in list
+SELECT * FROM students WHERE city IN ('Delhi', 'Mumbai', 'Bangalore');
+
+-- Equivalent to multiple OR conditions
+SELECT * FROM students 
+WHERE city = 'Delhi' OR city = 'Mumbai' OR city = 'Bangalore';
+
+-- NOT IN
+SELECT * FROM students WHERE city NOT IN ('Delhi', 'Mumbai');
+
+-- IN with subquery
+SELECT * FROM students 
+WHERE id IN (SELECT student_id FROM enrollments WHERE course = 'MySQL');
+
+-- BETWEEN operator - range check (inclusive)
+SELECT * FROM students WHERE age BETWEEN 18 AND 25;
+
+-- Equivalent to
+SELECT * FROM students WHERE age >= 18 AND age <= 25;
+
+-- NOT BETWEEN
+SELECT * FROM students WHERE age NOT BETWEEN 18 AND 25;
+
+-- BETWEEN with dates
+SELECT * FROM orders 
+WHERE order_date BETWEEN '2024-01-01' AND '2024-12-31';`,
+                interviewQuestions: [
+                    {
+                        question: 'IN operator ko subquery ke saath use karne mein kya dhyan rakhna chahiye?',
+                        answer: 'IN operator with subquery use karte waqt important points: 1) Subquery sirf ek column return karna chahiye, multiple columns error denge, 2) Performance issue ho sakta hai agar subquery large result set return kare - consider using JOIN instead, 3) NULL values: Agar subquery mein NULL hai to IN operator unexpected results de sakta hai, 4) Correlated subquery avoid karo kyunki wo har row ke liye execute hota hai (slow), 5) Modern MySQL versions mein IN ko automatically optimize kar diya jata hai JOIN mein. Example: WHERE id IN (SELECT student_id FROM large_table) slow ho sakta hai. Better: JOIN students s ON s.id = large_table.student_id. Lekin small result sets ke liye IN readable aur efficient hai. EXPLAIN use karke query plan check karo.'
+                    },
+                    {
+                        question: 'BETWEEN operator dates aur strings ke saath kaise kaam karta hai?',
+                        answer: 'BETWEEN operator numbers ke alawa dates aur strings ke saath bhi kaam karta hai: 1) Dates: BETWEEN "2024-01-01" AND "2024-12-31" - ye inclusive hai, dono dates include hongi. Dhyan rahe ki time component bhi matter karta hai: "2024-12-31" matlab "2024-12-31 00:00:00", to agar time 23:59:59 hai to wo include nahi hoga. Solution: BETWEEN "2024-01-01" AND "2024-12-31 23:59:59" ya DATE(column) use karo. 2) Strings: BETWEEN "A" AND "M" - alphabetically A se M tak ke names. Case sensitivity collation pe depend karti hai. 3) BETWEEN always inclusive hai - dono boundary values include hoti hain. 4) NOT BETWEEN dono boundaries exclude karta hai. Best practice: Dates ke saath hamesha explicit format use karo aur time zone aware raho.'
+                    }
+                ]
+            },
+            {
+                id: 'joins',
+                title: 'SQL Joins (INNER, LEFT, RIGHT, CROSS)',
+                category: 'Joins',
+                simpleExplanation: 'Joins are like connecting two toy boxes! INNER JOIN shows only toys that match in both boxes. LEFT JOIN shows all from the left box plus matches. RIGHT JOIN shows all from the right box plus matches. CROSS JOIN shows every possible combination!',
+                definition: 'SQL Joins are used to combine rows from two or more tables based on a related column between them. Different types of joins determine which rows are included in the result.',
+                keyPoints: [
+                    'INNER JOIN returns only matching rows from both tables',
+                    'LEFT JOIN returns all rows from left table and matching rows from right',
+                    'RIGHT JOIN returns all rows from right table and matching rows from left',
+                    'CROSS JOIN returns Cartesian product (all possible combinations)'
+                ],
+                codeExample: `-- INNER JOIN - only matching records
+SELECT students.name, courses.course_name
+FROM students
+INNER JOIN enrollments ON students.id = enrollments.student_id
+INNER JOIN courses ON enrollments.course_id = courses.id;
+
+-- LEFT JOIN - all from left table
+SELECT students.name, enrollments.course_id
+FROM students
+LEFT JOIN enrollments ON students.id = enrollments.student_id;
+-- Shows all students, even those not enrolled
+
+-- RIGHT JOIN - all from right table
+SELECT students.name, courses.course_name
+FROM students
+RIGHT JOIN courses ON students.major = courses.department;
+-- Shows all courses, even without students
+
+-- CROSS JOIN - all combinations
+SELECT students.name, courses.course_name
+FROM students
+CROSS JOIN courses;
+-- Every student paired with every course
+
+-- Multiple joins
+SELECT s.name, c.course_name, e.grade
+FROM students s
+INNER JOIN enrollments e ON s.id = e.student_id
+INNER JOIN courses c ON e.course_id = c.id
+WHERE e.grade > 80;`,
+                interviewQuestions: [
+                    {
+                        question: 'LEFT JOIN aur RIGHT JOIN mein practically kya difference hai?',
+                        answer: 'LEFT JOIN aur RIGHT JOIN technically same kaam karte hain, sirf direction different hai. LEFT JOIN left table ke saare rows return karta hai aur right table se matching rows, non-matching ke liye NULL. RIGHT JOIN opposite - right table ke saare rows aur left se matching. Practically: 1) LEFT JOIN zyada common hai aur readable hai, 2) Har RIGHT JOIN ko LEFT JOIN mein convert kar sakte ho table order change karke: A RIGHT JOIN B = B LEFT JOIN A, 3) Best practice: Sirf LEFT JOIN use karo consistency ke liye, RIGHT JOIN confusing ho sakta hai, 4) LEFT JOIN mein main table left side pe hoti hai jo logical lagta hai. Example: Students LEFT JOIN Enrollments - saare students chahiye, enrolled ho ya na ho. Ye RIGHT JOIN se zyada intuitive hai.'
+                    },
+                    {
+                        question: 'JOIN performance ko kaise optimize karein?',
+                        answer: 'JOIN performance optimize karne ke liye: 1) Join columns pe index hona chahiye - foreign key aur primary key columns pe index most important hai, 2) Sirf zaruri columns SELECT karo, * avoid karo, 3) WHERE clause se pehle rows filter karo to kam rows join hone padenge, 4) Proper join type choose karo - INNER JOIN fastest hai, LEFT/RIGHT JOIN slower, 5) Join order matter karta hai - chhoti table pehle, badi table baad mein, 6) Avoid multiple joins agar possible ho - denormalization consider karo frequently joined tables ke liye, 7) EXPLAIN use karke query execution plan dekho, 8) Composite indexes use karo agar multiple columns pe join kar rahe ho. Example: INDEX(student_id, course_id) agar dono columns pe frequently join hota hai. Large tables pe proper indexing se 100x performance improvement ho sakti hai.'
+                    }
+                ]
+            },
+            {
+                id: 'self-join',
+                title: 'Self Join',
+                category: 'Joins',
+                simpleExplanation: 'Self Join is like a table looking at itself in a mirror! It\'s when you connect a table to itself. Like finding which students have the same age by comparing the students table with itself!',
+                definition: 'A Self Join is a regular join where a table is joined with itself. It is useful for comparing rows within the same table or establishing hierarchical relationships.',
+                keyPoints: [
+                    'Table is joined with itself using table aliases',
+                    'Useful for hierarchical data (like employee-manager relationships)',
+                    'Can use any join type (INNER, LEFT, RIGHT) with self join'
+                ],
+                codeExample: `-- Find students from the same city
+SELECT s1.name AS student1, s2.name AS student2, s1.city
+FROM students s1
+INNER JOIN students s2 ON s1.city = s2.city
+WHERE s1.id < s2.id;  -- Avoid duplicate pairs
+
+-- Employee-Manager relationship
+SELECT e.name AS employee, m.name AS manager
+FROM employees e
+LEFT JOIN employees m ON e.manager_id = m.id;
+
+-- Find students with same age
+SELECT s1.name AS student1, s2.name AS student2, s1.age
+FROM students s1
+INNER JOIN students s2 ON s1.age = s2.age AND s1.id != s2.id;
+
+-- Hierarchical data - find all subordinates
+SELECT e1.name AS employee, e2.name AS subordinate
+FROM employees e1
+LEFT JOIN employees e2 ON e1.id = e2.manager_id
+ORDER BY e1.name;
+
+-- Find pairs of students in same course
+SELECT s1.name, s2.name, e1.course_id
+FROM enrollments e1
+JOIN enrollments e2 ON e1.course_id = e2.course_id
+JOIN students s1 ON e1.student_id = s1.id
+JOIN students s2 ON e2.student_id = s2.id
+WHERE s1.id < s2.id;`,
+                interviewQuestions: [
+                    {
+                        question: 'Self Join mein duplicate pairs ko kaise avoid karein?',
+                        answer: 'Self Join mein duplicate aur reverse pairs avoid karne ke liye conditions use karte hain: 1) s1.id < s2.id use karo to sirf ek direction ke pairs milenge - agar (1,2) mila to (2,1) nahi milega, 2) s1.id != s2.id use karo to same record apne aap se match nahi hoga, 3) Dono conditions saath use karo best results ke liye: WHERE s1.id < s2.id. Example: Agar 3 students same city se hain (id 1,2,3), to bina condition ke 9 pairs milenge including (1,1), (1,2), (2,1) etc. With s1.id < s2.id sirf 3 unique pairs milenge: (1,2), (1,3), (2,3). Ye important hai kyunki duplicate pairs confusing aur inefficient hain. Interview mein ye commonly puchha jata hai kyunki ye logical thinking test karta hai.'
+                    },
+                    {
+                        question: 'Self Join ka real-world use case kya hai?',
+                        answer: 'Self Join ke bahut practical use cases hain: 1) Organizational hierarchy - employees table mein manager_id column ho to self join se employee-manager relationship mil sakti hai, 2) Social networks - friends table mein user_id aur friend_id ho to mutual friends find kar sakte ho, 3) Product recommendations - "customers who bought X also bought Y" type queries, 4) Geographic data - find cities within certain distance of each other, 5) Time series data - compare current value with previous value, 6) Family trees - parent-child relationships, 7) Course prerequisites - which courses must be taken before others. Example: SELECT e.name, m.name as manager FROM employees e LEFT JOIN employees m ON e.manager_id = m.id - ye query har employee ka manager show karegi. CEO ke liye manager NULL hoga. Ye pattern bahut common hai enterprise applications mein.'
+                    }
+                ]
+            },
+            {
+                id: 'union',
+                title: 'UNION and UNION ALL',
+                category: 'Joins',
+                simpleExplanation: 'UNION is like combining two toy boxes into one! UNION removes duplicate toys, while UNION ALL keeps everything even if you have two of the same toy. Both boxes must have the same type of toys (same columns)!',
+                definition: 'UNION combines the result sets of two or more SELECT statements, removing duplicates. UNION ALL combines results but keeps all duplicates.',
+                keyPoints: [
+                    'UNION removes duplicate rows, UNION ALL keeps all rows',
+                    'All SELECT statements must have same number of columns with compatible data types',
+                    'Column names from first SELECT are used in result'
+                ],
+                codeExample: `-- UNION - removes duplicates
+SELECT name, city FROM students
+UNION
+SELECT name, city FROM teachers;
+
+-- UNION ALL - keeps duplicates (faster)
+SELECT name, city FROM students
+UNION ALL
+SELECT name, city FROM teachers;
+
+-- UNION with WHERE clauses
+SELECT name, 'Student' AS type FROM students WHERE age > 20
+UNION
+SELECT name, 'Teacher' AS type FROM teachers WHERE experience > 5;
+
+-- UNION with ORDER BY (at the end)
+SELECT name, age FROM students
+UNION
+SELECT name, age FROM alumni
+ORDER BY age DESC;
+
+-- Multiple UNION
+SELECT product_name, price FROM electronics
+UNION
+SELECT product_name, price FROM furniture
+UNION
+SELECT product_name, price FROM clothing
+ORDER BY price;
+
+-- UNION with different column names (first query names used)
+SELECT student_id AS id, student_name AS name FROM students
+UNION
+SELECT teacher_id, teacher_name FROM teachers;`,
+                interviewQuestions: [
+                    {
+                        question: 'UNION aur UNION ALL mein performance difference kya hai?',
+                        answer: 'UNION aur UNION ALL mein significant performance difference hai: UNION ALL fast hai kyunki ye simply dono result sets ko combine kar deta hai bina kuch check kiye. UNION slow hai kyunki ye duplicates remove karne ke liye extra processing karta hai - internally ye DISTINCT operation perform karta hai. Performance impact: Large datasets pe UNION 2-3x slower ho sakta hai UNION ALL se. Best practice: 1) Agar aapko pata hai ki duplicates nahi honge ya duplicates acceptable hain to UNION ALL use karo, 2) Sirf tab UNION use karo jab duplicates remove karna zaroori ho, 3) Agar possible ho to application level pe duplicates handle karo. Example: Agar aap different tables se data combine kar rahe ho jo naturally unique hain (different primary keys) to UNION ALL use karo. Interview mein ye question frequently aata hai kyunki ye performance awareness test karta hai.'
+                    },
+                    {
+                        question: 'UNION use karte waqt kya restrictions hain?',
+                        answer: 'UNION use karte waqt important restrictions: 1) Saare SELECT statements mein same number of columns hone chahiye, 2) Corresponding columns ke data types compatible hone chahiye (INT aur VARCHAR combine nahi ho sakte), 3) Column order same hona chahiye - pehli query ka pehla column dusri query ke pehle column se match hona chahiye, 4) ORDER BY sirf last mein ek baar use kar sakte ho, individual queries mein nahi, 5) Column names first SELECT statement se aate hain, baaki queries ke column names ignore hote hain. Common mistakes: Different number of columns, incompatible data types, ORDER BY har query mein lagana. Solution: Hamesha columns explicitly specify karo, * avoid karo. Example: SELECT id, name FROM t1 UNION SELECT id, name FROM t2 - ye sahi hai. SELECT * FROM t1 UNION SELECT * FROM t2 - ye risky hai agar table structures different hain.'
+                    }
+                ]
+            },
+            {
+                id: 'group-by',
+                title: 'GROUP BY Clause',
+                category: 'Aggregation',
+                simpleExplanation: 'GROUP BY is like sorting your toys into groups - all cars together, all dolls together. Then you can count how many toys are in each group or find the biggest toy in each group!',
+                definition: 'The GROUP BY clause groups rows that have the same values in specified columns into summary rows. It is typically used with aggregate functions to perform calculations on each group.',
+                keyPoints: [
+                    'Groups rows with same values in specified columns',
+                    'Usually used with aggregate functions (COUNT, SUM, AVG, MIN, MAX)',
+                    'Columns in SELECT must be either in GROUP BY or used with aggregate functions'
+                ],
+                codeExample: `-- Count students per city
+SELECT city, COUNT(*) AS student_count
+FROM students
+GROUP BY city;
+
+-- Average age per city
+SELECT city, AVG(age) AS avg_age
+FROM students
+GROUP BY city;
+
+-- Multiple aggregations
+SELECT city, 
+       COUNT(*) AS total,
+       AVG(age) AS avg_age,
+       MIN(age) AS youngest,
+       MAX(age) AS oldest
+FROM students
+GROUP BY city;
+
+-- GROUP BY multiple columns
+SELECT city, gender, COUNT(*) AS count
+FROM students
+GROUP BY city, gender;
+
+-- GROUP BY with WHERE (filter before grouping)
+SELECT city, COUNT(*) AS count
+FROM students
+WHERE age > 18
+GROUP BY city;
+
+-- GROUP BY with ORDER BY
+SELECT city, COUNT(*) AS count
+FROM students
+GROUP BY city
+ORDER BY count DESC;`,
+                interviewQuestions: [
+                    {
+                        question: 'GROUP BY mein SELECT clause mein kya columns allowed hain?',
+                        answer: 'GROUP BY use karte waqt SELECT clause mein sirf do tarah ke columns allowed hain: 1) Wo columns jo GROUP BY mein mentioned hain, 2) Aggregate functions (COUNT, SUM, AVG, MIN, MAX). Agar koi column GROUP BY mein nahi hai aur aggregate function mein bhi nahi hai to error aayega (SQL strict mode mein). Example: SELECT city, name, COUNT(*) FROM students GROUP BY city - ye error dega kyunki name GROUP BY mein nahi hai. Sahi tarika: SELECT city, COUNT(*) FROM students GROUP BY city. Reason: Agar ek city mein 10 students hain to database ko kaunsa name show karna chahiye? Ye ambiguous hai. MySQL ke purane versions mein ye allow tha but random value select hoti thi jo unpredictable tha. Modern MySQL mein ONLY_FULL_GROUP_BY mode default hai jo ye error throw karta hai.'
+                    },
+                    {
+                        question: 'WHERE aur HAVING mein kya difference hai GROUP BY ke context mein?',
+                        answer: 'WHERE aur HAVING dono filter karte hain but different stages pe: WHERE clause GROUP BY se PEHLE rows ko filter karta hai - ye individual rows pe condition apply karta hai. HAVING clause GROUP BY ke BAAD groups ko filter karta hai - ye aggregate results pe condition apply karta hai. Example: SELECT city, COUNT(*) as count FROM students WHERE age > 18 GROUP BY city HAVING count > 5. Yahan WHERE pehle 18+ students filter karega, phir GROUP BY city wise group karega, phir HAVING sirf wo cities show karegi jahan 5+ students hain. Key difference: WHERE mein aggregate functions use nahi kar sakte (WHERE COUNT(*) > 5 invalid hai), HAVING mein aggregate functions use kar sakte ho. Performance: WHERE fast hai kyunki pehle filter karta hai, HAVING baad mein filter karta hai. Best practice: Jitna ho sake WHERE mein filter karo.'
+                    }
+                ]
+            },
+            {
+                id: 'having',
+                title: 'HAVING Clause',
+                category: 'Aggregation',
+                simpleExplanation: 'HAVING is like a filter for groups! After you\'ve grouped your toys, HAVING lets you say "only show me groups with more than 5 toys" or "only groups where the average price is over $10"!',
+                definition: 'The HAVING clause is used to filter groups created by GROUP BY based on aggregate function results. It is similar to WHERE but works on grouped data.',
+                keyPoints: [
+                    'HAVING filters groups after GROUP BY is applied',
+                    'Can use aggregate functions in conditions',
+                    'WHERE filters rows before grouping, HAVING filters groups after grouping'
+                ],
+                codeExample: `-- Cities with more than 5 students
+SELECT city, COUNT(*) AS student_count
+FROM students
+GROUP BY city
+HAVING COUNT(*) > 5;
+
+-- Cities with average age above 20
+SELECT city, AVG(age) AS avg_age
+FROM students
+GROUP BY city
+HAVING AVG(age) > 20;
+
+-- Multiple HAVING conditions
+SELECT city, COUNT(*) AS count, AVG(age) AS avg_age
+FROM students
+GROUP BY city
+HAVING COUNT(*) > 5 AND AVG(age) > 20;
+
+-- HAVING with WHERE
+SELECT city, COUNT(*) AS count
+FROM students
+WHERE age > 18
+GROUP BY city
+HAVING COUNT(*) > 3;
+
+-- HAVING with ORDER BY
+SELECT city, COUNT(*) AS count
+FROM students
+GROUP BY city
+HAVING COUNT(*) > 5
+ORDER BY count DESC;
+
+-- HAVING with alias (MySQL allows this)
+SELECT city, COUNT(*) AS student_count
+FROM students
+GROUP BY city
+HAVING student_count > 5;`,
+                interviewQuestions: [
+                    {
+                        question: 'HAVING clause mein alias use kar sakte hain kya?',
+                        answer: 'MySQL mein HAVING clause mein alias use kar sakte ho but ye standard SQL nahi hai aur sab databases mein kaam nahi karta. Example: SELECT city, COUNT(*) AS cnt FROM students GROUP BY city HAVING cnt > 5 - ye MySQL mein kaam karega. Lekin PostgreSQL, Oracle mein error dega. Standard SQL mein HAVING mein aggregate function repeat karna padta hai: HAVING COUNT(*) > 5. Reason: SQL execution order mein SELECT clause HAVING ke baad process hota hai theoretically, to alias available nahi hona chahiye. But MySQL implementation mein ye allowed hai convenience ke liye. Best practice: Agar code portable banana hai multiple databases ke liye to HAVING mein alias avoid karo aur aggregate function repeat karo. Agar sirf MySQL use kar rahe ho to alias use kar sakte ho readability ke liye.'
+                    },
+                    {
+                        question: 'Query execution order kya hai jab WHERE, GROUP BY, HAVING sab ho?',
+                        answer: 'SQL query execution order (logical order, not actual execution): 1) FROM - tables identify hoti hain, 2) WHERE - individual rows filter hote hain, 3) GROUP BY - filtered rows group hote hain, 4) HAVING - groups filter hote hain, 5) SELECT - columns select hote hain, 6) ORDER BY - results sort hote hain, 7) LIMIT - final rows limit hote hain. Example: SELECT city, COUNT(*) as cnt FROM students WHERE age > 18 GROUP BY city HAVING cnt > 5 ORDER BY cnt DESC LIMIT 3. Execution: Pehle age > 18 wale students filter honge, phir city wise group honge, phir 5+ students wale cities filter hongi, phir count ke hisaab se sort hoga, phir top 3 cities milegi. Ye order samajhna important hai kyunki isse pata chalta hai ki kahan kya optimize kar sakte ho aur kahan kaunse columns available hain.'
+                    }
+                ]
+            },
+            {
+                id: 'exists',
+                title: 'EXISTS Operator',
+                category: 'Advanced SQL',
+                simpleExplanation: 'EXISTS is like asking "does this exist?" It checks if a subquery returns any results. Like asking "are there any red cars in the toy box?" - if yes, EXISTS is true!',
+                definition: 'The EXISTS operator is used to test for the existence of any record in a subquery. It returns TRUE if the subquery returns one or more records.',
+                keyPoints: [
+                    'Returns TRUE if subquery returns at least one row',
+                    'More efficient than IN for large datasets',
+                    'Stops execution as soon as first match is found'
+                ],
+                codeExample: `-- Find students who are enrolled in at least one course
+SELECT name FROM students s
+WHERE EXISTS (
+    SELECT 1 FROM enrollments e 
+    WHERE e.student_id = s.id
+);
+
+-- Find students NOT enrolled in any course
+SELECT name FROM students s
+WHERE NOT EXISTS (
+    SELECT 1 FROM enrollments e 
+    WHERE e.student_id = s.id
+);
+
+-- Find cities with at least one student above 25
+SELECT DISTINCT city FROM students s1
+WHERE EXISTS (
+    SELECT 1 FROM students s2 
+    WHERE s2.city = s1.city AND s2.age > 25
+);
+
+-- EXISTS vs IN comparison
+-- Using EXISTS (efficient)
+SELECT name FROM students s
+WHERE EXISTS (
+    SELECT 1 FROM enrollments e 
+    WHERE e.student_id = s.id AND e.course_id = 101
+);
+
+-- Using IN (less efficient for large data)
+SELECT name FROM students
+WHERE id IN (
+    SELECT student_id FROM enrollments 
+    WHERE course_id = 101
+);`,
+                interviewQuestions: [
+                    {
+                        question: 'EXISTS aur IN operator mein performance difference kya hai?',
+                        answer: 'EXISTS aur IN mein important performance differences hain: 1) EXISTS short-circuit evaluation karta hai - jaise hi pehla match milta hai, wo stop ho jata hai aur TRUE return karta hai. IN operator puri subquery execute karta hai aur phir check karta hai. 2) EXISTS correlated subquery use karta hai jo har outer row ke liye execute hota hai, but optimization ki wajah se often fast hota hai. 3) Large result sets ke liye EXISTS better hai kyunki wo sirf existence check karta hai, actual values return nahi karta. 4) IN operator subquery ke saare results memory mein load karta hai. Example: Agar subquery 1 million rows return kare to IN slow hoga, EXISTS fast. Best practice: Agar sirf existence check karna hai to EXISTS use karo. Agar actual values chahiye to IN use karo. Modern databases dono ko optimize kar lete hain but EXISTS generally safer choice hai large data ke liye.'
+                    },
+                    {
+                        question: 'EXISTS subquery mein SELECT 1, SELECT * ya SELECT column_name - kya difference hai?',
+                        answer: 'EXISTS subquery mein SELECT clause matter nahi karta kyunki EXISTS sirf check karta hai ki koi row exist karta hai ya nahi, actual values nahi dekhta. Isliye teen options same result dete hain: 1) SELECT 1 - most common aur recommended, clearly shows intent ki sirf existence check hai, 2) SELECT * - kaam karega but unnecessary hai kyunki columns fetch nahi hote, 3) SELECT column_name - ye bhi kaam karega but pointless hai. Best practice: SELECT 1 use karo kyunki: a) Code clearly dikhata hai ki sirf existence check hai, b) Readable hai, c) Convention hai jo developers samajhte hain. Performance wise koi difference nahi hai kyunki optimizer samajh jata hai ki EXISTS ke liye actual data fetch karne ki zarurat nahi. Interview mein ye puchh sakte hain to samjhao ki SELECT 1 convention hai aur clarity ke liye use hota hai.'
+                    }
+                ]
+            },
+            {
+                id: 'any-all',
+                title: 'ANY and ALL Operators',
+                category: 'Advanced SQL',
+                simpleExplanation: 'ANY means "at least one must match" and ALL means "every single one must match". Like checking if your toy is bigger than ANY toy in a box (just one) or bigger than ALL toys (every single one)!',
+                definition: 'ANY and ALL are operators used with subqueries. ANY returns TRUE if the condition is true for at least one value returned by the subquery. ALL returns TRUE if the condition is true for all values returned by the subquery.',
+                keyPoints: [
+                    'ANY returns TRUE if condition matches at least one subquery result',
+                    'ALL returns TRUE if condition matches all subquery results',
+                    'Often used with comparison operators (>, <, =, !=)'
+                ],
+                codeExample: `-- Find students older than ANY student in Delhi
+SELECT name, age FROM students
+WHERE age > ANY (
+    SELECT age FROM students WHERE city = 'Delhi'
+);
+-- Returns students older than the youngest Delhi student
+
+-- Find students older than ALL students in Delhi
+SELECT name, age FROM students
+WHERE age > ALL (
+    SELECT age FROM students WHERE city = 'Delhi'
+);
+-- Returns students older than the oldest Delhi student
+
+-- Using = ANY (equivalent to IN)
+SELECT name FROM students
+WHERE city = ANY ('Delhi', 'Mumbai', 'Bangalore');
+-- Same as: WHERE city IN ('Delhi', 'Mumbai', 'Bangalore')
+
+-- Using != ALL (equivalent to NOT IN)
+SELECT name FROM students
+WHERE city != ALL ('Delhi', 'Mumbai');
+-- Same as: WHERE city NOT IN ('Delhi', 'Mumbai')
+
+-- Find products cheaper than ALL competitor products
+SELECT product_name, price FROM our_products
+WHERE price < ALL (
+    SELECT price FROM competitor_products 
+    WHERE category = 'Electronics'
+);
+
+-- Find students with age equal to any of the top 3 ages
+SELECT name, age FROM students
+WHERE age = ANY (
+    SELECT age FROM students 
+    ORDER BY age DESC LIMIT 3
+);`,
+                interviewQuestions: [
+                    {
+                        question: 'ANY aur ALL operators ko IN aur NOT IN se kaise compare karein?',
+                        answer: 'ANY aur ALL operators IN aur NOT IN se related hain: 1) = ANY exactly same hai IN ke jaise: WHERE x = ANY (subquery) same as WHERE x IN (subquery), 2) != ALL exactly same hai NOT IN ke jaise: WHERE x != ALL (subquery) same as WHERE x NOT IN (subquery), 3) But ANY aur ALL zyada flexible hain kyunki inhe kisi bhi comparison operator ke saath use kar sakte ho: >, <, >=, <=, 4) IN sirf equality check karta hai. Example: age > ANY (subquery) ka matlab hai age subquery ki kisi bhi value se bada ho. Ye IN se nahi kar sakte. Best practice: Equality ke liye IN use karo (readable hai), other comparisons ke liye ANY/ALL use karo. Interview mein ye relationship samjhana important hai kyunki ye logical thinking show karta hai.'
+                    },
+                    {
+                        question: 'ALL operator ka practical use case kya hai?',
+                        answer: 'ALL operator ke useful practical use cases: 1) Find maximum: age > ALL (subquery) matlab age sabse badi hai - ye MAX() ka alternative hai, 2) Quality control: price < ALL (competitor_prices) - apni price sabse kam hai, 3) Threshold checking: score >= ALL (passing_scores) - sabhi passing criteria meet kar raha hai, 4) Comparison across groups: salary > ALL (SELECT salary FROM dept WHERE dept_id = 5) - is employee ki salary department 5 ke sabhi employees se zyada hai, 5) Data validation: value != ALL (invalid_values) - value kisi bhi invalid value ke equal nahi hai. Real example: E-commerce mein "Lowest Price Guarantee" check karne ke liye: WHERE our_price <= ALL (SELECT price FROM competitors WHERE product_id = X). ALL operator powerful hai but readability ke liye sometimes JOIN ya aggregate functions better hote hain. Production mein use karte waqt performance test karo.'
+                    }
+                ]
+            },
+            {
+                id: 'insert-select',
+                title: 'INSERT INTO SELECT',
+                category: 'Advanced SQL',
+                simpleExplanation: 'INSERT INTO SELECT is like copying toys from one box to another! You select toys from one box (table) and put them into another box. You can copy all toys or just specific ones!',
+                definition: 'INSERT INTO SELECT statement copies data from one table and inserts it into another table. It combines INSERT and SELECT operations in a single statement.',
+                keyPoints: [
+                    'Copies data from one table to another',
+                    'Can use WHERE clause to filter which rows to copy',
+                    'Target and source tables can be the same (with conditions)'
+                ],
+                codeExample: `-- Copy all students to archive table
+INSERT INTO students_archive
+SELECT * FROM students;
+
+-- Copy specific columns
+INSERT INTO students_summary (name, city)
+SELECT name, city FROM students;
+
+-- Copy with WHERE condition
+INSERT INTO senior_students
+SELECT * FROM students
+WHERE age >= 21;
+
+-- Copy with transformation
+INSERT INTO students_report (full_name, age_group)
+SELECT 
+    CONCAT(first_name, ' ', last_name),
+    CASE 
+        WHEN age < 18 THEN 'Minor'
+        WHEN age BETWEEN 18 AND 25 THEN 'Young Adult'
+        ELSE 'Adult'
+    END
+FROM students;
+
+-- Copy from multiple tables with JOIN
+INSERT INTO enrollment_summary (student_name, course_name, grade)
+SELECT s.name, c.course_name, e.grade
+FROM students s
+JOIN enrollments e ON s.id = e.student_id
+JOIN courses c ON e.course_id = c.id
+WHERE e.grade >= 80;
+
+-- Copy with aggregate data
+INSERT INTO city_stats (city, student_count, avg_age)
+SELECT city, COUNT(*), AVG(age)
+FROM students
+GROUP BY city;`,
+                interviewQuestions: [
+                    {
+                        question: 'INSERT INTO SELECT ka performance kaise optimize karein?',
+                        answer: 'INSERT INTO SELECT ko optimize karne ke liye: 1) Bulk insert use karo - ek baar mein multiple rows insert karna individual inserts se fast hai, 2) Indexes temporarily disable karo large inserts ke liye, baad mein rebuild karo - ye significantly fast hota hai, 3) Transaction size control karo - bahut bade transactions memory issues create kar sakte hain, batches mein insert karo, 4) WHERE clause se unnecessary rows filter karo pehle hi, 5) Target table pe triggers disable karo temporarily agar possible ho, 6) LOAD DATA INFILE use karo agar bahut large data transfer karna hai - ye fastest method hai, 7) Parallel execution use karo agar database support karta hai. Example: Agar 10 million rows copy karne hain to 100k rows ki batches mein karo. Best practice: Production mein large data migrations ke liye proper planning karo, off-peak hours mein run karo, aur backup lo pehle.'
+                    },
+                    {
+                        question: 'INSERT INTO SELECT mein duplicate keys ko kaise handle karein?',
+                        answer: 'INSERT INTO SELECT mein duplicate keys handle karne ke options: 1) INSERT IGNORE use karo - duplicate keys ko silently skip kar dega, error nahi dega: INSERT IGNORE INTO table SELECT..., 2) ON DUPLICATE KEY UPDATE use karo - duplicate ho to update kar do: INSERT INTO table SELECT... ON DUPLICATE KEY UPDATE col=VALUES(col), 3) REPLACE INTO use karo - duplicate ho to pehle delete karo phir insert karo: REPLACE INTO table SELECT..., 4) Pehle check karo WHERE NOT EXISTS use karke: INSERT INTO t1 SELECT * FROM t2 WHERE NOT EXISTS (SELECT 1 FROM t1 WHERE t1.id = t2.id). Har approach ke pros/cons hain: INSERT IGNORE fast hai but silent failures ho sakte hain, ON DUPLICATE KEY UPDATE flexible hai but complex, REPLACE dangerous hai kyunki delete karta hai. Best practice: Business logic ke hisaab se choose karo aur hamesha test karo staging environment mein pehle.'
+                    }
+                ]
+            },
+            {
+                id: 'case',
+                title: 'CASE Statement',
+                category: 'Advanced SQL',
+                simpleExplanation: 'CASE is like an if-else statement! It checks conditions and gives different answers. Like saying "if toy is red, call it \'fire truck\', if blue, call it \'police car\', otherwise call it \'regular car\'"!',
+                definition: 'The CASE statement is a conditional expression that allows you to add if-then-else logic to SQL queries. It evaluates conditions and returns a value when the first condition is met.',
+                keyPoints: [
+                    'Two forms: Simple CASE and Searched CASE',
+                    'Returns a value based on conditions',
+                    'Can be used in SELECT, WHERE, ORDER BY, and other clauses'
+                ],
+                codeExample: `-- Simple CASE (comparing one column)
+SELECT name, age,
+    CASE age
+        WHEN 18 THEN 'Just Adult'
+        WHEN 19 THEN 'Young Adult'
+        WHEN 20 THEN 'Adult'
+        ELSE 'Other'
+    END AS age_category
+FROM students;
+
+-- Searched CASE (multiple conditions)
+SELECT name, age,
+    CASE 
+        WHEN age < 18 THEN 'Minor'
+        WHEN age BETWEEN 18 AND 25 THEN 'Young Adult'
+        WHEN age BETWEEN 26 AND 40 THEN 'Adult'
+        ELSE 'Senior'
+    END AS age_group
+FROM students;
+
+-- CASE in ORDER BY
+SELECT name, city
+FROM students
+ORDER BY 
+    CASE city
+        WHEN 'Delhi' THEN 1
+        WHEN 'Mumbai' THEN 2
+        WHEN 'Bangalore' THEN 3
+        ELSE 4
+    END;
+
+-- CASE with aggregation
+SELECT 
+    city,
+    COUNT(CASE WHEN age < 20 THEN 1 END) AS under_20,
+    COUNT(CASE WHEN age >= 20 THEN 1 END) AS over_20
+FROM students
+GROUP BY city;
+
+-- Nested CASE
+SELECT name,
+    CASE 
+        WHEN age < 18 THEN 'Minor'
+        WHEN age >= 18 THEN
+            CASE 
+                WHEN city = 'Delhi' THEN 'Delhi Adult'
+                ELSE 'Other City Adult'
+            END
+    END AS category
+FROM students;
+
+-- CASE in UPDATE
+UPDATE students
+SET grade = CASE
+    WHEN score >= 90 THEN 'A'
+    WHEN score >= 80 THEN 'B'
+    WHEN score >= 70 THEN 'C'
+    ELSE 'F'
+END;`,
+                interviewQuestions: [
+                    {
+                        question: 'Simple CASE aur Searched CASE mein kya difference hai?',
+                        answer: 'CASE ke do forms hain: 1) Simple CASE: Ek expression ko multiple values se compare karta hai. Syntax: CASE column WHEN value1 THEN result1 WHEN value2 THEN result2 END. Example: CASE city WHEN "Delhi" THEN 1 WHEN "Mumbai" THEN 2 END. Ye sirf equality check kar sakta hai. 2) Searched CASE: Multiple different conditions check kar sakta hai. Syntax: CASE WHEN condition1 THEN result1 WHEN condition2 THEN result2 END. Example: CASE WHEN age < 18 THEN "Minor" WHEN age > 60 THEN "Senior" END. Ye kisi bhi comparison operator use kar sakta hai. Searched CASE zyada flexible hai aur commonly use hota hai. Simple CASE readable hai jab sirf ek column ki values check karni ho. Best practice: Searched CASE use karo kyunki ye zyada powerful hai aur future changes ke liye flexible hai.'
+                    },
+                    {
+                        question: 'CASE statement ko aggregate functions ke saath kaise use karein?',
+                        answer: 'CASE statement aggregate functions ke saath bahut powerful hai conditional aggregation ke liye: 1) Conditional counting: COUNT(CASE WHEN condition THEN 1 END) - sirf matching rows count hoti hain, 2) Conditional sum: SUM(CASE WHEN city="Delhi" THEN amount ELSE 0 END), 3) Multiple aggregations ek query mein: SELECT COUNT(CASE WHEN age<20 THEN 1 END) as young, COUNT(CASE WHEN age>=20 THEN 1 END) as old FROM students. Ye pivot table jaise results deta hai. Example: SELECT city, SUM(CASE WHEN gender="M" THEN 1 ELSE 0 END) as male_count, SUM(CASE WHEN gender="F" THEN 1 ELSE 0 END) as female_count FROM students GROUP BY city. Ye ek query mein city-wise gender distribution de dega. Ye approach multiple queries se better hai performance wise. Production mein reporting queries mein ye pattern bahut common hai.'
+                    }
+                ]
+            },
+            {
+                id: 'null-functions',
+                title: 'NULL Functions (IFNULL, COALESCE, NULLIF)',
+                category: 'Advanced SQL',
+                simpleExplanation: 'NULL functions help you handle empty boxes! IFNULL says "if box is empty, use this instead". COALESCE checks multiple boxes and uses the first non-empty one. NULLIF makes a box empty if two things are equal!',
+                definition: 'NULL functions are used to handle NULL values in SQL. IFNULL returns an alternative value if NULL, COALESCE returns the first non-NULL value from a list, and NULLIF returns NULL if two expressions are equal.',
+                keyPoints: [
+                    'IFNULL(expr, replacement) - returns replacement if expr is NULL',
+                    'COALESCE(expr1, expr2, ...) - returns first non-NULL expression',
+                    'NULLIF(expr1, expr2) - returns NULL if expr1 equals expr2'
+                ],
+                codeExample: `-- IFNULL - provide default value for NULL
+SELECT name, IFNULL(email, 'No email provided') AS email
+FROM students;
+
+-- IFNULL in calculations
+SELECT name, age, IFNULL(bonus, 0) AS bonus,
+       salary + IFNULL(bonus, 0) AS total_pay
+FROM employees;
+
+-- COALESCE - first non-NULL value
+SELECT name,
+       COALESCE(mobile, home_phone, office_phone, 'No phone') AS contact
+FROM students;
+
+-- COALESCE with multiple columns
+SELECT 
+    COALESCE(preferred_name, first_name, 'Unknown') AS display_name
+FROM users;
+
+-- NULLIF - return NULL if values are equal
+SELECT name,
+       NULLIF(city, 'Unknown') AS city
+FROM students;
+-- If city is 'Unknown', it becomes NULL
+
+-- NULLIF to avoid division by zero
+SELECT 
+    total_sales,
+    total_sales / NULLIF(total_orders, 0) AS avg_order_value
+FROM sales_data;
+-- Returns NULL instead of error when total_orders is 0
+
+-- Combining NULL functions
+SELECT name,
+       COALESCE(
+           NULLIF(email, ''),
+           NULLIF(backup_email, ''),
+           'No email'
+       ) AS contact_email
+FROM students;`,
+                interviewQuestions: [
+                    {
+                        question: 'IFNULL aur COALESCE mein kya difference hai aur kab kaunsa use karein?',
+                        answer: 'IFNULL aur COALESCE dono NULL handling ke liye hain but differences hain: 1) IFNULL sirf 2 arguments leta hai: IFNULL(expr, replacement). COALESCE multiple arguments le sakta hai: COALESCE(expr1, expr2, expr3, ...) aur pehla non-NULL return karta hai. 2) IFNULL MySQL specific hai, COALESCE standard SQL hai jo sab databases mein kaam karta hai. 3) Performance: IFNULL thoda fast hai kyunki simple hai, but difference negligible hai. 4) Flexibility: COALESCE zyada flexible hai multiple fallback values ke liye. Example: COALESCE(mobile, home_phone, office_phone, "No contact") - ye teen phone numbers check karega. IFNULL se ye nahi kar sakte. Best practice: Agar sirf ek fallback value hai to IFNULL use karo simplicity ke liye. Agar multiple fallback options hain ya code portable banana hai to COALESCE use karo.'
+                    },
+                    {
+                        question: 'NULLIF function ka practical use case kya hai?',
+                        answer: 'NULLIF ka main use case hai unwanted values ko NULL mein convert karna: 1) Division by zero avoid karna: amount / NULLIF(quantity, 0) - agar quantity 0 hai to NULL return hoga instead of error, 2) Empty strings ko NULL banana: NULLIF(email, "") - agar email empty string hai to NULL ho jayega, 3) Default/placeholder values ko NULL banana: NULLIF(city, "Unknown") - "Unknown" ko NULL treat karna, 4) Data cleaning: NULLIF(status, "N/A") - invalid values ko NULL banana. Real example: E-commerce mein average order value calculate karte waqt: SELECT SUM(total) / NULLIF(COUNT(*), 0) FROM orders WHERE status="completed". Agar koi completed order nahi hai to division by zero nahi hoga, NULL milega. Ye error handling ka elegant tarika hai. NULLIF se code cleaner hota hai compared to CASE statements. Production mein calculations mein ye pattern common hai.'
+                    }
+                ]
+            },
+            {
+                id: 'operators',
+                title: 'SQL Operators',
+                category: 'Advanced SQL',
+                simpleExplanation: 'Operators are like tools for comparing and calculating! + adds numbers, = checks if things are equal, > checks if bigger, AND combines conditions. Like math symbols but for databases!',
+                definition: 'SQL operators are symbols or keywords used to perform operations on data. They include arithmetic operators (+, -, *, /), comparison operators (=, !=, <, >), logical operators (AND, OR, NOT), and special operators (LIKE, IN, BETWEEN).',
+                keyPoints: [
+                    'Arithmetic: +, -, *, /, % (modulo)',
+                    'Comparison: =, !=, <, >, <=, >=, <> (not equal)',
+                    'Logical: AND, OR, NOT',
+                    'Special: LIKE, IN, BETWEEN, IS NULL, EXISTS'
+                ],
+                codeExample: `-- Arithmetic operators
+SELECT 
+    price,
+    price * 1.18 AS price_with_tax,
+    price * 0.9 AS discounted_price,
+    quantity % 10 AS remainder
+FROM products;
+
+-- Comparison operators
+SELECT * FROM students WHERE age >= 18;
+SELECT * FROM students WHERE city != 'Delhi';
+SELECT * FROM students WHERE age <> 20;  -- <> same as !=
+
+-- Logical operators
+SELECT * FROM students 
+WHERE age > 18 AND city = 'Mumbai';
+
+SELECT * FROM students 
+WHERE city = 'Delhi' OR city = 'Mumbai';
+
+SELECT * FROM students 
+WHERE NOT city = 'Delhi';
+
+-- Bitwise operators
+SELECT 5 & 3 AS bitwise_and;  -- Result: 1
+SELECT 5 | 3 AS bitwise_or;   -- Result: 7
+SELECT 5 ^ 3 AS bitwise_xor;  -- Result: 6
+
+-- String concatenation
+SELECT CONCAT(first_name, ' ', last_name) AS full_name
+FROM students;
+
+-- NULL-safe equal operator
+SELECT * FROM students WHERE email <=> NULL;  -- Finds NULL values
+SELECT * FROM students WHERE city <=> 'Delhi';  -- Works like =
+
+-- Operator precedence example
+SELECT * FROM students
+WHERE age > 18 AND city = 'Delhi' OR city = 'Mumbai';
+-- AND has higher precedence than OR
+-- Same as: (age > 18 AND city = 'Delhi') OR city = 'Mumbai'
+
+-- Use parentheses for clarity
+SELECT * FROM students
+WHERE age > 18 AND (city = 'Delhi' OR city = 'Mumbai');`,
+                interviewQuestions: [
+                    {
+                        question: 'SQL mein operator precedence kya hai aur ye kyu important hai?',
+                        answer: 'Operator precedence decide karta hai ki complex expressions mein operators kis order mein evaluate honge. MySQL mein precedence (high to low): 1) Parentheses (), 2) Multiplication *, Division /, Modulo %, 3) Addition +, Subtraction -, 4) Comparison operators =, !=, <, >, <=, >=, 5) NOT, 6) AND, 7) OR. Example: WHERE a = 1 OR b = 2 AND c = 3 evaluate hoga as: WHERE a = 1 OR (b = 2 AND c = 3) kyunki AND ki precedence OR se high hai. Agar aap chahte ho: WHERE (a = 1 OR b = 2) AND c = 3 to parentheses use karo. Importance: Galat precedence se galat results aa sakte hain jo bugs create karta hai. Best practice: Complex conditions mein hamesha parentheses use karo clarity ke liye, chahe precedence sahi ho. Ye code readable banata hai aur mistakes avoid karta hai.'
+                    },
+                    {
+                        question: '<=> (NULL-safe equal) operator kya hai aur kab use karein?',
+                        answer: '<=> operator ko "spaceship operator" ya "NULL-safe equal operator" kehte hain. Ye MySQL specific hai. Normal = operator NULL ke saath kaam nahi karta: NULL = NULL returns NULL (not TRUE). But <=> operator NULL values ko properly handle karta hai: NULL <=> NULL returns TRUE. Examples: 1) SELECT * FROM students WHERE email <=> NULL - ye NULL emails find karega (same as IS NULL), 2) SELECT * FROM students WHERE city <=> "Delhi" - ye normal = ki tarah kaam karega, 3) SELECT NULL <=> NULL - returns 1 (TRUE), 4) SELECT 5 <=> 5 - returns 1 (TRUE), 5) SELECT 5 <=> NULL - returns 0 (FALSE). Use case: Jab aapko NULL values ko bhi compare karna ho. Example: Comparing two tables where both might have NULLs. Best practice: Readability ke liye IS NULL use karo NULL checking ke liye, <=> sirf tab use karo jab specifically NULL-safe comparison chahiye.'
+                    }
+                ]
+            },
+            {
+                id: 'create-drop-db',
+                title: 'Create and Drop Database',
+                category: 'Database Operations',
+                simpleExplanation: 'CREATE DATABASE is like getting a new toy box! DROP DATABASE is like throwing away the entire box with all toys inside. Be very careful with DROP - once gone, everything is lost!',
+                definition: 'CREATE DATABASE creates a new database. DROP DATABASE permanently deletes a database and all its tables and data.',
+                keyPoints: [
+                    'CREATE DATABASE creates a new empty database',
+                    'DROP DATABASE permanently deletes database and all contents',
+                    'Use IF EXISTS/IF NOT EXISTS to avoid errors'
+                ],
+                codeExample: `-- Create a new database
+CREATE DATABASE school;
+
+-- Create database if it doesn't exist (no error if exists)
+CREATE DATABASE IF NOT EXISTS school;
+
+-- Create database with character set
+CREATE DATABASE school
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+-- Show all databases
+SHOW DATABASES;
+
+-- Select/Use a database
+USE school;
+
+-- Show current database
+SELECT DATABASE();
+
+-- Drop a database (DANGEROUS!)
+DROP DATABASE school;
+
+-- Drop database if it exists (no error if doesn't exist)
+DROP DATABASE IF EXISTS school;
+
+-- Drop database with confirmation (best practice)
+-- First check what's in it
+USE school;
+SHOW TABLES;
+-- Then drop
+DROP DATABASE school;`,
+                interviewQuestions: [
+                    {
+                        question: 'Database create karte waqt character set aur collation kyu important hai?',
+                        answer: 'Character set aur collation database mein text data ko store aur compare karne ka tarika define karte hain: 1) Character set decide karta hai ki kaunse characters store ho sakte hain. utf8mb4 recommended hai kyunki ye sabhi Unicode characters support karta hai including emojis. Purana utf8 sirf 3-byte characters support karta tha. 2) Collation decide karta hai ki strings ko kaise compare aur sort kiya jaye. utf8mb4_unicode_ci case-insensitive hai aur proper Unicode sorting karta hai. 3) Agar galat character set choose karo to kuch characters store nahi ho payenge ya corrupted ho jayenge. Example: Agar latin1 use karo to Hindi, Chinese characters store nahi ho payenge. Best practice: Hamesha utf8mb4 with utf8mb4_unicode_ci use karo new databases ke liye. Ye international characters, emojis sab support karta hai. Production mein character set change karna bahut difficult hai isliye start mein sahi choose karo.'
+                    },
+                    {
+                        question: 'DROP DATABASE se pehle kya precautions lene chahiye?',
+                        answer: 'DROP DATABASE bahut dangerous command hai, isliye precautions zaroori hain: 1) Hamesha backup lo pehle - mysqldump ya automated backup system use karo, 2) Production database pe DROP kabhi directly na chalaao, pehle verify karo ki sahi database select hai: SELECT DATABASE(), 3) IF EXISTS use karo to avoid errors: DROP DATABASE IF EXISTS test_db, 4) Pehle database ki contents check karo: USE db_name; SHOW TABLES; to confirm karo ki ye wahi database hai jo delete karna hai, 5) Production mein DROP DATABASE permissions limited rakho, sirf senior DBAs ko do, 6) Staging environment mein test karo pehle, 7) Transaction mein DROP DATABASE nahi hota, ye immediately execute hota hai aur rollback nahi kar sakte. Best practice: Production mein DROP DATABASE ki jagah database ko rename karo aur kuch din baad delete karo: RENAME DATABASE old_name TO old_name_deleted_20240115. Isse agar zarurat pade to recover kar sakte ho.'
+                    }
+                ]
+            },
+            {
+                id: 'create-drop-alter-table',
+                title: 'Create, Drop, and Alter Table',
+                category: 'Database Operations',
+                simpleExplanation: 'CREATE TABLE makes a new toy shelf with specific compartments. DROP TABLE throws away the whole shelf. ALTER TABLE lets you add new compartments, remove old ones, or change their size!',
+                definition: 'CREATE TABLE creates a new table with specified columns and data types. DROP TABLE deletes a table. ALTER TABLE modifies an existing table structure.',
+                keyPoints: [
+                    'CREATE TABLE defines table structure with columns and data types',
+                    'DROP TABLE permanently deletes table and all data',
+                    'ALTER TABLE can add, modify, or drop columns and constraints'
+                ],
+                codeExample: `-- Create a simple table
+CREATE TABLE students (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    age INT,
+    city VARCHAR(50)
+);
+
+-- Create table with multiple constraints
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    age INT CHECK (age >= 18),
+    city VARCHAR(50) DEFAULT 'Unknown',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create table if not exists
+CREATE TABLE IF NOT EXISTS students (
+    id INT PRIMARY KEY,
+    name VARCHAR(50)
+);
+
+-- Create table from another table
+CREATE TABLE students_backup AS
+SELECT * FROM students;
+
+-- Show table structure
+DESCRIBE students;
+-- or
+SHOW COLUMNS FROM students;
+
+-- Drop table
+DROP TABLE students;
+
+-- Drop table if exists
+DROP TABLE IF EXISTS students;
+
+-- ALTER TABLE - Add column
+ALTER TABLE students
+ADD COLUMN phone VARCHAR(15);
+
+-- Add column with position
+ALTER TABLE students
+ADD COLUMN email VARCHAR(100) AFTER name;
+
+-- Add column at first position
+ALTER TABLE students
+ADD COLUMN student_id INT FIRST;
+
+-- Modify column (change data type)
+ALTER TABLE students
+MODIFY COLUMN age SMALLINT;
+
+-- Change column (rename and change type)
+ALTER TABLE students
+CHANGE COLUMN age student_age INT;
+
+-- Drop column
+ALTER TABLE students
+DROP COLUMN phone;
+
+-- Add constraint
+ALTER TABLE students
+ADD CONSTRAINT unique_email UNIQUE (email);
+
+-- Drop constraint
+ALTER TABLE students
+DROP CONSTRAINT unique_email;
+
+-- Rename table
+ALTER TABLE students
+RENAME TO students_new;
+
+-- or
+RENAME TABLE students TO students_new;`,
+                interviewQuestions: [
+                    {
+                        question: 'ALTER TABLE operations production mein kaise safely perform karein?',
+                        answer: 'ALTER TABLE production mein risky ho sakta hai, especially large tables pe: 1) Table lock: ALTER TABLE operation ke dauran table lock ho jati hai, reads/writes block ho sakte hain. Large tables pe ye hours tak chal sakta hai. 2) Downtime: Users ko impact hota hai. Solutions: a) Online DDL use karo (MySQL 5.6+): ALTER TABLE students ADD COLUMN email VARCHAR(100), ALGORITHM=INPLACE, LOCK=NONE - ye minimal locking ke saath kaam karta hai, b) pt-online-schema-change tool use karo (Percona Toolkit) - ye bina downtime ke schema changes karta hai, c) Off-peak hours mein run karo, d) Pehle staging pe test karo same data volume ke saath. 3) Backup: Hamesha backup lo pehle. 4) Rollback plan: Agar kuch galat ho to kaise revert karoge, plan rakho. Best practice: Large tables ke liye third-party tools use karo, small tables ke liye native ALTER TABLE sufficient hai.'
+                    },
+                    {
+                        question: 'CREATE TABLE AS SELECT aur normal CREATE TABLE mein kya difference hai?',
+                        answer: 'CREATE TABLE AS SELECT (CTAS) aur normal CREATE TABLE mein important differences: 1) CTAS existing table se data copy karke new table banata hai: CREATE TABLE new_table AS SELECT * FROM old_table. Normal CREATE TABLE empty table banata hai. 2) CTAS mein column definitions automatically source table se aate hain. Normal CREATE mein explicitly define karne padte hain. 3) CTAS indexes aur constraints copy nahi karta (sirf data aur column types). Normal CREATE mein sab explicitly define kar sakte ho. 4) CTAS fast hai backup ya temporary tables banane ke liye. Example: CREATE TABLE students_2024 AS SELECT * FROM students WHERE year = 2024. Limitations: Primary keys, foreign keys, indexes copy nahi hote, manually add karne padte hain. Use case: Quick backups, creating test data, data archival. Best practice: Production tables ke liye normal CREATE TABLE use karo with proper constraints. CTAS sirf temporary ya backup tables ke liye use karo.'
+                    }
+                ]
+            },
+            {
+                id: 'constraints',
+                title: 'Constraints (NOT NULL, UNIQUE, PRIMARY KEY, FOREIGN KEY, CHECK, DEFAULT)',
+                category: 'Database Operations',
+                simpleExplanation: 'Constraints are like rules for your toy box! NOT NULL means "this compartment can\'t be empty". UNIQUE means "no two toys can be exactly the same". PRIMARY KEY is the special label that identifies each toy uniquely!',
+                definition: 'Constraints are rules enforced on data columns to ensure data integrity and accuracy. They restrict the type of data that can be inserted into a table.',
+                keyPoints: [
+                    'NOT NULL ensures column cannot have NULL values',
+                    'UNIQUE ensures all values in column are different',
+                    'PRIMARY KEY uniquely identifies each row (NOT NULL + UNIQUE)',
+                    'FOREIGN KEY links tables and maintains referential integrity',
+                    'CHECK validates data against a condition',
+                    'DEFAULT provides default value when none is specified'
+                ],
+                codeExample: `-- Table with all constraint types
+CREATE TABLE students (
+    -- PRIMARY KEY: Unique identifier, cannot be NULL
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    
+    -- NOT NULL: Must have a value
+    name VARCHAR(50) NOT NULL,
+    
+    -- UNIQUE: All values must be different
+    email VARCHAR(100) UNIQUE,
+    
+    -- CHECK: Must satisfy condition
+    age INT CHECK (age >= 18 AND age <= 100),
+    
+    -- DEFAULT: Default value if not provided
+    city VARCHAR(50) DEFAULT 'Unknown',
+    status VARCHAR(20) DEFAULT 'active',
+    
+    -- Multiple column UNIQUE constraint
+    UNIQUE (email, phone),
+    
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- FOREIGN KEY example
+CREATE TABLE enrollments (
+    id INT PRIMARY KEY,
+    student_id INT,
+    course_id INT,
+    
+    -- Foreign key to students table
+    FOREIGN KEY (student_id) REFERENCES students(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    
+    -- Foreign key to courses table
+    FOREIGN KEY (course_id) REFERENCES courses(id)
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT
+);
+
+-- Add constraints to existing table
+ALTER TABLE students
+ADD CONSTRAINT unique_email UNIQUE (email);
+
+ALTER TABLE students
+ADD CONSTRAINT check_age CHECK (age >= 18);
+
+ALTER TABLE enrollments
+ADD CONSTRAINT fk_student
+FOREIGN KEY (student_id) REFERENCES students(id);
+
+-- Drop constraints
+ALTER TABLE students
+DROP CONSTRAINT unique_email;
+
+ALTER TABLE students
+DROP CHECK check_age;
+
+-- Show constraints
+SHOW CREATE TABLE students;`,
+                interviewQuestions: [
+                    {
+                        question: 'PRIMARY KEY aur UNIQUE constraint mein kya difference hai?',
+                        answer: 'PRIMARY KEY aur UNIQUE dono uniqueness ensure karte hain but important differences hain: 1) NULL values: PRIMARY KEY NULL values allow nahi karta, UNIQUE NULL values allow karta hai (multiple NULLs bhi ho sakte hain kyunki NULL != NULL). 2) Quantity: Ek table mein sirf ek PRIMARY KEY ho sakti hai, but multiple UNIQUE constraints ho sakte hain. 3) Purpose: PRIMARY KEY table ki main identifier hai jo rows ko uniquely identify karti hai, UNIQUE sirf uniqueness ensure karta hai. 4) Index: Dono automatically index create karte hain but PRIMARY KEY clustered index banata hai (data physically is order mein store hota hai). 5) Foreign Keys: Dusri tables ki FOREIGN KEY usually PRIMARY KEY ko reference karti hai, UNIQUE ko bhi kar sakti hai but less common. Best practice: PRIMARY KEY use karo main identifier ke liye (jaise id), UNIQUE use karo other columns ke liye jo unique hone chahiye (jaise email, phone).'
+                    },
+                    {
+                        question: 'FOREIGN KEY mein ON DELETE CASCADE aur ON DELETE RESTRICT kya karte hain?',
+                        answer: 'FOREIGN KEY constraints mein referential actions define karte hain ki parent table mein changes hone pe child table mein kya hoga: 1) ON DELETE CASCADE: Jab parent row delete ho to related child rows bhi automatically delete ho jayenge. Example: Agar student delete ho to uski saari enrollments bhi delete ho jayengi. Dangerous but useful for dependent data. 2) ON DELETE RESTRICT (ya NO ACTION): Parent row delete nahi hogi agar child rows exist karti hain. Error throw hoga. Ye default behavior hai aur safest hai. 3) ON DELETE SET NULL: Parent delete hone pe child rows mein foreign key NULL ho jayegi. 4) ON UPDATE CASCADE: Parent ki primary key update hone pe child ki foreign key bhi update ho jayegi. Best practice: Dependent data ke liye CASCADE use karo (jaise order items when order is deleted), independent data ke liye RESTRICT use karo. Production mein CASCADE carefully use karo kyunki accidental deletes se bahut data loss ho sakta hai.'
+                    }
+                ]
+            },
+            {
+                id: 'indexes',
+                title: 'Indexes',
+                category: 'Database Operations',
+                simpleExplanation: 'Indexes are like a book\'s index page! Instead of reading every page to find something, you look at the index and jump directly to the right page. Makes finding things super fast!',
+                definition: 'An index is a database structure that improves the speed of data retrieval operations on a table. It works like a lookup table that helps the database find rows quickly without scanning the entire table.',
+                keyPoints: [
+                    'Indexes speed up SELECT queries but slow down INSERT, UPDATE, DELETE',
+                    'PRIMARY KEY and UNIQUE constraints automatically create indexes',
+                    'Can create indexes on single or multiple columns (composite index)'
+                ],
+                codeExample: `-- Create index on single column
+CREATE INDEX idx_city ON students(city);
+
+-- Create index on multiple columns (composite index)
+CREATE INDEX idx_city_age ON students(city, age);
+
+-- Create unique index
+CREATE UNIQUE INDEX idx_email ON students(email);
+
+-- Create index with specific name
+CREATE INDEX idx_student_name ON students(name);
+
+-- Show indexes on a table
+SHOW INDEXES FROM students;
+
+-- Drop index
+DROP INDEX idx_city ON students;
+
+-- Create index when creating table
+CREATE TABLE students (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    city VARCHAR(50),
+    age INT,
+    INDEX idx_city (city),
+    INDEX idx_city_age (city, age)
+);
+
+-- Add index to existing table
+ALTER TABLE students
+ADD INDEX idx_name (name);
+
+-- Full-text index for text searching
+CREATE FULLTEXT INDEX idx_description ON products(description);
+
+-- Use full-text search
+SELECT * FROM products
+WHERE MATCH(description) AGAINST('laptop computer');
+
+-- Check if query uses index (EXPLAIN)
+EXPLAIN SELECT * FROM students WHERE city = 'Delhi';`,
+                interviewQuestions: [
+                    {
+                        question: 'Index kab create karna chahiye aur kab nahi?',
+                        answer: 'Index create karne ke guidelines: CREATE KARO jab: 1) Column frequently WHERE clause mein use hota ho, 2) Column JOIN conditions mein use hota ho, 3) Column ORDER BY ya GROUP BY mein use hota ho, 4) Table large hai (1000+ rows), 5) Column mein high cardinality hai (bahut unique values). CREATE MAT KARO jab: 1) Table chhoti hai (<1000 rows), 2) Column mein bahut kam unique values hain (jaise gender with only M/F), 3) Table pe frequent INSERT/UPDATE/DELETE operations hote hain, 4) Column rarely queries mein use hota hai. Reason: Har index storage space leta hai aur write operations ko slow karta hai kyunki index bhi update karna padta hai. Best practice: EXPLAIN use karke query performance check karo, sirf wo indexes rakho jo actually use ho rahe hain. Over-indexing se performance degrade hoti hai. Production mein regularly unused indexes identify karke remove karo.'
+                    },
+                    {
+                        question: 'Composite index (multiple columns) kaise kaam karta hai?',
+                        answer: 'Composite index multiple columns pe banta hai aur left-to-right order mein kaam karta hai. Example: INDEX(city, age, name) - ye index teen columns pe hai. Important rule: "Leftmost prefix" - index tab use hoga jab query leftmost column se start ho. Use cases: 1) WHERE city = "Delhi" - index use hoga, 2) WHERE city = "Delhi" AND age = 20 - index use hoga, 3) WHERE city = "Delhi" AND age = 20 AND name = "Rahul" - pura index use hoga, 4) WHERE age = 20 - index use NAHI hoga (city missing), 5) WHERE city = "Delhi" AND name = "Rahul" - partial index use hoga (age skip ho gaya). Column order matter karta hai: Most selective column (jisme sabse zyada unique values) pehle rakho. Example: Agar city mein 10 unique values hain aur age mein 50, to INDEX(age, city) better hai than INDEX(city, age). Best practice: Query patterns analyze karke composite indexes design karo.'
+                    }
+                ]
+            },
+            {
+                id: 'auto-increment',
+                title: 'Auto Increment',
+                category: 'Database Operations',
+                simpleExplanation: 'Auto Increment is like an automatic numbering machine! Every time you add a new toy, it gives it the next number automatically. 1, 2, 3, 4... you don\'t have to count yourself!',
+                definition: 'AUTO_INCREMENT is a column attribute that automatically generates a unique sequential number for each new row inserted into a table. It is commonly used for primary key columns.',
+                keyPoints: [
+                    'Automatically generates unique sequential numbers',
+                    'Typically used with PRIMARY KEY columns',
+                    'Starts from 1 by default, increments by 1'
+                ],
+                codeExample: `-- Create table with AUTO_INCREMENT
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    email VARCHAR(100)
+);
+
+-- Insert without specifying id (auto-generated)
+INSERT INTO students (name, email) 
+VALUES ('Rahul', 'rahul@email.com');
+
+INSERT INTO students (name, email) 
+VALUES ('Priya', 'priya@email.com');
+-- id will be automatically 1, 2, 3...
+
+-- Get last inserted AUTO_INCREMENT value
+SELECT LAST_INSERT_ID();
+
+-- Set AUTO_INCREMENT starting value
+ALTER TABLE students AUTO_INCREMENT = 1000;
+
+-- Insert with explicit id (not recommended)
+INSERT INTO students (id, name, email) 
+VALUES (500, 'Amit', 'amit@email.com');
+-- Next auto value will be 501
+
+-- Reset AUTO_INCREMENT (careful!)
+ALTER TABLE students AUTO_INCREMENT = 1;
+
+-- Show current AUTO_INCREMENT value
+SHOW TABLE STATUS LIKE 'students';
+
+-- Create table with custom starting value
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100)
+) AUTO_INCREMENT = 1001;
+
+-- AUTO_INCREMENT with specific increment
+-- (requires server configuration)
+SET @@auto_increment_increment = 10;
+-- Now increments by 10: 1, 11, 21, 31...`,
+                interviewQuestions: [
+                    {
+                        question: 'AUTO_INCREMENT value reset karne se kya problems ho sakti hain?',
+                        answer: 'AUTO_INCREMENT reset karna dangerous ho sakta hai: 1) Duplicate keys: Agar table mein already data hai aur aap AUTO_INCREMENT = 1 set karte ho, to next insert existing id ke saath conflict karega aur error dega. 2) Foreign key violations: Agar dusri tables mein foreign keys hain jo is table ko reference karti hain, to reset karne se referential integrity issues aa sakte hain. 3) Application logic: Agar application code specific id ranges expect karta hai to reset se break ho sakta hai. 4) Data loss risk: Agar accidentally reset karke old data overwrite ho jaye. Safe reset karne ka tarika: 1) Pehle table ka maximum id find karo: SELECT MAX(id) FROM students, 2) AUTO_INCREMENT ko max+1 pe set karo: ALTER TABLE students AUTO_INCREMENT = 1001. Best practice: Production mein AUTO_INCREMENT reset mat karo unless absolutely necessary. Agar gaps se problem hai to wo acceptable hai, reset karne se zyada safe hai.'
+                    },
+                    {
+                        question: 'AUTO_INCREMENT mein gaps kyu aate hain aur kya ye problem hai?',
+                        answer: 'AUTO_INCREMENT mein gaps (missing numbers) normal hain aur several reasons se aate hain: 1) Failed inserts: Agar INSERT fail ho jaye (constraint violation, error) to AUTO_INCREMENT value consume ho jati hai but row insert nahi hoti. Next insert next number use karega. 2) Rollback: Transaction rollback hone pe bhi AUTO_INCREMENT consume ho jati hai. 3) DELETE: Rows delete karne se gaps aate hain. 4) Explicit values: Agar manually id specify karo to gaps aa sakte hain. Kya ye problem hai? NO! Gaps acceptable aur expected hain. AUTO_INCREMENT ka purpose unique values generate karna hai, sequential without gaps nahi. Problems agar gaps se: 1) Agar business logic sequential numbers expect karta hai (invoice numbers) to AUTO_INCREMENT use mat karo, separate sequence table banao. 2) Agar gaps se storage waste ho raha hai (INT vs BIGINT). Solution: Gaps ko accept karo, ye normal behavior hai. Agar truly sequential numbers chahiye to custom solution implement karo with proper locking.'
+                    }
+                ]
+            },
+            {
+                id: 'dates',
+                title: 'Date and Time Functions',
+                category: 'Database Operations',
+                simpleExplanation: 'Date functions help you work with dates and times! Like finding today\'s date, calculating how many days until your birthday, or finding what day of the week it is!',
+                definition: 'MySQL provides various date and time functions to store, manipulate, and format date and time values. Common data types include DATE, TIME, DATETIME, and TIMESTAMP.',
+                keyPoints: [
+                    'DATE stores date (YYYY-MM-DD), TIME stores time (HH:MM:SS)',
+                    'DATETIME stores both date and time',
+                    'TIMESTAMP stores date/time and automatically updates',
+                    'Many functions available for date arithmetic and formatting'
+                ],
+                codeExample: `-- Date/Time data types
+CREATE TABLE events (
+    id INT PRIMARY KEY,
+    event_name VARCHAR(100),
+    event_date DATE,
+    event_time TIME,
+    event_datetime DATETIME,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Current date and time functions
+SELECT NOW();                    -- Current datetime: 2024-01-15 14:30:45
+SELECT CURDATE();               -- Current date: 2024-01-15
+SELECT CURTIME();               -- Current time: 14:30:45
+SELECT CURRENT_TIMESTAMP();     -- Same as NOW()
+
+-- Date extraction functions
+SELECT DATE(NOW());             -- Extract date part
+SELECT TIME(NOW());             -- Extract time part
+SELECT YEAR(NOW());             -- 2024
+SELECT MONTH(NOW());            -- 1
+SELECT DAY(NOW());              -- 15
+SELECT HOUR(NOW());             -- 14
+SELECT MINUTE(NOW());           -- 30
+SELECT SECOND(NOW());           -- 45
+
+-- Date formatting
+SELECT DATE_FORMAT(NOW(), '%Y-%m-%d');           -- 2024-01-15
+SELECT DATE_FORMAT(NOW(), '%d/%m/%Y');           -- 15/01/2024
+SELECT DATE_FORMAT(NOW(), '%W, %M %d, %Y');      -- Monday, January 15, 2024
+SELECT DATE_FORMAT(NOW(), '%h:%i %p');           -- 02:30 PM
+
+-- Date arithmetic
+SELECT DATE_ADD(NOW(), INTERVAL 7 DAY);          -- Add 7 days
+SELECT DATE_SUB(NOW(), INTERVAL 1 MONTH);        -- Subtract 1 month
+SELECT NOW() + INTERVAL 1 YEAR;                  -- Add 1 year
+SELECT DATEDIFF('2024-12-31', '2024-01-01');    -- Days between dates: 365
+
+-- Age calculation
+SELECT name, 
+       birthdate,
+       TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age
+FROM students;
+
+-- Day of week
+SELECT DAYNAME(NOW());          -- Monday
+SELECT DAYOFWEEK(NOW());        -- 2 (1=Sunday, 7=Saturday)
+SELECT WEEKDAY(NOW());          -- 0 (0=Monday, 6=Sunday)
+
+-- Useful queries
+-- Find records from last 7 days
+SELECT * FROM orders 
+WHERE order_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY);
+
+-- Find records from current month
+SELECT * FROM orders 
+WHERE MONTH(order_date) = MONTH(CURDATE())
+AND YEAR(order_date) = YEAR(CURDATE());
+
+-- Find birthdays this month
+SELECT name, birthdate FROM students
+WHERE MONTH(birthdate) = MONTH(CURDATE());`,
+                interviewQuestions: [
+                    {
+                        question: 'DATETIME aur TIMESTAMP mein kya difference hai?',
+                        answer: 'DATETIME aur TIMESTAMP dono date aur time store karte hain but important differences hain: 1) Range: DATETIME 1000-01-01 se 9999-12-31 tak store kar sakta hai, TIMESTAMP 1970-01-01 se 2038-01-19 tak (32-bit systems pe). 2) Storage: DATETIME 8 bytes leta hai, TIMESTAMP 4 bytes. 3) Timezone: DATETIME timezone aware nahi hai, jo value store karo wahi milti hai. TIMESTAMP UTC mein store hota hai aur retrieve karte waqt current timezone mein convert hota hai. 4) Automatic update: TIMESTAMP automatically update ho sakta hai ON UPDATE CURRENT_TIMESTAMP ke saath, DATETIME nahi. 5) Default: TIMESTAMP DEFAULT CURRENT_TIMESTAMP use kar sakte ho, DATETIME mein ye MySQL 5.6+ mein available hai. Best practice: created_at ke liye TIMESTAMP use karo (automatic value), updated_at ke liye TIMESTAMP with ON UPDATE, specific dates (birthdate, event_date) ke liye DATE ya DATETIME use karo. Agar 2038 ke baad ki dates chahiye to DATETIME use karo.'
+                    },
+                    {
+                        question: 'Date queries ko optimize kaise karein?',
+                        answer: 'Date queries ko optimize karne ke tips: 1) Date columns pe index banao: CREATE INDEX idx_created_at ON orders(created_at) - ye range queries ko fast banata hai. 2) Functions avoid karo WHERE clause mein: WHERE YEAR(created_at) = 2024 slow hai kyunki index use nahi hota. Better: WHERE created_at >= "2024-01-01" AND created_at < "2025-01-01". 3) Date ranges use karo: WHERE created_at BETWEEN "2024-01-01" AND "2024-12-31" index use karega. 4) Partition tables by date: Large tables ko date ke hisaab se partition karo for better performance. 5) Avoid CURDATE() in WHERE if possible: Agar same query baar baar run hoti hai to date value calculate karke variable mein store karo. Example: SET @today = CURDATE(); WHERE order_date = @today. 6) Use appropriate data type: Agar sirf date chahiye to DATE use karo, DATETIME nahi - storage aur comparison dono fast hoga. Production mein date range queries bahut common hain, proper indexing se 100x performance improvement ho sakti hai.'
+                    }
+                ]
+            },
+            {
+                id: 'views',
+                title: 'Views',
+                category: 'Database Operations',
+                simpleExplanation: 'A View is like a window that shows you a specific view of your toys! It\'s not a real toy box, but it shows you toys in a special way - maybe only red toys, or toys sorted by size. The actual toys stay in the original box!',
+                definition: 'A View is a virtual table based on the result of a SELECT query. It does not store data itself but displays data from one or more tables. Views can simplify complex queries and provide security by restricting access to specific columns.',
+                keyPoints: [
+                    'Views are virtual tables that don\'t store data',
+                    'Simplify complex queries by encapsulating them',
+                    'Provide security by limiting access to specific columns/rows',
+                    'Can be used like regular tables in SELECT queries'
+                ],
+                codeExample: `-- Create a simple view
+CREATE VIEW student_summary AS
+SELECT id, name, city, age
+FROM students
+WHERE age >= 18;
+
+-- Use the view like a table
+SELECT * FROM student_summary;
+SELECT * FROM student_summary WHERE city = 'Delhi';
+
+-- Create view with JOIN
+CREATE VIEW enrollment_details AS
+SELECT 
+    s.name AS student_name,
+    c.course_name,
+    e.grade,
+    e.enrollment_date
+FROM students s
+JOIN enrollments e ON s.id = e.student_id
+JOIN courses c ON e.course_id = c.id;
+
+-- Create view with aggregation
+CREATE VIEW city_statistics AS
+SELECT 
+    city,
+    COUNT(*) AS student_count,
+    AVG(age) AS average_age,
+    MIN(age) AS youngest,
+    MAX(age) AS oldest
+FROM students
+GROUP BY city;
+
+-- Create or replace view (update existing view)
+CREATE OR REPLACE VIEW student_summary AS
+SELECT id, name, city, age, email
+FROM students
+WHERE age >= 18;
+
+-- Show all views
+SHOW FULL TABLES WHERE TABLE_TYPE = 'VIEW';
+
+-- Show view definition
+SHOW CREATE VIEW student_summary;
+
+-- Drop view
+DROP VIEW student_summary;
+
+-- Drop view if exists
+DROP VIEW IF EXISTS student_summary;
+
+-- Create view with check option
+CREATE VIEW adult_students AS
+SELECT * FROM students
+WHERE age >= 18
+WITH CHECK OPTION;
+-- Prevents inserting/updating rows that don't match WHERE condition
+
+-- Updatable view (simple views can be updated)
+CREATE VIEW active_students AS
+SELECT id, name, email, city
+FROM students
+WHERE status = 'active';
+
+-- Update through view
+UPDATE active_students
+SET city = 'Mumbai'
+WHERE id = 1;`,
+                interviewQuestions: [
+                    {
+                        question: 'Views ke kya advantages aur disadvantages hain?',
+                        answer: 'Views ke ADVANTAGES: 1) Simplicity: Complex queries ko encapsulate kar sakte ho, users ko simple interface mil jata hai. Example: Multi-table JOIN ko view mein wrap karke simple SELECT * FROM view use kar sakte ho. 2) Security: Sensitive columns hide kar sakte ho. Example: employees table mein salary column hai but view mein sirf name aur department show karo. 3) Consistency: Same query multiple jagah use hoti hai to view banao, ek jagah change karne se sab jagah update ho jayega. 4) Logical data independence: Table structure change ho to view update karke application code ko protect kar sakte ho. DISADVANTAGES: 1) Performance: Views query execution time mein add hote hain, especially nested views slow hote hain. 2) No indexes: Views pe directly index nahi bana sakte, underlying tables pe hi index kaam karte hain. 3) Update limitations: Complex views (aggregations, JOINs) updatable nahi hote. Best practice: Simple, frequently used queries ke liye views use karo. Performance-critical queries mein views avoid karo ya materialized views consider karo.'
+                    },
+                    {
+                        question: 'Updatable views aur non-updatable views mein kya difference hai?',
+                        answer: 'Views do types ke hote hain update capability ke hisaab se: UPDATABLE VIEWS: Simple views jo INSERT, UPDATE, DELETE support karte hain. Requirements: 1) Single table se bana ho (no JOINs), 2) No aggregate functions (COUNT, SUM, AVG), 3) No DISTINCT, GROUP BY, HAVING, 4) No subqueries in SELECT, 5) No UNION. Example: CREATE VIEW active_users AS SELECT id, name, email FROM users WHERE status="active" - ye updatable hai. NON-UPDATABLE VIEWS: Complex views jo sirf read-only hain. Example: Views with JOINs, aggregations, DISTINCT. Agar aap non-updatable view pe UPDATE try karoge to error milega. WITH CHECK OPTION: Ye ensure karta hai ki view ke through jo bhi INSERT/UPDATE ho wo view ki WHERE condition satisfy kare. Example: CREATE VIEW adults AS SELECT * FROM users WHERE age>=18 WITH CHECK OPTION - ab aap age=15 insert nahi kar sakte is view ke through. Best practice: Views ko primarily read-only consider karo, updates directly base tables pe karo clarity ke liye.'
+                    }
+                ]
+            }
+        ];
+
+        let currentTopic = null;
+
+        function initializeApp() {
+            renderSidebar();
+            renderTabs();
+            showTopic(topics[0].id);
+            setupSearch();
+        }
+
+        function renderSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const categories = [...new Set(topics.map(t => t.category))];
+            
+            let html = '<h3>📚 Topics</h3>';
+            categories.forEach(category => {
+                html += `<div class="category-label">${category}</div>`;
+                topics.filter(t => t.category === category).forEach(topic => {
+                    html += `<div class="nav-item" onclick="showTopic('${topic.id}')">${topic.title}</div>`;
+                });
+            });
+            
+            sidebar.innerHTML = html;
+        }
+
+        function renderTabs() {
+            const tabContainer = document.getElementById('tabContainer');
+            let html = '';
+            topics.forEach(topic => {
+                html += `<button class="tab-btn" onclick="showTopic('${topic.id}')">${topic.title}</button>`;
+            });
+            tabContainer.innerHTML = html;
+        }
+
+        function showTopic(topicId) {
+            const topic = topics.find(t => t.id === topicId);
+            if (!topic) return;
+
+            currentTopic = topicId;
+
+            // Update active states
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Render topic content
+            const contentArea = document.getElementById('contentArea');
+            contentArea.innerHTML = `
+                <div class="topic-card active">
+                    <h1 class="topic-title">${topic.title} <span class="badge">${topic.category}</span></h1>
+                    
+                    <div class="section">
+                        <h2 class="section-title">🎈 Simple Explanation</h2>
+                        <div class="simple-explanation">
+                            ${topic.simpleExplanation}
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">📖 Technical Definition</h2>
+                        <div class="definition">
+                            ${topic.definition}
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">⭐ Key Points to Remember</h2>
+                        <div class="key-points">
+                            <ul>
+                                ${topic.keyPoints.map(point => `<li>${point}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">💻 Code Example</h2>
+                        <div class="code-example">
+                            <pre>${escapeHtml(topic.codeExample)}</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">🎤 Interview Questions (Hinglish)</h2>
+                        <div class="interview-section">
+                            ${topic.interviewQuestions.map((q, index) => `
+                                <div class="interview-question" onclick="toggleAnswer(${index})">
+                                    <div class="question-text">
+                                        <span><strong>Q${index + 1}:</strong> ${q.question}</span>
+                                        <span class="toggle-icon">+</span>
+                                    </div>
+                                    <div class="answer" id="answer-${index}">
+                                        <strong>Answer:</strong> ${q.answer}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Scroll to top
+            contentArea.scrollTop = 0;
+        }
+
+        function toggleAnswer(index) {
+            const answer = document.getElementById(`answer-${index}`);
+            const icon = event.currentTarget.querySelector('.toggle-icon');
+            
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                icon.textContent = '+';
+            } else {
+                answer.classList.add('show');
+                icon.textContent = '−';
+            }
+        }
+
+        function setupSearch() {
+            const searchBox = document.getElementById('searchBox');
+            searchBox.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                
+                if (query.length === 0) {
+                    renderSidebar();
+                    renderTabs();
+                    return;
+                }
+
+                const filtered = topics.filter(topic => {
+                    return topic.title.toLowerCase().includes(query) ||
+                           topic.simpleExplanation.toLowerCase().includes(query) ||
+                           topic.definition.toLowerCase().includes(query) ||
+                           topic.keyPoints.some(p => p.toLowerCase().includes(query)) ||
+                           topic.codeExample.toLowerCase().includes(query);
+                });
+
+                // Update sidebar
+                const sidebar = document.getElementById('sidebar');
+                if (filtered.length === 0) {
+                    sidebar.innerHTML = '<div class="no-results">No results found</div>';
+                } else {
+                    let html = '<h3>🔍 Search Results</h3>';
+                    filtered.forEach(topic => {
+                        html += `<div class="nav-item" onclick="showTopic('${topic.id}')">${topic.title}</div>`;
+                    });
+                    sidebar.innerHTML = html;
+                }
+
+                // Update tabs
+                const tabContainer = document.getElementById('tabContainer');
+                if (filtered.length === 0) {
+                    tabContainer.innerHTML = '<div class="no-results">No results found</div>';
+                } else {
+                    let html = '';
+                    filtered.forEach(topic => {
+                        html += `<button class="tab-btn" onclick="showTopic('${topic.id}')">${topic.title}</button>`;
+                    });
+                    tabContainer.innerHTML = html;
+                }
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initialize app when page loads
+        window.onload = initializeApp;
+    </script>
+</body>
+</html>

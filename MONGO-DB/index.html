@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MongoDB Complete Study Guide - Interactive Learning Resource</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00ED64;
+            --primary-dark: #00C853;
+            --secondary: #001E2B;
+            --accent: #13AA52;
+            --bg-dark: #0A1A23;
+            --bg-light: #F5F5F5;
+            --text-dark: #1A1A1A;
+            --text-light: #FFFFFF;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0A1A23 0%, #001E2B 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1600px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: var(--secondary);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--secondary);
+            font-size: 20px;
+        }
+
+        .logo-text {
+            color: var(--text-light);
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            margin: 5px 0;
+            color: var(--text-light);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background: rgba(0, 237, 100, 0.1);
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 40px;
+            background: var(--bg-light);
+        }
+
+        .header {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .header h1 {
+            color: var(--secondary);
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        /* Tab Styles */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: var(--card-bg);
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab:hover {
+            background: rgba(0, 237, 100, 0.1);
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: var(--secondary);
+            box-shadow: var(--shadow);
+        }
+
+        /* Content Card Styles */
+        .content-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-title {
+            color: var(--secondary);
+            font-size: 28px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .explanation-box {
+            background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid var(--primary);
+        }
+
+        .explanation-box h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .explanation-box p {
+            color: var(--text-dark);
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .qa-box {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #FF9800;
+        }
+
+        .qa-box .question {
+            color: #E65100;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 17px;
+        }
+
+        .qa-box .answer {
+            color: var(--text-dark);
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .formal-box {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #2196F3;
+        }
+
+        .formal-box h3 {
+            color: #1565C0;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .formal-box p, .formal-box ul {
+            color: var(--text-dark);
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .formal-box ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .formal-box li {
+            margin: 8px 0;
+        }
+
+        .code-block {
+            background: #1E1E1E;
+            color: #D4D4D4;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            box-shadow: var(--shadow);
+        }
+
+        .code-block code {
+            color: #CE9178;
+        }
+
+        .keyword {
+            color: #569CD6;
+        }
+
+        .string {
+            color: #CE9178;
+        }
+
+        .function {
+            color: #DCDCAA;
+        }
+
+        .highlight {
+            background: rgba(0, 237, 100, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #9C27B0;
+        }
+
+        .tip-box strong {
+            color: #6A1B9A;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 17px;
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: var(--primary);
+            color: var(--secondary);
+            border: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                width: 100%;
+            }
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+            z-index: 2000;
+        }
+
+        .emoji {
+            font-size: 24px;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <div class="logo-icon">M</div>
+                <div class="logo-text">MongoDB Guide</div>
+            </div>
+            <nav id="navigation">
+                <!-- Navigation items will be generated by JavaScript -->
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="header">
+                <h1>🍃 MongoDB Complete Study Guide</h1>
+                <p>Interactive learning resource for MongoDB mastery - From basics to advanced concepts</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="tabs">
+                <button class="tab active" data-mode="simple">
+                    <span class="emoji">👶</span> Simple Explanation
+                </button>
+                <button class="tab" data-mode="hinglish">
+                    <span class="emoji">💬</span> Interview Q&A (Hinglish)
+                </button>
+                <button class="tab" data-mode="formal">
+                    <span class="emoji">📚</span> Formal Definitions
+                </button>
+            </div>
+
+            <!-- Content Container -->
+            <div id="contentContainer">
+                <!-- Content will be generated by JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // MongoDB Study Guide Data
+        const studyData = {
+            'mongodb-home': {
+                title: 'MongoDB HOME',
+                icon: '🏠',
+                simple: {
+                    title: 'What is MongoDB?',
+                    content: `MongoDB is like a super smart filing cabinet for your computer! Imagine you have a toy box where you can put different toys in different ways - some toys in bags, some in boxes, some loose. MongoDB works the same way with data!
+                    
+                    Unlike traditional databases that are like strict filing cabinets where everything must fit in specific folders, MongoDB is flexible. It's like having a magical notebook where you can write anything - drawings, lists, stories - all on the same page!`,
+                    examples: [
+                        'Think of it like a digital library where books (data) can have different numbers of pages and chapters',
+                        'It\'s like a recipe book where each recipe can have different ingredients and steps',
+                        'Imagine a photo album where some photos have captions, some don\'t, and that\'s perfectly okay!'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'MongoDB kya hai aur ye traditional databases se kaise different hai?',
+                        a: 'MongoDB ek NoSQL database hai jo documents ko store karta hai JSON format mein. Traditional SQL databases tables aur rows use karte hain, lekin MongoDB flexible documents use karta hai jahan har document different structure rakh sakta hai. Ye bahut flexible hai!'
+                    },
+                    {
+                        q: 'MongoDB ka main advantage kya hai?',
+                        a: 'MongoDB ka sabse bada advantage hai flexibility. Aap easily schema change kar sakte ho bina database ko restructure kiye. Scalability bhi bahut achhi hai - horizontal scaling easily ho jati hai. Aur JSON-like format use karta hai jo developers ke liye natural lagta hai.'
+                    },
+                    {
+                        q: 'MongoDB kab use karna chahiye?',
+                        a: 'Jab aapka data structure frequently change hota hai, jab aapko rapid development chahiye, jab aapko large scale applications banana hai with high traffic, aur jab aapka data naturally JSON format mein fit hota hai - tab MongoDB perfect choice hai.'
+                    }
+                ],
+                formal: {
+                    definition: 'MongoDB is a document-oriented NoSQL database that stores data in flexible, JSON-like documents called BSON (Binary JSON). It provides high performance, high availability, and automatic scaling.',
+                    keyPoints: [
+                        'Document-based data model with dynamic schemas',
+                        'Horizontal scalability through sharding',
+                        'Rich query language supporting CRUD operations',
+                        'Indexing capabilities for optimized query performance',
+                        'Replication for high availability and data redundancy',
+                        'Aggregation framework for complex data processing',
+                        'GridFS for storing large files',
+                        'ACID transactions support (since version 4.0)'
+                    ],
+                    useCases: [
+                        'Content management systems',
+                        'Real-time analytics and IoT applications',
+                        'Mobile applications',
+                        'Product catalogs with varying attributes',
+                        'User profiles and personalization'
+                    ]
+                }
+            },
+            'get-started': {
+                title: 'Get Started',
+                icon: '🚀',
+                simple: {
+                    title: 'Starting Your MongoDB Journey',
+                    content: `Getting started with MongoDB is like learning to ride a bicycle! First, you need to install MongoDB on your computer - think of this as getting your bicycle ready.
+                    
+                    Once installed, you start the MongoDB server (like getting on the bike), and then you can connect to it using the MongoDB Shell (like holding the handlebars). The shell is where you type commands to talk to your database!`,
+                    examples: [
+                        'Installing MongoDB is like installing a game on your computer',
+                        'Starting the server is like turning on your gaming console',
+                        'The MongoDB Shell is like the controller you use to play'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'MongoDB install kaise karte hain?',
+                        a: 'MongoDB install karna bahut easy hai. MongoDB website se installer download karo, run karo, aur installation wizard follow karo. Windows mein MSI installer use karo, Mac mein Homebrew se install kar sakte ho (brew install mongodb-community), aur Linux mein package manager use karo.'
+                    },
+                    {
+                        q: 'MongoDB server start kaise karte hain?',
+                        a: 'Server start karne ke liye terminal mein "mongod" command run karo. Ye MongoDB daemon start kar deta hai jo port 27017 pe listen karta hai. Agar custom port chahiye to --port flag use karo. Background mein run karne ke liye service ke tarah setup kar sakte ho.'
+                    },
+                    {
+                        q: 'MongoDB Shell kya hai aur kaise use karte hain?',
+                        a: 'MongoDB Shell (mongosh) ek interactive JavaScript interface hai database ke saath interact karne ke liye. Terminal mein "mongosh" type karo to connect ho jaoge. Yahan se aap directly commands run kar sakte ho like db.collection.find() etc.'
+                    }
+                ],
+                formal: {
+                    definition: 'MongoDB installation and setup involves downloading the appropriate distribution, configuring the database server, and establishing connections through various client interfaces.',
+                    keyPoints: [
+                        'Installation methods: MSI installer (Windows), Homebrew (macOS), Package managers (Linux)',
+                        'MongoDB daemon (mongod) runs the database server',
+                        'Default port: 27017',
+                        'MongoDB Shell (mongosh) provides interactive JavaScript interface',
+                        'Configuration file: mongod.conf for server settings',
+                        'Data directory: Default /data/db (customizable)',
+                        'Connection string format: mongodb://localhost:27017',
+                        'Authentication and security configuration options'
+                    ],
+                    commands: [
+                        'mongod - Start MongoDB server',
+                        'mongosh - Connect to MongoDB shell',
+                        'mongod --dbpath /custom/path - Specify custom data directory',
+                        'mongod --port 27018 - Run on custom port',
+                        'mongosh "mongodb://localhost:27017" - Connect with connection string'
+                    ]
+                }
+            },
+            'query-api': {
+                title: 'Query API',
+                icon: '🔍',
+                simple: {
+                    title: 'Talking to Your Database',
+                    content: `The Query API is like having a conversation with your database! Just like you ask your friend questions and they answer, you ask MongoDB questions using the Query API and it gives you answers.
+                    
+                    You can ask simple questions like "Show me all the toys" or complex questions like "Show me all the red toys that cost less than $10 and are made of plastic". MongoDB understands all these questions!`,
+                    examples: [
+                        'It\'s like asking a librarian to find specific books for you',
+                        'Like searching on Google but for your own data',
+                        'Similar to asking Alexa questions, but for your database'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'MongoDB Query API kya hai?',
+                        a: 'Query API MongoDB ka interface hai jisse hum database se data retrieve karte hain. Isme various methods hain like find(), findOne(), aggregate() etc. Ye methods JavaScript objects accept karte hain as query filters.'
+                    },
+                    {
+                        q: 'Query operators kaise kaam karte hain?',
+                        a: 'Query operators special keywords hain jo $ sign se start hote hain. For example, $gt (greater than), $lt (less than), $in (in array), $and, $or etc. Ye operators complex conditions create karne mein help karte hain. Example: {age: {$gt: 18}} means age greater than 18.'
+                    },
+                    {
+                        q: 'Projection kya hota hai queries mein?',
+                        a: 'Projection se hum specify karte hain ki result mein konse fields chahiye. Ye bandwidth save karta hai. Example: db.users.find({}, {name: 1, email: 1}) sirf name aur email return karega. 1 means include, 0 means exclude.'
+                    }
+                ],
+                formal: {
+                    definition: 'The MongoDB Query API provides a rich set of operators and methods for querying, filtering, and retrieving documents from collections with precise control over result sets.',
+                    keyPoints: [
+                        'Query filter documents specify selection criteria',
+                        'Comparison operators: $eq, $ne, $gt, $gte, $lt, $lte',
+                        'Logical operators: $and, $or, $not, $nor',
+                        'Element operators: $exists, $type',
+                        'Array operators: $in, $nin, $all, $elemMatch',
+                        'Projection to specify returned fields',
+                        'Cursor methods: limit(), skip(), sort()',
+                        'Query optimization through proper indexing'
+                    ],
+                    examples: [
+                        'db.collection.find({age: {$gte: 18}}) - Find documents where age >= 18',
+                        'db.collection.find({status: "active", age: {$lt: 30}}) - Multiple conditions',
+                        'db.collection.find({$or: [{status: "active"}, {priority: "high"}]}) - OR logic',
+                        'db.collection.find({}, {name: 1, email: 1, _id: 0}) - Projection'
+                    ]
+                }
+            },
+            'create-db': {
+                title: 'Create Database',
+                icon: '🗄️',
+                simple: {
+                    title: 'Making Your Own Storage Space',
+                    content: `Creating a database in MongoDB is like creating a new folder on your computer! When you want to organize your photos, you create a folder called "Photos". Similarly, when you want to organize data about your school, you create a database called "school".
+                    
+                    The cool thing about MongoDB is that you don't need to formally "create" a database. Just start using it, and MongoDB creates it automatically! It's like magic - the folder appears when you put the first file in it!`,
+                    examples: [
+                        'Like creating a new notebook for a new subject in school',
+                        'Similar to making a new folder for your vacation photos',
+                        'Like starting a new save file in a video game'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'MongoDB mein database kaise create karte hain?',
+                        a: 'MongoDB mein explicit CREATE DATABASE command nahi hai. Bas "use databaseName" command use karo. Jab aap pehli baar us database mein koi collection create karoge ya data insert karoge, tab database automatically create ho jayega. Example: use mySchool - ye mySchool database ko select kar lega ya create kar dega.'
+                    },
+                    {
+                        q: 'Current database kaise check karte hain?',
+                        a: 'Current database check karne ke liye "db" command use karo. Ye currently selected database ka naam show karega. Saare databases dekhne ke liye "show dbs" ya "show databases" command use karo. Lekin empty databases list mein nahi dikhte.'
+                    },
+                    {
+                        q: 'Database naming conventions kya hain?',
+                        a: 'Database names case-sensitive hote hain (Linux/Mac pe). Special characters avoid karo. Lowercase letters, numbers, aur underscores use kar sakte ho. Spaces allowed nahi hain. Maximum length 64 characters hai. Reserved names like "admin", "local", "config" use mat karo.'
+                    }
+                ],
+                formal: {
+                    definition: 'Database creation in MongoDB is implicit - databases are created automatically when data is first written to them. The "use" command switches context to a specified database.',
+                    keyPoints: [
+                        'Implicit creation: No explicit CREATE DATABASE command',
+                        'use <dbname> command switches to specified database',
+                        'Database created when first document is inserted',
+                        'Empty databases not shown in database list',
+                        'db command shows current database',
+                        'show dbs or show databases lists all databases',
+                        'Database names are case-sensitive on Linux/Unix',
+                        'Naming restrictions: no spaces, special characters limited'
+                    ],
+                    commands: [
+                        'use myDatabase - Switch to/create database',
+                        'db - Show current database name',
+                        'show dbs - List all databases',
+                        'db.dropDatabase() - Delete current database',
+                        'db.getName() - Get current database name'
+                    ],
+                    bestPractices: [
+                        'Use descriptive, lowercase names',
+                        'Follow consistent naming conventions',
+                        'Avoid reserved names (admin, local, config)',
+                        'Consider environment prefixes (dev_, prod_)',
+                        'Keep names concise but meaningful'
+                    ]
+                }
+            },
+            'collection': {
+                title: 'Collection',
+                icon: '📦',
+                simple: {
+                    title: 'Organizing Your Data into Groups',
+                    content: `A collection in MongoDB is like a toy box! Just as you have different boxes for different types of toys - one for cars, one for dolls, one for building blocks - MongoDB has collections for different types of data.
+                    
+                    In a school database, you might have a "students" collection (box) for all student information, a "teachers" collection for teacher information, and a "classes" collection for class information. Each collection holds similar things together!`,
+                    examples: [
+                        'Like having different drawers in your dresser - one for shirts, one for pants',
+                        'Similar to having different playlists for different types of music',
+                        'Like organizing your books into fiction, non-fiction, and comics'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'Collection kya hota hai MongoDB mein?',
+                        a: 'Collection ek group hai similar documents ka. Ye SQL tables ke equivalent hai, lekin zyada flexible. Ek database mein multiple collections ho sakte hain. Example: ek "users" collection mein saare user documents honge, "products" collection mein saare product documents.'
+                    },
+                    {
+                        q: 'Collection kaise create karte hain?',
+                        a: 'Collection create karne ke do tarike hain: 1) Explicitly db.createCollection("collectionName") use karke, 2) Implicitly jab aap pehli baar document insert karte ho. Mostly implicit method hi use hota hai kyunki ye simple hai. Example: db.users.insertOne({name: "Raj"}) - ye users collection create kar dega agar exist nahi karta.'
+                    },
+                    {
+                        q: 'Collection operations kya kya hain?',
+                        a: 'Main operations hain: show collections (saare collections dekhne ke liye), db.collection.drop() (collection delete karne ke liye), db.collection.renameCollection("newName") (rename karne ke liye), db.collection.stats() (collection ki statistics dekhne ke liye).'
+                    }
+                ],
+                formal: {
+                    definition: 'A collection is a grouping of MongoDB documents, analogous to a table in relational databases. Collections exist within a single database and do not enforce a schema.',
+                    keyPoints: [
+                        'Collections store documents (JSON-like objects)',
+                        'Schema-less: documents can have different structures',
+                        'Created implicitly on first document insertion',
+                        'Can be created explicitly with options',
+                        'Collection names must be valid UTF-8 strings',
+                        'Cannot contain null character or start with system.',
+                        'Capped collections available for fixed-size storage',
+                        'Support for collection-level validation rules'
+                    ],
+                    commands: [
+                        'db.createCollection("myCollection") - Explicit creation',
+                        'db.createCollection("logs", {capped: true, size: 5242880}) - Capped collection',
+                        'show collections - List all collections',
+                        'db.myCollection.drop() - Delete collection',
+                        'db.myCollection.renameCollection("newName") - Rename',
+                        'db.myCollection.stats() - Collection statistics'
+                    ],
+                    collectionTypes: [
+                        'Standard collections: Regular document storage',
+                        'Capped collections: Fixed-size, insertion-order maintained',
+                        'Time series collections: Optimized for time-stamped data',
+                        'System collections: Internal MongoDB collections (system.*)'
+                    ]
+                }
+            },
+            'insert': {
+                title: 'Insert Documents',
+                icon: '➕',
+                simple: {
+                    title: 'Adding New Things to Your Collection',
+                    content: `Inserting documents in MongoDB is like adding new cards to your Pokemon card collection! Each card (document) has information like the Pokemon's name, type, and power level.
+                    
+                    You can add one card at a time (insertOne) or add a whole bunch of cards at once (insertMany). MongoDB gives each card a special ID number automatically, so you can always find it later!`,
+                    examples: [
+                        'Like adding a new contact to your phone',
+                        'Similar to posting a new photo on Instagram',
+                        'Like adding a new song to your playlist'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'Document insert karne ke kitne methods hain?',
+                        a: 'Teen main methods hain: 1) insertOne() - ek document insert karta hai, 2) insertMany() - multiple documents ek saath insert karta hai, 3) insert() - deprecated hai, use mat karo. InsertOne aur insertMany prefer karo kyunki ye clear aur modern hain.'
+                    },
+                    {
+                        q: '_id field kya hai aur ye kaise generate hota hai?',
+                        a: '_id har document ka unique identifier hai. Agar aap _id provide nahi karte, to MongoDB automatically ObjectId generate kar deta hai. Ye 12-byte unique value hoti hai. Aap custom _id bhi de sakte ho, lekin ensure karo ki wo unique ho collection mein.'
+                    },
+                    {
+                        q: 'InsertMany mein error handling kaise hota hai?',
+                        a: 'By default, agar insertMany mein koi document fail hota hai, to baaki documents insert nahi hote (ordered: true). Lekin agar aap {ordered: false} option use karo, to error ke baad bhi baaki documents insert hote rahenge. Ye useful hai jab aap chahte ho ki maximum documents insert ho jayein.'
+                    }
+                ],
+                formal: {
+                    definition: 'Insert operations add new documents to a collection. MongoDB provides insertOne() and insertMany() methods for single and bulk insertions respectively.',
+                    keyPoints: [
+                        'insertOne() inserts a single document',
+                        'insertMany() inserts multiple documents in one operation',
+                        'Automatic _id generation if not provided',
+                        '_id must be unique within collection',
+                        'Returns acknowledgment with inserted IDs',
+                        'Ordered vs unordered bulk inserts',
+                        'Write concern options for durability guarantees',
+                        'Validation rules applied during insertion'
+                    ],
+                    commands: [
+                        'db.collection.insertOne({name: "John", age: 30})',
+                        'db.collection.insertMany([{name: "Alice"}, {name: "Bob"}])',
+                        'db.collection.insertOne({_id: 1, name: "Custom ID"})',
+                        'db.collection.insertMany([...], {ordered: false})',
+                        'db.collection.insertOne({...}, {writeConcern: {w: "majority"}})'
+                    ],
+                    returnValue: {
+                        acknowledged: 'Boolean indicating write acknowledgment',
+                        insertedId: 'The _id of inserted document (insertOne)',
+                        insertedIds: 'Array of _ids (insertMany)'
+                    }
+                }
+            },
+            'find': {
+                title: 'Find Documents',
+                icon: '🔎',
+                simple: {
+                    title: 'Searching for Your Stuff',
+                    content: `Finding documents in MongoDB is like using the search function in your phone! When you want to find a specific photo, you type what you're looking for and your phone shows you all matching photos.
+                    
+                    MongoDB's find() works the same way. You tell it what you're looking for - maybe all students who are 10 years old, or all toys that are red - and MongoDB shows you all the matching documents!`,
+                    examples: [
+                        'Like searching for a specific email in your inbox',
+                        'Similar to finding all your photos from last summer',
+                        'Like looking for all your friends who live in your city'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'find() aur findOne() mein kya difference hai?',
+                        a: 'find() saare matching documents return karta hai as a cursor, jabki findOne() sirf pehla matching document return karta hai as an object. find() ke results ko iterate karna padta hai, findOne() directly use kar sakte ho. Performance ke liye, agar ek hi document chahiye to findOne() better hai.'
+                    },
+                    {
+                        q: 'Empty find query kya karta hai?',
+                        a: 'db.collection.find() bina kisi parameter ke saare documents return karta hai collection se. Ye SELECT * FROM table ke equivalent hai SQL mein. Lekin production mein ye avoid karo large collections ke liye, kyunki bahut zyada data return ho sakta hai.'
+                    },
+                    {
+                        q: 'Cursor methods kya hain aur kaise use karte hain?',
+                        a: 'Cursor methods find() ke results ko modify karte hain. Main methods: limit() - limited documents return karta hai, skip() - pehle kuch documents skip karta hai, sort() - results ko sort karta hai. Example: db.users.find().sort({age: -1}).limit(10) - age se descending order mein top 10 users.'
+                    }
+                ],
+                formal: {
+                    definition: 'The find() method queries a collection and returns a cursor to the matching documents. It accepts query filters and projection parameters to control result sets.',
+                    keyPoints: [
+                        'find() returns a cursor to matching documents',
+                        'findOne() returns first matching document',
+                        'Empty query {} matches all documents',
+                        'Query filters use MongoDB query operators',
+                        'Projection specifies fields to return/exclude',
+                        'Cursor methods: limit(), skip(), sort(), count()',
+                        'Cursor iteration with forEach(), toArray()',
+                        'Query optimization through indexes'
+                    ],
+                    commands: [
+                        'db.collection.find() - Find all documents',
+                        'db.collection.find({age: 25}) - Find with filter',
+                        'db.collection.find({}, {name: 1, _id: 0}) - With projection',
+                        'db.collection.findOne({email: "test@example.com"})',
+                        'db.collection.find().sort({age: -1}).limit(10)',
+                        'db.collection.find().skip(20).limit(10) - Pagination'
+                    ],
+                    cursorMethods: [
+                        'limit(n) - Limit results to n documents',
+                        'skip(n) - Skip first n documents',
+                        'sort({field: 1/-1}) - Sort ascending/descending',
+                        'count() - Count matching documents',
+                        'forEach(function) - Iterate over results',
+                        'toArray() - Convert cursor to array'
+                    ]
+                }
+            },
+            'update': {
+                title: 'Update Documents',
+                icon: '✏️',
+                simple: {
+                    title: 'Changing Information',
+                    content: `Updating documents is like editing your profile on social media! Maybe you changed your profile picture, or updated your bio, or changed your phone number. MongoDB lets you update information in the same way.
+                    
+                    You can change just one thing (like updating your age), or change many things at once (like updating your address, phone, and email together). You can even update one person's information or many people's information at the same time!`,
+                    examples: [
+                        'Like editing a document in Google Docs',
+                        'Similar to changing your password on a website',
+                        'Like updating your high score in a game'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'Update operations ke kitne types hain?',
+                        a: 'Char main methods hain: 1) updateOne() - pehla matching document update karta hai, 2) updateMany() - saare matching documents update karta hai, 3) replaceOne() - pura document replace kar deta hai, 4) findOneAndUpdate() - document find karke update karta hai aur updated document return karta hai.'
+                    },
+                    {
+                        q: '$set aur $unset operators kya karte hain?',
+                        a: '$set operator field ki value set karta hai. Agar field exist nahi karta to create kar deta hai. Example: {$set: {age: 25}}. $unset operator field ko document se remove kar deta hai. Example: {$unset: {age: ""}}. Ye dono sabse common update operators hain.'
+                    },
+                    {
+                        q: 'Upsert kya hota hai?',
+                        a: 'Upsert ek option hai jo update aur insert ko combine karta hai. Agar matching document milta hai to update hota hai, nahi to naya document insert ho jata hai. {upsert: true} option use karo. Ye useful hai jab aap ensure karna chahte ho ki document exist kare, chahe update ho ya insert.'
+                    }
+                ],
+                formal: {
+                    definition: 'Update operations modify existing documents in a collection. MongoDB provides various update methods and operators for precise document modifications.',
+                    keyPoints: [
+                        'updateOne() updates first matching document',
+                        'updateMany() updates all matching documents',
+                        'replaceOne() replaces entire document',
+                        'findOneAndUpdate() returns modified document',
+                        'Update operators: $set, $unset, $inc, $push, $pull',
+                        'Upsert option: insert if no match found',
+                        'Array update operators for array modifications',
+                        'Atomic operations ensure consistency'
+                    ],
+                    commands: [
+                        'db.collection.updateOne({_id: 1}, {$set: {age: 26}})',
+                        'db.collection.updateMany({status: "pending"}, {$set: {status: "active"}})',
+                        'db.collection.replaceOne({_id: 1}, {name: "New", age: 30})',
+                        'db.collection.updateOne({email: "test@test.com"}, {$set: {verified: true}}, {upsert: true})',
+                        'db.collection.findOneAndUpdate({_id: 1}, {$inc: {views: 1}}, {returnDocument: "after"})'
+                    ],
+                    updateOperators: [
+                        '$set - Set field value',
+                        '$unset - Remove field',
+                        '$inc - Increment numeric value',
+                        '$mul - Multiply numeric value',
+                        '$rename - Rename field',
+                        '$min/$max - Update if value is min/max',
+                        '$currentDate - Set to current date'
+                    ]
+                }
+            },
+            'delete': {
+                title: 'Delete Documents',
+                icon: '🗑️',
+                simple: {
+                    title: 'Removing Things You Don\'t Need',
+                    content: `Deleting documents is like cleaning your room and throwing away things you don't need anymore! Maybe you have old toys you don't play with, or old drawings you don't want to keep. MongoDB lets you remove documents the same way.
+                    
+                    You can delete just one thing (deleteOne) or delete many things at once (deleteMany). Be careful though - once you delete something, it's gone forever, just like throwing something in the trash!`,
+                    examples: [
+                        'Like deleting old photos from your phone',
+                        'Similar to removing songs from your playlist',
+                        'Like throwing away old homework papers'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'Delete operations ke kitne types hain?',
+                        a: 'Teen main methods hain: 1) deleteOne() - pehla matching document delete karta hai, 2) deleteMany() - saare matching documents delete karte hain, 3) findOneAndDelete() - document find karke delete karta hai aur deleted document return karta hai. Careful raho, delete permanent hota hai!'
+                    },
+                    {
+                        q: 'Saare documents kaise delete karte hain collection se?',
+                        a: 'db.collection.deleteMany({}) empty filter ke saath saare documents delete kar dega. Lekin ye dangerous hai! Better hai ki pehle count check karo: db.collection.countDocuments({}), phir delete karo. Production mein ye operation carefully use karo aur backup rakho.'
+                    },
+                    {
+                        q: 'Delete aur drop mein kya difference hai?',
+                        a: 'deleteMany() documents ko delete karta hai lekin collection aur indexes remain karte hain. drop() pura collection hi delete kar deta hai including indexes aur metadata. drop() faster hai large collections ke liye, lekin zyada destructive bhi hai.'
+                    }
+                ],
+                formal: {
+                    definition: 'Delete operations remove documents from a collection. MongoDB provides methods for single and bulk deletions with precise filtering capabilities.',
+                    keyPoints: [
+                        'deleteOne() removes first matching document',
+                        'deleteMany() removes all matching documents',
+                        'findOneAndDelete() returns deleted document',
+                        'Empty filter {} matches all documents',
+                        'Delete operations are permanent',
+                        'Returns deletedCount in result',
+                        'Indexes remain after document deletion',
+                        'Write concern options available'
+                    ],
+                    commands: [
+                        'db.collection.deleteOne({_id: 1})',
+                        'db.collection.deleteMany({status: "inactive"})',
+                        'db.collection.deleteMany({}) - Delete all documents',
+                        'db.collection.findOneAndDelete({email: "test@test.com"})',
+                        'db.collection.drop() - Drop entire collection'
+                    ],
+                    returnValue: {
+                        acknowledged: 'Boolean indicating write acknowledgment',
+                        deletedCount: 'Number of documents deleted'
+                    },
+                    bestPractices: [
+                        'Always use specific filters to avoid accidental deletions',
+                        'Test delete queries with find() first',
+                        'Maintain backups before bulk deletions',
+                        'Consider soft deletes (status flag) for important data',
+                        'Use transactions for multi-document consistency'
+                    ]
+                }
+            },
+            'query-operators': {
+                title: 'Query Operators',
+                icon: '⚙️',
+                simple: {
+                    title: 'Special Search Tools',
+                    content: `Query operators are like special filters when you're shopping online! When you shop, you can filter by price (less than $50), by color (red or blue), by size (medium or large). MongoDB's query operators work exactly the same way!
+                    
+                    You can search for things that are greater than something ($gt), less than something ($lt), equal to something ($eq), or even search in a list of options ($in). These operators make your searches super powerful!`,
+                    examples: [
+                        'Like filtering Netflix by genre, rating, and year',
+                        'Similar to searching for houses by price range and number of bedrooms',
+                        'Like finding restaurants that are open now AND have good ratings'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'Comparison operators kya hain aur kaise use karte hain?',
+                        a: 'Comparison operators values ko compare karte hain: $eq (equal), $ne (not equal), $gt (greater than), $gte (greater than or equal), $lt (less than), $lte (less than or equal). Example: {age: {$gte: 18}} means age 18 ya usse zyada. {price: {$lt: 1000}} means price 1000 se kam.'
+                    },
+                    {
+                        q: 'Logical operators kaise kaam karte hain?',
+                        a: '$and, $or, $not, $nor logical operators hain. $and saari conditions true honi chahiye, $or koi bhi ek condition true ho sakti hai. Example: {$or: [{age: {$lt: 18}}, {age: {$gt: 60}}]} means age 18 se kam YA 60 se zyada. $and implicit hai jab multiple conditions ho.'
+                    },
+                    {
+                        q: 'Array operators kya hain?',
+                        a: 'Array operators arrays ke saath kaam karte hain: $in (value array mein hai), $nin (value array mein nahi hai), $all (saare values present hain), $elemMatch (array element condition match karta hai), $size (array ki length). Example: {tags: {$in: ["mongodb", "database"]}} means tags mein mongodb YA database hai.'
+                    }
+                ],
+                formal: {
+                    definition: 'Query operators are special syntax elements that specify conditions in query filter documents. They enable complex querying capabilities beyond simple equality matches.',
+                    keyPoints: [
+                        'Operators prefixed with $ symbol',
+                        'Comparison: $eq, $ne, $gt, $gte, $lt, $lte',
+                        'Logical: $and, $or, $not, $nor',
+                        'Element: $exists, $type',
+                        'Evaluation: $regex, $text, $where',
+                        'Array: $in, $nin, $all, $elemMatch, $size',
+                        'Operators can be combined for complex queries',
+                        'Proper indexing improves operator performance'
+                    ],
+                    examples: [
+                        '{age: {$gte: 18, $lte: 65}} - Age between 18 and 65',
+                        '{$or: [{status: "active"}, {priority: "high"}]} - OR condition',
+                        '{tags: {$in: ["mongodb", "database", "nosql"]}} - Value in array',
+                        '{email: {$exists: true}} - Field exists',
+                        '{name: {$regex: /^John/i}} - Regex pattern match',
+                        '{scores: {$elemMatch: {$gte: 80, $lt: 90}}} - Array element match'
+                    ],
+                    operatorCategories: {
+                        comparison: '$eq, $ne, $gt, $gte, $lt, $lte',
+                        logical: '$and, $or, $not, $nor',
+                        element: '$exists, $type',
+                        evaluation: '$regex, $text, $where, $expr',
+                        array: '$in, $nin, $all, $elemMatch, $size'
+                    }
+                }
+            },
+            'update-operators': {
+                title: 'Update Operators',
+                icon: '🔧',
+                simple: {
+                    title: 'Tools for Changing Things',
+                    content: `Update operators are like different tools in a toolbox! Just like you use a hammer for nails and a screwdriver for screws, MongoDB has different operators for different types of updates.
+                    
+                    Want to change a value? Use $set. Want to add 1 to a number? Use $inc. Want to add something to a list? Use $push. Each operator is the perfect tool for a specific job!`,
+                    examples: [
+                        'Like having different buttons in a video game - jump, run, shoot',
+                        'Similar to different editing tools in a photo app - crop, filter, rotate',
+                        'Like different cooking actions - mix, chop, bake'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'Field update operators kya hain?',
+                        a: '$set field ki value set karta hai, $unset field remove karta hai, $rename field ka naam change karta hai, $inc numeric value ko increment karta hai, $mul multiply karta hai. Example: {$set: {name: "Raj"}} name set karega, {$inc: {age: 1}} age mein 1 add karega.'
+                    },
+                    {
+                        q: 'Array update operators kaise use karte hain?',
+                        a: '$push array mein element add karta hai, $pop pehla ya last element remove karta hai, $pull condition match karne wale elements remove karta hai, $addToSet duplicate avoid karke add karta hai. Example: {$push: {tags: "mongodb"}} tags array mein mongodb add karega.'
+                    },
+                    {
+                        q: '$inc aur $set mein kya difference hai?',
+                        a: '$set field ko specific value set karta hai (replace karta hai), jabki $inc existing value mein add karta hai. Example: agar age 25 hai, to {$set: {age: 30}} age ko 30 kar dega, lekin {$inc: {age: 1}} age ko 26 kar dega (25 + 1).'
+                    }
+                ],
+                formal: {
+                    definition: 'Update operators are special operators used in update operations to specify how document fields should be modified. They provide atomic operations for various modification patterns.',
+                    keyPoints: [
+                        'Field operators: $set, $unset, $rename, $setOnInsert',
+                        'Numeric operators: $inc, $mul, $min, $max',
+                        'Array operators: $push, $pop, $pull, $addToSet',
+                        'Array modifiers: $each, $slice, $sort, $position',
+                        'Bitwise operator: $bit',
+                        'Date operator: $currentDate',
+                        'Operators ensure atomic updates',
+                        'Multiple operators can be used together'
+                    ],
+                    examples: [
+                        '{$set: {status: "active", lastModified: new Date()}}',
+                        '{$inc: {views: 1, likes: 1}}',
+                        '{$push: {comments: {user: "John", text: "Great!"}}}',
+                        '{$addToSet: {tags: {$each: ["mongodb", "database"]}}}',
+                        '{$pull: {scores: {$lt: 50}}}',
+                        '{$rename: {old_name: "new_name"}}'
+                    ],
+                    operatorCategories: {
+                        field: '$set, $unset, $rename, $setOnInsert',
+                        numeric: '$inc, $mul, $min, $max',
+                        array: '$push, $pop, $pull, $pullAll, $addToSet',
+                        modifiers: '$each, $slice, $sort, $position',
+                        other: '$currentDate, $bit'
+                    }
+                }
+            },
+            'aggregations': {
+                title: 'Aggregations',
+                icon: '📊',
+                simple: {
+                    title: 'Analyzing and Summarizing Data',
+                    content: `Aggregations are like making a report card! Just like your teacher takes all your test scores, homework grades, and participation points, then calculates your final grade - MongoDB aggregations take your data and create summaries.
+                    
+                    You can count how many students are in each class, find the average age of students, group students by their favorite subject, or find the highest score. It's like having a super calculator for your data!`,
+                    examples: [
+                        'Like calculating your total spending from all your purchases',
+                        'Similar to finding your average score across all games',
+                        'Like grouping your photos by month and counting them'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'Aggregation pipeline kya hai?',
+                        a: 'Aggregation pipeline ek series of stages hai jo data ko process karte hain step by step. Har stage input documents ko process karke output produce karta hai jo next stage ka input ban jata hai. Ye assembly line ki tarah kaam karta hai. Example: pehle filter karo, phir group karo, phir sort karo.'
+                    },
+                    {
+                        q: 'Common aggregation stages kya hain?',
+                        a: '$match - documents filter karta hai (like find), $group - documents ko group karke aggregate karta hai, $sort - results sort karta hai, $project - fields select/reshape karta hai, $limit - results limit karta hai, $skip - documents skip karta hai, $lookup - join operation (like SQL join).'
+                    },
+                    {
+                        q: '$group stage kaise kaam karta hai?',
+                        a: '$group documents ko _id field ke basis pe group karta hai aur accumulator operators use karke calculations karta hai. Example: {$group: {_id: "$category", total: {$sum: "$price"}}} category wise total price calculate karega. $sum, $avg, $min, $max, $push common accumulators hain.'
+                    }
+                ],
+                formal: {
+                    definition: 'The aggregation framework processes data records and returns computed results. It uses a pipeline approach where documents pass through multiple stages, each performing specific operations.',
+                    keyPoints: [
+                        'Pipeline-based processing model',
+                        'Multiple stages executed sequentially',
+                        'Each stage transforms document stream',
+                        'Common stages: $match, $group, $project, $sort',
+                        'Accumulator operators: $sum, $avg, $min, $max',
+                        'Array operators: $unwind, $push, $addToSet',
+                        'Join operations: $lookup, $graphLookup',
+                        'Performance optimization through stage ordering'
+                    ],
+                    stages: [
+                        '$match - Filter documents (use early for performance)',
+                        '$group - Group documents and perform calculations',
+                        '$project - Reshape documents, include/exclude fields',
+                        '$sort - Sort documents',
+                        '$limit - Limit number of documents',
+                        '$skip - Skip documents',
+                        '$unwind - Deconstruct array fields',
+                        '$lookup - Left outer join with another collection',
+                        '$facet - Multiple parallel pipelines'
+                    ],
+                    examples: [
+                        'db.orders.aggregate([{$match: {status: "completed"}}, {$group: {_id: "$customerId", total: {$sum: "$amount"}}}])',
+                        'db.products.aggregate([{$group: {_id: "$category", avgPrice: {$avg: "$price"}, count: {$sum: 1}}}])',
+                        'db.users.aggregate([{$project: {name: 1, age: 1, _id: 0}}, {$sort: {age: -1}}, {$limit: 10}])'
+                    ]
+                }
+            },
+            'indexing': {
+                title: 'Indexing & Search',
+                icon: '🔖',
+                simple: {
+                    title: 'Making Searches Super Fast',
+                    content: `Indexes in MongoDB are like the index at the back of a textbook! Instead of reading every page to find information about "dinosaurs", you look at the index, find "dinosaurs - page 47", and jump straight to that page.
+                    
+                    MongoDB indexes work the same way. Without an index, MongoDB has to look at every document to find what you want (slow!). With an index, it can jump straight to the right documents (super fast!). It's like having a cheat sheet for finding things!`,
+                    examples: [
+                        'Like the table of contents in a book',
+                        'Similar to contacts in your phone sorted alphabetically',
+                        'Like a library catalog that helps you find books quickly'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'Index kya hai aur kyun zaroori hai?',
+                        a: 'Index ek special data structure hai jo queries ko fast banata hai. Bina index ke MongoDB ko har document check karna padta hai (collection scan). Index ke saath directly relevant documents mil jate hain. Lekin indexes space lete hain aur write operations ko thoda slow kar sakte hain.'
+                    },
+                    {
+                        q: 'Index types kya kya hain?',
+                        a: 'Single field index - ek field pe, Compound index - multiple fields pe, Multikey index - array fields pe, Text index - text search ke liye, Geospatial index - location data ke liye, Hashed index - hash-based sharding ke liye. Har type ka apna use case hai.'
+                    },
+                    {
+                        q: 'Index kab create karna chahiye?',
+                        a: 'Frequently queried fields pe index create karo, sort operations mein use hone wale fields pe, join operations ($lookup) ke liye foreign keys pe. Lekin har field pe index mat banao - indexes memory use karte hain aur writes slow karte hain. Analyze karo ki konse queries slow hain, phir index banao.'
+                    }
+                ],
+                formal: {
+                    definition: 'Indexes are special data structures that store a small portion of the collection\'s data in an easy-to-traverse form. They dramatically improve query performance by reducing the number of documents MongoDB must examine.',
+                    keyPoints: [
+                        'Indexes improve query performance significantly',
+                        'Trade-off: faster reads, slower writes, more storage',
+                        'Single field indexes on individual fields',
+                        'Compound indexes on multiple fields',
+                        'Multikey indexes for array fields',
+                        'Text indexes for text search capabilities',
+                        'Geospatial indexes for location queries',
+                        'Index intersection for multiple single-field indexes'
+                    ],
+                    commands: [
+                        'db.collection.createIndex({field: 1}) - Ascending index',
+                        'db.collection.createIndex({field: -1}) - Descending index',
+                        'db.collection.createIndex({field1: 1, field2: -1}) - Compound',
+                        'db.collection.createIndex({field: "text"}) - Text index',
+                        'db.collection.getIndexes() - List all indexes',
+                        'db.collection.dropIndex("indexName") - Drop index',
+                        'db.collection.createIndex({field: 1}, {unique: true}) - Unique index'
+                    ],
+                    indexTypes: {
+                        singleField: 'Index on a single field',
+                        compound: 'Index on multiple fields (order matters)',
+                        multikey: 'Index on array fields',
+                        text: 'Full-text search index',
+                        geospatial: '2d and 2dsphere for location data',
+                        hashed: 'Hash-based for sharding'
+                    },
+                    bestPractices: [
+                        'Index fields used in query filters',
+                        'Index fields used in sort operations',
+                        'Use compound indexes for multiple field queries',
+                        'Consider index selectivity (unique values)',
+                        'Monitor index usage with explain()',
+                        'Remove unused indexes',
+                        'Limit number of indexes per collection'
+                    ]
+                }
+            },
+            'validation': {
+                title: 'Validation',
+                icon: '✅',
+                simple: {
+                    title: 'Making Sure Data is Correct',
+                    content: `Validation in MongoDB is like a teacher checking your homework! Before you submit your homework, the teacher makes sure you filled in all the required fields, your answers are in the right format, and you followed all the rules.
+                    
+                    MongoDB validation does the same thing. It checks that documents have all required fields, that numbers are actually numbers (not text), that email addresses look like email addresses, and that everything follows the rules you set. If something's wrong, MongoDB won't let you save it!`,
+                    examples: [
+                        'Like a form that won\'t submit until you fill in all required fields',
+                        'Similar to your phone checking if you entered a valid phone number',
+                        'Like a game that won\'t let you enter an invalid username'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'Schema validation kya hai MongoDB mein?',
+                        a: 'Schema validation rules define karta hai ki documents ka structure kaisa hona chahiye. Ye ensure karta hai ki invalid data insert na ho. JSON Schema standard use hota hai. Example: aap specify kar sakte ho ki "age" field required hai, number type ka hona chahiye, aur 0 se 150 ke beech hona chahiye.'
+                    },
+                    {
+                        q: 'Validation level aur action kya hote hain?',
+                        a: 'Validation level decide karta hai ki validation kab apply ho: "strict" (default) - saare inserts aur updates pe, "moderate" - sirf valid documents pe updates. Validation action decide karta hai ki invalid document pe kya ho: "error" (default) - operation fail ho jaye, "warn" - warning log ho lekin operation succeed ho.'
+                    },
+                    {
+                        q: 'Existing collection mein validation kaise add karte hain?',
+                        a: 'collMod command use karo: db.runCommand({collMod: "collectionName", validator: {...}, validationLevel: "strict", validationAction: "error"}). Lekin dhyan rakho, agar existing documents validation rules violate karte hain to unhe update nahi kar paoge jab tak validation level "moderate" na ho.'
+                    }
+                ],
+                formal: {
+                    definition: 'Schema validation allows you to enforce document structure and data types in MongoDB collections using JSON Schema standard. It ensures data quality and consistency.',
+                    keyPoints: [
+                        'JSON Schema standard for validation rules',
+                        'Validation on insert and update operations',
+                        'Required fields specification',
+                        'Data type enforcement',
+                        'Value range and pattern constraints',
+                        'Validation levels: strict, moderate',
+                        'Validation actions: error, warn',
+                        'Can be added to existing collections'
+                    ],
+                    validationRules: {
+                        bsonType: 'Specify field data type (string, int, double, etc.)',
+                        required: 'Array of required field names',
+                        properties: 'Define validation for each field',
+                        minimum: 'Minimum value for numbers',
+                        maximum: 'Maximum value for numbers',
+                        pattern: 'Regex pattern for strings',
+                        enum: 'Allowed values list',
+                        minLength: 'Minimum string length',
+                        maxLength: 'Maximum string length'
+                    },
+                    example: `db.createCollection("users", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["name", "email", "age"],
+      properties: {
+        name: {
+          bsonType: "string",
+          description: "must be a string and is required"
+        },
+        email: {
+          bsonType: "string",
+          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+          description: "must be a valid email"
+        },
+        age: {
+          bsonType: "int",
+          minimum: 0,
+          maximum: 150,
+          description: "must be an integer between 0 and 150"
+        }
+      }
+    }
+  }
+})`,
+                    commands: [
+                        'db.createCollection("name", {validator: {...}}) - Create with validation',
+                        'db.runCommand({collMod: "name", validator: {...}}) - Add validation',
+                        'db.getCollectionInfos({name: "collectionName"}) - View validation rules'
+                    ]
+                }
+            },
+            'data-api': {
+                title: 'Data API',
+                icon: '🌐',
+                simple: {
+                    title: 'Accessing MongoDB from Anywhere',
+                    content: `The Data API is like having a remote control for your MongoDB database! Just like you can control your TV from your couch using a remote, you can control your MongoDB database from anywhere using the Data API.
+                    
+                    You can use it from your website, your mobile app, or even from other services. You send requests over the internet (like pressing buttons on a remote), and MongoDB responds with the data you asked for. No need to install anything special!`,
+                    examples: [
+                        'Like ordering food through an app - you send a request, they send food',
+                        'Similar to asking Alexa questions - you ask, she responds',
+                        'Like using a website - you click, the website responds'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'MongoDB Data API kya hai?',
+                        a: 'Data API ek REST API hai jo MongoDB Atlas provide karta hai. Isse aap HTTP requests ke through database operations perform kar sakte ho bina MongoDB driver install kiye. Ye serverless applications, webhooks, aur third-party integrations ke liye perfect hai. HTTPS endpoints use karta hai.'
+                    },
+                    {
+                        q: 'Data API kaise setup karte hain?',
+                        a: 'Atlas console mein jao, App Services section mein, Data API enable karo. API key generate karo authentication ke liye. Endpoints automatically create ho jate hain. Phir aap standard HTTP methods (GET, POST, PUT, DELETE) use karke operations perform kar sakte ho.'
+                    },
+                    {
+                        q: 'Data API aur MongoDB Driver mein kya difference hai?',
+                        a: 'Driver direct connection banata hai database se aur zyada features provide karta hai. Data API HTTP-based hai, easier to use hai bina setup ke, lekin thoda limited hai. Driver production applications ke liye better hai, Data API quick integrations aur serverless apps ke liye achha hai.'
+                    }
+                ],
+                formal: {
+                    definition: 'MongoDB Data API is a fully managed REST API that allows you to read and write data in MongoDB Atlas using standard HTTPS requests, without requiring MongoDB drivers or connection strings.',
+                    keyPoints: [
+                        'REST API for MongoDB Atlas',
+                        'HTTPS-based communication',
+                        'No driver installation required',
+                        'API key authentication',
+                        'Supports CRUD operations',
+                        'JSON request and response format',
+                        'Automatic endpoint generation',
+                        'Ideal for serverless and edge computing'
+                    ],
+                    endpoints: {
+                        findOne: 'POST /action/findOne - Find single document',
+                        find: 'POST /action/find - Find multiple documents',
+                        insertOne: 'POST /action/insertOne - Insert single document',
+                        insertMany: 'POST /action/insertMany - Insert multiple documents',
+                        updateOne: 'POST /action/updateOne - Update single document',
+                        updateMany: 'POST /action/updateMany - Update multiple documents',
+                        deleteOne: 'POST /action/deleteOne - Delete single document',
+                        deleteMany: 'POST /action/deleteMany - Delete multiple documents',
+                        aggregate: 'POST /action/aggregate - Run aggregation pipeline'
+                    },
+                    authentication: 'API Key in request header: api-key: <your-api-key>',
+                    useCases: [
+                        'Serverless functions (AWS Lambda, Azure Functions)',
+                        'Edge computing applications',
+                        'Webhooks and integrations',
+                        'Mobile and web applications',
+                        'Third-party service integrations',
+                        'Rapid prototyping'
+                    ]
+                }
+            },
+            'drivers': {
+                title: 'Drivers',
+                icon: '🔌',
+                simple: {
+                    title: 'Connecting Your Code to MongoDB',
+                    content: `MongoDB drivers are like translators! Imagine you speak English but your friend speaks Spanish. You need a translator to communicate. Similarly, your programming language (like Python or JavaScript) needs a driver to talk to MongoDB.
+                    
+                    Each programming language has its own driver - Python has PyMongo, JavaScript has the Node.js driver, Java has its own driver. The driver translates your code into commands MongoDB understands, and translates MongoDB's responses back into your programming language!`,
+                    examples: [
+                        'Like a USB cable connecting your phone to your computer',
+                        'Similar to a game controller connecting to your console',
+                        'Like headphones connecting to your music player'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'MongoDB driver kya hai aur kyun chahiye?',
+                        a: 'Driver ek library hai jo aapki programming language ko MongoDB se connect karne mein help karti hai. Ye language-specific API provide karti hai database operations ke liye. Bina driver ke aap MongoDB se communicate nahi kar sakte. Har major language ke liye official driver available hai.'
+                    },
+                    {
+                        q: 'Popular MongoDB drivers kya hain?',
+                        a: 'Node.js ke liye mongodb npm package, Python ke liye PyMongo, Java ke liye MongoDB Java Driver, C# ke liye MongoDB.Driver, PHP ke liye mongodb extension, Go ke liye mongo-go-driver, Ruby ke liye mongoid. Saare official drivers MongoDB team maintain karti hai.'
+                    },
+                    {
+                        q: 'Driver install aur use kaise karte hain?',
+                        a: 'Package manager use karke install karo: npm install mongodb (Node.js), pip install pymongo (Python), Maven/Gradle (Java). Phir code mein import karo, connection string se connect karo, aur operations perform karo. Connection pooling aur error handling automatically handle hota hai.'
+                    }
+                ],
+                formal: {
+                    definition: 'MongoDB drivers are language-specific client libraries that provide APIs for connecting to MongoDB and performing database operations from application code.',
+                    keyPoints: [
+                        'Official drivers for major programming languages',
+                        'Language-idiomatic APIs',
+                        'Connection pooling and management',
+                        'Automatic serialization/deserialization',
+                        'Support for all MongoDB features',
+                        'Async/await support in modern drivers',
+                        'Connection string-based configuration',
+                        'Built-in error handling and retry logic'
+                    ],
+                    officialDrivers: {
+                        nodejs: 'mongodb npm package',
+                        python: 'PyMongo',
+                        java: 'MongoDB Java Driver',
+                        csharp: 'MongoDB.Driver',
+                        php: 'mongodb extension',
+                        go: 'mongo-go-driver',
+                        ruby: 'mongoid',
+                        rust: 'mongodb crate',
+                        swift: 'MongoSwift'
+                    },
+                    features: [
+                        'Connection pooling for performance',
+                        'Automatic reconnection on failure',
+                        'Read/write concern configuration',
+                        'Transaction support',
+                        'Change streams for real-time updates',
+                        'GridFS for file storage',
+                        'Aggregation pipeline support',
+                        'Index management'
+                    ],
+                    connectionString: 'mongodb://[username:password@]host[:port][/database][?options]'
+                }
+            },
+            'nodejs-driver': {
+                title: 'Node.js Driver',
+                icon: '💚',
+                simple: {
+                    title: 'Using MongoDB with JavaScript',
+                    content: `The Node.js driver is like a special toolkit for JavaScript programmers! If you're building a website or app with JavaScript, this driver is your best friend. It lets you write JavaScript code that talks to MongoDB.
+                    
+                    You can do everything - add data, find data, update data, delete data - all using JavaScript that you already know! It's like having MongoDB speak JavaScript fluently. Plus, it works great with modern JavaScript features like async/await!`,
+                    examples: [
+                        'Like using JavaScript to control a robot',
+                        'Similar to using JavaScript to make a website interactive',
+                        'Like writing JavaScript to create a game'
+                    ]
+                },
+                hinglish: [
+                    {
+                        q: 'Node.js MongoDB driver kaise install aur setup karte hain?',
+                        a: 'npm install mongodb command se install karo. Phir code mein const { MongoClient } = require("mongodb") se import karo. Connection string banao (mongodb://localhost:27017 ya Atlas connection string), MongoClient.connect() se connect karo. Async/await use karo for better code readability.'
+                    },
+                    {
+                        q: 'CRUD operations Node.js driver mein kaise perform karte hain?',
+                        a: 'Pehle database aur collection reference lo: const db = client.db("mydb"); const collection = db.collection("users"). Phir methods use karo: insertOne(), insertMany(), find(), findOne(), updateOne(), updateMany(), deleteOne(), deleteMany(). Saare methods promises return karte hain, so await use karo.'
+                    },
+                    {
+                        q: 'Connection pooling kya hai aur kaise kaam karta hai?',
+                        a: 'Connection pooling automatically handle hota hai driver mein. Ek MongoClient instance multiple connections maintain karta hai (pool). Jab operation perform karte ho, driver pool se connection use karta hai aur operation ke baad wapas pool mein daal deta hai. Ye performance improve karta hai. Application start mein ek baar connect karo, end mein close karo.'
+                    }
+                ],
+                formal: {
+                    definition: 'The MongoDB Node.js driver is the official driver for connecting to MongoDB from Node.js applications. It provides a modern, promise-based API with full support for async/await.',
+                    keyPoints: [
+                        'Official MongoDB driver for Node.js',
+                        'Promise-based API with async/await support',
+                        'Automatic connection pooling',
+                        'Full CRUD operation support',
+                        'Aggregation framework support',
+                        'Change streams for real-time updates',
+                        'Transaction support',
+                        'GridFS for file storage'
+                    ],
+                    installation: 'npm install mongodb',
+                    basicUsage: `const { MongoClient } = require('mongodb');
+
+async function main() {
+  const uri = "mongodb://localhost:27017";
+  const client = new MongoClient(uri);
+  
+  try {
+    await client.connect();
+    const database = client.db('myDatabase');
+    const collection = database.collection('myCollection');
+    
+    // Insert
+    await collection.insertOne({ name: "John", age: 30 });
+    
+    // Find
+    const user = await collection.findOne({ name: "John" });
+    console.log(user);
+    
+    // Update
+    await collection.updateOne(
+      { name: "John" },
+      { $set: { age: 31 } }
+    );
+    
+    // Delete
+    await collection.deleteOne({ name: "John" });
+    
+  } finally {
+    await client.close();
+  }
+}
+
+main().catch(console.error);`,
+                    commonMethods: [
+                        'insertOne(doc) - Insert single document',
+                        'insertMany(docs) - Insert multiple documents',
+                        'findOne(filter) - Find single document',
+                        'find(filter) - Find multiple documents (returns cursor)',
+                        'updateOne(filter, update) - Update single document',
+                        'updateMany(filter, update) - Update multiple documents',
+                        'deleteOne(filter) - Delete single document',
+                        'deleteMany(filter) - Delete multiple documents',
+                        'aggregate(pipeline) - Run aggregation pipeline'
+                    ],
+                    bestPractices: [
+                        'Reuse MongoClient instance (singleton pattern)',
+                        'Use connection pooling (automatic)',
+                        'Always use try-finally to close connections',
+                        'Use async/await for cleaner code',
+                        'Handle errors appropriately',
+                        'Use projection to limit returned fields',
+                        'Create indexes for frequently queried fields',
+                        'Use transactions for multi-document operations'
+                    ]
+                }
+            }
+        };
+
+        // Generate navigation
+        function generateNavigation() {
+            const nav = document.getElementById('navigation');
+            Object.keys(studyData).forEach(key => {
+                const item = studyData[key];
+                const navItem = document.createElement('div');
+                navItem.className = 'nav-item';
+                navItem.dataset.topic = key;
+                navItem.innerHTML = `
+                    <span class="nav-icon">${item.icon}</span>
+                    <span>${item.title}</span>
+                `;
+                navItem.addEventListener('click', () => loadTopic(key));
+                nav.appendChild(navItem);
+            });
+            
+            // Load first topic by default
+            loadTopic('mongodb-home');
+        }
+
+        // Load topic content
+        function loadTopic(topicKey) {
+            const topic = studyData[topicKey];
+            const container = document.getElementById('contentContainer');
+            
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.topic === topicKey) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Get current mode
+            const activeTab = document.querySelector('.tab.active');
+            const mode = activeTab.dataset.mode;
+
+            // Generate content based on mode
+            let content = '';
+            
+            if (mode === 'simple') {
+                content = `
+                    <div class="content-card">
+                        <div class="section-title">
+                            <div class="section-icon">${topic.icon}</div>
+                            <span>${topic.title}</span>
+                        </div>
+                        <div class="explanation-box">
+                            <h3>${topic.simple.title}</h3>
+                            <p>${topic.simple.content}</p>
+                        </div>
+                        ${topic.simple.examples ? `
+                            <div class="tip-box">
+                                <strong>🎯 Real-World Examples:</strong>
+                                <ul>
+                                    ${topic.simple.examples.map(ex => `<li>${ex}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            } else if (mode === 'hinglish') {
+                content = `
+                    <div class="content-card">
+                        <div class="section-title">
+                            <div class="section-icon">${topic.icon}</div>
+                            <span>${topic.title} - Interview Questions</span>
+                        </div>
+                        ${topic.hinglish.map((qa, index) => `
+                            <div class="qa-box">
+                                <div class="question">Q${index + 1}: ${qa.q}</div>
+                                <div class="answer"><strong>Answer:</strong> ${qa.a}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (mode === 'formal') {
+                content = `
+                    <div class="content-card">
+                        <div class="section-title">
+                            <div class="section-icon">${topic.icon}</div>
+                            <span>${topic.title} - Formal Definition</span>
+                        </div>
+                        <div class="formal-box">
+                            <h3>📖 Definition</h3>
+                            <p>${topic.formal.definition}</p>
+                        </div>
+                        ${topic.formal.keyPoints ? `
+                            <div class="formal-box">
+                                <h3>🔑 Key Points</h3>
+                                <ul>
+                                    ${topic.formal.keyPoints.map(point => `<li>${point}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        ${topic.formal.commands ? `
+                            <div class="formal-box">
+                                <h3>💻 Commands</h3>
+                                <ul>
+                                    ${topic.formal.commands.map(cmd => `<li><code>${cmd}</code></li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        ${topic.formal.examples ? `
+                            <div class="formal-box">
+                                <h3>📝 Examples</h3>
+                                <ul>
+                                    ${topic.formal.examples.map(ex => `<li><code>${ex}</code></li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        ${topic.formal.example ? `
+                            <div class="code-block"><pre>${topic.formal.example}</pre></div>
+                        ` : ''}
+                        ${topic.formal.useCases ? `
+                            <div class="formal-box">
+                                <h3>🎯 Use Cases</h3>
+                                <ul>
+                                    ${topic.formal.useCases.map(uc => `<li>${uc}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        ${topic.formal.bestPractices ? `
+                            <div class="tip-box">
+                                <strong>✨ Best Practices</strong>
+                                <ul>
+                                    ${topic.formal.bestPractices.map(bp => `<li>${bp}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+
+            container.innerHTML = content;
+            
+            // Close mobile menu after selection
+            document.getElementById('sidebar').classList.remove('active');
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Reload current topic with new mode
+                const activeTopic = document.querySelector('.nav-item.active');
+                if (activeTopic) {
+                    loadTopic(activeTopic.dataset.topic);
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        document.getElementById('menuToggle').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+
+        // Progress bar on scroll
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Initialize
+        generateNavigation();
+    </script>
+</body>
+</html>
