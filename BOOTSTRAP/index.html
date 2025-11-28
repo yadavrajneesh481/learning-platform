@@ -1,0 +1,3390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap 5 Complete Mastery Guide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #ec4899;
+            --bg-dark: #0f172a;
+            --bg-darker: #020617;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .main-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 2rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0px;
+            width: 280px;
+            height: calc(100vh - 0px);
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+            z-index: 999;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: var(--bg-darker);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        .sidebar-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .sidebar-link:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .sidebar-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        /* Topic Card */
+        .topic-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+        }
+
+        .topic-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topic-header h2 {
+            font-size: 1.75rem;
+            margin: 0;
+        }
+
+        .topic-header i {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .topic-header.collapsed i {
+            transform: rotate(180deg);
+        }
+
+        .topic-body {
+            padding: 2rem;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-darker);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .section h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .section h4 {
+            color: var(--primary-color);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #1a1a2e;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        /* Demo Box */
+        .demo-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 2px solid var(--border-color);
+        }
+
+        /* Interview Questions */
+        .interview-qa {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .interview-qa .question {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .interview-qa .answer {
+            color: var(--text-secondary);
+            padding-left: 1rem;
+        }
+
+        /* Important Points */
+        .important-points {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(239, 68, 68, 0.1));
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .important-points ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .important-points li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Mobile Toggle */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .main-header h1 {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .topic-card {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Badge Styles */
+        .framework-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-react {
+            background: #61dafb;
+            color: #000;
+        }
+
+        .badge-nextjs {
+            background: #000;
+            color: #fff;
+            border: 1px solid #fff;
+        }
+
+        .badge-vue {
+            background: #42b883;
+            color: #fff;
+        }
+
+        /* Scroll to Top */
+        .scroll-top {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.25rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-top.show {
+            opacity: 1;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid var(--primary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <!-- <header class="main-header">
+        <div class="container">
+            <h1 class="text-center mb-2">🚀 Bootstrap 5 Complete Mastery Guide</h1>
+            <p class="text-center mb-0 opacity-75">Your Ultimate Interactive Learning Resource</p>
+        </div>
+    </header> -->
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <h5 class="text-white mb-3">📚 Topics</h5>
+        <a href="#get-started" class="sidebar-link">Get Started</a>
+        <a href="#containers" class="sidebar-link">Containers</a>
+        <a href="#grid" class="sidebar-link">Grid System</a>
+        <a href="#typography" class="sidebar-link">Typography</a>
+        <a href="#colors" class="sidebar-link">Colors</a>
+        <a href="#tables" class="sidebar-link">Tables</a>
+        <a href="#images" class="sidebar-link">Images</a>
+        <a href="#alerts" class="sidebar-link">Alerts</a>
+        <a href="#buttons" class="sidebar-link">Buttons</a>
+        <a href="#button-groups" class="sidebar-link">Button Groups</a>
+        <a href="#badges" class="sidebar-link">Badges</a>
+        <a href="#progress" class="sidebar-link">Progress Bars</a>
+        <a href="#spinners" class="sidebar-link">Spinners</a>
+        <a href="#pagination" class="sidebar-link">Pagination</a>
+        <a href="#list-groups" class="sidebar-link">List Groups</a>
+        <a href="#cards" class="sidebar-link">Cards</a>
+        <a href="#dropdowns" class="sidebar-link">Dropdowns</a>
+        <a href="#collapse" class="sidebar-link">Collapse</a>
+        <a href="#navs" class="sidebar-link">Navs</a>
+        <a href="#navbar" class="sidebar-link">Navbar</a>
+        <a href="#carousel" class="sidebar-link">Carousel</a>
+        <a href="#modal" class="sidebar-link">Modal</a>
+        <a href="#tooltip" class="sidebar-link">Tooltip</a>
+        <a href="#popover" class="sidebar-link">Popover</a>
+        <a href="#toast" class="sidebar-link">Toast</a>
+        <a href="#scrollspy" class="sidebar-link">Scrollspy</a>
+        <a href="#offcanvas" class="sidebar-link">Offcanvas</a>
+        <a href="#utilities" class="sidebar-link">Utilities</a>
+        <a href="#dark-mode" class="sidebar-link">Dark Mode</a>
+        <a href="#flex" class="sidebar-link">Flexbox</a>
+        <a href="#forms" class="sidebar-link">Forms</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Get Started -->
+        <div class="topic-card" id="get-started">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>🎯 Get Started with Bootstrap 5</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What is Bootstrap 5?</h3>
+                    <p><strong>Simple Explanation:</strong> Bootstrap is like a big toy box full of ready-made building
+                        blocks for websites! Instead of creating buttons, menus, and cards from scratch, you just pick
+                        what you need and use it. It's like LEGO for websites! 🧱✨</p>
+                    <p><strong>Proper Definition:</strong> Bootstrap 5 is a powerful, open-source CSS framework that
+                        provides pre-built components, responsive grid system, and utility classes for rapid web
+                        development. It enables developers to create mobile-first, responsive websites quickly and
+                        efficiently.</p>
+                </div>
+
+                <div class="section">
+                    <h3>💡 Why Use Bootstrap 5?</h3>
+                    <div class="highlight-box">
+                        <ul>
+                            <li>✅ <strong>Rapid Development:</strong> Build websites 10x faster with pre-built
+                                components</li>
+                            <li>✅ <strong>Responsive by Default:</strong> Works perfectly on all devices (mobile,
+                                tablet, desktop)</li>
+                            <li>✅ <strong>Consistent Design:</strong> Professional look across all browsers</li>
+                            <li>✅ <strong>No jQuery:</strong> Bootstrap 5 removed jQuery dependency (lighter & faster)
+                            </li>
+                            <li>✅ <strong>Customizable:</strong> Easy to customize with Sass variables</li>
+                            <li>✅ <strong>Large Community:</strong> Tons of resources, themes, and support</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use Bootstrap 5</h3>
+                    <h4>Method 1: CDN (Quickest - For Learning)</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Bootstrap 5 App&lt;/title&gt;
+    
+    &lt;!-- Bootstrap CSS --&gt;
+    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 class="text-center text-primary"&gt;Hello Bootstrap!&lt;/h1&gt;
+    
+    &lt;!-- Bootstrap JS Bundle --&gt;
+    &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                    </div>
+
+                    <h4>Method 2: NPM (For Production)</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre># Install Bootstrap
+npm install bootstrap
+
+# Import in your CSS/SCSS
+@import "bootstrap/scss/bootstrap";
+
+# Or import in JavaScript
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>// Install
+npm install bootstrap
+
+// Import in index.js or App.js
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
+// Component Example
+function App() {
+  return (
+    &lt;div className="container mt-5"&gt;
+      &lt;h1 className="text-primary"&gt;Hello Bootstrap + React!&lt;/h1&gt;
+      &lt;button className="btn btn-success"&gt;Click Me&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>▲ With Next.js</h3>
+                    <span class="framework-badge badge-nextjs">Next.js</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>// Install
+npm install bootstrap
+
+// Import in _app.js
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect } from 'react';
+
+function MyApp({ Component, pageProps }) {
+  useEffect(() => {
+    import('bootstrap/dist/js/bootstrap.bundle.min.js');
+  }, []);
+
+  return &lt;Component {...pageProps} /&gt;;
+}
+
+// Use in any page
+export default function Home() {
+  return (
+    &lt;div className="container"&gt;
+      &lt;h1 className="text-primary"&gt;Next.js + Bootstrap&lt;/h1&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💚 With Vue</h3>
+                    <span class="framework-badge badge-vue">Vue</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>// Install
+npm install bootstrap
+
+// Import in main.js
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
+// Component Example
+&lt;template&gt;
+  &lt;div class="container mt-5"&gt;
+    &lt;h1 class="text-primary"&gt;Vue + Bootstrap&lt;/h1&gt;
+    &lt;button class="btn btn-success"&gt;Click Me&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: Bootstrap 5 kya hai aur iska use kyun karte hain?</div>
+                        <div class="answer"><strong>Answer:</strong> Bootstrap 5 ek CSS framework hai jo ready-made
+                            components provide karta hai. Iska use isliye karte hain kyunki development speed bahut fast
+                            ho jati hai, responsive design automatically mil jata hai, aur professional look milta hai
+                            bina zyada CSS likhe. Bootstrap 5 mein jQuery dependency remove kar di gayi hai, jo isse
+                            lightweight aur fast banata hai.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: Bootstrap 4 aur Bootstrap 5 mein kya difference hai?</div>
+                        <div class="answer"><strong>Answer:</strong> Bootstrap 5 mein jQuery dependency nahi hai (pure
+                            JavaScript use hota hai), Internet Explorer support remove kar diya, custom CSS properties
+                            add kiye, RTL support improve kiya, aur file size chota ho gaya. Naye utilities aur
+                            components bhi add kiye gaye jaise Offcanvas.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q3: Bootstrap ko React/Vue ke saath kaise integrate karte hain?</div>
+                        <div class="answer"><strong>Answer:</strong> NPM se bootstrap install karo (npm install
+                            bootstrap), phir main file mein CSS aur JS import karo. React mein className use karo (class
+                            ki jagah), aur useEffect mein JS import karo dynamic components ke liye. Vue mein main.js
+                            mein import karo aur template mein normal classes use karo.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Bootstrap 5 is jQuery-free (uses vanilla JavaScript)</li>
+                            <li>Mobile-first approach (design for mobile, then scale up)</li>
+                            <li>Uses rem units instead of px for better accessibility</li>
+                            <li>Supports CSS custom properties (CSS variables)</li>
+                            <li>Dropped Internet Explorer support</li>
+                            <li>Improved grid system with new xxl breakpoint</li>
+                            <li>Better form controls and validation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Containers -->
+        <div class="topic-card" id="containers">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>📦 Containers</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What are Containers?</h3>
+                    <p><strong>Simple Explanation:</strong> Containers are like boxes that hold your content and keep it
+                        centered on the page. They make sure your content doesn't stretch too wide on big screens! 📦
+                    </p>
+                    <p><strong>Proper Definition:</strong> Containers are the most basic layout element in Bootstrap
+                        that contain, pad, and align content within a given device or viewport. They provide responsive
+                        fixed-width or full-width containers.</p>
+                </div>
+
+                <div class="section">
+                    <h3>💡 Types of Containers</h3>
+                    <div class="highlight-box">
+                        <ul>
+                            <li><strong>.container</strong> - Responsive fixed-width container</li>
+                            <li><strong>.container-fluid</strong> - Full-width container (100% width)</li>
+                            <li><strong>.container-{breakpoint}</strong> - 100% width until breakpoint</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!-- Fixed-width responsive container --&gt;
+&lt;div class="container"&gt;
+  &lt;h1&gt;Fixed Width Container&lt;/h1&gt;
+&lt;/div&gt;
+
+&lt;!-- Full-width container --&gt;
+&lt;div class="container-fluid"&gt;
+  &lt;h1&gt;Full Width Container&lt;/h1&gt;
+&lt;/div&gt;
+
+&lt;!-- Responsive containers --&gt;
+&lt;div class="container-sm"&gt;100% wide until small breakpoint&lt;/div&gt;
+&lt;div class="container-md"&gt;100% wide until medium breakpoint&lt;/div&gt;
+&lt;div class="container-lg"&gt;100% wide until large breakpoint&lt;/div&gt;
+&lt;div class="container-xl"&gt;100% wide until extra large breakpoint&lt;/div&gt;
+&lt;div class="container-xxl"&gt;100% wide until extra extra large breakpoint&lt;/div&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <div class="container bg-primary text-white p-3 mb-3 rounded">
+                            .container - Fixed width, responsive
+                        </div>
+                        <div class="container-fluid bg-success text-white p-3 rounded">
+                            .container-fluid - Full width (100%)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function Container() {
+  return (
+    &lt;&gt;
+      &lt;div className="container"&gt;
+        &lt;h1&gt;Fixed Width Container&lt;/h1&gt;
+      &lt;/div&gt;
+      
+      &lt;div className="container-fluid"&gt;
+        &lt;h1&gt;Full Width Container&lt;/h1&gt;
+      &lt;/div&gt;
+    &lt;/&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>▲ With Next.js</h3>
+                    <span class="framework-badge badge-nextjs">Next.js</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>export default function Page() {
+  return (
+    &lt;div className="container"&gt;
+      &lt;h1&gt;Next.js Container&lt;/h1&gt;
+      &lt;p&gt;Content goes here&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💚 With Vue</h3>
+                    <span class="framework-badge badge-vue">Vue</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;template&gt;
+  &lt;div class="container"&gt;
+    &lt;h1&gt;Vue Container&lt;/h1&gt;
+    &lt;p&gt;{{ message }}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  data() {
+    return {
+      message: 'Content goes here'
+    }
+  }
+}
+&lt;/script&gt;</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: Container aur Container-fluid mein kya difference hai?</div>
+                        <div class="answer"><strong>Answer:</strong> Container ek fixed-width responsive container hai
+                            jo different breakpoints pe different max-width leta hai (centered rahta hai).
+                            Container-fluid hamesha 100% width leta hai, chahe screen size kuch bhi ho. Container
+                            content ko centered rakhta hai, fluid full width use karta hai.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: Container-md ka kya matlab hai?</div>
+                        <div class="answer"><strong>Answer:</strong> Container-md ka matlab hai ki yeh container medium
+                            breakpoint (768px) tak 100% width rahega, uske baad fixed-width container ban jayega. Yeh
+                            responsive design ke liye useful hai jab aap chahte ho ki mobile aur tablet pe full width
+                            ho, lekin desktop pe centered ho.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Containers provide padding (15px on each side by default)</li>
+                            <li>Always use containers as the outermost wrapper</li>
+                            <li>Don't nest containers inside containers</li>
+                            <li>Container breakpoints: sm(540px), md(720px), lg(960px), xl(1140px), xxl(1320px)</li>
+                            <li>Use container-fluid for full-width layouts</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid System -->
+        <div class="topic-card" id="grid">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>🎨 Grid System</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What is Grid System?</h3>
+                    <p><strong>Simple Explanation:</strong> The grid system is like a chocolate bar divided into 12
+                        pieces. You can take 1 piece, 6 pieces, or all 12 pieces to make your layout! 🍫</p>
+                    <p><strong>Proper Definition:</strong> Bootstrap's grid system uses a series of containers, rows,
+                        and columns to layout and align content. It's built with flexbox and is fully responsive,
+                        allowing up to 12 columns across the page.</p>
+                </div>
+
+                <div class="section">
+                    <h3>💡 Grid Breakpoints</h3>
+                    <div class="highlight-box">
+                        <ul>
+                            <li><strong>xs</strong> - Extra small (&lt;576px) - Mobile phones</li>
+                            <li><strong>sm</strong> - Small (≥576px) - Mobile landscape</li>
+                            <li><strong>md</strong> - Medium (≥768px) - Tablets</li>
+                            <li><strong>lg</strong> - Large (≥992px) - Desktops</li>
+                            <li><strong>xl</strong> - Extra large (≥1200px) - Large desktops</li>
+                            <li><strong>xxl</strong> - Extra extra large (≥1400px) - Larger desktops</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;div class="container"&gt;
+  &lt;!-- Basic Grid --&gt;
+  &lt;div class="row"&gt;
+    &lt;div class="col"&gt;Column 1&lt;/div&gt;
+    &lt;div class="col"&gt;Column 2&lt;/div&gt;
+    &lt;div class="col"&gt;Column 3&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Specific Width --&gt;
+  &lt;div class="row"&gt;
+    &lt;div class="col-4"&gt;4 columns wide&lt;/div&gt;
+    &lt;div class="col-8"&gt;8 columns wide&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Responsive Grid --&gt;
+  &lt;div class="row"&gt;
+    &lt;div class="col-12 col-md-6 col-lg-4"&gt;
+      Mobile: 12 cols, Tablet: 6 cols, Desktop: 4 cols
+    &lt;/div&gt;
+    &lt;div class="col-12 col-md-6 col-lg-4"&gt;
+      Responsive Column
+    &lt;/div&gt;
+    &lt;div class="col-12 col-md-12 col-lg-4"&gt;
+      Responsive Column
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Offset Columns --&gt;
+  &lt;div class="row"&gt;
+    &lt;div class="col-md-4 offset-md-4"&gt;Centered with offset&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <div class="container">
+                            <div class="row mb-3">
+                                <div class="col bg-primary text-white p-3 m-1 rounded">Col 1</div>
+                                <div class="col bg-success text-white p-3 m-1 rounded">Col 2</div>
+                                <div class="col bg-danger text-white p-3 m-1 rounded">Col 3</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 bg-info text-white p-3 m-1 rounded">col-4</div>
+                                <div class="col-8 bg-warning text-dark p-3 m-1 rounded">col-8</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function GridExample() {
+  return (
+    &lt;div className="container"&gt;
+      &lt;div className="row"&gt;
+        &lt;div className="col-12 col-md-6 col-lg-4"&gt;
+          &lt;div className="card"&gt;
+            &lt;div className="card-body"&gt;
+              &lt;h5&gt;Card 1&lt;/h5&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div className="col-12 col-md-6 col-lg-4"&gt;
+          &lt;div className="card"&gt;
+            &lt;div className="card-body"&gt;
+              &lt;h5&gt;Card 2&lt;/h5&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div className="col-12 col-md-12 col-lg-4"&gt;
+          &lt;div className="card"&gt;
+            &lt;div className="card-body"&gt;
+              &lt;h5&gt;Card 3&lt;/h5&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: Bootstrap grid system mein kitne columns hote hain?</div>
+                        <div class="answer"><strong>Answer:</strong> Bootstrap grid system mein 12 columns hote hain.
+                            Aap in 12 columns ko kisi bhi tarah divide kar sakte ho - jaise 6+6, 4+4+4, 3+9, etc. Yeh
+                            12-column system flexibility provide karta hai different layouts banane ke liye.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: col-md-6 ka kya matlab hai?</div>
+                        <div class="answer"><strong>Answer:</strong> col-md-6 ka matlab hai ki medium breakpoint (768px)
+                            aur usse bade screens pe yeh column 6 columns ki width lega (50% width). Chote screens pe
+                            yeh full width (12 columns) ho jayega automatically. 'md' medium breakpoint hai aur '6'
+                            columns ki number hai.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q3: Row aur Column ka kya role hai?</div>
+                        <div class="answer"><strong>Answer:</strong> Row ek wrapper hai jo columns ko hold karta hai aur
+                            negative margins use karke container ki padding ko cancel karta hai. Columns actual content
+                            hold karte hain aur row ke andar hi use hote hain. Bina row ke columns properly align nahi
+                            honge.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Always use .row inside .container or .container-fluid</li>
+                            <li>Columns must be immediate children of rows</li>
+                            <li>Grid system is based on flexbox</li>
+                            <li>Maximum 12 columns per row</li>
+                            <li>Use .g-* classes for gutters (spacing between columns)</li>
+                            <li>Mobile-first approach: design for mobile, then add larger breakpoints</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Typography -->
+        <div class="topic-card" id="typography">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>✍️ Typography</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What is Typography?</h3>
+                    <p><strong>Simple:</strong> Typography is all about text - making it big, small, bold, or colorful!
+                        📝</p>
+                    <p><strong>Definition:</strong> Typography utilities control text styling including headings,
+                        paragraphs, font sizes, weights, alignment, and text transformations.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!-- Headings --&gt;
+&lt;h1&gt;Heading 1&lt;/h1&gt;
+&lt;h2&gt;Heading 2&lt;/h2&gt;
+&lt;h3&gt;Heading 3&lt;/h3&gt;
+&lt;h4&gt;Heading 4&lt;/h4&gt;
+&lt;h5&gt;Heading 5&lt;/h5&gt;
+&lt;h6&gt;Heading 6&lt;/h6&gt;
+
+&lt;!-- Display Headings (Larger) --&gt;
+&lt;h1 class="display-1"&gt;Display 1&lt;/h1&gt;
+&lt;h1 class="display-2"&gt;Display 2&lt;/h1&gt;
+&lt;h1 class="display-3"&gt;Display 3&lt;/h1&gt;
+&lt;h1 class="display-4"&gt;Display 4&lt;/h1&gt;
+
+&lt;!-- Lead Paragraph --&gt;
+&lt;p class="lead"&gt;This is a lead paragraph - stands out!&lt;/p&gt;
+
+&lt;!-- Font Sizes --&gt;
+&lt;p class="fs-1"&gt;Font size 1 (largest)&lt;/p&gt;
+&lt;p class="fs-2"&gt;Font size 2&lt;/p&gt;
+&lt;p class="fs-3"&gt;Font size 3&lt;/p&gt;
+&lt;p class="fs-4"&gt;Font size 4&lt;/p&gt;
+&lt;p class="fs-5"&gt;Font size 5&lt;/p&gt;
+&lt;p class="fs-6"&gt;Font size 6 (smallest)&lt;/p&gt;
+
+&lt;!-- Font Weight --&gt;
+&lt;p class="fw-bold"&gt;Bold text&lt;/p&gt;
+&lt;p class="fw-bolder"&gt;Bolder text&lt;/p&gt;
+&lt;p class="fw-semibold"&gt;Semibold text&lt;/p&gt;
+&lt;p class="fw-normal"&gt;Normal weight&lt;/p&gt;
+&lt;p class="fw-light"&gt;Light weight&lt;/p&gt;
+&lt;p class="fw-lighter"&gt;Lighter weight&lt;/p&gt;
+
+&lt;!-- Font Style --&gt;
+&lt;p class="fst-italic"&gt;Italic text&lt;/p&gt;
+&lt;p class="fst-normal"&gt;Normal style&lt;/p&gt;
+
+&lt;!-- Text Alignment --&gt;
+&lt;p class="text-start"&gt;Left aligned&lt;/p&gt;
+&lt;p class="text-center"&gt;Center aligned&lt;/p&gt;
+&lt;p class="text-end"&gt;Right aligned&lt;/p&gt;
+
+&lt;!-- Text Transform --&gt;
+&lt;p class="text-lowercase"&gt;LOWERCASE TEXT&lt;/p&gt;
+&lt;p class="text-uppercase"&gt;uppercase text&lt;/p&gt;
+&lt;p class="text-capitalize"&gt;capitalize each word&lt;/p&gt;
+
+&lt;!-- Text Decoration --&gt;
+&lt;p class="text-decoration-underline"&gt;Underlined&lt;/p&gt;
+&lt;p class="text-decoration-line-through"&gt;Strikethrough&lt;/p&gt;
+&lt;p class="text-decoration-none"&gt;No decoration&lt;/p&gt;
+
+&lt;!-- Line Height --&gt;
+&lt;p class="lh-1"&gt;Line height 1&lt;/p&gt;
+&lt;p class="lh-sm"&gt;Line height small&lt;/p&gt;
+&lt;p class="lh-base"&gt;Line height base&lt;/p&gt;
+&lt;p class="lh-lg"&gt;Line height large&lt;/p&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <h1>Heading 1</h1>
+                        <h2>Heading 2</h2>
+                        <h3>Heading 3</h3>
+                        <p class="lead">This is a lead paragraph that stands out from regular text.</p>
+                        <p class="fw-bold">Bold text example</p>
+                        <p class="fst-italic">Italic text example</p>
+                        <p class="text-uppercase">uppercase text</p>
+                        <p class="text-decoration-underline">Underlined text</p>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function Typography() {
+  return (
+    &lt;div&gt;
+      &lt;h1 className="display-1"&gt;Large Display Heading&lt;/h1&gt;
+      &lt;p className="lead"&gt;Lead paragraph text&lt;/p&gt;
+      &lt;p className="fw-bold text-uppercase"&gt;Bold uppercase text&lt;/p&gt;
+      &lt;p className="text-center text-muted"&gt;Centered muted text&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: Display headings aur normal headings mein kya difference hai?</div>
+                        <div class="answer"><strong>Answer:</strong> Display headings (display-1 to display-6) normal
+                            headings se bade hote hain aur hero sections ya landing pages ke liye use hote hain. Yeh
+                            zyada attention grab karte hain. Normal headings (h1-h6) regular content hierarchy ke liye
+                            hain.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: Lead paragraph ka kya use hai?</div>
+                        <div class="answer"><strong>Answer:</strong> Lead paragraph (.lead class) introductory text ko
+                            highlight karne ke liye use hota hai. Yeh normal text se thoda bada aur prominent dikhta
+                            hai, usually article ya section ke start mein use hota hai.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Use semantic HTML tags (h1-h6) for SEO</li>
+                            <li>Display headings are larger than regular headings</li>
+                            <li>Font sizes: fs-1 (largest) to fs-6 (smallest)</li>
+                            <li>Use .lead for introductory paragraphs</li>
+                            <li>Text utilities are responsive (text-start text-md-center)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colors -->
+        <div class="topic-card" id="colors">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>🎨 Colors</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What are Bootstrap Colors?</h3>
+                    <p><strong>Simple:</strong> Colors make your website pretty and help show what's important! 🌈</p>
+                    <p><strong>Definition:</strong> Bootstrap provides a comprehensive color system with semantic color
+                        classes for text, backgrounds, and borders.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!-- Text Colors --&gt;
+&lt;p class="text-primary"&gt;Primary text&lt;/p&gt;
+&lt;p class="text-secondary"&gt;Secondary text&lt;/p&gt;
+&lt;p class="text-success"&gt;Success text&lt;/p&gt;
+&lt;p class="text-danger"&gt;Danger text&lt;/p&gt;
+&lt;p class="text-warning"&gt;Warning text&lt;/p&gt;
+&lt;p class="text-info"&gt;Info text&lt;/p&gt;
+&lt;p class="text-light bg-dark"&gt;Light text&lt;/p&gt;
+&lt;p class="text-dark"&gt;Dark text&lt;/p&gt;
+&lt;p class="text-muted"&gt;Muted text&lt;/p&gt;
+&lt;p class="text-white bg-dark"&gt;White text&lt;/p&gt;
+
+&lt;!-- Background Colors --&gt;
+&lt;div class="bg-primary text-white p-3"&gt;Primary background&lt;/div&gt;
+&lt;div class="bg-secondary text-white p-3"&gt;Secondary background&lt;/div&gt;
+&lt;div class="bg-success text-white p-3"&gt;Success background&lt;/div&gt;
+&lt;div class="bg-danger text-white p-3"&gt;Danger background&lt;/div&gt;
+&lt;div class="bg-warning text-dark p-3"&gt;Warning background&lt;/div&gt;
+&lt;div class="bg-info text-dark p-3"&gt;Info background&lt;/div&gt;
+&lt;div class="bg-light text-dark p-3"&gt;Light background&lt;/div&gt;
+&lt;div class="bg-dark text-white p-3"&gt;Dark background&lt;/div&gt;
+
+&lt;!-- Background Opacity --&gt;
+&lt;div class="bg-primary bg-opacity-75 text-white p-3"&gt;75% opacity&lt;/div&gt;
+&lt;div class="bg-primary bg-opacity-50 text-white p-3"&gt;50% opacity&lt;/div&gt;
+&lt;div class="bg-primary bg-opacity-25 text-white p-3"&gt;25% opacity&lt;/div&gt;
+&lt;div class="bg-primary bg-opacity-10 text-white p-3"&gt;10% opacity&lt;/div&gt;
+
+&lt;!-- Border Colors --&gt;
+&lt;div class="border border-primary p-3"&gt;Primary border&lt;/div&gt;
+&lt;div class="border border-success p-3"&gt;Success border&lt;/div&gt;
+&lt;div class="border border-danger p-3"&gt;Danger border&lt;/div&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <div class="mb-2">
+                            <span class="badge bg-primary">Primary</span>
+                            <span class="badge bg-secondary">Secondary</span>
+                            <span class="badge bg-success">Success</span>
+                            <span class="badge bg-danger">Danger</span>
+                            <span class="badge bg-warning text-dark">Warning</span>
+                            <span class="badge bg-info text-dark">Info</span>
+                        </div>
+                        <div class="bg-primary text-white p-3 mb-2 rounded">Primary Background</div>
+                        <div class="bg-success text-white p-3 mb-2 rounded">Success Background</div>
+                        <div class="border border-primary border-3 p-3 rounded">Primary Border</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function ColorExample() {
+  const [status, setStatus] = useState('success');
+  
+  return (
+    &lt;div&gt;
+      &lt;div className={`alert alert-${status}`}&gt;
+        Status: {status}
+      &lt;/div&gt;
+      &lt;button 
+        className="btn btn-primary me-2"
+        onClick={() => setStatus('success')}
+      &gt;
+        Success
+      &lt;/button&gt;
+      &lt;button 
+        className="btn btn-danger"
+        onClick={() => setStatus('danger')}
+      &gt;
+        Danger
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: Semantic colors ka kya matlab hai?</div>
+                        <div class="answer"><strong>Answer:</strong> Semantic colors ka matlab hai ki har color ka ek
+                            specific meaning hai - primary (main actions), success (positive), danger (errors/delete),
+                            warning (caution), info (information). Yeh colors user ko visual feedback dete hain bina
+                            text padhe.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: bg-opacity classes kaise kaam karti hain?</div>
+                        <div class="answer"><strong>Answer:</strong> bg-opacity classes background color ki transparency
+                            control karti hain. Values hain: 10, 25, 50, 75, 100. Example: bg-primary bg-opacity-50 se
+                            primary color 50% transparent ho jayega. Yeh overlays aur subtle backgrounds ke liye useful
+                            hai.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Use semantic colors for consistent meaning</li>
+                            <li>text-* for text colors, bg-* for backgrounds</li>
+                            <li>bg-opacity-* for transparent backgrounds</li>
+                            <li>Combine text and background colors carefully for contrast</li>
+                            <li>Use text-white or text-dark with colored backgrounds</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables -->
+        <div class="topic-card" id="tables">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>📊 Tables</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What are Bootstrap Tables?</h3>
+                    <p><strong>Simple:</strong> Tables organize information in rows and columns, like a spreadsheet! 📋
+                    </p>
+                    <p><strong>Definition:</strong> Bootstrap tables provide styled, responsive tables with various
+                        options for striping, borders, hover states, and more.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!-- Basic Table --&gt;
+&lt;table class="table"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;#&lt;/th&gt;
+      &lt;th&gt;Name&lt;/th&gt;
+      &lt;th&gt;Email&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;John Doe&lt;/td&gt;
+      &lt;td&gt;john@example.com&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;!-- Striped Table --&gt;
+&lt;table class="table table-striped"&gt;...&lt;/table&gt;
+
+&lt;!-- Bordered Table --&gt;
+&lt;table class="table table-bordered"&gt;...&lt;/table&gt;
+
+&lt;!-- Borderless Table --&gt;
+&lt;table class="table table-borderless"&gt;...&lt;/table&gt;
+
+&lt;!-- Hoverable Table --&gt;
+&lt;table class="table table-hover"&gt;...&lt;/table&gt;
+
+&lt;!-- Small Table --&gt;
+&lt;table class="table table-sm"&gt;...&lt;/table&gt;
+
+&lt;!-- Dark Table --&gt;
+&lt;table class="table table-dark"&gt;...&lt;/table&gt;
+
+&lt;!-- Colored Rows --&gt;
+&lt;tr class="table-primary"&gt;...&lt;/tr&gt;
+&lt;tr class="table-success"&gt;...&lt;/tr&gt;
+&lt;tr class="table-danger"&gt;...&lt;/tr&gt;
+&lt;tr class="table-warning"&gt;...&lt;/tr&gt;
+&lt;tr class="table-info"&gt;...&lt;/tr&gt;
+
+&lt;!-- Responsive Table --&gt;
+&lt;div class="table-responsive"&gt;
+  &lt;table class="table"&gt;...&lt;/table&gt;
+&lt;/div&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>John Doe</td>
+                                    <td>Developer</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Jane Smith</td>
+                                    <td>Designer</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Bob Johnson</td>
+                                    <td>Manager</td>
+                                    <td><span class="badge bg-warning text-dark">Pending</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function UserTable() {
+  const users = [
+    { id: 1, name: 'John', email: 'john@example.com', status: 'Active' },
+    { id: 2, name: 'Jane', email: 'jane@example.com', status: 'Inactive' }
+  ];
+
+  return (
+    &lt;table className="table table-striped table-hover"&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;
+          &lt;th&gt;ID&lt;/th&gt;
+          &lt;th&gt;Name&lt;/th&gt;
+          &lt;th&gt;Email&lt;/th&gt;
+          &lt;th&gt;Status&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        {users.map(user => (
+          &lt;tr key={user.id}&gt;
+            &lt;td&gt;{user.id}&lt;/td&gt;
+            &lt;td&gt;{user.name}&lt;/td&gt;
+            &lt;td&gt;{user.email}&lt;/td&gt;
+            &lt;td&gt;
+              &lt;span className={`badge bg-${user.status === 'Active' ? 'success' : 'secondary'}`}&gt;
+                {user.status}
+              &lt;/span&gt;
+            &lt;/td&gt;
+          &lt;/tr&gt;
+        ))}
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: Table-responsive ka kya use hai?</div>
+                        <div class="answer"><strong>Answer:</strong> table-responsive class table ko scrollable bana
+                            deti hai jab screen choti ho. Yeh table ko wrap karta hai ek div mein jo horizontal scroll
+                            provide karta hai mobile devices pe. Isse table ka layout break nahi hota aur user scroll
+                            karke sab columns dekh sakta hai.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: Table-striped aur table-hover ka kya fayda hai?</div>
+                        <div class="answer"><strong>Answer:</strong> table-striped alternate rows ko different color
+                            deta hai jo readability improve karta hai. table-hover rows pe hover effect add karta hai jo
+                            user ko current row identify karne mein help karta hai. Dono classes combined use kar sakte
+                            hain better UX ke liye.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Always use .table class as base</li>
+                            <li>Use .table-responsive for mobile-friendly tables</li>
+                            <li>Combine classes: table table-striped table-hover</li>
+                            <li>Use table-* classes for colored rows</li>
+                            <li>thead can have table-dark or table-light</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Images -->
+        <div class="topic-card" id="images">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>🖼️ Images</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What are Bootstrap Image Classes?</h3>
+                    <p><strong>Simple:</strong> Image classes make pictures look nice and fit properly on your page! 📸
+                    </p>
+                    <p><strong>Definition:</strong> Bootstrap provides utility classes for styling images including
+                        responsive images, thumbnails, rounded corners, and alignment.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!-- Responsive Image (scales with parent) --&gt;
+&lt;img src="image.jpg" class="img-fluid" alt="Responsive image"&gt;
+
+&lt;!-- Thumbnail --&gt;
+&lt;img src="image.jpg" class="img-thumbnail" alt="Thumbnail"&gt;
+
+&lt;!-- Rounded Corners --&gt;
+&lt;img src="image.jpg" class="rounded" alt="Rounded"&gt;
+&lt;img src="image.jpg" class="rounded-circle" alt="Circle"&gt;
+&lt;img src="image.jpg" class="rounded-pill" alt="Pill shape"&gt;
+
+&lt;!-- Float Images --&gt;
+&lt;img src="image.jpg" class="float-start" alt="Float left"&gt;
+&lt;img src="image.jpg" class="float-end" alt="Float right"&gt;
+
+&lt;!-- Center Image --&gt;
+&lt;img src="image.jpg" class="d-block mx-auto" alt="Centered"&gt;
+
+&lt;!-- Figure with Caption --&gt;
+&lt;figure class="figure"&gt;
+  &lt;img src="image.jpg" class="figure-img img-fluid rounded" alt="..."&gt;
+  &lt;figcaption class="figure-caption"&gt;A caption for the image.&lt;/figcaption&gt;
+&lt;/figure&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-primary text-white p-5 rounded">
+                                    <p class="text-center mb-0">img-fluid</p>
+                                </div>
+                                <p class="text-center mt-2 text-dark"><small>Responsive Image</small></p>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-success text-white p-5 rounded-circle"
+                                    style="width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                                    <p class="text-center mb-0">Circle</p>
+                                </div>
+                                <p class="text-center mt-2 text-dark"><small>rounded-circle</small></p>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-danger text-white p-4 border border-3 border-dark rounded">
+                                    <p class="text-center mb-0">Thumbnail</p>
+                                </div>
+                                <p class="text-center mt-2 text-dark"><small>img-thumbnail</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function ImageGallery() {
+  const images = [
+    { id: 1, src: '/img1.jpg', alt: 'Image 1' },
+    { id: 2, src: '/img2.jpg', alt: 'Image 2' },
+    { id: 3, src: '/img3.jpg', alt: 'Image 3' }
+  ];
+
+  return (
+    &lt;div className="row"&gt;
+      {images.map(img => (
+        &lt;div key={img.id} className="col-md-4 mb-3"&gt;
+          &lt;img 
+            src={img.src} 
+            alt={img.alt} 
+            className="img-fluid rounded shadow"
+          /&gt;
+        &lt;/div&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: img-fluid class kya karti hai?</div>
+                        <div class="answer"><strong>Answer:</strong> img-fluid class image ko responsive banati hai. Yeh
+                            max-width: 100% aur height: auto set karti hai, jisse image apne parent container ke
+                            according scale ho jati hai aur kabhi overflow nahi hoti. Mobile-friendly images ke liye yeh
+                            essential hai.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: rounded-circle aur rounded mein kya difference hai?</div>
+                        <div class="answer"><strong>Answer:</strong> rounded class image ko slightly rounded corners
+                            deti hai (border-radius: 0.375rem). rounded-circle image ko perfect circle bana deti hai
+                            (border-radius: 50%), usually profile pictures ke liye use hoti hai. Circle ke liye image
+                            square honi chahiye.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Always use img-fluid for responsive images</li>
+                            <li>img-thumbnail adds border and padding</li>
+                            <li>rounded-circle works best with square images</li>
+                            <li>Use d-block mx-auto to center images</li>
+                            <li>Combine with shadow classes for depth</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alerts -->
+        <div class="topic-card" id="alerts">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>⚠️ Alerts</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What are Alerts?</h3>
+                    <p><strong>Simple:</strong> Alerts are colorful message boxes that tell you important information!
+                        📢</p>
+                    <p><strong>Definition:</strong> Alerts provide contextual feedback messages for typical user actions
+                        with a handful of available and flexible alert messages.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!-- Basic Alerts --&gt;
+&lt;div class="alert alert-primary" role="alert"&gt;
+  Primary alert message
+&lt;/div&gt;
+&lt;div class="alert alert-secondary" role="alert"&gt;
+  Secondary alert message
+&lt;/div&gt;
+&lt;div class="alert alert-success" role="alert"&gt;
+  Success alert message
+&lt;/div&gt;
+&lt;div class="alert alert-danger" role="alert"&gt;
+  Danger alert message
+&lt;/div&gt;
+&lt;div class="alert alert-warning" role="alert"&gt;
+  Warning alert message
+&lt;/div&gt;
+&lt;div class="alert alert-info" role="alert"&gt;
+  Info alert message
+&lt;/div&gt;
+
+&lt;!-- Alert with Heading --&gt;
+&lt;div class="alert alert-success" role="alert"&gt;
+  &lt;h4 class="alert-heading"&gt;Well done!&lt;/h4&gt;
+  &lt;p&gt;You successfully completed the task.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;!-- Alert with Link --&gt;
+&lt;div class="alert alert-primary" role="alert"&gt;
+  A simple alert with &lt;a href="#" class="alert-link"&gt;a link&lt;/a&gt;.
+&lt;/div&gt;
+
+&lt;!-- Dismissible Alert --&gt;
+&lt;div class="alert alert-warning alert-dismissible fade show" role="alert"&gt;
+  &lt;strong&gt;Warning!&lt;/strong&gt; This is a dismissible alert.
+  &lt;button type="button" class="btn-close" data-bs-dismiss="alert"&gt;&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- Alert with Icon --&gt;
+&lt;div class="alert alert-success d-flex align-items-center" role="alert"&gt;
+  &lt;i class="bi bi-check-circle-fill me-2"&gt;&lt;/i&gt;
+  &lt;div&gt;Success message with icon&lt;/div&gt;
+&lt;/div&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <div class="alert alert-success" role="alert">
+                            ✅ Success! Your changes have been saved.
+                        </div>
+                        <div class="alert alert-danger" role="alert">
+                            ❌ Error! Something went wrong.
+                        </div>
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            ⚠️ Warning! Please review your information.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        <div class="alert alert-info" role="alert">
+                            ℹ️ Info: New features are available!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function Alert({ type, message, onClose }) {
+  return (
+    &lt;div className={`alert alert-${type} alert-dismissible fade show`} role="alert"&gt;
+      {message}
+      {onClose && (
+        &lt;button 
+          type="button" 
+          className="btn-close" 
+          onClick={onClose}
+        &gt;&lt;/button&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+
+// Usage
+function App() {
+  const [showAlert, setShowAlert] = useState(true);
+
+  return (
+    &lt;div&gt;
+      {showAlert && (
+        &lt;Alert 
+          type="success" 
+          message="Operation successful!" 
+          onClose={() => setShowAlert(false)}
+        /&gt;
+      )}
+    &lt;/div&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: Alert-dismissible kaise kaam karta hai?</div>
+                        <div class="answer"><strong>Answer:</strong> alert-dismissible class alert mein close button add
+                            karti hai. Iske saath btn-close button aur data-bs-dismiss="alert" attribute use karna padta
+                            hai. Jab user close button click karta hai, Bootstrap automatically alert ko fade out karke
+                            remove kar deta hai.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: Alert colors ka semantic meaning kya hai?</div>
+                        <div class="answer"><strong>Answer:</strong> Success (green) - successful operations, Danger
+                            (red) - errors/critical issues, Warning (yellow) - caution/important info, Info (blue) -
+                            general information, Primary - main actions, Secondary - less important info. Yeh colors
+                            user ko instantly message ka importance samajh aata hai.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Always include role="alert" for accessibility</li>
+                            <li>Use alert-dismissible for closeable alerts</li>
+                            <li>alert-link class for styled links inside alerts</li>
+                            <li>Combine with icons for better visual communication</li>
+                            <li>Use fade show classes for smooth animations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="topic-card" id="buttons">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>🔘 Buttons</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What are Bootstrap Buttons?</h3>
+                    <p><strong>Simple Explanation:</strong> Buttons are like colorful clickable boxes that make things
+                        happen when you press them! 🎯</p>
+                    <p><strong>Proper Definition:</strong> Bootstrap provides predefined button styles with various
+                        colors, sizes, and states for different actions in web applications.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!-- Button Styles --&gt;
+&lt;button class="btn btn-primary"&gt;Primary&lt;/button&gt;
+&lt;button class="btn btn-secondary"&gt;Secondary&lt;/button&gt;
+&lt;button class="btn btn-success"&gt;Success&lt;/button&gt;
+&lt;button class="btn btn-danger"&gt;Danger&lt;/button&gt;
+&lt;button class="btn btn-warning"&gt;Warning&lt;/button&gt;
+&lt;button class="btn btn-info"&gt;Info&lt;/button&gt;
+&lt;button class="btn btn-light"&gt;Light&lt;/button&gt;
+&lt;button class="btn btn-dark"&gt;Dark&lt;/button&gt;
+&lt;button class="btn btn-link"&gt;Link&lt;/button&gt;
+
+&lt;!-- Outline Buttons --&gt;
+&lt;button class="btn btn-outline-primary"&gt;Outline Primary&lt;/button&gt;
+&lt;button class="btn btn-outline-success"&gt;Outline Success&lt;/button&gt;
+
+&lt;!-- Button Sizes --&gt;
+&lt;button class="btn btn-primary btn-lg"&gt;Large Button&lt;/button&gt;
+&lt;button class="btn btn-primary"&gt;Default Button&lt;/button&gt;
+&lt;button class="btn btn-primary btn-sm"&gt;Small Button&lt;/button&gt;
+
+&lt;!-- Block Button --&gt;
+&lt;button class="btn btn-primary w-100"&gt;Block Button&lt;/button&gt;
+
+&lt;!-- Disabled Button --&gt;
+&lt;button class="btn btn-primary" disabled&gt;Disabled&lt;/button&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <button class="btn btn-primary me-2 mb-2">Primary</button>
+                        <button class="btn btn-secondary me-2 mb-2">Secondary</button>
+                        <button class="btn btn-success me-2 mb-2">Success</button>
+                        <button class="btn btn-danger me-2 mb-2">Danger</button>
+                        <button class="btn btn-warning me-2 mb-2">Warning</button>
+                        <button class="btn btn-info me-2 mb-2">Info</button>
+                        <hr>
+                        <button class="btn btn-outline-primary me-2 mb-2">Outline</button>
+                        <button class="btn btn-primary btn-lg me-2 mb-2">Large</button>
+                        <button class="btn btn-primary btn-sm me-2 mb-2">Small</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function ButtonExample() {
+  const handleClick = () => {
+    alert('Button clicked!');
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;button className="btn btn-primary" onClick={handleClick}&gt;
+        Click Me
+      &lt;/button&gt;
+      &lt;button className="btn btn-success ms-2"&gt;
+        Success Button
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: btn aur btn-primary dono classes kyun use karte hain?</div>
+                        <div class="answer"><strong>Answer:</strong> 'btn' class basic button styling provide karti hai
+                            jaise padding, border-radius, font-size etc. 'btn-primary' color aur specific styling add
+                            karti hai. Dono classes zaruri hain - btn base styling ke liye aur btn-primary color theme
+                            ke liye.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: Outline button kab use karte hain?</div>
+                        <div class="answer"><strong>Answer:</strong> Outline buttons (btn-outline-*) tab use karte hain
+                            jab aap secondary actions dikhana chahte ho ya page pe zyada emphasis nahi dena chahte. Yeh
+                            lightweight dikhte hain aur primary buttons se kam attention attract karte hain. Good for
+                            cancel buttons ya less important actions.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Always use .btn class as base, then add color class</li>
+                            <li>Buttons work on &lt;button&gt;, &lt;a&gt;, and &lt;input&gt; elements</li>
+                            <li>Use .active class to show pressed state</li>
+                            <li>Use .disabled class or disabled attribute to disable</li>
+                            <li>Button groups can combine multiple buttons</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards -->
+        <div class="topic-card" id="cards">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>🃏 Cards</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What are Cards?</h3>
+                    <p><strong>Simple Explanation:</strong> Cards are like small boxes that hold information - like
+                        trading cards or recipe cards! 🎴</p>
+                    <p><strong>Proper Definition:</strong> Cards are flexible and extensible content containers with
+                        multiple variants and options for headers, footers, images, and various content types.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!-- Basic Card --&gt;
+&lt;div class="card" style="width: 18rem;"&gt;
+  &lt;img src="image.jpg" class="card-img-top" alt="..."&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h5 class="card-title"&gt;Card Title&lt;/h5&gt;
+    &lt;p class="card-text"&gt;Some quick example text.&lt;/p&gt;
+    &lt;a href="#" class="btn btn-primary"&gt;Go somewhere&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Card with Header and Footer --&gt;
+&lt;div class="card"&gt;
+  &lt;div class="card-header"&gt;Featured&lt;/div&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h5 class="card-title"&gt;Special title&lt;/h5&gt;
+    &lt;p class="card-text"&gt;Card content&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="card-footer text-muted"&gt;2 days ago&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Colored Cards --&gt;
+&lt;div class="card text-white bg-primary"&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h5 class="card-title"&gt;Primary Card&lt;/h5&gt;
+    &lt;p class="card-text"&gt;Content&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Card Title</h5>
+                                        <p class="card-text">Some quick example text to build on the card.</p>
+                                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card text-white bg-success">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Success Card</h5>
+                                        <p class="card-text">Colored card example.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header">Featured</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">With Header</h5>
+                                        <p class="card-text">Card with header and footer.</p>
+                                    </div>
+                                    <div class="card-footer text-muted">Footer</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function Card({ title, text, image }) {
+  return (
+    &lt;div className="card" style={{ width: '18rem' }}&gt;
+      {image && &lt;img src={image} className="card-img-top" alt={title} /&gt;}
+      &lt;div className="card-body"&gt;
+        &lt;h5 className="card-title"&gt;{title}&lt;/h5&gt;
+        &lt;p className="card-text"&gt;{text}&lt;/p&gt;
+        &lt;button className="btn btn-primary"&gt;Learn More&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Usage
+&lt;Card 
+  title="React Card" 
+  text="This is a reusable card component"
+  image="/path/to/image.jpg"
+/&gt;</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: Card component ka use kab karte hain?</div>
+                        <div class="answer"><strong>Answer:</strong> Cards ka use tab karte hain jab aapko related
+                            information ko ek box mein group karke dikhana ho. Jaise product listings, blog posts, user
+                            profiles, dashboards etc. Cards content ko organized aur visually appealing banate hain.
+                        </div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: Card-deck aur Card-group mein kya difference hai?</div>
+                        <div class="answer"><strong>Answer:</strong> Bootstrap 5 mein card-deck aur card-group remove
+                            kar diye gaye hain. Ab hum grid system (row aur col classes) use karte hain cards ko layout
+                            karne ke liye. Yeh zyada flexible aur responsive hai.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Cards have no fixed width by default</li>
+                            <li>Use grid system to control card layout</li>
+                            <li>card-img-top for images at top, card-img-bottom for bottom</li>
+                            <li>Use .card-img-overlay for image overlays</li>
+                            <li>Cards support various content types: text, lists, links, images</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forms -->
+        <div class="topic-card" id="forms">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>📝 Forms</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What are Bootstrap Forms?</h3>
+                    <p><strong>Simple Explanation:</strong> Forms are like fill-in-the-blank papers where you type
+                        information! 📋</p>
+                    <p><strong>Proper Definition:</strong> Bootstrap provides extensive form controls with consistent
+                        styling across browsers, including inputs, textareas, selects, checkboxes, radios, and
+                        validation states.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;form&gt;
+  &lt;!-- Text Input --&gt;
+  &lt;div class="mb-3"&gt;
+    &lt;label for="email" class="form-label"&gt;Email&lt;/label&gt;
+    &lt;input type="email" class="form-control" id="email" placeholder="name@example.com"&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Password --&gt;
+  &lt;div class="mb-3"&gt;
+    &lt;label for="password" class="form-label"&gt;Password&lt;/label&gt;
+    &lt;input type="password" class="form-control" id="password"&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Select --&gt;
+  &lt;div class="mb-3"&gt;
+    &lt;label for="country" class="form-label"&gt;Country&lt;/label&gt;
+    &lt;select class="form-select" id="country"&gt;
+      &lt;option selected&gt;Choose...&lt;/option&gt;
+      &lt;option value="1"&gt;USA&lt;/option&gt;
+      &lt;option value="2"&gt;India&lt;/option&gt;
+    &lt;/select&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Textarea --&gt;
+  &lt;div class="mb-3"&gt;
+    &lt;label for="message" class="form-label"&gt;Message&lt;/label&gt;
+    &lt;textarea class="form-control" id="message" rows="3"&gt;&lt;/textarea&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Checkbox --&gt;
+  &lt;div class="mb-3 form-check"&gt;
+    &lt;input type="checkbox" class="form-check-input" id="check"&gt;
+    &lt;label class="form-check-label" for="check"&gt;Remember me&lt;/label&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Radio Buttons --&gt;
+  &lt;div class="mb-3"&gt;
+    &lt;div class="form-check"&gt;
+      &lt;input class="form-check-input" type="radio" name="gender" id="male"&gt;
+      &lt;label class="form-check-label" for="male"&gt;Male&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class="form-check"&gt;
+      &lt;input class="form-check-input" type="radio" name="gender" id="female"&gt;
+      &lt;label class="form-check-label" for="female"&gt;Female&lt;/label&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- File Input --&gt;
+  &lt;div class="mb-3"&gt;
+    &lt;label for="file" class="form-label"&gt;Upload File&lt;/label&gt;
+    &lt;input class="form-control" type="file" id="file"&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Submit Button --&gt;
+  &lt;button type="submit" class="btn btn-primary"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <form>
+                            <div class="mb-3">
+                                <label for="demoEmail" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="demoEmail" placeholder="name@example.com">
+                            </div>
+                            <div class="mb-3">
+                                <label for="demoSelect" class="form-label">Select Option</label>
+                                <select class="form-select" id="demoSelect">
+                                    <option selected>Choose...</option>
+                                    <option value="1">Option 1</option>
+                                    <option value="2">Option 2</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="demoCheck">
+                                <label class="form-check-label" for="demoCheck">Check me out</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function ContactForm() {
+  const [formData, setFormData] = useState({
+    email: '',
+    message: ''
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;div className="mb-3"&gt;
+        &lt;label htmlFor="email" className="form-label"&gt;Email&lt;/label&gt;
+        &lt;input 
+          type="email" 
+          className="form-control" 
+          id="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+        /&gt;
+      &lt;/div&gt;
+      &lt;div className="mb-3"&gt;
+        &lt;label htmlFor="message" className="form-label"&gt;Message&lt;/label&gt;
+        &lt;textarea 
+          className="form-control" 
+          id="message"
+          name="message"
+          rows="3"
+          value={formData.message}
+          onChange={handleChange}
+        &gt;&lt;/textarea&gt;
+      &lt;/div&gt;
+      &lt;button type="submit" className="btn btn-primary"&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: form-control aur form-select mein kya difference hai?</div>
+                        <div class="answer"><strong>Answer:</strong> form-control class input fields aur textarea ke
+                            liye use hoti hai, jabki form-select specifically select dropdown ke liye hai. Dono
+                            different styling provide karte hain jo unke element type ke according optimized hai.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: Form validation Bootstrap mein kaise karte hain?</div>
+                        <div class="answer"><strong>Answer:</strong> Bootstrap mein validation ke liye .was-validated
+                            class form pe add karo aur :valid/:invalid pseudo-classes automatically apply ho jayengi. Ya
+                            phir .is-valid aur .is-invalid classes manually add kar sakte ho specific fields pe. HTML5
+                            validation attributes (required, pattern) bhi use kar sakte ho.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Always use .form-control for text inputs</li>
+                            <li>Use .form-label for labels</li>
+                            <li>Add .mb-3 for spacing between form groups</li>
+                            <li>Use .form-check for checkboxes and radios</li>
+                            <li>Form validation classes: .is-valid, .is-invalid</li>
+                            <li>Use .form-floating for floating labels</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="topic-card" id="modal">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>🪟 Modal</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What is a Modal?</h3>
+                    <p><strong>Simple Explanation:</strong> A modal is like a pop-up window that appears on top of your
+                        page to show important information! 🪟</p>
+                    <p><strong>Proper Definition:</strong> Modals are dialog boxes/popup windows that are displayed on
+                        top of the current page, typically used for user notifications, forms, or important information
+                        that requires user attention.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!-- Button trigger modal --&gt;
+&lt;button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"&gt;
+  Launch Modal
+&lt;/button&gt;
+
+&lt;!-- Modal --&gt;
+&lt;div class="modal fade" id="exampleModal" tabindex="-1"&gt;
+  &lt;div class="modal-dialog"&gt;
+    &lt;div class="modal-content"&gt;
+      &lt;div class="modal-header"&gt;
+        &lt;h5 class="modal-title"&gt;Modal Title&lt;/h5&gt;
+        &lt;button type="button" class="btn-close" data-bs-dismiss="modal"&gt;&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class="modal-body"&gt;
+        Modal body content goes here...
+      &lt;/div&gt;
+      &lt;div class="modal-footer"&gt;
+        &lt;button type="button" class="btn btn-secondary" data-bs-dismiss="modal"&gt;Close&lt;/button&gt;
+        &lt;button type="button" class="btn btn-primary"&gt;Save changes&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Sizes --&gt;
+&lt;div class="modal-dialog modal-sm"&gt;Small&lt;/div&gt;
+&lt;div class="modal-dialog"&gt;Default&lt;/div&gt;
+&lt;div class="modal-dialog modal-lg"&gt;Large&lt;/div&gt;
+&lt;div class="modal-dialog modal-xl"&gt;Extra Large&lt;/div&gt;
+
+&lt;!-- Centered --&gt;
+&lt;div class="modal-dialog modal-dialog-centered"&gt;Centered&lt;/div&gt;
+
+&lt;!-- Scrollable --&gt;
+&lt;div class="modal-dialog modal-dialog-scrollable"&gt;Scrollable&lt;/div&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#demoModal">
+                            Launch Demo Modal
+                        </button>
+
+                        <div class="modal fade" id="demoModal" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-dark">Demo Modal</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body text-dark">
+                                        This is a demo modal! Click outside or press ESC to close.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>import { useState } from 'react';
+
+function ModalExample() {
+  const [show, setShow] = useState(false);
+
+  return (
+    &lt;&gt;
+      &lt;button 
+        className="btn btn-primary" 
+        onClick={() => setShow(true)}
+      &gt;
+        Open Modal
+      &lt;/button&gt;
+
+      {show && (
+        &lt;div className="modal show d-block" tabIndex="-1"&gt;
+          &lt;div className="modal-dialog"&gt;
+            &lt;div className="modal-content"&gt;
+              &lt;div className="modal-header"&gt;
+                &lt;h5 className="modal-title"&gt;React Modal&lt;/h5&gt;
+                &lt;button 
+                  type="button" 
+                  className="btn-close" 
+                  onClick={() => setShow(false)}
+                &gt;&lt;/button&gt;
+              &lt;/div&gt;
+              &lt;div className="modal-body"&gt;
+                Modal content here
+              &lt;/div&gt;
+              &lt;div className="modal-footer"&gt;
+                &lt;button 
+                  className="btn btn-secondary" 
+                  onClick={() => setShow(false)}
+                &gt;
+                  Close
+                &lt;/button&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      )}
+      {show && &lt;div className="modal-backdrop show"&gt;&lt;/div&gt;}
+    &lt;/&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: Modal ko programmatically kaise open/close karte hain?</div>
+                        <div class="answer"><strong>Answer:</strong> JavaScript se modal ko control karne ke liye
+                            Bootstrap Modal API use karte hain. Vanilla JS mein: new bootstrap.Modal(element).show() aur
+                            .hide(). React mein state use karke show/hide control karte hain. data-bs-toggle aur
+                            data-bs-target attributes se bhi control kar sakte ho.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: Modal backdrop ka kya role hai?</div>
+                        <div class="answer"><strong>Answer:</strong> Backdrop woh dark overlay hai jo modal ke peeche
+                            dikhta hai. Yeh page ke baaki content ko dim kar deta hai aur user ka focus modal pe rakhta
+                            hai. By default, backdrop pe click karne se modal close ho jata hai.
+                            data-bs-backdrop="static" se yeh behavior disable kar sakte ho.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Modals are hidden by default (display: none)</li>
+                            <li>Use data-bs-toggle="modal" to trigger</li>
+                            <li>Press ESC key to close modal</li>
+                            <li>Click outside (backdrop) to close</li>
+                            <li>Use .modal-dialog-centered for vertical centering</li>
+                            <li>Multiple modals not supported by default</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navbar -->
+        <div class="topic-card" id="navbar">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>🧭 Navbar</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What is a Navbar?</h3>
+                    <p><strong>Simple Explanation:</strong> A navbar is like a menu bar at the top of a website that
+                        helps you navigate to different pages! 🧭</p>
+                    <p><strong>Proper Definition:</strong> A navbar (navigation bar) is a responsive navigation header
+                        that includes support for branding, navigation links, forms, and more. It collapses on mobile
+                        devices and expands on larger screens.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;nav class="navbar navbar-expand-lg navbar-dark bg-dark"&gt;
+  &lt;div class="container-fluid"&gt;
+    &lt;a class="navbar-brand" href="#"&gt;Brand&lt;/a&gt;
+    
+    &lt;!-- Mobile Toggle --&gt;
+    &lt;button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"&gt;
+      &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+    &lt;/button&gt;
+    
+    &lt;!-- Nav Links --&gt;
+    &lt;div class="collapse navbar-collapse" id="navbarNav"&gt;
+      &lt;ul class="navbar-nav ms-auto"&gt;
+        &lt;li class="nav-item"&gt;
+          &lt;a class="nav-link active" href="#"&gt;Home&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li class="nav-item"&gt;
+          &lt;a class="nav-link" href="#"&gt;About&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li class="nav-item"&gt;
+          &lt;a class="nav-link" href="#"&gt;Services&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li class="nav-item"&gt;
+          &lt;a class="nav-link" href="#"&gt;Contact&lt;/a&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;
+
+&lt;!-- Color Schemes --&gt;
+&lt;nav class="navbar navbar-light bg-light"&gt;Light&lt;/nav&gt;
+&lt;nav class="navbar navbar-dark bg-dark"&gt;Dark&lt;/nav&gt;
+&lt;nav class="navbar navbar-dark bg-primary"&gt;Primary&lt;/nav&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                            <div class="container-fluid">
+                                <a class="navbar-brand" href="#">MyBrand</a>
+                                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#demoNav">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                                <div class="collapse navbar-collapse" id="demoNav">
+                                    <ul class="navbar-nav ms-auto">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#">Home</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">About</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Contact</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function Navbar() {
+  return (
+    &lt;nav className="navbar navbar-expand-lg navbar-dark bg-dark"&gt;
+      &lt;div className="container-fluid"&gt;
+        &lt;a className="navbar-brand" href="#"&gt;MyApp&lt;/a&gt;
+        &lt;button 
+          className="navbar-toggler" 
+          type="button" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#navbarNav"
+        &gt;
+          &lt;span className="navbar-toggler-icon"&gt;&lt;/span&gt;
+        &lt;/button&gt;
+        &lt;div className="collapse navbar-collapse" id="navbarNav"&gt;
+          &lt;ul className="navbar-nav ms-auto"&gt;
+            &lt;li className="nav-item"&gt;
+              &lt;a className="nav-link active" href="#"&gt;Home&lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li className="nav-item"&gt;
+              &lt;a className="nav-link" href="#"&gt;About&lt;/a&gt;
+            &lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/nav&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: navbar-expand-lg ka kya matlab hai?</div>
+                        <div class="answer"><strong>Answer:</strong> navbar-expand-lg ka matlab hai ki navbar large
+                            breakpoint (992px) tak collapsed rahega (hamburger menu dikhega), aur uske baad expand ho
+                            jayega (full menu dikhega). Aap -sm, -md, -lg, -xl use kar sakte ho different breakpoints ke
+                            liye.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: Navbar ko sticky kaise banate hain?</div>
+                        <div class="answer"><strong>Answer:</strong> Navbar ko sticky banane ke liye .sticky-top class
+                            add karo. Yeh navbar ko top pe stick kar dega jab aap scroll karoge. Ya phir .fixed-top use
+                            karo jo navbar ko hamesha top pe fixed rakhega (page scroll karne pe bhi).</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Use .navbar-expand-* for responsive behavior</li>
+                            <li>.navbar-dark for dark backgrounds, .navbar-light for light</li>
+                            <li>.ms-auto pushes nav items to right</li>
+                            <li>Use .fixed-top or .sticky-top for fixed positioning</li>
+                            <li>Navbar collapses into hamburger menu on mobile</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Carousel -->
+        <div class="topic-card" id="carousel">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>🎠 Carousel</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What is a Carousel?</h3>
+                    <p><strong>Simple:</strong> A carousel is like a slideshow that shows pictures one by one! 🎠</p>
+                    <p><strong>Definition:</strong> A carousel is a slideshow component for cycling through elements
+                        (images or slides of text) like a carousel.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;div id="carouselExample" class="carousel slide" data-bs-ride="carousel"&gt;
+  &lt;!-- Indicators --&gt;
+  &lt;div class="carousel-indicators"&gt;
+    &lt;button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active"&gt;&lt;/button&gt;
+    &lt;button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1"&gt;&lt;/button&gt;
+    &lt;button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2"&gt;&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Slides --&gt;
+  &lt;div class="carousel-inner"&gt;
+    &lt;div class="carousel-item active"&gt;
+      &lt;img src="slide1.jpg" class="d-block w-100" alt="Slide 1"&gt;
+      &lt;div class="carousel-caption d-none d-md-block"&gt;
+        &lt;h5&gt;First slide&lt;/h5&gt;
+        &lt;p&gt;Description for first slide&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="carousel-item"&gt;
+      &lt;img src="slide2.jpg" class="d-block w-100" alt="Slide 2"&gt;
+    &lt;/div&gt;
+    &lt;div class="carousel-item"&gt;
+      &lt;img src="slide3.jpg" class="d-block w-100" alt="Slide 3"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Controls --&gt;
+  &lt;button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev"&gt;
+    &lt;span class="carousel-control-prev-icon"&gt;&lt;/span&gt;
+    &lt;span class="visually-hidden"&gt;Previous&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next"&gt;
+    &lt;span class="carousel-control-next-icon"&gt;&lt;/span&gt;
+    &lt;span class="visually-hidden"&gt;Next&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- Auto-playing Carousel --&gt;
+&lt;div class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000"&gt;
+  &lt;!-- Slides every 3 seconds --&gt;
+&lt;/div&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <div id="demoCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#demoCarousel" data-bs-slide-to="0"
+                                    class="active"></button>
+                                <button type="button" data-bs-target="#demoCarousel" data-bs-slide-to="1"></button>
+                                <button type="button" data-bs-target="#demoCarousel" data-bs-slide-to="2"></button>
+                            </div>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="bg-primary text-white p-5 text-center"
+                                        style="height: 300px; display: flex; align-items: center; justify-content: center;">
+                                        <div>
+                                            <h3>Slide 1</h3>
+                                            <p>First slide content</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="bg-success text-white p-5 text-center"
+                                        style="height: 300px; display: flex; align-items: center; justify-content: center;">
+                                        <div>
+                                            <h3>Slide 2</h3>
+                                            <p>Second slide content</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="bg-danger text-white p-5 text-center"
+                                        style="height: 300px; display: flex; align-items: center; justify-content: center;">
+                                        <div>
+                                            <h3>Slide 3</h3>
+                                            <p>Third slide content</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#demoCarousel"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#demoCarousel"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function Carousel({ slides }) {
+  return (
+    &lt;div id="myCarousel" className="carousel slide" data-bs-ride="carousel"&gt;
+      &lt;div className="carousel-inner"&gt;
+        {slides.map((slide, index) => (
+          &lt;div 
+            key={index} 
+            className={`carousel-item ${index === 0 ? 'active' : ''}`}
+          &gt;
+            &lt;img src={slide.image} className="d-block w-100" alt={slide.title} /&gt;
+            &lt;div className="carousel-caption"&gt;
+              &lt;h5&gt;{slide.title}&lt;/h5&gt;
+              &lt;p&gt;{slide.description}&lt;/p&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+      &lt;button className="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev"&gt;
+        &lt;span className="carousel-control-prev-icon"&gt;&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;button className="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next"&gt;
+        &lt;span className="carousel-control-next-icon"&gt;&lt;/span&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: Carousel ko auto-play kaise banate hain?</div>
+                        <div class="answer"><strong>Answer:</strong> Carousel ko auto-play banane ke liye
+                            data-bs-ride="carousel" attribute add karo. Slide interval control karne ke liye
+                            data-bs-interval="3000" use karo (milliseconds mein). Default interval 5000ms (5 seconds)
+                            hai. data-bs-pause="false" se hover pe pause nahi hoga.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: Carousel indicators ka kya role hai?</div>
+                        <div class="answer"><strong>Answer:</strong> Carousel indicators (dots) user ko batate hain ki
+                            total kitne slides hain aur currently konsa slide active hai. Yeh navigation bhi provide
+                            karte hain - user kisi bhi specific slide pe directly jump kar sakta hai indicator click
+                            karke.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>First carousel-item must have .active class</li>
+                            <li>Use data-bs-ride="carousel" for auto-play</li>
+                            <li>carousel-caption for text overlays</li>
+                            <li>Indicators show current slide position</li>
+                            <li>Use data-bs-interval to control slide duration</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast -->
+        <div class="topic-card" id="toast">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>🍞 Toast</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What is a Toast?</h3>
+                    <p><strong>Simple:</strong> Toasts are small notification pop-ups that appear briefly and then
+                        disappear! 🍞</p>
+                    <p><strong>Definition:</strong> Toasts are lightweight notifications designed to mimic push
+                        notifications. They're typically used for brief messages that don't require user interaction.
+                    </p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!-- Toast Container (usually fixed position) --&gt;
+&lt;div class="toast-container position-fixed bottom-0 end-0 p-3"&gt;
+  &lt;div class="toast" role="alert" id="myToast"&gt;
+    &lt;div class="toast-header"&gt;
+      &lt;strong class="me-auto"&gt;Bootstrap&lt;/strong&gt;
+      &lt;small&gt;11 mins ago&lt;/small&gt;
+      &lt;button type="button" class="btn-close" data-bs-dismiss="toast"&gt;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="toast-body"&gt;
+      Hello, world! This is a toast message.
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Button to trigger toast --&gt;
+&lt;button type="button" class="btn btn-primary" id="toastBtn"&gt;Show Toast&lt;/button&gt;
+
+&lt;script&gt;
+// Initialize and show toast
+const toastBtn = document.getElementById('toastBtn');
+const myToast = document.getElementById('myToast');
+
+toastBtn.addEventListener('click', () => {
+  const toast = new bootstrap.Toast(myToast);
+  toast.show();
+});
+&lt;/script&gt;
+
+&lt;!-- Colored Toasts --&gt;
+&lt;div class="toast align-items-center text-white bg-primary" role="alert"&gt;
+  &lt;div class="d-flex"&gt;
+    &lt;div class="toast-body"&gt;Primary toast&lt;/div&gt;
+    &lt;button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"&gt;&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Auto-hide Toast --&gt;
+&lt;div class="toast" data-bs-autohide="true" data-bs-delay="3000"&gt;
+  &lt;!-- Hides after 3 seconds --&gt;
+&lt;/div&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <button type="button" class="btn btn-primary" onclick="showDemoToast()">Show Toast</button>
+
+                        <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+                            <div id="demoToast" class="toast" role="alert">
+                                <div class="toast-header">
+                                    <strong class="me-auto text-primary">Notification</strong>
+                                    <small class="text-muted">just now</small>
+                                    <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                                </div>
+                                <div class="toast-body text-dark">
+                                    This is a demo toast notification! 🎉
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function ToastNotification() {
+  const [show, setShow] = useState(false);
+
+  return (
+    &lt;&gt;
+      &lt;button 
+        className="btn btn-primary" 
+        onClick={() => setShow(true)}
+      &gt;
+        Show Toast
+      &lt;/button&gt;
+
+      &lt;div className="toast-container position-fixed bottom-0 end-0 p-3"&gt;
+        &lt;div className={`toast ${show ? 'show' : ''}`} role="alert"&gt;
+          &lt;div className="toast-header"&gt;
+            &lt;strong className="me-auto"&gt;Notification&lt;/strong&gt;
+            &lt;small&gt;Just now&lt;/small&gt;
+            &lt;button 
+              type="button" 
+              className="btn-close" 
+              onClick={() => setShow(false)}
+            &gt;&lt;/button&gt;
+          &lt;/div&gt;
+          &lt;div className="toast-body"&gt;
+            Your action was successful!
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: Toast aur Alert mein kya difference hai?</div>
+                        <div class="answer"><strong>Answer:</strong> Toast temporary notification hai jo automatically
+                            hide ho jata hai aur screen ke corner mein dikhta hai. Alert permanent message hai jo page
+                            content mein inline dikhta hai aur user manually close karta hai. Toast non-intrusive hai,
+                            Alert zyada prominent hai.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: Toast ko programmatically kaise show/hide karte hain?</div>
+                        <div class="answer"><strong>Answer:</strong> JavaScript mein: const toast = new
+                            bootstrap.Toast(element); toast.show(); ya toast.hide(); use karo. React mein state use
+                            karke show class toggle karo. data-bs-autohide="true" se automatic hide hota hai specified
+                            delay ke baad.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Toasts must be initialized with JavaScript</li>
+                            <li>Use toast-container for positioning</li>
+                            <li>data-bs-autohide controls auto-dismiss</li>
+                            <li>data-bs-delay sets display duration</li>
+                            <li>Stack multiple toasts in container</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Offcanvas -->
+        <div class="topic-card" id="offcanvas">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>📱 Offcanvas</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What is Offcanvas?</h3>
+                    <p><strong>Simple:</strong> Offcanvas is a sidebar that slides in from the side of the screen! 📱
+                    </p>
+                    <p><strong>Definition:</strong> Offcanvas is a sidebar component that can be toggled to appear from
+                        the left, right, top, or bottom edge of the viewport.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!-- Button trigger --&gt;
+&lt;button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"&gt;
+  Open Offcanvas
+&lt;/button&gt;
+
+&lt;!-- Offcanvas --&gt;
+&lt;div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"&gt;
+  &lt;div class="offcanvas-header"&gt;
+    &lt;h5 class="offcanvas-title"&gt;Offcanvas Title&lt;/h5&gt;
+    &lt;button type="button" class="btn-close" data-bs-dismiss="offcanvas"&gt;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class="offcanvas-body"&gt;
+    &lt;p&gt;Content goes here...&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Positions --&gt;
+&lt;div class="offcanvas offcanvas-start"&gt;From left&lt;/div&gt;
+&lt;div class="offcanvas offcanvas-end"&gt;From right&lt;/div&gt;
+&lt;div class="offcanvas offcanvas-top"&gt;From top&lt;/div&gt;
+&lt;div class="offcanvas offcanvas-bottom"&gt;From bottom&lt;/div&gt;
+
+&lt;!-- With Backdrop --&gt;
+&lt;div class="offcanvas" data-bs-backdrop="true"&gt;With backdrop&lt;/div&gt;
+&lt;div class="offcanvas" data-bs-backdrop="static"&gt;Static backdrop&lt;/div&gt;
+&lt;div class="offcanvas" data-bs-backdrop="false"&gt;No backdrop&lt;/div&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#demoOffcanvas">
+                            Open Offcanvas Demo
+                        </button>
+
+                        <div class="offcanvas offcanvas-start" tabindex="-1" id="demoOffcanvas">
+                            <div class="offcanvas-header">
+                                <h5 class="offcanvas-title text-dark">Demo Offcanvas</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+                            </div>
+                            <div class="offcanvas-body text-dark">
+                                <p>This is an offcanvas sidebar!</p>
+                                <p>You can put any content here:</p>
+                                <ul>
+                                    <li>Navigation links</li>
+                                    <li>Forms</li>
+                                    <li>User profile</li>
+                                    <li>Settings</li>
+                                </ul>
+                                <button class="btn btn-primary">Action Button</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function OffcanvasMenu() {
+  const [show, setShow] = useState(false);
+
+  return (
+    &lt;&gt;
+      &lt;button 
+        className="btn btn-primary" 
+        onClick={() => setShow(true)}
+      &gt;
+        Open Menu
+      &lt;/button&gt;
+
+      &lt;div className={`offcanvas offcanvas-start ${show ? 'show' : ''}`} tabIndex="-1"&gt;
+        &lt;div className="offcanvas-header"&gt;
+          &lt;h5 className="offcanvas-title"&gt;Menu&lt;/h5&gt;
+          &lt;button 
+            type="button" 
+            className="btn-close" 
+            onClick={() => setShow(false)}
+          &gt;&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div className="offcanvas-body"&gt;
+          &lt;nav&gt;
+            &lt;a href="#" className="d-block mb-2"&gt;Home&lt;/a&gt;
+            &lt;a href="#" className="d-block mb-2"&gt;About&lt;/a&gt;
+            &lt;a href="#" className="d-block mb-2"&gt;Contact&lt;/a&gt;
+          &lt;/nav&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      
+      {show && &lt;div className="offcanvas-backdrop show" onClick={() => setShow(false)}&gt;&lt;/div&gt;}
+    &lt;/&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: Offcanvas ka main use case kya hai?</div>
+                        <div class="answer"><strong>Answer:</strong> Offcanvas mobile navigation menus, filters,
+                            shopping carts, user profiles, aur settings panels ke liye use hota hai. Yeh screen space
+                            save karta hai aur mobile-first design ke liye perfect hai. Desktop pe bhi side panels ke
+                            liye useful hai.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: Offcanvas aur Modal mein kya difference hai?</div>
+                        <div class="answer"><strong>Answer:</strong> Offcanvas screen ke edge se slide karta hai
+                            (left/right/top/bottom), Modal center mein appear hota hai. Offcanvas navigation aur menus
+                            ke liye better hai, Modal important actions aur forms ke liye. Offcanvas zyada
+                            mobile-friendly hai.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>New in Bootstrap 5 (replaces old sidebar patterns)</li>
+                            <li>Four positions: start, end, top, bottom</li>
+                            <li>Use data-bs-toggle="offcanvas" to trigger</li>
+                            <li>Backdrop can be static, true, or false</li>
+                            <li>Perfect for mobile navigation menus</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flexbox -->
+        <div class="topic-card" id="flex">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>📐 Flexbox Utilities</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What is Flexbox?</h3>
+                    <p><strong>Simple:</strong> Flexbox helps arrange items in rows or columns easily! 📦</p>
+                    <p><strong>Definition:</strong> Flexbox utilities provide quick layout options for alignment,
+                        direction, wrapping, and spacing of flex items.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!-- Enable Flexbox --&gt;
+&lt;div class="d-flex"&gt;Flex container&lt;/div&gt;
+&lt;div class="d-inline-flex"&gt;Inline flex&lt;/div&gt;
+
+&lt;!-- Direction --&gt;
+&lt;div class="d-flex flex-row"&gt;Horizontal (default)&lt;/div&gt;
+&lt;div class="d-flex flex-row-reverse"&gt;Horizontal reversed&lt;/div&gt;
+&lt;div class="d-flex flex-column"&gt;Vertical&lt;/div&gt;
+&lt;div class="d-flex flex-column-reverse"&gt;Vertical reversed&lt;/div&gt;
+
+&lt;!-- Justify Content (horizontal alignment) --&gt;
+&lt;div class="d-flex justify-content-start"&gt;Start&lt;/div&gt;
+&lt;div class="d-flex justify-content-end"&gt;End&lt;/div&gt;
+&lt;div class="d-flex justify-content-center"&gt;Center&lt;/div&gt;
+&lt;div class="d-flex justify-content-between"&gt;Space between&lt;/div&gt;
+&lt;div class="d-flex justify-content-around"&gt;Space around&lt;/div&gt;
+&lt;div class="d-flex justify-content-evenly"&gt;Space evenly&lt;/div&gt;
+
+&lt;!-- Align Items (vertical alignment) --&gt;
+&lt;div class="d-flex align-items-start"&gt;Top&lt;/div&gt;
+&lt;div class="d-flex align-items-end"&gt;Bottom&lt;/div&gt;
+&lt;div class="d-flex align-items-center"&gt;Center&lt;/div&gt;
+&lt;div class="d-flex align-items-baseline"&gt;Baseline&lt;/div&gt;
+&lt;div class="d-flex align-items-stretch"&gt;Stretch&lt;/div&gt;
+
+&lt;!-- Wrap --&gt;
+&lt;div class="d-flex flex-wrap"&gt;Wrap&lt;/div&gt;
+&lt;div class="d-flex flex-nowrap"&gt;No wrap&lt;/div&gt;
+&lt;div class="d-flex flex-wrap-reverse"&gt;Wrap reverse&lt;/div&gt;
+
+&lt;!-- Gap --&gt;
+&lt;div class="d-flex gap-2"&gt;Gap 2&lt;/div&gt;
+&lt;div class="d-flex gap-3"&gt;Gap 3&lt;/div&gt;
+
+&lt;!-- Flex Item Properties --&gt;
+&lt;div class="flex-fill"&gt;Fill available space&lt;/div&gt;
+&lt;div class="flex-grow-1"&gt;Grow&lt;/div&gt;
+&lt;div class="flex-shrink-1"&gt;Shrink&lt;/div&gt;
+
+&lt;!-- Order --&gt;
+&lt;div class="order-1"&gt;Second&lt;/div&gt;
+&lt;div class="order-0"&gt;First&lt;/div&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <h6 class="text-dark">justify-content-between:</h6>
+                        <div class="d-flex justify-content-between bg-light p-3 mb-3 rounded">
+                            <div class="bg-primary text-white p-2 rounded">Item 1</div>
+                            <div class="bg-success text-white p-2 rounded">Item 2</div>
+                            <div class="bg-danger text-white p-2 rounded">Item 3</div>
+                        </div>
+
+                        <h6 class="text-dark">align-items-center:</h6>
+                        <div class="d-flex align-items-center bg-light p-3 mb-3 rounded" style="height: 150px;">
+                            <div class="bg-primary text-white p-2 rounded">Centered</div>
+                            <div class="bg-success text-white p-2 rounded ms-2">Items</div>
+                        </div>
+
+                        <h6 class="text-dark">gap-3:</h6>
+                        <div class="d-flex gap-3 bg-light p-3 rounded">
+                            <div class="bg-info text-white p-2 rounded">Gap</div>
+                            <div class="bg-warning text-dark p-2 rounded">Between</div>
+                            <div class="bg-secondary text-white p-2 rounded">Items</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>function FlexLayout() {
+  return (
+    &lt;div className="d-flex justify-content-between align-items-center p-3 bg-light"&gt;
+      &lt;div&gt;Logo&lt;/div&gt;
+      &lt;nav className="d-flex gap-3"&gt;
+        &lt;a href="#"&gt;Home&lt;/a&gt;
+        &lt;a href="#"&gt;About&lt;/a&gt;
+        &lt;a href="#"&gt;Contact&lt;/a&gt;
+      &lt;/nav&gt;
+      &lt;button className="btn btn-primary"&gt;Login&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: justify-content aur align-items mein kya difference hai?</div>
+                        <div class="answer"><strong>Answer:</strong> justify-content main axis (default mein horizontal)
+                            pe items ko align karta hai - start, end, center, between, around. align-items cross axis
+                            (default mein vertical) pe align karta hai - start, end, center, baseline, stretch. Dono
+                            saath use karke perfect centering achieve kar sakte ho.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: flex-grow aur flex-shrink ka kya use hai?</div>
+                        <div class="answer"><strong>Answer:</strong> flex-grow-1 item ko available space mein grow karne
+                            deta hai. flex-shrink-1 item ko shrink hone deta hai jab space kam ho. flex-fill sabhi items
+                            ko equally grow karta hai. Yeh responsive layouts ke liye bahut useful hai.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>d-flex enables flexbox on container</li>
+                            <li>justify-content for horizontal alignment</li>
+                            <li>align-items for vertical alignment</li>
+                            <li>gap-* for spacing between flex items</li>
+                            <li>Responsive: d-flex d-md-block</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Utilities -->
+        <div class="topic-card" id="utilities">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>🛠️ Utilities</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What are Utilities?</h3>
+                    <p><strong>Simple Explanation:</strong> Utilities are like magic shortcuts that let you style things
+                        quickly without writing CSS! ✨</p>
+                    <p><strong>Proper Definition:</strong> Utility classes are single-purpose helper classes that apply
+                        specific CSS properties, enabling rapid styling without custom CSS.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 Common Utilities</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!-- Spacing (Margin & Padding) --&gt;
+&lt;div class="m-3"&gt;Margin all sides&lt;/div&gt;
+&lt;div class="mt-3"&gt;Margin top&lt;/div&gt;
+&lt;div class="mb-3"&gt;Margin bottom&lt;/div&gt;
+&lt;div class="ms-3"&gt;Margin start (left)&lt;/div&gt;
+&lt;div class="me-3"&gt;Margin end (right)&lt;/div&gt;
+&lt;div class="mx-3"&gt;Margin horizontal&lt;/div&gt;
+&lt;div class="my-3"&gt;Margin vertical&lt;/div&gt;
+
+&lt;div class="p-3"&gt;Padding all sides&lt;/div&gt;
+&lt;div class="pt-3"&gt;Padding top&lt;/div&gt;
+
+&lt;!-- Display --&gt;
+&lt;div class="d-none"&gt;Hidden&lt;/div&gt;
+&lt;div class="d-block"&gt;Block&lt;/div&gt;
+&lt;div class="d-flex"&gt;Flex&lt;/div&gt;
+&lt;div class="d-inline"&gt;Inline&lt;/div&gt;
+
+&lt;!-- Text Alignment --&gt;
+&lt;div class="text-start"&gt;Left aligned&lt;/div&gt;
+&lt;div class="text-center"&gt;Center aligned&lt;/div&gt;
+&lt;div class="text-end"&gt;Right aligned&lt;/div&gt;
+
+&lt;!-- Text Transform --&gt;
+&lt;div class="text-lowercase"&gt;LOWERCASE&lt;/div&gt;
+&lt;div class="text-uppercase"&gt;uppercase&lt;/div&gt;
+&lt;div class="text-capitalize"&gt;capitalize each word&lt;/div&gt;
+
+&lt;!-- Font Weight --&gt;
+&lt;div class="fw-bold"&gt;Bold&lt;/div&gt;
+&lt;div class="fw-normal"&gt;Normal&lt;/div&gt;
+&lt;div class="fw-light"&gt;Light&lt;/div&gt;
+
+&lt;!-- Colors --&gt;
+&lt;div class="text-primary"&gt;Primary text&lt;/div&gt;
+&lt;div class="bg-success"&gt;Success background&lt;/div&gt;
+
+&lt;!-- Border --&gt;
+&lt;div class="border"&gt;Border all sides&lt;/div&gt;
+&lt;div class="border-top"&gt;Border top&lt;/div&gt;
+&lt;div class="rounded"&gt;Rounded corners&lt;/div&gt;
+&lt;div class="rounded-circle"&gt;Circle&lt;/div&gt;
+
+&lt;!-- Shadow --&gt;
+&lt;div class="shadow-sm"&gt;Small shadow&lt;/div&gt;
+&lt;div class="shadow"&gt;Regular shadow&lt;/div&gt;
+&lt;div class="shadow-lg"&gt;Large shadow&lt;/div&gt;
+
+&lt;!-- Width & Height --&gt;
+&lt;div class="w-25"&gt;Width 25%&lt;/div&gt;
+&lt;div class="w-50"&gt;Width 50%&lt;/div&gt;
+&lt;div class="w-100"&gt;Width 100%&lt;/div&gt;
+&lt;div class="h-100"&gt;Height 100%&lt;/div&gt;</pre>
+                    </div>
+
+                    <div class="demo-box">
+                        <div class="mb-3">
+                            <span class="badge bg-primary me-2">Primary</span>
+                            <span class="badge bg-success me-2">Success</span>
+                            <span class="badge bg-danger">Danger</span>
+                        </div>
+                        <div class="p-3 mb-3 bg-light border rounded">
+                            Padding, border, and rounded corners
+                        </div>
+                        <div class="text-center fw-bold text-primary">
+                            Centered, bold, primary text
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: m-3 aur p-3 mein kya difference hai?</div>
+                        <div class="answer"><strong>Answer:</strong> m-3 margin add karta hai (element ke bahar ki
+                            space), jabki p-3 padding add karta hai (element ke andar ki space). Number (0-5) spacing ki
+                            size represent karta hai. m-0 = 0, m-1 = 0.25rem, m-2 = 0.5rem, m-3 = 1rem, m-4 = 1.5rem,
+                            m-5 = 3rem.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: Responsive utilities kaise use karte hain?</div>
+                        <div class="answer"><strong>Answer:</strong> Breakpoint prefix add karke: d-none d-md-block
+                            (mobile pe hidden, tablet+ pe visible). Format: {property}-{breakpoint}-{value}. Example:
+                            text-center text-md-start (mobile pe center, tablet+ pe left aligned).</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Utilities follow pattern: {property}-{value}</li>
+                            <li>Responsive: {property}-{breakpoint}-{value}</li>
+                            <li>Spacing scale: 0, 1, 2, 3, 4, 5 (0 to 3rem)</li>
+                            <li>Use utilities instead of custom CSS when possible</li>
+                            <li>Combine multiple utilities for complex styling</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dark Mode -->
+        <div class="topic-card" id="dark-mode">
+            <div class="topic-header" onclick="toggleTopic(this)">
+                <h2>🌙 Dark Mode</h2>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="topic-body">
+                <div class="section">
+                    <h3>📖 What is Dark Mode?</h3>
+                    <p><strong>Simple Explanation:</strong> Dark mode makes your website look dark instead of bright -
+                        easier on the eyes at night! 🌙</p>
+                    <p><strong>Proper Definition:</strong> Dark mode is a color scheme that uses light-colored text and
+                        UI elements on dark backgrounds, reducing eye strain in low-light conditions.</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚀 How to Use</h3>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>&lt;!-- Enable dark mode with data-bs-theme --&gt;
+&lt;html data-bs-theme="dark"&gt;
+
+&lt;!-- Or on specific elements --&gt;
+&lt;div data-bs-theme="dark"&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="card-body"&gt;
+      This card is in dark mode
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Toggle dark mode with JavaScript --&gt;
+&lt;button onclick="toggleDarkMode()"&gt;Toggle Dark Mode&lt;/button&gt;
+
+&lt;script&gt;
+function toggleDarkMode() {
+  const html = document.documentElement;
+  const currentTheme = html.getAttribute('data-bs-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-bs-theme', newTheme);
+}
+&lt;/script&gt;
+
+&lt;!-- Dark mode specific colors --&gt;
+&lt;div class="bg-dark text-white"&gt;Dark background&lt;/div&gt;
+&lt;div class="bg-light text-dark"&gt;Light background&lt;/div&gt;</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>⚛️ With React</h3>
+                    <span class="framework-badge badge-react">React</span>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre>import { useState, useEffect } from 'react';
+
+function DarkModeToggle() {
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.setAttribute(
+      'data-bs-theme',
+      darkMode ? 'dark' : 'light'
+    );
+  }, [darkMode]);
+
+  return (
+    &lt;button 
+      className="btn btn-primary" 
+      onClick={() => setDarkMode(!darkMode)}
+    &gt;
+      {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+    &lt;/button&gt;
+  );
+}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💼 Interview Questions (Hinglish)</h3>
+                    <div class="interview-qa">
+                        <div class="question">Q1: Bootstrap 5 mein dark mode kaise implement karte hain?</div>
+                        <div class="answer"><strong>Answer:</strong> Bootstrap 5.3+ mein data-bs-theme="dark" attribute
+                            use karte hain. Yeh html tag pe ya kisi bhi specific element pe add kar sakte ho. JavaScript
+                            se toggle karne ke liye setAttribute use karo. Yeh automatic color scheme apply kar deta hai
+                            sabhi Bootstrap components pe.</div>
+                    </div>
+                    <div class="interview-qa">
+                        <div class="question">Q2: User ki system preference ke according dark mode kaise set kare?</div>
+                        <div class="answer"><strong>Answer:</strong> CSS media query prefers-color-scheme use karo ya
+                            JavaScript mein window.matchMedia('(prefers-color-scheme: dark)') check karo. User ki system
+                            setting detect karke automatically dark/light mode set kar sakte ho.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="important-points">
+                        <h4>🎯 Important Points</h4>
+                        <ul>
+                            <li>Bootstrap 5.3+ has built-in dark mode support</li>
+                            <li>Use data-bs-theme="dark" or "light"</li>
+                            <li>Can be applied globally or to specific components</li>
+                            <li>Automatically adjusts all Bootstrap components</li>
+                            <li>Store user preference in localStorage</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle Topic Accordion
+        function toggleTopic(header) {
+            const body = header.nextElementSibling;
+            const icon = header.querySelector('i');
+
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                icon.classList.remove('bi-chevron-down');
+                icon.classList.add('bi-chevron-up');
+                header.classList.remove('collapsed');
+            } else {
+                body.style.display = 'none';
+                icon.classList.remove('bi-chevron-up');
+                icon.classList.add('bi-chevron-down');
+                header.classList.add('collapsed');
+            }
+        }
+
+        // Copy Code Function
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const code = codeBlock.textContent;
+
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+
+        // Toggle Sidebar (Mobile)
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('show');
+        }
+
+        // Scroll to Top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Show/Hide Scroll to Top Button
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.getElementById('scrollTop');
+            if (window.pageYOffset > 300) {
+                scrollTop.classList.add('show');
+            } else {
+                scrollTop.classList.remove('show');
+            }
+        });
+
+        // Active Sidebar Link
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        const sections = document.querySelectorAll('.topic-card');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth Scroll for Sidebar Links
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').slice(1);
+                const targetSection = document.getElementById(targetId);
+
+                window.scrollTo({
+                    top: targetSection.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+
+                // Close sidebar on mobile
+                if (window.innerWidth < 992) {
+                    document.getElementById('sidebar').classList.remove('show');
+                }
+            });
+        });
+
+        // Close sidebar when clicking outside (mobile)
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+
+            if (window.innerWidth < 992 &&
+                !sidebar.contains(e.target) &&
+                !toggle.contains(e.target) &&
+                sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+
+</html>
