@@ -272,6 +272,7 @@
                 opacity: 0;
                 transform: translateY(-50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -283,6 +284,7 @@
                 opacity: 0;
                 transform: translateY(50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -290,9 +292,12 @@
         }
 
         @keyframes float {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0px);
             }
+
             50% {
                 transform: translateY(-20px);
             }
@@ -303,9 +308,11 @@
                 bottom: -100px;
                 opacity: 0;
             }
+
             50% {
                 opacity: 1;
             }
+
             100% {
                 bottom: 100%;
                 opacity: 0;
@@ -330,9 +337,9 @@
                 font-size: 4rem;
             }
         }
-    
 
-    
+
+
         /* Code Block Formatting - Universal Styles */
         pre {
             background: #282c34 !important;
@@ -372,15 +379,43 @@
         }
 
         /* Syntax Highlighting Classes */
-        .syntax-keyword { color: #c678dd; font-weight: bold; }
-        .syntax-tag { color: #e06c75; }
-        .syntax-attr { color: #d19a66; }
-        .syntax-string { color: #98c379; }
-        .syntax-comment { color: #5c6370; font-style: italic; }
-        .syntax-number { color: #d19a66; }
-        .syntax-function { color: #61afef; }
-        .syntax-operator { color: #56b6c2; }
-        .syntax-variable { color: #e5c07b; }
+        .syntax-keyword {
+            color: #c678dd;
+            font-weight: bold;
+        }
+
+        .syntax-tag {
+            color: #e06c75;
+        }
+
+        .syntax-attr {
+            color: #d19a66;
+        }
+
+        .syntax-string {
+            color: #98c379;
+        }
+
+        .syntax-comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+
+        .syntax-number {
+            color: #d19a66;
+        }
+
+        .syntax-function {
+            color: #61afef;
+        }
+
+        .syntax-operator {
+            color: #56b6c2;
+        }
+
+        .syntax-variable {
+            color: #e5c07b;
+        }
 
         /* Code Block Container */
         .code-block {
@@ -423,7 +458,10 @@
         }
 
         /* Inline Code */
-        p code, li code, td code, th code {
+        p code,
+        li code,
+        td code,
+        th code {
             background: rgba(0, 0, 0, 0.1);
             padding: 2px 6px;
             border-radius: 3px;
@@ -459,12 +497,11 @@
         pre::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.5);
         }
-
     </style>
 </head>
 
 <body>
-  
+
 
     <div class="container">
         <div class="header">
@@ -516,7 +553,7 @@
             
             
         </div> -->
-  
+
         <div class="cards-container">
 
             <!-- HTML & CSS -->
@@ -529,17 +566,18 @@
                 <p>Master the building blocks of the web. Create beautiful, responsive layouts.</p>
                 <a href="./HTML-CSS%20INTRACT/index.html"><span>Start Learning →</span></a>
             </div>
-        
+
             <!-- JavaScript -->
             <div class="card">
                 <div class="icon">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="60">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
+                        width="60">
                 </div>
                 <h2>JavaScript</h2>
                 <p>Bring your websites to life with interactive and dynamic functionality.</p>
                 <a href="./java-script/index.html"><span>Start Learning →</span></a>
             </div>
-        
+
             <!-- React -->
             <div class="card">
                 <div class="icon">
@@ -549,7 +587,7 @@
                 <p>Build powerful modern web applications with the most popular framework.</p>
                 <a href="./REACT-JS%20INTRACT/index.html"><span>Start Learning →</span></a>
             </div>
-        
+
             <!-- Node.js -->
             <div class="card">
                 <div class="icon">
@@ -559,30 +597,42 @@
                 <p>Learn backend development and build scalable server-side applications.</p>
                 <a href="./node/index.html"><span>Start Learning →</span></a>
             </div>
-        
+
             <!-- MongoDB -->
             <div class="card">
                 <div class="icon">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" width="60">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg"
+                        width="60">
                 </div>
                 <h2>MongoDB</h2>
                 <p>Learn NoSQL database concepts and build scalable data-driven applications.</p>
                 <a href="./MONGO-DB/index.html"><span>Start Learning →</span></a>
             </div>
-        
+
             <!-- SQL -->
             <div class="card">
                 <div class="icon">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" width="70">
                 </div>
-                <h2>SQL</h2>
+                <h2> MySQL</h2>
                 <p>Master SQL queries and manage structured data efficiently in relational databases.</p>
                 <a href="./SQL/index.html"><span>Start Learning →</span></a>
             </div>
-        
+
+            <div class="card">
+                <div class="icon">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg"
+                        width="60">
+                </div>
+                <h2>Tailwind CSS</h2>
+                <p>Learn utility-first CSS and build fast, modern, responsive UI designs.</p>
+                <a href="./TAILWIND/index.html"><span>Start Learning →</span></a>
+            </div>
+
+
         </div>
-        
-  
+
+
     </div>
 </body>
 

@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind CSS Complete Study Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .accordion-content.active {
+            max-height: 5000px;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .card-hover {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-8 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl md:text-5xl font-bold text-center mb-2">🎨 Tailwind CSS Mastery</h1>
+            <p class="text-center text-lg opacity-90">Your Complete Interactive Study Guide</p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container mx-auto px-4 py-8">
+
+        <!-- Navigation Tabs -->
+        <div class="bg-white rounded-lg shadow-lg p-4 mb-8 sticky top-24 z-40">
+            <div class="flex flex-wrap gap-2 justify-center">
+                <button onclick="showTab('intro')"
+                    class="tab-btn px-4 py-2 rounded-lg bg-purple-600 text-white font-semibold hover:bg-purple-700 transition">Introduction</button>
+                <button onclick="showTab('basics')"
+                    class="tab-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition">Basics</button>
+                <button onclick="showTab('layout')"
+                    class="tab-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition">Layout</button>
+                <button onclick="showTab('flexbox')"
+                    class="tab-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition">Flexbox &
+                    Grid</button>
+                <button onclick="showTab('styling')"
+                    class="tab-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition">Styling</button>
+                <button onclick="showTab('effects')"
+                    class="tab-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition">Effects</button>
+                <button onclick="showTab('advanced')"
+                    class="tab-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition">Advanced</button>
+                <button onclick="showTab('interview')"
+                    class="tab-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition">Interview Q&A</button>
+            </div>
+        </div>
+
+        <!-- Introduction Tab -->
+        <div id="intro" class="tab-content active">
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-6">
+                <h2 class="text-3xl font-bold text-purple-600 mb-4">🌟 What is Tailwind CSS?</h2>
+                <div class="space-y-4">
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                        <h3 class="font-bold text-lg mb-2">Simple Explanation (Like telling a child):</h3>
+                        <p class="text-gray-700">Imagine you have a big box of LEGO blocks. Each block has a special
+                            power - one makes things blue, one makes things big, one makes things round. Tailwind CSS is
+                            like that box of LEGO blocks for websites! Instead of drawing everything from scratch, you
+                            just pick the blocks (classes) you need and snap them together to make beautiful websites!
+                            🎨✨</p>
+                    </div>
+
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                        <h3 class="font-bold text-lg mb-2">Proper Definition:</h3>
+                        <p class="text-gray-700"><strong>Tailwind CSS</strong> is a utility-first CSS framework that
+                            provides low-level utility classes to build custom designs directly in your markup without
+                            writing custom CSS. It offers pre-defined classes for styling elements, enabling rapid UI
+                            development with consistent design patterns.</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4 mt-6">
+                        <div class="card-hover bg-gradient-to-br from-purple-100 to-pink-100 p-6 rounded-lg">
+                            <h4 class="font-bold text-xl mb-3 text-purple-700">✅ Advantages</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li>• <strong>Rapid Development:</strong> Build UIs faster with pre-built utilities</li>
+                                <li>• <strong>Consistency:</strong> Maintains design system automatically</li>
+                                <li>• <strong>Customizable:</strong> Fully configurable via tailwind.config.js</li>
+                                <li>• <strong>Small Bundle Size:</strong> PurgeCSS removes unused styles</li>
+                                <li>• <strong>Responsive Design:</strong> Built-in responsive modifiers</li>
+                                <li>• <strong>No Naming Conflicts:</strong> No need to invent class names</li>
+                            </ul>
+                        </div>
+
+                        <div class="card-hover bg-gradient-to-br from-blue-100 to-cyan-100 p-6 rounded-lg">
+                            <h4 class="font-bold text-xl mb-3 text-blue-700">🎯 Applications</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li>• Landing pages and marketing sites</li>
+                                <li>• Web applications and dashboards</li>
+                                <li>• E-commerce platforms</li>
+                                <li>• Admin panels and CMS</li>
+                                <li>• Mobile-responsive websites</li>
+                                <li>• Component libraries</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
+                        <h3 class="font-bold text-lg mb-2">🆚 Tailwind vs Bootstrap vs Bulma</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="p-2 text-left">Feature</th>
+                                        <th class="p-2 text-left">Tailwind CSS</th>
+                                        <th class="p-2 text-left">Bootstrap</th>
+                                        <th class="p-2 text-left">Bulma</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-t">
+                                        <td class="p-2 font-semibold">Approach</td>
+                                        <td class="p-2">Utility-first</td>
+                                        <td class="p-2">Component-based</td>
+                                        <td class="p-2">Component-based</td>
+                                    </tr>
+                                    <tr class="border-t bg-gray-50">
+                                        <td class="p-2 font-semibold">Customization</td>
+                                        <td class="p-2">Highly customizable</td>
+                                        <td class="p-2">Limited customization</td>
+                                        <td class="p-2">Moderate customization</td>
+                                    </tr>
+                                    <tr class="border-t">
+                                        <td class="p-2 font-semibold">File Size</td>
+                                        <td class="p-2">Small (with PurgeCSS)</td>
+                                        <td class="p-2">Large (~150KB)</td>
+                                        <td class="p-2">Medium (~200KB)</td>
+                                    </tr>
+                                    <tr class="border-t bg-gray-50">
+                                        <td class="p-2 font-semibold">Learning Curve</td>
+                                        <td class="p-2">Moderate</td>
+                                        <td class="p-2">Easy</td>
+                                        <td class="p-2">Easy</td>
+                                    </tr>
+                                    <tr class="border-t">
+                                        <td class="p-2 font-semibold">JavaScript</td>
+                                        <td class="p-2">Not required</td>
+                                        <td class="p-2">Required for components</td>
+                                        <td class="p-2">Not required</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Basics Tab -->
+        <div id="basics" class="tab-content">
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-6">
+                <h2 class="text-3xl font-bold text-purple-600 mb-6">📚 Tailwind CSS Basics</h2>
+
+                <!-- Installation Section -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('install')"
+                        class="w-full text-left bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 rounded-lg font-bold text-xl hover:from-purple-600 hover:to-pink-600 transition">
+                        ⚙️ Installation & Setup
+                    </button>
+                    <div id="install" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <h4 class="font-bold mb-2">Simple Explanation:</h4>
+                                <p>Installing Tailwind is like downloading a game on your computer. You need to tell
+                                    your computer to get it, then set it up so it works with your project! 🎮</p>
+                            </div>
+
+                            <h4 class="font-bold text-lg">Method 1: CDN (Quickest - For Learning)</h4>
+                            <div class="code-block">
+                                &lt;!-- Add this in your HTML &lt;head&gt; --&gt;
+                                &lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;
+                            </div>
+
+                            <h4 class="font-bold text-lg mt-4">Method 2: NPM (For Real Projects)</h4>
+                            <div class="code-block">
+                                # Install Tailwind CSS
+                                npm install -D tailwindcss
+                                npx tailwindcss init
+
+                                # Create tailwind.config.js
+                                module.exports = {
+                                content: ["./src/**/*.{html,js}"],
+                                theme: { extend: {} },
+                                plugins: [],
+                                }
+
+                                # Add to your CSS file
+                                @tailwind base;
+                                @tailwind components;
+                                @tailwind utilities;
+                            </div>
+
+                            <h4 class="font-bold text-lg mt-4">Method 3: With React/Next.js</h4>
+                            <div class="code-block">
+                                # Create Next.js app with Tailwind
+                                npx create-next-app@latest my-app --tailwind
+
+                                # Or add to existing React project
+                                npm install -D tailwindcss postcss autoprefixer
+                                npx tailwindcss init -p
+                            </div>
+
+                            <h4 class="font-bold text-lg mt-4">Method 4: With Vue</h4>
+                            <div class="code-block">
+                                # Create Vue app
+                                npm create vue@latest my-app
+                                cd my-app
+                                npm install -D tailwindcss postcss autoprefixer
+                                npx tailwindcss init -p
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Core Concepts -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('concepts')"
+                        class="w-full text-left bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-4 rounded-lg font-bold text-xl hover:from-blue-600 hover:to-cyan-600 transition">
+                        💡 Core Concepts
+                    </button>
+                    <div id="concepts" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-6">
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <h4 class="font-bold text-lg text-purple-600 mb-2">1. Utility-First Approach</h4>
+                                <p class="mb-3"><strong>Definition:</strong> Building designs using small,
+                                    single-purpose utility classes instead of writing custom CSS.</p>
+                                <div class="code-block">
+                                    &lt;!-- Traditional CSS --&gt;
+                                    &lt;style&gt;
+                                    .button { background: blue; padding: 1rem; border-radius: 0.5rem; }
+                                    &lt;/style&gt;
+                                    &lt;button class="button"&gt;Click Me&lt;/button&gt;
+
+                                    &lt;!-- Tailwind Way --&gt;
+                                    &lt;button class="bg-blue-500 px-4 py-2 rounded-lg"&gt;Click Me&lt;/button&gt;
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <h4 class="font-bold text-lg text-purple-600 mb-2">2. Responsive Design</h4>
+                                <p class="mb-3"><strong>Definition:</strong> Mobile-first breakpoint system using
+                                    prefixes (sm, md, lg, xl, 2xl).</p>
+                                <div class="code-block">
+                                    &lt;!-- Responsive text sizes --&gt;
+                                    &lt;h1 class="text-2xl md:text-4xl lg:text-6xl"&gt;
+                                    Responsive Heading
+                                    &lt;/h1&gt;
+
+                                    &lt;!-- Breakpoints --&gt;
+                                    sm: 640px (Small devices)
+                                    md: 768px (Medium devices)
+                                    lg: 1024px (Large devices)
+                                    xl: 1280px (Extra large)
+                                    2xl: 1536px (2X Extra large)
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <h4 class="font-bold text-lg text-purple-600 mb-2">3. State Variants</h4>
+                                <p class="mb-3"><strong>Definition:</strong> Pseudo-class modifiers for interactive
+                                    states.</p>
+                                <div class="code-block">
+                                    &lt;!-- Hover, Focus, Active states --&gt;
+                                    &lt;button class="bg-blue-500 hover:bg-blue-700 focus:ring-4 active:scale-95"&gt;
+                                    Interactive Button
+                                    &lt;/button&gt;
+
+                                    &lt;!-- Other states --&gt;
+                                    hover: - Mouse hover
+                                    focus: - Keyboard focus
+                                    active: - Being clicked
+                                    disabled: - Disabled state
+                                    group-hover: - Parent hover
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <h4 class="font-bold text-lg text-purple-600 mb-2">4. Dark Mode</h4>
+                                <div class="code-block">
+                                    &lt;!-- Dark mode classes --&gt;
+                                    &lt;div class="bg-white dark:bg-gray-800 text-black dark:text-white"&gt;
+                                    This adapts to dark mode!
+                                    &lt;/div&gt;
+
+                                    &lt;!-- Enable in tailwind.config.js --&gt;
+                                    module.exports = {
+                                    darkMode: 'class', // or 'media'
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Layout Tab -->
+        <div id="layout" class="tab-content">
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-6">
+                <h2 class="text-3xl font-bold text-purple-600 mb-6">📐 Layout System</h2>
+
+                <!-- Container -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('container')"
+                        class="w-full text-left bg-gradient-to-r from-green-500 to-teal-500 text-white p-4 rounded-lg font-bold text-xl">
+                        📦 Container
+                    </button>
+                    <div id="container" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6">
+                            <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                                <p><strong>Simple:</strong> Container is like a box that holds your content and keeps it
+                                    centered and not too wide! 📦</p>
+                                <p class="mt-2"><strong>Definition:</strong> A component that sets max-width at each
+                                    responsive breakpoint.</p>
+                            </div>
+                            <div class="code-block">
+                                &lt;div class="container mx-auto px-4"&gt;
+                                Content stays centered and responsive!
+                                &lt;/div&gt;
+
+                                &lt;!-- Container sizes --&gt;
+                                None: width: 100%
+                                sm: max-width: 640px
+                                md: max-width: 768px
+                                lg: max-width: 1024px
+                                xl: max-width: 1280px
+                                2xl: max-width: 1536px
+                            </div>
+                            <div class="mt-4 p-4 bg-white rounded border-2 border-dashed border-purple-300">
+                                <div class="container mx-auto bg-purple-100 p-4 rounded">
+                                    <p class="text-center">This is inside a container! Resize your browser to see it
+                                        adapt.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Display -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('display')"
+                        class="w-full text-left bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-4 rounded-lg font-bold text-xl">
+                        👁️ Display
+                    </button>
+                    <div id="display" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6">
+                            <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                                <p><strong>Simple:</strong> Display controls if something is visible and how it sits on
+                                    the page - like blocks stacked or items in a row! 🧱</p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Display Types --&gt;
+                                &lt;div class="block"&gt;Block (takes full width)&lt;/div&gt;
+                                &lt;div class="inline-block"&gt;Inline Block&lt;/div&gt;
+                                &lt;div class="inline"&gt;Inline&lt;/div&gt;
+                                &lt;div class="flex"&gt;Flex Container&lt;/div&gt;
+                                &lt;div class="grid"&gt;Grid Container&lt;/div&gt;
+                                &lt;div class="hidden"&gt;Hidden&lt;/div&gt;
+
+                                &lt;!-- Responsive Display --&gt;
+                                &lt;div class="hidden md:block"&gt;Visible on medium screens+&lt;/div&gt;
+                            </div>
+                            <div class="mt-4 space-y-2">
+                                <div class="block bg-blue-200 p-2 rounded">block - Full width</div>
+                                <div class="inline-block bg-green-200 p-2 rounded">inline-block</div>
+                                <div class="inline-block bg-green-200 p-2 rounded">inline-block</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Position -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('position')"
+                        class="w-full text-left bg-gradient-to-r from-pink-500 to-rose-500 text-white p-4 rounded-lg font-bold text-xl">
+                        📍 Position
+                    </button>
+                    <div id="position" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6">
+                            <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                                <p><strong>Simple:</strong> Position is like telling an element where to sit - should it
+                                    stay in place, follow you when you scroll, or float on top? 🎈</p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Position Types --&gt;
+                                &lt;div class="static"&gt;Static (default)&lt;/div&gt;
+                                &lt;div class="relative"&gt;Relative (can move from original spot)&lt;/div&gt;
+                                &lt;div class="absolute"&gt;Absolute (floats, positioned by parent)&lt;/div&gt;
+                                &lt;div class="fixed"&gt;Fixed (stays when scrolling)&lt;/div&gt;
+                                &lt;div class="sticky"&gt;Sticky (sticks when scrolling past)&lt;/div&gt;
+
+                                &lt;!-- Positioning with top/right/bottom/left --&gt;
+                                &lt;div class="absolute top-0 right-0"&gt;Top Right Corner&lt;/div&gt;
+                                &lt;div class="fixed bottom-4 right-4"&gt;Fixed Bottom Right&lt;/div&gt;
+                            </div>
+                            <div class="mt-4 relative h-48 bg-gray-200 rounded">
+                                <div class="absolute top-2 left-2 bg-blue-500 text-white p-2 rounded">Absolute Top-Left
+                                </div>
+                                <div class="absolute bottom-2 right-2 bg-green-500 text-white p-2 rounded">Absolute
+                                    Bottom-Right</div>
+                                <div
+                                    class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-purple-500 text-white p-2 rounded">
+                                    Centered</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Z-Index -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('zindex')"
+                        class="w-full text-left bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-4 rounded-lg font-bold text-xl">
+                        🎚️ Z-Index (Stacking Order)
+                    </button>
+                    <div id="zindex" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6">
+                            <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                                <p><strong>Simple:</strong> Z-index is like layers of paper - higher numbers are on top!
+                                    📄📄📄</p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Z-Index values --&gt;
+                                z-0 z-index: 0
+                                z-10 z-index: 10
+                                z-20 z-index: 20
+                                z-30 z-index: 30
+                                z-40 z-index: 40
+                                z-50 z-index: 50
+                                z-auto z-index: auto
+                            </div>
+                            <div class="mt-4 relative h-48">
+                                <div class="absolute top-4 left-4 w-32 h-32 bg-red-400 z-10 p-2 rounded">z-10</div>
+                                <div class="absolute top-12 left-12 w-32 h-32 bg-blue-400 z-20 p-2 rounded">z-20</div>
+                                <div class="absolute top-20 left-20 w-32 h-32 bg-green-400 z-30 p-2 rounded">z-30</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overflow -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('overflow')"
+                        class="w-full text-left bg-gradient-to-r from-cyan-500 to-blue-500 text-white p-4 rounded-lg font-bold text-xl">
+                        💧 Overflow
+                    </button>
+                    <div id="overflow" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6">
+                            <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                                <p><strong>Simple:</strong> Overflow controls what happens when content is too big for
+                                    its box - hide it, scroll it, or let it spill out! 📦➡️</p>
+                            </div>
+                            <div class="code-block">
+                                overflow-auto - Add scrollbar if needed
+                                overflow-hidden - Hide overflow content
+                                overflow-visible - Show overflow (default)
+                                overflow-scroll - Always show scrollbar
+                                overflow-x-auto - Horizontal scroll only
+                                overflow-y-auto - Vertical scroll only
+                            </div>
+                            <div class="mt-4 grid md:grid-cols-2 gap-4">
+                                <div class="h-32 overflow-auto bg-purple-100 p-4 rounded border-2 border-purple-300">
+                                    <p class="font-bold">overflow-auto</p>
+                                    <p>This content is very long and will create a scrollbar when it exceeds the
+                                        container height. Keep reading to see the scroll effect in action! More content
+                                        here... and more... and even more to demonstrate scrolling behavior.</p>
+                                </div>
+                                <div class="h-32 overflow-hidden bg-pink-100 p-4 rounded border-2 border-pink-300">
+                                    <p class="font-bold">overflow-hidden</p>
+                                    <p>This content is cut off when it exceeds the container. You won't see anything
+                                        beyond this box even though there's more text here that continues beyond the
+                                        visible area.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flexbox & Grid Tab -->
+        <div id="flexbox" class="tab-content">
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-6">
+                <h2 class="text-3xl font-bold text-purple-600 mb-6">🔲 Flexbox & Grid</h2>
+
+                <!-- Flexbox -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('flex')"
+                        class="w-full text-left bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-4 rounded-lg font-bold text-xl">
+                        🎯 Flexbox
+                    </button>
+                    <div id="flex" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> Flexbox is like arranging toys in a row or column - you can
+                                    space them out, center them, or make them grow! 🧸🧸🧸</p>
+                                <p class="mt-2"><strong>Definition:</strong> A one-dimensional layout method for
+                                    arranging items in rows or columns with flexible sizing.</p>
+                            </div>
+
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold mb-2">Flex Direction</h4>
+                                <div class="code-block">
+                                    flex-row - Horizontal (default)
+                                    flex-row-reverse - Horizontal reversed
+                                    flex-col - Vertical
+                                    flex-col-reverse - Vertical reversed
+                                </div>
+                                <div class="mt-4 space-y-2">
+                                    <div class="flex flex-row gap-2 bg-purple-100 p-2 rounded">
+                                        <div class="bg-purple-500 text-white p-2 rounded">1</div>
+                                        <div class="bg-purple-500 text-white p-2 rounded">2</div>
+                                        <div class="bg-purple-500 text-white p-2 rounded">3</div>
+                                    </div>
+                                    <div class="flex flex-col gap-2 bg-blue-100 p-2 rounded w-32">
+                                        <div class="bg-blue-500 text-white p-2 rounded">1</div>
+                                        <div class="bg-blue-500 text-white p-2 rounded">2</div>
+                                        <div class="bg-blue-500 text-white p-2 rounded">3</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold mb-2">Justify Content (Main Axis)</h4>
+                                <div class="code-block">
+                                    justify-start - Start (default)
+                                    justify-center - Center
+                                    justify-end - End
+                                    justify-between - Space between items
+                                    justify-around - Space around items
+                                    justify-evenly - Equal space
+                                </div>
+                                <div class="mt-4 space-y-2">
+                                    <div class="flex justify-start gap-2 bg-green-100 p-2 rounded">
+                                        <div class="bg-green-500 text-white p-2 rounded">Start</div>
+                                        <div class="bg-green-500 text-white p-2 rounded">Start</div>
+                                    </div>
+                                    <div class="flex justify-center gap-2 bg-blue-100 p-2 rounded">
+                                        <div class="bg-blue-500 text-white p-2 rounded">Center</div>
+                                        <div class="bg-blue-500 text-white p-2 rounded">Center</div>
+                                    </div>
+                                    <div class="flex justify-between bg-purple-100 p-2 rounded">
+                                        <div class="bg-purple-500 text-white p-2 rounded">Between</div>
+                                        <div class="bg-purple-500 text-white p-2 rounded">Between</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold mb-2">Align Items (Cross Axis)</h4>
+                                <div class="code-block">
+                                    items-start - Start
+                                    items-center - Center
+                                    items-end - End
+                                    items-baseline - Baseline
+                                    items-stretch - Stretch (default)
+                                </div>
+                                <div class="mt-4 flex items-center h-32 bg-pink-100 p-2 rounded gap-2">
+                                    <div class="bg-pink-500 text-white p-2 rounded h-12">Item</div>
+                                    <div class="bg-pink-500 text-white p-2 rounded h-16">Centered</div>
+                                    <div class="bg-pink-500 text-white p-2 rounded h-20">Items</div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold mb-2">Flex Grow & Shrink</h4>
+                                <div class="code-block">
+                                    flex-1 - Grow and shrink equally
+                                    flex-auto - Grow and shrink based on content
+                                    flex-initial - Don't grow, can shrink
+                                    flex-none - Don't grow or shrink
+                                </div>
+                                <div class="mt-4 flex gap-2 bg-yellow-100 p-2 rounded">
+                                    <div class="flex-1 bg-yellow-500 text-white p-2 rounded">flex-1</div>
+                                    <div class="flex-1 bg-yellow-600 text-white p-2 rounded">flex-1</div>
+                                    <div class="flex-none bg-yellow-700 text-white p-2 rounded">flex-none</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('grid')"
+                        class="w-full text-left bg-gradient-to-r from-green-500 to-emerald-500 text-white p-4 rounded-lg font-bold text-xl">
+                        🎨 Grid
+                    </button>
+                    <div id="grid" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> Grid is like a checkerboard - you can place items in rows
+                                    and columns, making perfect layouts! ⬜⬛⬜⬛</p>
+                                <p class="mt-2"><strong>Definition:</strong> A two-dimensional layout system for
+                                    creating complex responsive layouts with rows and columns.</p>
+                            </div>
+
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold mb-2">Grid Columns</h4>
+                                <div class="code-block">
+                                    grid-cols-1 - 1 column
+                                    grid-cols-2 - 2 columns
+                                    grid-cols-3 - 3 columns
+                                    grid-cols-4 - 4 columns
+                                    grid-cols-12 - 12 columns (common)
+                                </div>
+                                <div class="mt-4 grid grid-cols-3 gap-4 bg-blue-100 p-4 rounded">
+                                    <div class="bg-blue-500 text-white p-4 rounded text-center">1</div>
+                                    <div class="bg-blue-500 text-white p-4 rounded text-center">2</div>
+                                    <div class="bg-blue-500 text-white p-4 rounded text-center">3</div>
+                                    <div class="bg-blue-500 text-white p-4 rounded text-center">4</div>
+                                    <div class="bg-blue-500 text-white p-4 rounded text-center">5</div>
+                                    <div class="bg-blue-500 text-white p-4 rounded text-center">6</div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold mb-2">Grid Column Span</h4>
+                                <div class="code-block">
+                                    col-span-1 - Span 1 column
+                                    col-span-2 - Span 2 columns
+                                    col-span-3 - Span 3 columns
+                                    col-span-full - Span all columns
+                                </div>
+                                <div class="mt-4 grid grid-cols-3 gap-4 bg-purple-100 p-4 rounded">
+                                    <div class="col-span-2 bg-purple-500 text-white p-4 rounded text-center">Spans 2
+                                        Columns</div>
+                                    <div class="bg-purple-500 text-white p-4 rounded text-center">1</div>
+                                    <div class="bg-purple-500 text-white p-4 rounded text-center">1</div>
+                                    <div class="col-span-2 bg-purple-500 text-white p-4 rounded text-center">Spans 2
+                                        Columns</div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold mb-2">Gap (Spacing)</h4>
+                                <div class="code-block">
+                                    gap-0 - No gap
+                                    gap-2 - 0.5rem gap
+                                    gap-4 - 1rem gap
+                                    gap-8 - 2rem gap
+                                    gap-x-4 - Horizontal gap only
+                                    gap-y-4 - Vertical gap only
+                                </div>
+                                <div class="mt-4 grid grid-cols-3 gap-6 bg-green-100 p-4 rounded">
+                                    <div class="bg-green-500 text-white p-4 rounded text-center">Gap</div>
+                                    <div class="bg-green-500 text-white p-4 rounded text-center">Between</div>
+                                    <div class="bg-green-500 text-white p-4 rounded text-center">Items</div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold mb-2">Responsive Grid</h4>
+                                <div class="code-block">
+                                    &lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"&gt;
+                                    &lt;!-- 1 column on mobile, 2 on tablet, 4 on desktop --&gt;
+                                    &lt;/div&gt;
+                                </div>
+                                <div
+                                    class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 bg-pink-100 p-4 rounded">
+                                    <div class="bg-pink-500 text-white p-4 rounded text-center">Responsive</div>
+                                    <div class="bg-pink-500 text-white p-4 rounded text-center">Grid</div>
+                                    <div class="bg-pink-500 text-white p-4 rounded text-center">Layout</div>
+                                    <div class="bg-pink-500 text-white p-4 rounded text-center">Demo</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Styling Tab -->
+        <div id="styling" class="tab-content">
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-6">
+                <h2 class="text-3xl font-bold text-purple-600 mb-6">🎨 Styling Utilities</h2>
+
+                <!-- Spacing -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('spacing')"
+                        class="w-full text-left bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-4 rounded-lg font-bold text-xl">
+                        📏 Spacing (Padding & Margin)
+                    </button>
+                    <div id="spacing" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> Spacing is like adding air around things - padding is inside
+                                    space, margin is outside space! 📦 ↔️ 📦</p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Padding (inside space) --&gt;
+                                p-4 - Padding all sides (1rem)
+                                pt-4 - Padding top
+                                pr-4 - Padding right
+                                pb-4 - Padding bottom
+                                pl-4 - Padding left
+                                px-4 - Padding horizontal (left + right)
+                                py-4 - Padding vertical (top + bottom)
+
+                                &lt;!-- Margin (outside space) --&gt;
+                                m-4 - Margin all sides
+                                mt-4 - Margin top
+                                mr-4 - Margin right
+                                mb-4 - Margin bottom
+                                ml-4 - Margin left
+                                mx-4 - Margin horizontal
+                                my-4 - Margin vertical
+                                mx-auto - Center horizontally
+
+                                &lt;!-- Spacing Scale --&gt;
+                                0: 0px, 1: 0.25rem, 2: 0.5rem, 3: 0.75rem
+                                4: 1rem, 6: 1.5rem, 8: 2rem, 12: 3rem
+                            </div>
+                            <div class="mt-4 bg-gray-200 p-8 rounded">
+                                <div class="bg-blue-500 text-white p-8 rounded">
+                                    <div class="bg-white text-blue-500 p-4 rounded">
+                                        Padding creates space inside!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sizing -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('sizing')"
+                        class="w-full text-left bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 rounded-lg font-bold text-xl">
+                        📐 Sizing (Width & Height)
+                    </button>
+                    <div id="sizing" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> Sizing controls how big or small things are - like choosing
+                                    small, medium, or large! 📦📦📦</p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Width --&gt;
+                                w-full - 100% width
+                                w-1/2 - 50% width
+                                w-1/3 - 33.333% width
+                                w-screen - 100vw (full viewport)
+                                w-64 - 16rem (256px)
+
+                                &lt;!-- Height --&gt;
+                                h-full - 100% height
+                                h-screen - 100vh (full viewport)
+                                h-64 - 16rem (256px)
+
+                                &lt;!-- Min/Max --&gt;
+                                min-w-0, max-w-xs, max-w-full
+                                min-h-0, max-h-screen
+                            </div>
+                            <div class="mt-4 space-y-2">
+                                <div class="w-full bg-blue-500 text-white p-2 rounded">w-full (100%)</div>
+                                <div class="w-1/2 bg-green-500 text-white p-2 rounded">w-1/2 (50%)</div>
+                                <div class="w-1/3 bg-purple-500 text-white p-2 rounded">w-1/3 (33%)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Typography -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('typography')"
+                        class="w-full text-left bg-gradient-to-r from-green-500 to-teal-500 text-white p-4 rounded-lg font-bold text-xl">
+                        ✍️ Typography
+                    </button>
+                    <div id="typography" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> Typography is all about text - making it big, small, bold,
+                                    colorful, or fancy! ✨ABC✨</p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Font Size --&gt;
+                                text-xs, text-sm, text-base, text-lg
+                                text-xl, text-2xl, text-3xl, text-4xl
+
+                                &lt;!-- Font Weight --&gt;
+                                font-thin, font-light, font-normal
+                                font-medium, font-semibold, font-bold
+
+                                &lt;!-- Text Color --&gt;
+                                text-gray-500, text-blue-600, text-red-500
+
+                                &lt;!-- Text Alignment --&gt;
+                                text-left, text-center, text-right, text-justify
+
+                                &lt;!-- Text Transform --&gt;
+                                uppercase, lowercase, capitalize
+
+                                &lt;!-- Text Decoration --&gt;
+                                underline, line-through, no-underline
+                            </div>
+                            <div class="mt-4 space-y-2">
+                                <p class="text-xs">Extra Small Text (text-xs)</p>
+                                <p class="text-base">Base Text (text-base)</p>
+                                <p class="text-2xl font-bold">Large Bold Text (text-2xl font-bold)</p>
+                                <p class="text-blue-600 underline">Blue Underlined Text</p>
+                                <p class="uppercase">uppercase text</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backgrounds -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('backgrounds')"
+                        class="w-full text-left bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-4 rounded-lg font-bold text-xl">
+                        🌈 Backgrounds
+                    </button>
+                    <div id="backgrounds" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> Backgrounds are like painting the wall behind your content -
+                                    solid colors or beautiful gradients! 🎨</p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Background Color --&gt;
+                                bg-blue-500, bg-red-600, bg-green-400
+
+                                &lt;!-- Background Opacity --&gt;
+                                bg-opacity-50, bg-opacity-75
+
+                                &lt;!-- Gradients --&gt;
+                                bg-gradient-to-r - Left to right
+                                bg-gradient-to-br - Top-left to bottom-right
+                                from-purple-500 - Start color
+                                via-pink-500 - Middle color
+                                to-red-500 - End color
+
+                                &lt;!-- Background Image --&gt;
+                                bg-cover, bg-contain, bg-center
+                            </div>
+                            <div class="mt-4 space-y-2">
+                                <div class="bg-blue-500 text-white p-4 rounded">Solid Blue Background</div>
+                                <div
+                                    class="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white p-4 rounded">
+                                    Beautiful Gradient Background
+                                </div>
+                                <div class="bg-gradient-to-br from-green-400 to-blue-500 text-white p-4 rounded">
+                                    Diagonal Gradient
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Borders -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('borders')"
+                        class="w-full text-left bg-gradient-to-r from-pink-500 to-rose-500 text-white p-4 rounded-lg font-bold text-xl">
+                        🔲 Borders & Rounded Corners
+                    </button>
+                    <div id="borders" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> Borders are like drawing lines around things, and rounded
+                                    corners make them smooth like a circle! ⬜ → 🔘</p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Border Width --&gt;
+                                border - 1px all sides
+                                border-2 - 2px all sides
+                                border-t-4 - 4px top only
+
+                                &lt;!-- Border Color --&gt;
+                                border-gray-300, border-blue-500
+
+                                &lt;!-- Border Radius (Rounded) --&gt;
+                                rounded-none - No rounding
+                                rounded-sm - Small rounding
+                                rounded - Default rounding
+                                rounded-lg - Large rounding
+                                rounded-full - Fully rounded (circle/pill)
+
+                                &lt;!-- Specific Corners --&gt;
+                                rounded-t-lg - Top corners
+                                rounded-l-lg - Left corners
+                            </div>
+                            <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div class="border-4 border-blue-500 p-4 text-center">border-4</div>
+                                <div class="border-4 border-green-500 rounded p-4 text-center">rounded</div>
+                                <div class="border-4 border-purple-500 rounded-lg p-4 text-center">rounded-lg</div>
+                                <div class="border-4 border-pink-500 rounded-full p-4 text-center">rounded-full</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Effects Tab -->
+        <div id="effects" class="tab-content">
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-6">
+                <h2 class="text-3xl font-bold text-purple-600 mb-6">✨ Effects & Animations</h2>
+
+                <!-- Shadows -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('shadows')"
+                        class="w-full text-left bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-4 rounded-lg font-bold text-xl">
+                        🌑 Shadows
+                    </button>
+                    <div id="shadows" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> Shadows make things look like they're floating above the
+                                    page! 📄☁️</p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Box Shadow --&gt;
+                                shadow-sm - Small shadow
+                                shadow - Default shadow
+                                shadow-md - Medium shadow
+                                shadow-lg - Large shadow
+                                shadow-xl - Extra large shadow
+                                shadow-2xl - 2X Extra large shadow
+                                shadow-none - No shadow
+
+                                &lt;!-- Text Shadow --&gt;
+                                Not built-in, use custom config
+                            </div>
+                            <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-6">
+                                <div class="shadow-sm bg-white p-6 rounded-lg text-center">shadow-sm</div>
+                                <div class="shadow-md bg-white p-6 rounded-lg text-center">shadow-md</div>
+                                <div class="shadow-lg bg-white p-6 rounded-lg text-center">shadow-lg</div>
+                                <div class="shadow-xl bg-white p-6 rounded-lg text-center">shadow-xl</div>
+                                <div class="shadow-2xl bg-white p-6 rounded-lg text-center">shadow-2xl</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opacity -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('opacity')"
+                        class="w-full text-left bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-4 rounded-lg font-bold text-xl">
+                        👻 Opacity
+                    </button>
+                    <div id="opacity" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> Opacity makes things see-through, like looking through foggy
+                                    glass! 🪟</p>
+                            </div>
+                            <div class="code-block">
+                                opacity-0 - Invisible (0%)
+                                opacity-25 - 25% visible
+                                opacity-50 - 50% visible
+                                opacity-75 - 75% visible
+                                opacity-100 - Fully visible (100%)
+                            </div>
+                            <div class="mt-4 flex gap-4 bg-gradient-to-r from-purple-400 to-pink-400 p-8 rounded-lg">
+                                <div class="opacity-100 bg-white p-4 rounded">100%</div>
+                                <div class="opacity-75 bg-white p-4 rounded">75%</div>
+                                <div class="opacity-50 bg-white p-4 rounded">50%</div>
+                                <div class="opacity-25 bg-white p-4 rounded">25%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transitions -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('transitions')"
+                        class="w-full text-left bg-gradient-to-r from-green-500 to-emerald-500 text-white p-4 rounded-lg font-bold text-xl">
+                        🎬 Transitions
+                    </button>
+                    <div id="transitions" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> Transitions make changes happen smoothly instead of
+                                    instantly - like a smooth slide instead of a jump! 🎢</p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Transition Property --&gt;
+                                transition-none - No transition
+                                transition-all - All properties
+                                transition - Common properties
+                                transition-colors - Colors only
+                                transition-opacity - Opacity only
+                                transition-transform - Transform only
+
+                                &lt;!-- Duration --&gt;
+                                duration-75, duration-100, duration-150
+                                duration-200, duration-300, duration-500
+
+                                &lt;!-- Timing Function --&gt;
+                                ease-linear, ease-in, ease-out, ease-in-out
+                            </div>
+                            <div class="mt-4 space-y-4">
+                                <button
+                                    class="bg-blue-500 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition duration-300">
+                                    Hover Me (Smooth Transition)
+                                </button>
+                                <button
+                                    class="bg-green-500 hover:scale-110 text-white px-6 py-3 rounded-lg transition transform duration-300">
+                                    Hover to Scale
+                                </button>
+                                <button
+                                    class="bg-purple-500 hover:rotate-6 text-white px-6 py-3 rounded-lg transition transform duration-300">
+                                    Hover to Rotate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transforms -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('transforms')"
+                        class="w-full text-left bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-4 rounded-lg font-bold text-xl">
+                        🔄 Transforms
+                    </button>
+                    <div id="transforms" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> Transforms let you move, spin, grow, or squish things! 🔄📏
+                                </p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Scale --&gt;
+                                scale-0, scale-50, scale-100, scale-150
+
+                                &lt;!-- Rotate --&gt;
+                                rotate-0, rotate-45, rotate-90, rotate-180
+
+                                &lt;!-- Translate (Move) --&gt;
+                                translate-x-4, translate-y-4
+                                -translate-x-4 (negative)
+
+                                &lt;!-- Skew --&gt;
+                                skew-x-12, skew-y-12
+
+                                &lt;!-- Transform Origin --&gt;
+                                origin-center, origin-top, origin-bottom
+                            </div>
+                            <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-6 bg-gray-100 p-6 rounded-lg">
+                                <div class="bg-blue-500 text-white p-4 rounded hover:scale-110 transition transform">
+                                    Hover: Scale
+                                </div>
+                                <div class="bg-green-500 text-white p-4 rounded hover:rotate-12 transition transform">
+                                    Hover: Rotate
+                                </div>
+                                <div
+                                    class="bg-purple-500 text-white p-4 rounded hover:translate-y-2 transition transform">
+                                    Hover: Move
+                                </div>
+                                <div class="bg-pink-500 text-white p-4 rounded hover:skew-y-3 transition transform">
+                                    Hover: Skew
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('filters')"
+                        class="w-full text-left bg-gradient-to-r from-pink-500 to-rose-500 text-white p-4 rounded-lg font-bold text-xl">
+                        🎨 Filters
+                    </button>
+                    <div id="filters" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> Filters are like Instagram filters - make things blurry,
+                                    bright, or change colors! 📸✨</p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Blur --&gt;
+                                blur-none, blur-sm, blur, blur-lg, blur-xl
+
+                                &lt;!-- Brightness --&gt;
+                                brightness-0, brightness-50, brightness-100, brightness-150
+
+                                &lt;!-- Contrast --&gt;
+                                contrast-0, contrast-50, contrast-100, contrast-150
+
+                                &lt;!-- Grayscale --&gt;
+                                grayscale-0, grayscale (100%)
+
+                                &lt;!-- Sepia --&gt;
+                                sepia-0, sepia (100%)
+
+                                &lt;!-- Saturate --&gt;
+                                saturate-0, saturate-50, saturate-100, saturate-150
+                            </div>
+                            <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
+                                <div
+                                    class="bg-gradient-to-br from-purple-400 to-pink-400 p-8 rounded-lg text-white text-center">
+                                    Normal
+                                </div>
+                                <div
+                                    class="bg-gradient-to-br from-purple-400 to-pink-400 p-8 rounded-lg text-white text-center blur-sm">
+                                    blur-sm
+                                </div>
+                                <div
+                                    class="bg-gradient-to-br from-purple-400 to-pink-400 p-8 rounded-lg text-white text-center grayscale">
+                                    grayscale
+                                </div>
+                                <div
+                                    class="bg-gradient-to-br from-purple-400 to-pink-400 p-8 rounded-lg text-white text-center brightness-150">
+                                    brightness-150
+                                </div>
+                                <div
+                                    class="bg-gradient-to-br from-purple-400 to-pink-400 p-8 rounded-lg text-white text-center sepia">
+                                    sepia
+                                </div>
+                                <div
+                                    class="bg-gradient-to-br from-purple-400 to-pink-400 p-8 rounded-lg text-white text-center contrast-150">
+                                    contrast-150
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Tab -->
+        <div id="advanced" class="tab-content">
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-6">
+                <h2 class="text-3xl font-bold text-purple-600 mb-6">🚀 Advanced Topics</h2>
+
+                <!-- Interactivity -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('interactivity')"
+                        class="w-full text-left bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-4 rounded-lg font-bold text-xl">
+                        🖱️ Interactivity
+                    </button>
+                    <div id="interactivity" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> Interactivity makes things respond when you click, hover, or
+                                    focus on them! 🖱️✨</p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Cursor --&gt;
+                                cursor-pointer, cursor-wait, cursor-not-allowed
+
+                                &lt;!-- User Select --&gt;
+                                select-none, select-text, select-all
+
+                                &lt;!-- Pointer Events --&gt;
+                                pointer-events-none, pointer-events-auto
+
+                                &lt;!-- Resize --&gt;
+                                resize-none, resize, resize-x, resize-y
+
+                                &lt;!-- Scroll Behavior --&gt;
+                                scroll-smooth, scroll-auto
+                            </div>
+                            <div class="mt-4 space-y-2">
+                                <button
+                                    class="bg-blue-500 text-white px-6 py-3 rounded-lg cursor-pointer hover:bg-blue-700">
+                                    cursor-pointer
+                                </button>
+                                <button class="bg-gray-400 text-white px-6 py-3 rounded-lg cursor-not-allowed">
+                                    cursor-not-allowed
+                                </button>
+                                <div class="bg-purple-100 p-4 rounded select-none">
+                                    Try to select this text (select-none)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tables -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('tables')"
+                        class="w-full text-left bg-gradient-to-r from-green-500 to-teal-500 text-white p-4 rounded-lg font-bold text-xl">
+                        📊 Tables
+                    </button>
+                    <div id="tables" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> Tables organize information in rows and columns, like a
+                                    spreadsheet! 📋</p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Table Layout --&gt;
+                                table-auto - Auto width
+                                table-fixed - Fixed width
+
+                                &lt;!-- Border Collapse --&gt;
+                                border-collapse, border-separate
+                            </div>
+                            <div class="mt-4 overflow-x-auto">
+                                <table class="w-full border-collapse border border-gray-300">
+                                    <thead class="bg-purple-500 text-white">
+                                        <tr>
+                                            <th class="border border-gray-300 p-3">Name</th>
+                                            <th class="border border-gray-300 p-3">Role</th>
+                                            <th class="border border-gray-300 p-3">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="hover:bg-gray-100">
+                                            <td class="border border-gray-300 p-3">John Doe</td>
+                                            <td class="border border-gray-300 p-3">Developer</td>
+                                            <td class="border border-gray-300 p-3">
+                                                <span
+                                                    class="bg-green-200 text-green-800 px-2 py-1 rounded">Active</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-100">
+                                            <td class="border border-gray-300 p-3">Jane Smith</td>
+                                            <td class="border border-gray-300 p-3">Designer</td>
+                                            <td class="border border-gray-300 p-3">
+                                                <span
+                                                    class="bg-green-200 text-green-800 px-2 py-1 rounded">Active</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SVG -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('svg')"
+                        class="w-full text-left bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-4 rounded-lg font-bold text-xl">
+                        🎨 SVG Styling
+                    </button>
+                    <div id="svg" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> SVG utilities help you style vector graphics and icons! 🎨
+                                </p>
+                            </div>
+                            <div class="code-block">
+                                &lt;!-- Fill --&gt;
+                                fill-current, fill-blue-500
+
+                                &lt;!-- Stroke --&gt;
+                                stroke-current, stroke-blue-500
+                                stroke-1, stroke-2 (width)
+                            </div>
+                            <div class="mt-4 flex gap-4">
+                                <svg class="w-16 h-16 fill-current text-blue-500" viewBox="0 0 24 24">
+                                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
+                                </svg>
+                                <svg class="w-16 h-16 fill-current text-green-500" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                                </svg>
+                                <svg class="w-16 h-16 fill-current text-purple-500" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Configuration -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('config')"
+                        class="w-full text-left bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-4 rounded-lg font-bold text-xl">
+                        ⚙️ Custom Configuration
+                    </button>
+                    <div id="config" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p><strong>Simple:</strong> You can customize Tailwind to add your own colors, sizes,
+                                    and styles! 🎨</p>
+                            </div>
+                            <div class="code-block">
+                                // tailwind.config.js
+                                module.exports = {
+                                theme: {
+                                extend: {
+                                colors: {
+                                'brand-blue': '#1DA1F2',
+                                'brand-purple': '#7C3AED',
+                                },
+                                spacing: {
+                                '128': '32rem',
+                                '144': '36rem',
+                                },
+                                fontFamily: {
+                                'custom': ['Inter', 'sans-serif'],
+                                },
+                                borderRadius: {
+                                '4xl': '2rem',
+                                }
+                                }
+                                },
+                                plugins: [
+                                require('@tailwindcss/forms'),
+                                require('@tailwindcss/typography'),
+                                ]
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Framework Integration -->
+                <div class="mb-8">
+                    <button onclick="toggleAccordion('frameworks')"
+                        class="w-full text-left bg-gradient-to-r from-pink-500 to-rose-500 text-white p-4 rounded-lg font-bold text-xl">
+                        🔧 Framework Integration
+                    </button>
+                    <div id="frameworks" class="accordion-content bg-gray-50 rounded-b-lg">
+                        <div class="p-6 space-y-6">
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold text-lg mb-2">React Integration</h4>
+                                <div class="code-block">
+                                    // Install
+                                    npm install -D tailwindcss postcss autoprefixer
+                                    npx tailwindcss init -p
+
+                                    // Component Example
+                                    function Button({ children }) {
+                                    return (
+                                    &lt;button className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2
+                                    rounded"&gt;
+                                    {children}
+                                    &lt;/button&gt;
+                                    )
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold text-lg mb-2">Next.js Integration</h4>
+                                <div class="code-block">
+                                    // Create Next.js app with Tailwind
+                                    npx create-next-app@latest my-app --tailwind
+
+                                    // Or add to existing project
+                                    npm install -D tailwindcss postcss autoprefixer
+                                    npx tailwindcss init -p
+
+                                    // tailwind.config.js
+                                    module.exports = {
+                                    content: [
+                                    './pages/**/*.{js,ts,jsx,tsx}',
+                                    './components/**/*.{js,ts,jsx,tsx}',
+                                    ],
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold text-lg mb-2">Vue Integration</h4>
+                                <div class="code-block">
+                                    // Install
+                                    npm install -D tailwindcss postcss autoprefixer
+                                    npx tailwindcss init -p
+
+                                    // Component Example
+                                    &lt;template&gt;
+                                    &lt;button class="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded"&gt;
+                                    Click Me
+                                    &lt;/button&gt;
+                                    &lt;/template&gt;
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interview Q&A Tab -->
+        <div id="interview" class="tab-content">
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-6">
+                <h2 class="text-3xl font-bold text-purple-600 mb-6">💼 Interview Questions & Answers (Hinglish)</h2>
+
+                <div class="space-y-6">
+                    <!-- Question 1 -->
+                    <div class="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-lg border-l-4 border-blue-500">
+                        <h3 class="font-bold text-xl mb-3 text-blue-700">Q1: Tailwind CSS kya hai aur iska use kyun
+                            karte hain?</h3>
+                        <p class="text-gray-700"><strong>Answer:</strong> Tailwind CSS ek utility-first CSS framework
+                            hai jo pre-built classes provide karta hai. Iska use isliye karte hain kyunki:</p>
+                        <ul class="list-disc ml-6 mt-2 space-y-1 text-gray-700">
+                            <li>Development speed bahut fast ho jati hai</li>
+                            <li>Custom CSS likhne ki zarurat nahi padti</li>
+                            <li>Design consistency automatically maintain hoti hai</li>
+                            <li>Bundle size PurgeCSS se bahut chota ho jata hai</li>
+                            <li>Responsive design banana bahut easy hai</li>
+                        </ul>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-lg border-l-4 border-purple-500">
+                        <h3 class="font-bold text-xl mb-3 text-purple-700">Q2: Tailwind aur Bootstrap mein kya
+                            difference hai?</h3>
+                        <p class="text-gray-700"><strong>Answer:</strong></p>
+                        <ul class="list-disc ml-6 mt-2 space-y-1 text-gray-700">
+                            <li><strong>Tailwind:</strong> Utility-first approach hai, highly customizable hai, aur file
+                                size chota hai</li>
+                            <li><strong>Bootstrap:</strong> Component-based hai, pre-built components milte hain, lekin
+                                customization limited hai</li>
+                            <li>Tailwind mein aap apna design bana sakte ho, Bootstrap mein sab sites similar dikhti
+                                hain</li>
+                            <li>Tailwind mein JavaScript ki zarurat nahi, Bootstrap mein chahiye</li>
+                        </ul>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="bg-gradient-to-r from-green-50 to-teal-50 p-6 rounded-lg border-l-4 border-green-500">
+                        <h3 class="font-bold text-xl mb-3 text-green-700">Q3: Responsive design Tailwind mein kaise
+                            banate hain?</h3>
+                        <p class="text-gray-700"><strong>Answer:</strong> Tailwind mein mobile-first approach use hota
+                            hai. Breakpoint prefixes use karte hain:</p>
+                        <div class="code-block mt-2">
+                            &lt;div class="text-sm md:text-lg lg:text-2xl"&gt;
+                            Mobile pe small, tablet pe large, desktop pe extra large
+                            &lt;/div&gt;
+
+                            Breakpoints:
+                            sm: 640px - Small devices
+                            md: 768px - Medium devices
+                            lg: 1024px - Large devices
+                            xl: 1280px - Extra large
+                        </div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div
+                        class="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-lg border-l-4 border-yellow-500">
+                        <h3 class="font-bold text-xl mb-3 text-yellow-700">Q4: PurgeCSS kya hai aur kyun important hai?
+                        </h3>
+                        <p class="text-gray-700"><strong>Answer:</strong> PurgeCSS ek tool hai jo unused CSS classes ko
+                            remove kar deta hai. Yeh important hai kyunki:</p>
+                        <ul class="list-disc ml-6 mt-2 space-y-1 text-gray-700">
+                            <li>Production build ka size bahut chota ho jata hai (3MB se 10KB tak!)</li>
+                            <li>Website ki loading speed fast ho jati hai</li>
+                            <li>Tailwind automatically PurgeCSS use karta hai production build mein</li>
+                            <li>Content paths config mein specify karne padte hain</li>
+                        </ul>
+                    </div>
+
+                    <!-- Question 5 -->
+                    <div class="bg-gradient-to-r from-pink-50 to-rose-50 p-6 rounded-lg border-l-4 border-pink-500">
+                        <h3 class="font-bold text-xl mb-3 text-pink-700">Q5: Flexbox aur Grid mein kya difference hai?
+                        </h3>
+                        <p class="text-gray-700"><strong>Answer:</strong></p>
+                        <ul class="list-disc ml-6 mt-2 space-y-1 text-gray-700">
+                            <li><strong>Flexbox:</strong> One-dimensional layout hai (row ya column). Items ko align aur
+                                distribute karne ke liye best hai</li>
+                            <li><strong>Grid:</strong> Two-dimensional layout hai (rows aur columns dono). Complex
+                                layouts ke liye perfect hai</li>
+                            <li>Flexbox: Navigation bars, card layouts ke liye</li>
+                            <li>Grid: Page layouts, image galleries ke liye</li>
+                        </ul>
+                    </div>
+
+                    <!-- Question 6 -->
+                    <div
+                        class="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg border-l-4 border-indigo-500">
+                        <h3 class="font-bold text-xl mb-3 text-indigo-700">Q6: Custom colors Tailwind mein kaise add
+                            karte hain?</h3>
+                        <p class="text-gray-700"><strong>Answer:</strong> tailwind.config.js file mein extend karke:</p>
+                        <div class="code-block mt-2">
+                            module.exports = {
+                            theme: {
+                            extend: {
+                            colors: {
+                            'brand-blue': '#1DA1F2',
+                            'custom-purple': {
+                            100: '#F3E8FF',
+                            500: '#A855F7',
+                            900: '#581C87',
+                            }
+                            }
+                            }
+                            }
+                            }
+
+                            // Use karne ka tarika
+                            &lt;div class="bg-brand-blue text-custom-purple-500"&gt;
+                        </div>
+                    </div>
+
+                    <!-- Question 7 -->
+                    <div class="bg-gradient-to-r from-cyan-50 to-blue-50 p-6 rounded-lg border-l-4 border-cyan-500">
+                        <h3 class="font-bold text-xl mb-3 text-cyan-700">Q7: Dark mode Tailwind mein kaise implement
+                            karte hain?</h3>
+                        <p class="text-gray-700"><strong>Answer:</strong></p>
+                        <div class="code-block mt-2">
+                            // tailwind.config.js mein enable karo
+                            module.exports = {
+                            darkMode: 'class', // ya 'media'
+                            }
+
+                            // HTML mein use karo
+                            &lt;div class="bg-white dark:bg-gray-800 text-black dark:text-white"&gt;
+                            Content adapts to dark mode!
+                            &lt;/div&gt;
+
+                            // JavaScript se toggle karo
+                            document.documentElement.classList.toggle('dark')
+                        </div>
+                    </div>
+
+                    <!-- Question 8 -->
+                    <div
+                        class="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-lg border-l-4 border-green-500">
+                        <h3 class="font-bold text-xl mb-3 text-green-700">Q8: State variants (hover, focus) kaise use
+                            karte hain?</h3>
+                        <p class="text-gray-700"><strong>Answer:</strong> Prefix lagake use karte hain:</p>
+                        <div class="code-block mt-2">
+                            &lt;button class="bg-blue-500 hover:bg-blue-700 focus:ring-4 active:scale-95"&gt;
+                            Interactive Button
+                            &lt;/button&gt;
+
+                            Common variants:
+                            - hover: Mouse hover pe
+                            - focus: Keyboard focus pe
+                            - active: Click karte waqt
+                            - disabled: Disabled state mein
+                            - group-hover: Parent hover pe
+                            - first: Pehla child
+                            - last: Aakhri child
+                        </div>
+                    </div>
+
+                    <!-- Question 9 -->
+                    <div class="bg-gradient-to-r from-orange-50 to-red-50 p-6 rounded-lg border-l-4 border-orange-500">
+                        <h3 class="font-bold text-xl mb-3 text-orange-700">Q9: Tailwind ko React/Next.js mein kaise
+                            integrate karte hain?</h3>
+                        <p class="text-gray-700"><strong>Answer:</strong></p>
+                        <div class="code-block mt-2">
+                            // Next.js ke saath (easiest)
+                            npx create-next-app@latest my-app --tailwind
+
+                            // Existing React project mein
+                            npm install -D tailwindcss postcss autoprefixer
+                            npx tailwindcss init -p
+
+                            // tailwind.config.js
+                            module.exports = {
+                            content: ['./src/**/*.{js,jsx,ts,tsx}'],
+                            }
+
+                            // index.css mein
+                            @tailwind base;
+                            @tailwind components;
+                            @tailwind utilities;
+                        </div>
+                    </div>
+
+                    <!-- Question 10 -->
+                    <div
+                        class="bg-gradient-to-r from-purple-50 to-indigo-50 p-6 rounded-lg border-l-4 border-purple-500">
+                        <h3 class="font-bold text-xl mb-3 text-purple-700">Q10: @apply directive kya hai aur kab use
+                            karte hain?</h3>
+                        <p class="text-gray-700"><strong>Answer:</strong> @apply directive se aap Tailwind classes ko
+                            custom CSS mein use kar sakte ho:</p>
+                        <div class="code-block mt-2">
+                            /* styles.css */
+                            .btn-primary {
+                            @apply bg-blue-500 text-white px-4 py-2 rounded-lg;
+                            @apply hover:bg-blue-700 transition duration-300;
+                            }
+
+                            /* HTML mein */
+                            &lt;button class="btn-primary"&gt;Click Me&lt;/button&gt;
+
+                            Use cases:
+                            - Reusable components banane ke liye
+                            - Third-party libraries ko style karne ke liye
+                            - Complex patterns ko simplify karne ke liye
+                        </div>
+                    </div>
+
+                    <!-- Question 11 -->
+                    <div class="bg-gradient-to-r from-pink-50 to-purple-50 p-6 rounded-lg border-l-4 border-pink-500">
+                        <h3 class="font-bold text-xl mb-3 text-pink-700">Q11: Tailwind ke performance optimization tips
+                            kya hain?</h3>
+                        <p class="text-gray-700"><strong>Answer:</strong></p>
+                        <ul class="list-disc ml-6 mt-2 space-y-1 text-gray-700">
+                            <li><strong>PurgeCSS enable karo:</strong> Unused classes remove ho jayengi</li>
+                            <li><strong>JIT mode use karo:</strong> On-demand CSS generation</li>
+                            <li><strong>CDN avoid karo production mein:</strong> Build process use karo</li>
+                            <li><strong>Content paths properly configure karo:</strong> Sahi files scan ho</li>
+                            <li><strong>Custom utilities minimize karo:</strong> Built-in classes prefer karo</li>
+                        </ul>
+                    </div>
+
+                    <!-- Question 12 -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border-l-4 border-blue-500">
+                        <h3 class="font-bold text-xl mb-3 text-blue-700">Q12: Tailwind plugins kya hote hain aur popular
+                            plugins konse hain?</h3>
+                        <p class="text-gray-700"><strong>Answer:</strong> Plugins se aap Tailwind ki functionality
+                            extend kar sakte ho:</p>
+                        <div class="code-block mt-2">
+                            // Popular Official Plugins
+                            npm install @tailwindcss/forms
+                            npm install @tailwindcss/typography
+                            npm install @tailwindcss/aspect-ratio
+                            npm install @tailwindcss/line-clamp
+
+                            // tailwind.config.js
+                            module.exports = {
+                            plugins: [
+                            require('@tailwindcss/forms'),
+                            require('@tailwindcss/typography'),
+                            ]
+                            }
+                        </div>
+                        <p class="mt-2 text-gray-700">Forms plugin se form elements better dikhte hain, Typography
+                            plugin se prose content style hota hai.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="text-2xl font-bold mb-2">🎉 Congratulations!</h3>
+            <p class="text-lg opacity-90">You've completed the Tailwind CSS Study Guide!</p>
+            <p class="mt-4 opacity-75">Keep practicing and building amazing projects! 🚀</p>
+            <div class="mt-6 flex justify-center gap-4 flex-wrap">
+                <a href="https://tailwindcss.com/docs" target="_blank"
+                    class="bg-white text-purple-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">
+                    Official Docs
+                </a>
+                <a href="https://tailwindui.com" target="_blank"
+                    class="bg-white text-purple-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">
+                    Tailwind UI
+                </a>
+                <a href="https://play.tailwindcss.com" target="_blank"
+                    class="bg-white text-purple-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">
+                    Playground
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab Navigation
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Update button styles
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-purple-600', 'text-white');
+                btn.classList.add('bg-gray-200');
+            });
+            event.target.classList.remove('bg-gray-200');
+            event.target.classList.add('bg-purple-600', 'text-white');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Accordion Toggle
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            content.classList.toggle('active');
+        }
+
+        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.querySelectorAll('.card-hover').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s, transform 0.5s';
+            observer.observe(card);
+        });
+    </script>
+</body>
+
+</html>
