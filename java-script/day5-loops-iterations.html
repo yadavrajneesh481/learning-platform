@@ -3,885 +3,1578 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Day 5: Loops & Iterations</title>
+    <title>JavaScript Loops & Iterations - Interactive Learning</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
             background: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
         }
+
         header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 2px solid #007bff;
-        }
-        h1, h2, h3 {
-            color: #007bff;
-        }
-        section {
-            margin: 20px 0;
-            padding: 15px;
-            border-left: 4px solid #007bff;
-            background: #f9f9f9;
-        }
-        .demo {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin: 10px 0;
-            background: white;
-        }
-        button {
-            background: #007bff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin: 5px;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        .loop-visualizer {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-            gap: 5px;
-            margin: 15px 0;
-            max-width: 500px;
-        }
-        .loop-item {
-            padding: 10px;
-            background: #e9ecef;
-            border: 2px solid #dee2e6;
-            border-radius: 5px;
+            padding: 30px;
             text-align: center;
-            transition: all 0.3s;
         }
-        .loop-item.active {
-            background: #007bff;
-            color: white;
-            transform: scale(1.1);
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            animation: fadeInDown 1s;
         }
-        .multiplication-table {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 15px 0;
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
         }
-        .table-card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .pattern-display {
-            font-family: monospace;
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
             background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            white-space: pre;
+            border-bottom: 3px solid #667eea;
             overflow-x: auto;
         }
-        .home-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 15px;
-            background: #28a745;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
+
+        .nav-tab {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
         }
-        .home-link:hover {
-            background: #218838;
-        }
-        .interview-section {
+
+        .nav-tab:hover {
             background: #e9ecef;
-            padding: 20px;
-            margin-top: 30px;
+            color: #667eea;
         }
-        .question {
-            margin-bottom: 15px;
-            padding: 10px;
+
+        .nav-tab.active {
             background: white;
-            border-radius: 5px;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
         }
-        input, select {
-            padding: 8px;
-            margin: 5px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
+
+        .content {
+            padding: 30px;
         }
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: #e9ecef;
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+            font-size: 1.4em;
+        }
+
+        .analogy {
+            background: #fff3cd;
+            padding: 15px;
             border-radius: 10px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-        .progress-fill {
-            height: 100%;
-            background: #007bff;
-            width: 0%;
-            transition: width 0.3s;
-        }
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            .multiplication-table {
-                grid-template-columns: 1fr;
-            }
-        }
-    
-
-    
-        /* Code Block Formatting - Universal Styles */
-        pre {
-            background: #282c34 !important;
-            color: #abb2bf !important;
-            padding: 20px !important;
-            border-radius: 8px !important;
-            overflow-x: auto !important;
-            overflow-y: auto !important;
-            margin: 15px 0 !important;
-            font-family: 'Courier New', 'Consolas', 'Monaco', monospace !important;
-            font-size: 14px !important;
-            line-height: 1.6 !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
-            white-space: pre !important;
-            word-wrap: normal !important;
-            tab-size: 4 !important;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
         }
 
-        code {
-            font-family: 'Courier New', 'Consolas', 'Monaco', monospace !important;
-            font-size: 14px;
-            color: #e06c75;
-            background: rgba(0, 0, 0, 0.1);
-            padding: 2px 6px;
-            border-radius: 3px;
+        .analogy::before {
+            content: "💡 ";
+            font-size: 1.5em;
         }
 
-        pre code {
-            background: transparent !important;
-            padding: 0 !important;
-            color: #abb2bf !important;
-            display: block !important;
-            white-space: pre !important;
-            word-wrap: normal !important;
-            overflow-wrap: normal !important;
-        }
-
-        /* Syntax Highlighting Classes */
-        .syntax-keyword { color: #c678dd; font-weight: bold; }
-        .syntax-tag { color: #e06c75; }
-        .syntax-attr { color: #d19a66; }
-        .syntax-string { color: #98c379; }
-        .syntax-comment { color: #5c6370; font-style: italic; }
-        .syntax-number { color: #d19a66; }
-        .syntax-function { color: #61afef; }
-        .syntax-operator { color: #56b6c2; }
-        .syntax-variable { color: #e5c07b; }
-
-        /* Code Block Container */
-        .code-block {
-            background: #282c34;
-            border-radius: 8px;
-            margin: 20px 0;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .code-block pre {
-            margin: 0;
-            border-radius: 0;
-            box-shadow: none;
-        }
-
-        /* Code Example Container */
-        .code-example {
+        .code-container {
             background: #282c34;
             color: #abb2bf;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             margin: 15px 0;
-            overflow-x: auto;
             position: relative;
+            overflow-x: auto;
         }
 
-        .code-example pre {
+        .code-container pre {
             margin: 0;
-            background: transparent;
-            padding: 0;
-            box-shadow: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
         }
 
-        /* Demo Box Code */
-        .demo-box pre {
-            background: #1e2127;
-            padding: 15px;
-            border-radius: 6px;
+        .code-container code {
+            color: #61dafb;
         }
 
-        /* Inline Code */
-        p code, li code, td code, th code {
-            background: rgba(0, 0, 0, 0.1);
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 0.9em;
-            color: #e06c75;
+        .run-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: all 0.3s;
         }
 
-        /* Dark Mode Support */
-        body.dark-mode pre {
+        .run-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .output {
             background: #1e1e1e;
-            border-color: rgba(255, 255, 255, 0.2);
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            min-height: 50px;
+            display: none;
         }
 
-        body.dark-mode code {
-            background: rgba(255, 255, 255, 0.1);
+        .output.show {
+            display: block;
+            animation: slideDown 0.3s;
         }
 
-        /* Scrollbar Styling for Code Blocks */
-        pre::-webkit-scrollbar {
-            height: 8px;
+        .toggle-lang {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            transition: all 0.3s;
         }
 
-        pre::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 4px;
+        .toggle-lang:hover {
+            background: #138496;
         }
 
-        pre::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
+        .explanation {
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #667eea;
         }
 
-        pre::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
+        .hinglish {
+            display: none;
         }
 
+        .collapsible {
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            border: none;
+            text-align: left;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 10px;
+            margin: 10px 0;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .collapsible:hover {
+            background: #5568d3;
+        }
+
+        .collapsible::after {
+            content: ' ▼';
+            float: right;
+        }
+
+        .collapsible.active::after {
+            content: ' ▲';
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: white;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .collapsible-content.show {
+            max-height: 2000px;
+            padding: 20px;
+            border: 2px solid #667eea;
+            border-top: none;
+        }
+
+        .interview-question {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #007bff;
+        }
+
+        .interview-question h4 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .definition {
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #28a745;
+        }
+
+        .definition strong {
+            color: #155724;
+        }
+
+        .interactive-demo {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 3px solid #667eea;
+        }
+
+        .demo-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .demo-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .demo-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .demo-output {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            min-height: 50px;
+            font-family: monospace;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .nav-tab {
+                min-width: 120px;
+                padding: 12px 15px;
+                font-size: 0.9em;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .section {
+                padding: 15px;
+            }
+
+            .section h2 {
+                font-size: 1.4em;
+            }
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .emoji {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
-        
         <header>
-            <h1>Day 5: Loops & Iterations</h1>
-            <p><em>for, while, do-while loops, for...of, for...in, break, continue statements</em></p>
+            <h1>🔄 JavaScript Loops & Iterations</h1>
+            <p>Master Loops with Interactive Examples & Interview Prep</p>
         </header>
 
-        <section id="for-loop">
-            <h2>For Loop - Complete Deep Dive</h2>
-            <p>For loop JavaScript mein sabse commonly used iteration structure hai. Yeh tab use karte hain jab humein pata ho ki exactly kitni baar loop chalana hai. For loop mein teen parts hote hain: initialization, condition, aur increment/decrement.</p>
-            
-            <h3>For Loop Anatomy aur Working:</h3>
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;">
-                <h4>🔄 Loop Structure Breakdown:</h4>
-                <div style="background: #e7f3ff; padding: 10px; border-radius: 5px; font-family: monospace; margin: 10px 0;">
-for (initialization; condition; increment/decrement) {<br>
-&nbsp;&nbsp;// Loop body - code to execute<br>
-}<br><br>
-// Example:<br>
-for (let i = 0; i < 5; i++) {<br>
-&nbsp;&nbsp;console.log("Iteration:", i);<br>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="openTab('basics')">Loop Basics</button>
+            <button class="nav-tab" onclick="openTab('array-object')">Array & Object</button>
+            <button class="nav-tab" onclick="openTab('control')">Loop Control</button>
+            <button class="nav-tab" onclick="openTab('practical')">Practical Examples</button>
+            <button class="nav-tab" onclick="openTab('interview')">Interview Q&A</button>
+        </div>
+
+        <div class="content">
+            <!-- BASICS TAB -->
+            <div id="basics" class="tab-content active">
+                <div class="section">
+                    <h2><span class="emoji">📚</span>What are Loops?</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p><strong>Loops</strong> are programming structures that repeat a block of code multiple times until a specific condition is met. They help us avoid writing the same code repeatedly.</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p><strong>Loops</strong> ek programming structure hai jo code ko baar-baar repeat karta hai jab tak ki koi specific condition meet na ho jaye. Ye humein same code ko baar-baar likhne se bachata hai.</p>
+                    </div>
+
+                    <div class="analogy">
+                        <strong>Analogy:</strong> Imagine you're brushing your teeth. You move the brush up and down repeatedly until your teeth are clean. That's exactly what a loop does - it repeats an action until the job is done!
+                    </div>
+
+                    <div class="definition">
+                        <strong>Key Definition:</strong> A <span class="highlight">loop</span> is a control structure that executes a block of code repeatedly based on a given boolean condition.
+                    </div>
+                </div>
+
+                <!-- FOR LOOP -->
+                <div class="section">
+                    <h2><span class="emoji">🔁</span>1. For Loop</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p>The <strong>for loop</strong> is used when you know exactly how many times you want to repeat something. It has three parts: initialization, condition, and increment/decrement.</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p><strong>For loop</strong> tab use hota hai jab aapko pata ho ki kitni baar repeat karna hai. Isme teen parts hote hain: initialization (shuruat), condition (shart), aur increment/decrement (badhana/ghatana).</p>
+                    </div>
+
+                    <div class="analogy">
+                        <strong>Analogy:</strong> Like climbing stairs - you start at step 1, check if you've reached the top (condition), and move to the next step (increment) until you reach your destination!
+                    </div>
+
+                    <h3>Syntax:</h3>
+                    <div class="code-container">
+                        <pre><code>for (initialization; condition; increment/decrement) {
+    // code to be executed
+}</code></pre>
+                    </div>
+
+                    <h3>Example: Print numbers 1 to 5</h3>
+                    <div class="code-container">
+                        <pre><code id="code1">for (let i = 1; i <= 5; i++) {
+    console.log("Number: " + i);
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code1', 'output1')">▶ Run Code</button>
+                        <div id="output1" class="output"></div>
+                    </div>
+
+                    <h3>Example: Sum of first 10 numbers</h3>
+                    <div class="code-container">
+                        <pre><code id="code2">let sum = 0;
+for (let i = 1; i <= 10; i++) {
+    sum += i;
 }
+console.log("Sum of 1 to 10: " + sum);</code></pre>
+                        <button class="run-btn" onclick="runCode('code2', 'output2')">▶ Run Code</button>
+                        <div id="output2" class="output"></div>
+                    </div>
                 </div>
-                <ul>
-                    <li><strong>Initialization:</strong> Loop variable set karna (let i = 0)</li>
-                    <li><strong>Condition:</strong> Kab tak loop chalana hai (i < 5)</li>
-                    <li><strong>Increment:</strong> Har iteration ke baad variable change (i++)</li>
-                    <li><strong>Execution Order:</strong> Init → Condition → Body → Increment → Condition...</li>
-                </ul>
+
+                <!-- WHILE LOOP -->
+                <div class="section">
+                    <h2><span class="emoji">🔄</span>2. While Loop</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p>The <strong>while loop</strong> repeats code as long as a condition is true. Use it when you don't know exactly how many times to loop.</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p><strong>While loop</strong> tab tak code repeat karta hai jab tak condition true hai. Iska use tab karo jab aapko exact count nahi pata.</p>
+                    </div>
+
+                    <div class="analogy">
+                        <strong>Analogy:</strong> Like filling a bucket with water - you keep pouring (loop) while the bucket is not full (condition). You don't count how many times you pour, you just check if it's full!
+                    </div>
+
+                    <h3>Syntax:</h3>
+                    <div class="code-container">
+                        <pre><code>while (condition) {
+    // code to be executed
+    // don't forget to update the condition!
+}</code></pre>
+                    </div>
+
+                    <h3>Example: Count from 1 to 5</h3>
+                    <div class="code-container">
+                        <pre><code id="code3">let count = 1;
+while (count <= 5) {
+    console.log("Count: " + count);
+    count++;
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code3', 'output3')">▶ Run Code</button>
+                        <div id="output3" class="output"></div>
+                    </div>
+
+                    <div class="definition">
+                        <strong>Important:</strong> Always update the loop variable inside a while loop, otherwise you'll create an <span class="highlight">infinite loop</span> (loop that never ends)!
+                    </div>
+                </div>
+
+                <!-- DO-WHILE LOOP -->
+                <div class="section">
+                    <h2><span class="emoji">🔃</span>3. Do...While Loop</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p>The <strong>do...while loop</strong> is similar to while loop, but it executes the code at least once before checking the condition.</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p><strong>Do...while loop</strong> while loop jaisa hai, lekin ye code ko kam se kam ek baar zaroor execute karta hai, phir condition check karta hai.</p>
+                    </div>
+
+                    <div class="analogy">
+                        <strong>Analogy:</strong> Like trying a new dish - you taste it first (do), then decide if you want more (while condition). You always take at least one bite!
+                    </div>
+
+                    <h3>Syntax:</h3>
+                    <div class="code-container">
+                        <pre><code>do {
+    // code to be executed
+} while (condition);</code></pre>
+                    </div>
+
+                    <h3>Example: Execute at least once</h3>
+                    <div class="code-container">
+                        <pre><code id="code4">let num = 10;
+do {
+    console.log("Number: " + num);
+    num++;
+} while (num < 5);
+console.log("Loop ended. Final num: " + num);</code></pre>
+                        <button class="run-btn" onclick="runCode('code4', 'output4')">▶ Run Code</button>
+                        <div id="output4" class="output"></div>
+                    </div>
+
+                    <div class="definition">
+                        <strong>Key Difference:</strong> <span class="highlight">while</span> checks condition first, then executes. <span class="highlight">do...while</span> executes first, then checks condition.
+                    </div>
+                </div>
             </div>
-            
-            <h3>For Loop Variations aur Use Cases:</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 15px 0;">
-                <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; border: 1px solid #007bff;">
-                    <h4>🔢 Standard For Loop</h4>
-                    <div style="background: #f8f9fa; padding: 8px; border-radius: 3px; font-family: monospace; font-size: 12px;">
-for (let i = 0; i < 10; i++) {<br>
-&nbsp;&nbsp;console.log(i);<br>
+
+            <!-- ARRAY & OBJECT TAB -->
+            <div id="array-object" class="tab-content">
+                <div class="section">
+                    <h2><span class="emoji">📦</span>Array Iteration - for...of</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p>The <strong>for...of loop</strong> is used to iterate over iterable objects like arrays, strings, maps, sets, etc. It gives you direct access to the values.</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p><strong>For...of loop</strong> arrays, strings jaise iterable objects ko iterate karne ke liye use hota hai. Ye directly values deta hai.</p>
+                    </div>
+
+                    <div class="analogy">
+                        <strong>Analogy:</strong> Like checking items in your shopping bag one by one - you take out each item (value) directly without counting positions!
+                    </div>
+
+                    <h3>Syntax:</h3>
+                    <div class="code-container">
+                        <pre><code>for (let value of iterable) {
+    // code to be executed
+}</code></pre>
+                    </div>
+
+                    <h3>Example: Iterate through array</h3>
+                    <div class="code-container">
+                        <pre><code id="code5">const fruits = ['Apple', 'Banana', 'Orange', 'Mango'];
+for (let fruit of fruits) {
+    console.log("I love " + fruit);
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code5', 'output5')">▶ Run Code</button>
+                        <div id="output5" class="output"></div>
+                    </div>
+
+                    <h3>Example: Iterate through string</h3>
+                    <div class="code-container">
+                        <pre><code id="code6">const name = "JavaScript";
+for (let char of name) {
+    console.log(char);
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code6', 'output6')">▶ Run Code</button>
+                        <div id="output6" class="output"></div>
+                    </div>
+
+                    <div class="definition">
+                        <strong>Remember:</strong> <span class="highlight">for...of</span> gives you the <strong>values</strong> directly, not the index positions.
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2><span class="emoji">🗂️</span>Object Iteration - for...in</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p>The <strong>for...in loop</strong> is used to iterate over the properties (keys) of an object. It's perfect for objects where you need to access both keys and values.</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p><strong>For...in loop</strong> object ke properties (keys) ko iterate karne ke liye use hota hai. Ye objects ke liye perfect hai jahan keys aur values dono chahiye.</p>
+                    </div>
+
+                    <div class="analogy">
+                        <strong>Analogy:</strong> Like checking a dictionary - you look at each word (key) and then read its meaning (value)!
+                    </div>
+
+                    <h3>Syntax:</h3>
+                    <div class="code-container">
+                        <pre><code>for (let key in object) {
+    // code to be executed
+    // access value using object[key]
+}</code></pre>
+                    </div>
+
+                    <h3>Example: Iterate through object</h3>
+                    <div class="code-container">
+                        <pre><code id="code7">const student = {
+    name: "Rahul",
+    age: 20,
+    course: "JavaScript",
+    grade: "A"
+};
+
+for (let key in student) {
+    console.log(key + ": " + student[key]);
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code7', 'output7')">▶ Run Code</button>
+                        <div id="output7" class="output"></div>
+                    </div>
+
+                    <h3>Example: Array with for...in (not recommended)</h3>
+                    <div class="code-container">
+                        <pre><code id="code8">const colors = ['Red', 'Green', 'Blue'];
+console.log("Using for...in (gives index):");
+for (let index in colors) {
+    console.log(index + ": " + colors[index]);
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code8', 'output8')">▶ Run Code</button>
+                        <div id="output8" class="output"></div>
+                    </div>
+
+                    <div class="definition">
+                        <strong>Important:</strong> Use <span class="highlight">for...in</span> for objects (gives keys), and <span class="highlight">for...of</span> for arrays (gives values).
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2><span class="emoji">🎯</span>Array Methods</h2>
+                    
+                    <h3>forEach() Method</h3>
+                    <div class="code-container">
+                        <pre><code id="code9">const numbers = [1, 2, 3, 4, 5];
+numbers.forEach(function(num, index) {
+    console.log("Index " + index + ": " + num + " x 2 = " + (num * 2));
+});</code></pre>
+                        <button class="run-btn" onclick="runCode('code9', 'output9')">▶ Run Code</button>
+                        <div id="output9" class="output"></div>
+                    </div>
+
+                    <h3>map() Method</h3>
+                    <div class="code-container">
+                        <pre><code id="code10">const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map(num => num * 2);
+console.log("Original: " + numbers);
+console.log("Doubled: " + doubled);</code></pre>
+                        <button class="run-btn" onclick="runCode('code10', 'output10')">▶ Run Code</button>
+                        <div id="output10" class="output"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTROL TAB -->
+            <div id="control" class="tab-content">
+                <div class="section">
+                    <h2><span class="emoji">🛑</span>Loop Control Statements</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p>Loop control statements allow you to change the normal flow of loop execution. They help you exit loops early or skip certain iterations.</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p>Loop control statements se aap loop ke normal flow ko change kar sakte ho. Ye loop ko jaldi exit karne ya kuch iterations skip karne mein help karte hain.</p>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2><span class="emoji">🚪</span>1. Break Statement</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p>The <strong>break</strong> statement immediately exits the loop completely, regardless of the loop condition.</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p><strong>Break</strong> statement loop ko turant exit kar deta hai, chahe loop condition kuch bhi ho.</p>
+                    </div>
+
+                    <div class="analogy">
+                        <strong>Analogy:</strong> Like searching for your keys in a drawer - once you find them (condition met), you stop searching (break) immediately!
+                    </div>
+
+                    <h3>Example: Find first even number greater than 10</h3>
+                    <div class="code-container">
+                        <pre><code id="code11">for (let i = 1; i <= 20; i++) {
+    if (i > 10 && i % 2 === 0) {
+        console.log("Found: " + i);
+        break; // Exit loop immediately
+    }
+    console.log("Checking: " + i);
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code11', 'output11')">▶ Run Code</button>
+                        <div id="output11" class="output"></div>
+                    </div>
+
+                    <h3>Example: Break in nested loop</h3>
+                    <div class="code-container">
+                        <pre><code id="code12">for (let i = 1; i <= 3; i++) {
+    console.log("Outer loop: " + i);
+    for (let j = 1; j <= 3; j++) {
+        if (j === 2) {
+            console.log("  Breaking inner loop at j=" + j);
+            break;
+        }
+        console.log("  Inner loop: " + j);
+    }
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code12', 'output12')">▶ Run Code</button>
+                        <div id="output12" class="output"></div>
+                    </div>
+
+                    <div class="definition">
+                        <strong>Key Point:</strong> <span class="highlight">break</span> only exits the innermost loop it's in, not all nested loops.
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2><span class="emoji">⏭️</span>2. Continue Statement</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p>The <strong>continue</strong> statement skips the current iteration and moves to the next one. The loop doesn't exit, it just skips some code.</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p><strong>Continue</strong> statement current iteration ko skip kar ke next iteration pe chala jata hai. Loop exit nahi hota, bas kuch code skip ho jata hai.</p>
+                    </div>
+
+                    <div class="analogy">
+                        <strong>Analogy:</strong> Like skipping songs on a playlist - you don't stop listening (exit loop), you just skip to the next song (continue)!
+                    </div>
+
+                    <h3>Example: Print only odd numbers</h3>
+                    <div class="code-container">
+                        <pre><code id="code13">for (let i = 1; i <= 10; i++) {
+    if (i % 2 === 0) {
+        continue; // Skip even numbers
+    }
+    console.log("Odd number: " + i);
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code13', 'output13')">▶ Run Code</button>
+                        <div id="output13" class="output"></div>
+                    </div>
+
+                    <h3>Example: Skip multiples of 3</h3>
+                    <div class="code-container">
+                        <pre><code id="code14">for (let i = 1; i <= 15; i++) {
+    if (i % 3 === 0) {
+        console.log("Skipping " + i + " (multiple of 3)");
+        continue;
+    }
+    console.log("Processing: " + i);
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code14', 'output14')">▶ Run Code</button>
+                        <div id="output14" class="output"></div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2><span class="emoji">🏷️</span>3. Labeled Loops</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p><strong>Labeled loops</strong> allow you to break or continue outer loops from inside nested loops by giving loops a name (label).</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p><strong>Labeled loops</strong> se aap nested loops ke andar se outer loops ko break ya continue kar sakte ho, loops ko ek naam (label) dekar.</p>
+                    </div>
+
+                    <div class="analogy">
+                        <strong>Analogy:</strong> Like having multiple floors in a building - you can use an elevator (label) to jump directly to the ground floor (outer loop) instead of taking stairs one by one!
+                    </div>
+
+                    <h3>Example: Break outer loop from inner loop</h3>
+                    <div class="code-container">
+                        <pre><code id="code15">outerLoop: for (let i = 1; i <= 3; i++) {
+    console.log("Outer: " + i);
+    for (let j = 1; j <= 3; j++) {
+        if (i === 2 && j === 2) {
+            console.log("  Breaking outer loop!");
+            break outerLoop; // Breaks the outer loop
+        }
+        console.log("  Inner: " + j);
+    }
 }
+console.log("Loop ended");</code></pre>
+                        <button class="run-btn" onclick="runCode('code15', 'output15')">▶ Run Code</button>
+                        <div id="output15" class="output"></div>
                     </div>
-                    <p><strong>Use:</strong> Fixed iterations, array indexing</p>
+
+                    <h3>Example: Continue outer loop</h3>
+                    <div class="code-container">
+                        <pre><code id="code16">outerLoop: for (let i = 1; i <= 3; i++) {
+    console.log("Outer: " + i);
+    for (let j = 1; j <= 3; j++) {
+        if (j === 2) {
+            console.log("  Continuing outer loop");
+            continue outerLoop;
+        }
+        console.log("  Inner: " + j);
+    }
+    console.log("After inner loop");
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code16', 'output16')">▶ Run Code</button>
+                        <div id="output16" class="output"></div>
+                    </div>
+
+                    <div class="definition">
+                        <strong>Syntax:</strong> <code>labelName: for(...) { ... break labelName; }</code>
+                    </div>
                 </div>
-                <div style="background: #f0f8e7; padding: 15px; border-radius: 8px; border: 1px solid #28a745;">
-                    <h4>⬇️ Reverse For Loop</h4>
-                    <div style="background: #f8f9fa; padding: 8px; border-radius: 3px; font-family: monospace; font-size: 12px;">
-for (let i = 10; i >= 0; i--) {<br>
-&nbsp;&nbsp;console.log(i);<br>
+            </div>
+
+            <!-- PRACTICAL TAB -->
+            <div id="practical" class="tab-content">
+                <div class="section">
+                    <h2><span class="emoji">🧮</span>Multiplication Table Generator</h2>
+                    
+                    <div class="interactive-demo">
+                        <h3>Generate Multiplication Table</h3>
+                        <input type="number" id="tableNum" class="demo-input" placeholder="Enter a number (e.g., 5)" value="5">
+                        <input type="number" id="tableRange" class="demo-input" placeholder="Enter range (e.g., 10)" value="10">
+                        <button class="demo-btn" onclick="generateTable()">Generate Table</button>
+                        <div id="tableOutput" class="demo-output"></div>
+                    </div>
+
+                    <h3>Code Implementation:</h3>
+                    <div class="code-container">
+                        <pre><code id="code17">function multiplicationTable(num, range) {
+    console.log("Multiplication Table of " + num);
+    console.log("========================");
+    for (let i = 1; i <= range; i++) {
+        console.log(num + " x " + i + " = " + (num * i));
+    }
 }
+
+multiplicationTable(7, 10);</code></pre>
+                        <button class="run-btn" onclick="runCode('code17', 'output17')">▶ Run Code</button>
+                        <div id="output17" class="output"></div>
                     </div>
-                    <p><strong>Use:</strong> Countdown, reverse processing</p>
+
+                    <h3>Multiple Tables at Once:</h3>
+                    <div class="code-container">
+                        <pre><code id="code18">for (let table = 2; table <= 5; table++) {
+    console.log("\nTable of " + table + ":");
+    for (let i = 1; i <= 5; i++) {
+        console.log(table + " x " + i + " = " + (table * i));
+    }
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code18', 'output18')">▶ Run Code</button>
+                        <div id="output18" class="output"></div>
+                    </div>
                 </div>
-                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffc107;">
-                    <h4>⚡ Step-based Loop</h4>
-                    <div style="background: #f8f9fa; padding: 8px; border-radius: 3px; font-family: monospace; font-size: 12px;">
-for (let i = 0; i < 20; i += 2) {<br>
-&nbsp;&nbsp;console.log(i); // Even numbers<br>
+
+                <div class="section">
+                    <h2><span class="emoji">🛒</span>Dynamic List Processing</h2>
+                    
+                    <div class="interactive-demo">
+                        <h3>Shopping List Manager</h3>
+                        <input type="text" id="itemInput" class="demo-input" placeholder="Enter items separated by commas (e.g., Apple, Banana, Orange)">
+                        <button class="demo-btn" onclick="processShoppingList()">Process List</button>
+                        <button class="demo-btn" onclick="filterExpensiveItems()">Filter Expensive (>₹50)</button>
+                        <div id="listOutput" class="demo-output"></div>
+                    </div>
+
+                    <h3>Example: Process Shopping List</h3>
+                    <div class="code-container">
+                        <pre><code id="code19">const shoppingList = ['Milk', 'Bread', 'Eggs', 'Butter', 'Cheese'];
+const prices = [60, 40, 80, 120, 150];
+
+console.log("Shopping List:");
+for (let i = 0; i < shoppingList.length; i++) {
+    console.log((i + 1) + ". " + shoppingList[i] + " - ₹" + prices[i]);
 }
-                    </div>
-                    <p><strong>Use:</strong> Skip values, custom increments</p>
-                </div>
-                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border: 1px solid #dc3545;">
-                    <h4>🔗 Nested For Loop</h4>
-                    <div style="background: #f8f9fa; padding: 8px; border-radius: 3px; font-family: monospace; font-size: 12px;">
-for (let i = 0; i < 3; i++) {<br>
-&nbsp;&nbsp;for (let j = 0; j < 3; j++) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;console.log(i, j);<br>
-&nbsp;&nbsp;}<br>
+
+let total = 0;
+for (let price of prices) {
+    total += price;
 }
+console.log("\nTotal: ₹" + total);</code></pre>
+                        <button class="run-btn" onclick="runCode('code19', 'output19')">▶ Run Code</button>
+                        <div id="output19" class="output"></div>
                     </div>
-                    <p><strong>Use:</strong> 2D arrays, matrices, patterns</p>
-                </div>
-            </div>
-            
-            <div class="demo">
-                <h3>Interactive For Loop Visualizer</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 15px 0;">
-                    <div>
-                        <label>Start: <input type="number" id="for-start" value="0" min="-10" max="50"></label>
+
+                    <h3>Example: Filter and Transform</h3>
+                    <div class="code-container">
+                        <pre><code id="code20">const products = [
+    {name: 'Laptop', price: 50000, inStock: true},
+    {name: 'Mouse', price: 500, inStock: false},
+    {name: 'Keyboard', price: 1500, inStock: true},
+    {name: 'Monitor', price: 15000, inStock: true}
+];
+
+console.log("Available Products:");
+for (let product of products) {
+    if (product.inStock) {
+        console.log(product.name + " - ₹" + product.price);
+    }
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code20', 'output20')">▶ Run Code</button>
+                        <div id="output20" class="output"></div>
                     </div>
-                    <div>
-                        <label>End: <input type="number" id="for-end" value="5" min="1" max="50"></label>
+                </div>
+
+                <div class="section">
+                    <h2><span class="emoji">🎨</span>Pattern Printing</h2>
+                    
+                    <h3>Example: Star Pattern</h3>
+                    <div class="code-container">
+                        <pre><code id="code21">console.log("Right Triangle Pattern:");
+for (let i = 1; i <= 5; i++) {
+    let pattern = '';
+    for (let j = 1; j <= i; j++) {
+        pattern += '* ';
+    }
+    console.log(pattern);
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code21', 'output21')">▶ Run Code</button>
+                        <div id="output21" class="output"></div>
                     </div>
-                    <div>
-                        <label>Step: <input type="number" id="for-step" value="1" min="1" max="5"></label>
+
+                    <h3>Example: Number Pattern</h3>
+                    <div class="code-container">
+                        <pre><code id="code22">console.log("Number Pattern:");
+for (let i = 1; i <= 5; i++) {
+    let pattern = '';
+    for (let j = 1; j <= i; j++) {
+        pattern += j + ' ';
+    }
+    console.log(pattern);
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code22', 'output22')">▶ Run Code</button>
+                        <div id="output22" class="output"></div>
                     </div>
-                    <div>
-                        <label>Delay (ms): <input type="number" id="for-delay" value="500" min="100" max="2000"></label>
+                </div>
+
+                <div class="section">
+                    <h2><span class="emoji">🔍</span>Search and Count</h2>
+                    
+                    <h3>Example: Count Occurrences</h3>
+                    <div class="code-container">
+                        <pre><code id="code23">const text = "JavaScript is awesome. JavaScript is powerful.";
+const searchWord = "JavaScript";
+let count = 0;
+
+const words = text.split(' ');
+for (let word of words) {
+    if (word.includes(searchWord)) {
+        count++;
+    }
+}
+console.log(searchWord + " appears " + count + " times");</code></pre>
+                        <button class="run-btn" onclick="runCode('code23', 'output23')">▶ Run Code</button>
+                        <div id="output23" class="output"></div>
+                    </div>
+
+                    <h3>Example: Find Maximum</h3>
+                    <div class="code-container">
+                        <pre><code id="code24">const numbers = [45, 23, 89, 12, 67, 34, 91, 56];
+let max = numbers[0];
+
+for (let num of numbers) {
+    if (num > max) {
+        max = num;
+    }
+}
+console.log("Numbers: " + numbers);
+console.log("Maximum: " + max);</code></pre>
+                        <button class="run-btn" onclick="runCode('code24', 'output24')">▶ Run Code</button>
+                        <div id="output24" class="output"></div>
                     </div>
                 </div>
-                <div style="margin: 15px 0;">
-                    <button onclick="visualizeForLoop()">▶️ Start Standard Loop</button>
-                    <button onclick="visualizeReverseLoop()">⬇️ Reverse Loop</button>
-                    <button onclick="visualizeNestedLoop()">🔗 Nested Loop</button>
-                    <button onclick="stopLoop()">⏹️ Stop Loop</button>
+            </div>
+
+            <!-- INTERVIEW TAB -->
+            <div id="interview" class="tab-content">
+                <div class="section">
+                    <h2><span class="emoji">💼</span>Common Interview Questions</h2>
+                    
+                    <button class="collapsible">Q1: What is the difference between for, while, and do...while loops?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p><strong>for loop:</strong> Used when you know the exact number of iterations. Has initialization, condition, and increment in one line.</p>
+                            <p><strong>while loop:</strong> Used when the number of iterations is unknown. Checks condition before executing.</p>
+                            <p><strong>do...while loop:</strong> Similar to while, but executes at least once because it checks condition after execution.</p>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>for loop:</strong> Jab aapko pata ho kitni baar loop chalana hai tab use karte hain. Initialization, condition aur increment ek line mein hota hai.</p>
+                            <p><strong>while loop:</strong> Jab iterations ka count pata nahi ho tab use karte hain. Pehle condition check karta hai phir execute karta hai.</p>
+                            <p><strong>do...while loop:</strong> While jaisa hai lekin kam se kam ek baar zaroor execute hota hai kyunki condition baad mein check hoti hai.</p>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q2: What is the difference between for...of and for...in?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p><strong>for...of:</strong> Iterates over iterable objects (arrays, strings, maps, sets). Returns the <strong>values</strong>.</p>
+                            <p><strong>for...in:</strong> Iterates over enumerable properties of objects. Returns the <strong>keys/indices</strong>.</p>
+                            <p><strong>Best Practice:</strong> Use for...of for arrays, for...in for objects.</p>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>for...of:</strong> Arrays, strings jaise iterable objects ke liye use hota hai. Ye <strong>values</strong> return karta hai.</p>
+                            <p><strong>for...in:</strong> Objects ke properties ke liye use hota hai. Ye <strong>keys/indices</strong> return karta hai.</p>
+                            <p><strong>Best Practice:</strong> Arrays ke liye for...of use karo, objects ke liye for...in.</p>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q3: What is an infinite loop and how to avoid it?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p>An <strong>infinite loop</strong> is a loop that never ends because its condition never becomes false. It can crash your program or browser.</p>
+                            <p><strong>How to avoid:</strong></p>
+                            <ul>
+                                <li>Always update the loop variable inside the loop</li>
+                                <li>Ensure the condition will eventually become false</li>
+                                <li>Use break statements when necessary</li>
+                                <li>Test your loop logic carefully</li>
+                            </ul>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>Infinite loop</strong> ek aisa loop hai jo kabhi khatam nahi hota kyunki uski condition kabhi false nahi hoti. Ye program ya browser ko crash kar sakta hai.</p>
+                            <p><strong>Kaise avoid karein:</strong></p>
+                            <ul>
+                                <li>Loop variable ko loop ke andar update karna mat bhoolna</li>
+                                <li>Ensure karo ki condition eventually false ho jayegi</li>
+                                <li>Zarurat padne par break statement use karo</li>
+                                <li>Loop logic ko achhe se test karo</li>
+                            </ul>
+                            
+                            <div class="code-container">
+                                <pre><code>// ❌ Infinite loop (BAD)
+let i = 0;
+while (i < 10) {
+    console.log(i);
+    // Forgot to increment i!
+}
+
+// ✅ Correct (GOOD)
+let i = 0;
+while (i < 10) {
+    console.log(i);
+    i++; // Update the variable
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q4: What is the difference between break and continue?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p><strong>break:</strong> Completely exits the loop. No more iterations will run.</p>
+                            <p><strong>continue:</strong> Skips the current iteration and moves to the next one. The loop continues running.</p>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>break:</strong> Loop ko completely exit kar deta hai. Aage ke iterations nahi chalenge.</p>
+                            <p><strong>continue:</strong> Current iteration ko skip karke next iteration pe chala jata hai. Loop chalta rehta hai.</p>
+                            
+                            <div class="code-container">
+                                <pre><code>// break example
+for (let i = 1; i <= 5; i++) {
+    if (i === 3) break;
+    console.log(i); // Output: 1, 2
+}
+
+// continue example
+for (let i = 1; i <= 5; i++) {
+    if (i === 3) continue;
+    console.log(i); // Output: 1, 2, 4, 5
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q5: Can you use break and continue with labeled loops?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p>Yes! Labeled loops allow you to break or continue outer loops from inside nested loops. You give a loop a label (name) and reference it with break or continue.</p>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p>Haan! Labeled loops se aap nested loops ke andar se outer loops ko break ya continue kar sakte ho. Loop ko ek label (naam) do aur break/continue ke saath use karo.</p>
+                            
+                            <div class="code-container">
+                                <pre><code>outerLoop: for (let i = 1; i <= 3; i++) {
+    for (let j = 1; j <= 3; j++) {
+        if (i === 2 && j === 2) {
+            break outerLoop; // Breaks outer loop
+        }
+        console.log(i + "," + j);
+    }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q6: What are the advantages of forEach over traditional for loop?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p><strong>Advantages of forEach:</strong></p>
+                            <ul>
+                                <li>More readable and cleaner syntax</li>
+                                <li>No need to manage index manually</li>
+                                <li>Automatically handles array length</li>
+                                <li>Functional programming style</li>
+                            </ul>
+                            <p><strong>Disadvantages:</strong></p>
+                            <ul>
+                                <li>Cannot use break or continue</li>
+                                <li>Cannot return from the function</li>
+                                <li>Slightly slower than traditional for loop</li>
+                            </ul>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>forEach ke fayde:</strong></p>
+                            <ul>
+                                <li>Zyada readable aur clean syntax</li>
+                                <li>Index manually manage karne ki zarurat nahi</li>
+                                <li>Array length automatically handle hota hai</li>
+                                <li>Functional programming style</li>
+                            </ul>
+                            <p><strong>Nuksan:</strong></p>
+                            <ul>
+                                <li>Break ya continue use nahi kar sakte</li>
+                                <li>Function se return nahi kar sakte</li>
+                                <li>Traditional for loop se thoda slow hai</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q7: How do you iterate over an object's properties?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p>There are multiple ways to iterate over object properties:</p>
+                            <ol>
+                                <li><strong>for...in loop:</strong> Iterates over all enumerable properties</li>
+                                <li><strong>Object.keys():</strong> Returns array of keys, then use forEach/for...of</li>
+                                <li><strong>Object.values():</strong> Returns array of values</li>
+                                <li><strong>Object.entries():</strong> Returns array of [key, value] pairs</li>
+                            </ol>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p>Object ke properties ko iterate karne ke kai tarike hain:</p>
+                            <ol>
+                                <li><strong>for...in loop:</strong> Saari enumerable properties ko iterate karta hai</li>
+                                <li><strong>Object.keys():</strong> Keys ka array return karta hai, phir forEach/for...of use karo</li>
+                                <li><strong>Object.values():</strong> Values ka array return karta hai</li>
+                                <li><strong>Object.entries():</strong> [key, value] pairs ka array return karta hai</li>
+                            </ol>
+                            
+                            <div class="code-container">
+                                <pre><code>const person = {name: 'Raj', age: 25, city: 'Delhi'};
+
+// Method 1: for...in
+for (let key in person) {
+    console.log(key + ": " + person[key]);
+}
+
+// Method 2: Object.keys()
+Object.keys(person).forEach(key => {
+    console.log(key + ": " + person[key]);
+});
+
+// Method 3: Object.entries()
+for (let [key, value] of Object.entries(person)) {
+    console.log(key + ": " + value);
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q8: What happens if you don't initialize a variable in a for loop?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p>If you don't initialize a variable in a for loop, you'll get a <strong>ReferenceError</strong> because the variable is not defined. The initialization part is crucial for the loop to work properly.</p>
+                            <p>However, you can initialize the variable outside the loop and leave the initialization part empty in the for statement.</p>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p>Agar for loop mein variable initialize nahi karoge to <strong>ReferenceError</strong> aayega kyunki variable defined nahi hai. Initialization part loop ke liye zaroori hai.</p>
+                            <p>Lekin aap variable ko loop ke bahar initialize kar sakte ho aur for statement mein initialization part khali chhod sakte ho.</p>
+                            
+                            <div class="code-container">
+                                <pre><code>// ❌ Error - variable not defined
+for (; i < 5; i++) {
+    console.log(i); // ReferenceError: i is not defined
+}
+
+// ✅ Correct - initialize outside
+let i = 0;
+for (; i < 5; i++) {
+    console.log(i); // Works fine
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q9: Can you modify an array while iterating over it?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p>Yes, but it's <strong>not recommended</strong> as it can lead to unexpected behavior:</p>
+                            <ul>
+                                <li>Adding elements: May cause infinite loops or skip elements</li>
+                                <li>Removing elements: May skip elements or cause index issues</li>
+                                <li>Better approach: Create a new array or iterate backwards</li>
+                            </ul>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p>Haan, lekin ye <strong>recommended nahi hai</strong> kyunki unexpected behavior ho sakta hai:</p>
+                            <ul>
+                                <li>Elements add karna: Infinite loop ya elements skip ho sakte hain</li>
+                                <li>Elements remove karna: Elements skip ho sakte hain ya index issues aa sakte hain</li>
+                                <li>Better approach: Naya array banao ya backwards iterate karo</li>
+                            </ul>
+                            
+                            <div class="code-container">
+                                <pre><code>// ❌ Problematic
+let arr = [1, 2, 3, 4, 5];
+for (let i = 0; i < arr.length; i++) {
+    if (arr[i] % 2 === 0) {
+        arr.splice(i, 1); // Modifying while iterating
+    }
+}
+
+// ✅ Better approach
+let arr = [1, 2, 3, 4, 5];
+let newArr = arr.filter(num => num % 2 !== 0);
+console.log(newArr); // [1, 3, 5]</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q10: What is the time complexity of different loops?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p><strong>Time Complexity:</strong></p>
+                            <ul>
+                                <li><strong>Single loop (for/while):</strong> O(n) - Linear time</li>
+                                <li><strong>Nested loops (2 levels):</strong> O(n²) - Quadratic time</li>
+                                <li><strong>Nested loops (3 levels):</strong> O(n³) - Cubic time</li>
+                                <li><strong>forEach, map, filter:</strong> O(n) - Linear time</li>
+                            </ul>
+                            <p>The complexity depends on how many times the loop body executes, not the type of loop.</p>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>Time Complexity:</strong></p>
+                            <ul>
+                                <li><strong>Single loop (for/while):</strong> O(n) - Linear time</li>
+                                <li><strong>Nested loops (2 levels):</strong> O(n²) - Quadratic time</li>
+                                <li><strong>Nested loops (3 levels):</strong> O(n³) - Cubic time</li>
+                                <li><strong>forEach, map, filter:</strong> O(n) - Linear time</li>
+                            </ul>
+                            <p>Complexity is loop body kitni baar execute hota hai par depend karta hai, loop ke type par nahi.</p>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q11: How do you reverse a string using loops?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p>There are multiple ways to reverse a string using loops:</p>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p>Loops use karke string reverse karne ke kai tarike hain:</p>
+                            
+                            <div class="code-container">
+                                <pre><code>// Method 1: For loop (backwards)
+function reverseString1(str) {
+    let reversed = '';
+    for (let i = str.length - 1; i >= 0; i--) {
+        reversed += str[i];
+    }
+    return reversed;
+}
+
+// Method 2: For...of with array
+function reverseString2(str) {
+    let reversed = '';
+    for (let char of str) {
+        reversed = char + reversed;
+    }
+    return reversed;
+}
+
+// Method 3: While loop
+function reverseString3(str) {
+    let reversed = '';
+    let i = str.length - 1;
+    while (i >= 0) {
+        reversed += str[i];
+        i--;
+    }
+    return reversed;
+}
+
+console.log(reverseString1("JavaScript")); // tpircSavaJ</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q12: What is the difference between map() and forEach()?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p><strong>forEach():</strong></p>
+                            <ul>
+                                <li>Executes a function for each array element</li>
+                                <li>Returns <strong>undefined</strong></li>
+                                <li>Used for side effects (logging, updating external variables)</li>
+                                <li>Cannot chain other methods</li>
+                            </ul>
+                            <p><strong>map():</strong></p>
+                            <ul>
+                                <li>Creates a <strong>new array</strong> with transformed elements</li>
+                                <li>Returns the new array</li>
+                                <li>Used for transforming data</li>
+                                <li>Can chain other methods</li>
+                            </ul>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>forEach():</strong></p>
+                            <ul>
+                                <li>Har array element ke liye function execute karta hai</li>
+                                <li><strong>undefined</strong> return karta hai</li>
+                                <li>Side effects ke liye use hota hai (logging, external variables update)</li>
+                                <li>Dusre methods chain nahi kar sakte</li>
+                            </ul>
+                            <p><strong>map():</strong></p>
+                            <ul>
+                                <li>Transformed elements ke saath <strong>naya array</strong> banata hai</li>
+                                <li>Naya array return karta hai</li>
+                                <li>Data transform karne ke liye use hota hai</li>
+                                <li>Dusre methods chain kar sakte hain</li>
+                            </ul>
+                            
+                            <div class="code-container">
+                                <pre><code>const numbers = [1, 2, 3, 4, 5];
+
+// forEach - no return value
+numbers.forEach(num => console.log(num * 2));
+// Output: 2, 4, 6, 8, 10
+
+// map - returns new array
+const doubled = numbers.map(num => num * 2);
+console.log(doubled); // [2, 4, 6, 8, 10]</code></pre>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="for-progress"></div>
+
+                <div class="section">
+                    <h2><span class="emoji">📝</span>Key Definitions</h2>
+                    
+                    <div class="definition">
+                        <strong>Loop:</strong> A control structure that repeats a block of code until a specified condition is met.
+                    </div>
+
+                    <div class="definition">
+                        <strong>Iteration:</strong> One complete execution of the loop body. Each repetition is called an iteration.
+                    </div>
+
+                    <div class="definition">
+                        <strong>Iterator:</strong> An object that enables traversal through a collection, one element at a time.
+                    </div>
+
+                    <div class="definition">
+                        <strong>Iterable:</strong> An object that can be iterated over (arrays, strings, maps, sets, etc.).
+                    </div>
+
+                    <div class="definition">
+                        <strong>Loop Variable:</strong> A variable used to control the loop's execution (e.g., 'i' in for loops).
+                    </div>
+
+                    <div class="definition">
+                        <strong>Infinite Loop:</strong> A loop that never terminates because its condition never becomes false.
+                    </div>
+
+                    <div class="definition">
+                        <strong>Nested Loop:</strong> A loop inside another loop. The inner loop completes all iterations for each iteration of the outer loop.
+                    </div>
+
+                    <div class="definition">
+                        <strong>Loop Control Statement:</strong> Statements (break, continue) that alter the normal flow of loop execution.
+                    </div>
                 </div>
-                <div class="loop-visualizer" id="for-visualizer"></div>
-                <div id="for-output"></div>
-                
-                <h3>Advanced For Loop Concepts</h3>
-                <div style="margin: 15px 0;">
-                    <button onclick="demonstrateLoopOptimization()">🚀 Loop Optimization</button>
-                    <button onclick="demonstrateLoopPerformance()">⚡ Performance Comparison</button>
-                    <button onclick="demonstrateLoopPitfalls()">⚠️ Common Pitfalls</button>
-                </div>
-                <div id="advanced-for-result"></div>
             </div>
-        </section>
-
-        <section id="loop-performance">
-            <h2>Loop Performance aur Optimization</h2>
-            <p>Different loop types ki performance aur optimization techniques samjhna important hai, especially large datasets ke saath kaam karte waqt.</p>
-            
-            <h3>Performance Factors:</h3>
-            <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #ffc107;">
-                <h4>⚡ Key Performance Considerations:</h4>
-                <ul>
-                    <li><strong>Loop Length Caching:</strong> Array length ko variable mein store karna</li>
-                    <li><strong>Condition Complexity:</strong> Simple conditions faster hote hain</li>
-                    <li><strong>Variable Declaration:</strong> Loop ke bahar declare karna better</li>
-                    <li><strong>DOM Access:</strong> Loop ke andar DOM access avoid karna</li>
-                    <li><strong>Function Calls:</strong> Expensive operations loop ke bahar karna</li>
-                </ul>
-            </div>
-            
-            <div class="demo">
-                <h3>Performance Benchmarking Tool</h3>
-                <label>Array Size: <input type="number" id="perf-size" value="100000" min="1000" max="1000000"></label>
-                <div style="margin: 15px 0;">
-                    <button onclick="benchmarkForLoop()">🔄 Standard For Loop</button>
-                    <button onclick="benchmarkForEach()">🔁 forEach Method</button>
-                    <button onclick="benchmarkForOf()">📋 for...of Loop</button>
-                    <button onclick="benchmarkWhileLoop()">⭕ While Loop</button>
-                </div>
-                <div id="performance-results"></div>
-            </div>
-        </section>
-
-        <section id="while-loop">
-            <h2>While Loop</h2>
-            <p>Jab condition true hai tab tak chalta rahega:</p>
-            
-            <div class="demo">
-                <h3>Number Guessing Game (While Loop)</h3>
-                <p>1 se 10 ke beech mein number guess karo!</p>
-                <input type="number" id="guess-input" placeholder="Your guess" min="1" max="10">
-                <button onclick="startGuessingGame()">Start Game</button>
-                <button onclick="resetGame()">Reset</button>
-                <div id="guess-output"></div>
-                <div id="guess-attempts"></div>
-            </div>
-        </section>
-
-        <section id="do-while">
-            <h2>Do-While Loop</h2>
-            <p>Pehle execute karta hai, phir condition check karta hai:</p>
-            
-            <div class="demo">
-                <h3>Do-While Demo</h3>
-                <button onclick="demonstrateDoWhile()">Run Do-While Example</button>
-                <div id="do-while-output"></div>
-            </div>
-        </section>
-
-        <section id="for-of-in">
-            <h2>For...of aur For...in</h2>
-            <p><strong>for...of</strong> values iterate karta hai, <strong>for...in</strong> keys/indices:</p>
-            
-            <div class="demo">
-                <h3>Array & Object Iteration</h3>
-                <button onclick="demonstrateForOf()">For...of (Values)</button>
-                <button onclick="demonstrateForIn()">For...in (Keys)</button>
-                <div id="iteration-output"></div>
-            </div>
-        </section>
-
-        <section id="break-continue">
-            <h2>Break aur Continue</h2>
-            <p><strong>break</strong> loop se bahar nikalta hai, <strong>continue</strong> current iteration skip karta hai:</p>
-            
-            <div class="demo">
-                <h3>Break & Continue Demo</h3>
-                <button onclick="demonstrateBreak()">Break Example</button>
-                <button onclick="demonstrateContinue()">Continue Example</button>
-                <div id="break-continue-output"></div>
-            </div>
-        </section>
-
-        <section id="multiplication-tables">
-            <h2>Practice: Multiplication Tables Generator</h2>
-            <p>Nested loops use karke multiplication tables banayenge:</p>
-            
-            <div class="demo">
-                <h3>Table Generator</h3>
-                <label>Start table: <input type="number" id="table-start" value="2" min="1" max="20"></label>
-                <label>End table: <input type="number" id="table-end" value="5" min="1" max="20"></label>
-                <label>Up to: <input type="number" id="table-limit" value="10" min="1" max="20"></label>
-                <button onclick="generateTables()">Generate Tables</button>
-                <div class="multiplication-table" id="tables-output"></div>
-            </div>
-        </section>
-
-        <section id="patterns">
-            <h2>Practice: Pattern Generator</h2>
-            <p>Loops use karke different patterns banayenge:</p>
-            
-            <div class="demo">
-                <h3>Pattern Maker</h3>
-                <label>Pattern type: 
-                    <select id="pattern-type">
-                        <option value="star-triangle">Star Triangle</option>
-                        <option value="number-triangle">Number Triangle</option>
-                        <option value="reverse-triangle">Reverse Triangle</option>
-                        <option value="diamond">Diamond</option>
-                    </select>
-                </label>
-                <label>Size: <input type="number" id="pattern-size" value="5" min="3" max="10"></label>
-                <button onclick="generatePattern()">Generate Pattern</button>
-                <div class="pattern-display" id="pattern-output"></div>
-            </div>
-        </section>
-
-        <section id="list-processor">
-            <h2>Practice: Dynamic List Processor</h2>
-            <p>Array processing with different loop types:</p>
-            
-            <div class="demo">
-                <h3>List Operations</h3>
-                <input type="text" id="list-input" placeholder="Enter items separated by commas">
-                <div style="margin: 10px 0;">
-                    <button onclick="processListSum()">Sum Numbers</button>
-                    <button onclick="processListFilter()">Filter Even</button>
-                    <button onclick="processListReverse()">Reverse List</button>
-                    <button onclick="processListSearch()">Search Item</button>
-                </div>
-                <div id="list-output"></div>
-            </div>
-        </section>
-
-        <section class="interview-section">
-            <h2>Interview Questions</h2>
-            <div class="question">
-                <h3>1. Basic: for, while, aur do-while loop mein kya difference hai?</h3>
-                <p>Answer: for loop fixed iterations ke liye, while condition check karke chalti hai, do-while pehle execute phir check karti hai.</p>
-            </div>
-            <div class="question">
-                <h3>2. Basic: for...of aur for...in mein kya difference hai?</h3>
-                <p>Answer: for...of values iterate karta hai (arrays ke liye), for...in keys/indices iterate karta hai (objects ke liye).</p>
-            </div>
-            <div class="question">
-                <h3>3. Intermediate: break aur continue statement ka use kab karte hain?</h3>
-                <p>Answer: break loop se completely bahar nikalne ke liye, continue current iteration skip karke next iteration pe jaane ke liye.</p>
-            </div>
-            <div class="question">
-                <h3>4. Intermediate: Infinite loop kya hai aur kaise avoid karte hain?</h3>
-                <p>Answer: Loop jo kabhi end nahi hoti. Condition properly set karo, counter increment/decrement karo, break statements use karo.</p>
-            </div>
-            <div class="question">
-                <h3>5. Advanced: Nested loops ki time complexity kya hoti hai?</h3>
-                <p>Answer: O(n²) for two nested loops, O(n³) for three nested loops. Performance impact hota hai large datasets pe.</p>
-            </div>
-            <div class="question">
-                <h3>6. Advanced: Label statements kya hain aur kab use karte hain?</h3>
-                <p>Answer: Nested loops mein specific loop se break/continue karne ke liye. outer: for(...) { inner: for(...) { break outer; } }</p>
-            </div>
-        </section>
+        </div>
     </div>
 
     <script>
-        let gameNumber = Math.floor(Math.random() * 10) + 1;
-        let attempts = 0;
-        let gameActive = false;
-
-        function visualizeForLoop() {
-            const count = parseInt(document.getElementById('for-count').value) || 5;
-            const visualizer = document.getElementById('for-visualizer');
-            const output = document.getElementById('for-output');
-            const progress = document.getElementById('for-progress');
+        // Tab switching
+        function openTab(tabName) {
+            const contents = document.getElementsByClassName('tab-content');
+            const tabs = document.getElementsByClassName('nav-tab');
             
-            // Clear previous
-            visualizer.innerHTML = '';
-            output.innerHTML = '';
-            progress.style.width = '0%';
-            
-            // Create items
-            for (let i = 0; i < count; i++) {
-                const item = document.createElement('div');
-                item.className = 'loop-item';
-                item.textContent = i + 1;
-                visualizer.appendChild(item);
+            for (let content of contents) {
+                content.classList.remove('active');
             }
             
-            // Animate loop execution
-            let currentIndex = 0;
-            const interval = setInterval(() => {
-                if (currentIndex > 0) {
-                    visualizer.children[currentIndex - 1].classList.remove('active');
-                }
-                
-                if (currentIndex < count) {
-                    visualizer.children[currentIndex].classList.add('active');
-                    progress.style.width = ((currentIndex + 1) / count * 100) + '%';
-                    output.innerHTML += `<p>Iteration ${currentIndex + 1}: Processing item ${currentIndex + 1}</p>`;
-                    currentIndex++;
+            for (let tab of tabs) {
+                tab.classList.remove('active');
+            }
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Language toggle
+        function toggleLanguage(button) {
+            const section = button.closest('.section');
+            const englishExps = section.querySelectorAll('.explanation.english');
+            const hinglishExps = section.querySelectorAll('.explanation.hinglish');
+            
+            englishExps.forEach(exp => {
+                if (exp.style.display === 'none') {
+                    exp.style.display = 'block';
+                    button.textContent = 'Switch to Hinglish';
                 } else {
-                    clearInterval(interval);
-                    output.innerHTML += `<p><strong>Loop completed! Total iterations: ${count}</strong></p>`;
+                    exp.style.display = 'none';
+                    button.textContent = 'Switch to English';
                 }
-            }, 500);
-        }
-
-        function startGuessingGame() {
-            if (!gameActive) {
-                gameNumber = Math.floor(Math.random() * 10) + 1;
-                attempts = 0;
-                gameActive = true;
-                document.getElementById('guess-output').innerHTML = '<p>Game started! Guess the number between 1-10</p>';
-                document.getElementById('guess-attempts').innerHTML = '';
-            }
+            });
             
-            const guess = parseInt(document.getElementById('guess-input').value);
-            const output = document.getElementById('guess-output');
-            const attemptsDiv = document.getElementById('guess-attempts');
-            
-            if (isNaN(guess) || guess < 1 || guess > 10) {
-                output.innerHTML += '<p style="color: #dc3545;">Please enter a valid number between 1-10!</p>';
-                return;
-            }
-            
-            attempts++;
-            
-            if (guess === gameNumber) {
-                output.innerHTML += `<p style="color: #28a745;"><strong>🎉 Correct! You guessed it in ${attempts} attempts!</strong></p>`;
-                gameActive = false;
-            } else if (guess < gameNumber) {
-                output.innerHTML += `<p style="color: #ffc107;">Too low! Try higher.</p>`;
-            } else {
-                output.innerHTML += `<p style="color: #ffc107;">Too high! Try lower.</p>`;
-            }
-            
-            attemptsDiv.innerHTML = `<p>Attempts: ${attempts}</p>`;
-            document.getElementById('guess-input').value = '';
-        }
-
-        function resetGame() {
-            gameActive = false;
-            attempts = 0;
-            document.getElementById('guess-output').innerHTML = '';
-            document.getElementById('guess-attempts').innerHTML = '';
-            document.getElementById('guess-input').value = '';
-        }
-
-        function demonstrateDoWhile() {
-            const output = document.getElementById('do-while-output');
-            let result = '';
-            let i = 0;
-            
-            result += '<h4>Do-While Example:</h4>';
-            result += '<p>Starting with i = 0, condition: i < 3</p>';
-            
-            do {
-                result += `<p>Iteration ${i + 1}: i = ${i}</p>`;
-                i++;
-            } while (i < 3);
-            
-            result += '<p><strong>Loop ended when i = 3</strong></p>';
-            result += '<p><em>Notice: Loop executed at least once even if condition was false initially</em></p>';
-            
-            output.innerHTML = result;
-        }
-
-        function demonstrateForOf() {
-            const fruits = ['Apple', 'Banana', 'Orange', 'Mango'];
-            const output = document.getElementById('iteration-output');
-            let result = '<h4>For...of (Values):</h4>';
-            
-            result += `<p><strong>Array:</strong> [${fruits.join(', ')}]</p>`;
-            
-            for (const fruit of fruits) {
-                result += `<p>Value: ${fruit}</p>`;
-            }
-            
-            output.innerHTML = result;
-        }
-
-        function demonstrateForIn() {
-            const person = { name: 'Rahul', age: 25, city: 'Mumbai' };
-            const output = document.getElementById('iteration-output');
-            let result = '<h4>For...in (Keys):</h4>';
-            
-            result += `<p><strong>Object:</strong> {name: 'Rahul', age: 25, city: 'Mumbai'}</p>`;
-            
-            for (const key in person) {
-                result += `<p>Key: ${key}, Value: ${person[key]}</p>`;
-            }
-            
-            output.innerHTML = result;
-        }
-
-        function demonstrateBreak() {
-            const output = document.getElementById('break-continue-output');
-            let result = '<h4>Break Example:</h4>';
-            result += '<p>Loop from 1 to 10, break when i = 5</p>';
-            
-            for (let i = 1; i <= 10; i++) {
-                if (i === 5) {
-                    result += `<p style="color: #dc3545;">i = ${i} - BREAK! Loop terminated</p>`;
-                    break;
+            hinglishExps.forEach(exp => {
+                if (exp.style.display === 'none') {
+                    exp.style.display = 'block';
+                } else {
+                    exp.style.display = 'none';
                 }
-                result += `<p>i = ${i}</p>`;
-            }
-            
-            output.innerHTML = result;
+            });
         }
 
-        function demonstrateContinue() {
-            const output = document.getElementById('break-continue-output');
-            let result = '<h4>Continue Example:</h4>';
-            result += '<p>Loop from 1 to 8, skip even numbers</p>';
+        // Run code
+        function runCode(codeId, outputId) {
+            const code = document.getElementById(codeId).textContent;
+            const output = document.getElementById(outputId);
             
-            for (let i = 1; i <= 8; i++) {
-                if (i % 2 === 0) {
-                    result += `<p style="color: #ffc107;">i = ${i} - CONTINUE! Skipped</p>`;
-                    continue;
-                }
-                result += `<p style="color: #28a745;">i = ${i} - Processed (odd number)</p>`;
-            }
-            
-            output.innerHTML = result;
-        }
-
-        function generateTables() {
-            const start = parseInt(document.getElementById('table-start').value) || 2;
-            const end = parseInt(document.getElementById('table-end').value) || 5;
-            const limit = parseInt(document.getElementById('table-limit').value) || 10;
-            const output = document.getElementById('tables-output');
-            
+            // Clear previous output
             output.innerHTML = '';
+            output.classList.add('show');
             
-            for (let table = start; table <= end; table++) {
-                const tableCard = document.createElement('div');
-                tableCard.className = 'table-card';
-                
-                let tableHTML = `<h4>Table of ${table}</h4>`;
-                for (let i = 1; i <= limit; i++) {
-                    tableHTML += `<p>${table} × ${i} = ${table * i}</p>`;
-                }
-                
-                tableCard.innerHTML = tableHTML;
-                output.appendChild(tableCard);
-            }
-        }
-
-        function generatePattern() {
-            const type = document.getElementById('pattern-type').value;
-            const size = parseInt(document.getElementById('pattern-size').value) || 5;
-            const output = document.getElementById('pattern-output');
-            let pattern = '';
+            // Capture console.log
+            const logs = [];
+            const originalLog = console.log;
+            console.log = function(...args) {
+                logs.push(args.join(' '));
+                originalLog.apply(console, args);
+            };
             
-            switch (type) {
-                case 'star-triangle':
-                    for (let i = 1; i <= size; i++) {
-                        pattern += '*'.repeat(i) + '\n';
-                    }
-                    break;
-                    
-                case 'number-triangle':
-                    for (let i = 1; i <= size; i++) {
-                        for (let j = 1; j <= i; j++) {
-                            pattern += j + ' ';
-                        }
-                        pattern += '\n';
-                    }
-                    break;
-                    
-                case 'reverse-triangle':
-                    for (let i = size; i >= 1; i--) {
-                        pattern += '*'.repeat(i) + '\n';
-                    }
-                    break;
-                    
-                case 'diamond':
-                    // Upper half
-                    for (let i = 1; i <= size; i++) {
-                        pattern += ' '.repeat(size - i) + '*'.repeat(2 * i - 1) + '\n';
-                    }
-                    // Lower half
-                    for (let i = size - 1; i >= 1; i--) {
-                        pattern += ' '.repeat(size - i) + '*'.repeat(2 * i - 1) + '\n';
-                    }
-                    break;
+            try {
+                eval(code);
+                output.innerHTML = logs.join('\n') || 'Code executed successfully!';
+            } catch (error) {
+                output.innerHTML = '❌ Error: ' + error.message;
+                output.style.color = '#ff6b6b';
             }
             
-            output.textContent = pattern;
+            // Restore console.log
+            console.log = originalLog;
         }
 
-        function processListSum() {
-            const input = document.getElementById('list-input').value;
-            const output = document.getElementById('list-output');
+        // Collapsible sections
+        const collapsibles = document.getElementsByClassName('collapsible');
+        for (let collapsible of collapsibles) {
+            collapsible.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                content.classList.toggle('show');
+            });
+        }
+
+        // Interactive demos
+        function generateTable() {
+            const num = parseInt(document.getElementById('tableNum').value) || 5;
+            const range = parseInt(document.getElementById('tableRange').value) || 10;
+            const output = document.getElementById('tableOutput');
             
-            if (!input.trim()) {
-                output.innerHTML = '<p style="color: #dc3545;">Please enter some numbers!</p>';
+            let html = `<h4>Multiplication Table of ${num}</h4>`;
+            html += '<div style="font-family: monospace;">';
+            
+            for (let i = 1; i <= range; i++) {
+                html += `${num} × ${i} = ${num * i}<br>`;
+            }
+            
+            html += '</div>';
+            output.innerHTML = html;
+        }
+
+        function processShoppingList() {
+            const input = document.getElementById('itemInput').value;
+            const items = input.split(',').map(item => item.trim()).filter(item => item);
+            const output = document.getElementById('listOutput');
+            
+            if (items.length === 0) {
+                output.innerHTML = '⚠️ Please enter some items!';
                 return;
             }
             
-            const numbers = input.split(',').map(item => parseFloat(item.trim())).filter(num => !isNaN(num));
-            let sum = 0;
-            
-            for (const num of numbers) {
-                sum += num;
+            let html = '<h4>Your Shopping List:</h4><ol>';
+            for (let item of items) {
+                html += `<li>${item}</li>`;
             }
+            html += '</ol>';
+            html += `<p><strong>Total Items:</strong> ${items.length}</p>`;
             
-            output.innerHTML = `
-                <h4>Sum Calculation:</h4>
-                <p><strong>Numbers:</strong> [${numbers.join(', ')}]</p>
-                <p><strong>Sum:</strong> ${sum}</p>
-                <p><em>Used for...of loop to iterate through numbers</em></p>
-            `;
+            output.innerHTML = html;
         }
 
-        function processListFilter() {
-            const input = document.getElementById('list-input').value;
-            const output = document.getElementById('list-output');
+        function filterExpensiveItems() {
+            const items = [
+                {name: 'Apple', price: 30},
+                {name: 'Banana', price: 20},
+                {name: 'Mango', price: 80},
+                {name: 'Grapes', price: 60},
+                {name: 'Orange', price: 40}
+            ];
             
-            if (!input.trim()) {
-                output.innerHTML = '<p style="color: #dc3545;">Please enter some numbers!</p>';
-                return;
-            }
+            const output = document.getElementById('listOutput');
+            let html = '<h4>Items over ₹50:</h4><ul>';
             
-            const numbers = input.split(',').map(item => parseFloat(item.trim())).filter(num => !isNaN(num));
-            const evenNumbers = [];
-            
-            for (const num of numbers) {
-                if (num % 2 === 0) {
-                    evenNumbers.push(num);
+            for (let item of items) {
+                if (item.price > 50) {
+                    html += `<li>${item.name} - ₹${item.price}</li>`;
                 }
             }
             
-            output.innerHTML = `
-                <h4>Even Numbers Filter:</h4>
-                <p><strong>Original:</strong> [${numbers.join(', ')}]</p>
-                <p><strong>Even Numbers:</strong> [${evenNumbers.join(', ')}]</p>
-                <p><em>Used for...of loop with condition to filter</em></p>
-            `;
-        }
-
-        function processListReverse() {
-            const input = document.getElementById('list-input').value;
-            const output = document.getElementById('list-output');
-            
-            if (!input.trim()) {
-                output.innerHTML = '<p style="color: #dc3545;">Please enter some items!</p>';
-                return;
-            }
-            
-            const items = input.split(',').map(item => item.trim());
-            const reversed = [];
-            
-            for (let i = items.length - 1; i >= 0; i--) {
-                reversed.push(items[i]);
-            }
-            
-            output.innerHTML = `
-                <h4>List Reversal:</h4>
-                <p><strong>Original:</strong> [${items.join(', ')}]</p>
-                <p><strong>Reversed:</strong> [${reversed.join(', ')}]</p>
-                <p><em>Used for loop with reverse indexing</em></p>
-            `;
-        }
-
-        function processListSearch() {
-            const input = document.getElementById('list-input').value;
-            const output = document.getElementById('list-output');
-            
-            if (!input.trim()) {
-                output.innerHTML = '<p style="color: #dc3545;">Please enter some items!</p>';
-                return;
-            }
-            
-            const items = input.split(',').map(item => item.trim());
-            const searchTerm = prompt('Enter item to search:');
-            
-            if (!searchTerm) return;
-            
-            let found = false;
-            let position = -1;
-            
-            for (let i = 0; i < items.length; i++) {
-                if (items[i].toLowerCase() === searchTerm.toLowerCase()) {
-                    found = true;
-                    position = i;
-                    break; // Found it, no need to continue
-                }
-            }
-            
-            output.innerHTML = `
-                <h4>Search Results:</h4>
-                <p><strong>List:</strong> [${items.join(', ')}]</p>
-                <p><strong>Searching for:</strong> "${searchTerm}"</p>
-                <p><strong>Result:</strong> ${found ? `Found at position ${position}` : 'Not found'}</p>
-                <p><em>Used for loop with break statement for efficient search</em></p>
-            `;
+            html += '</ul>';
+            output.innerHTML = html;
         }
     </script>
 </body>

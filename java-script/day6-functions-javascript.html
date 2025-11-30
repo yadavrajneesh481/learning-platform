@@ -3,931 +3,2113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Day 6: Functions in JavaScript</title>
+    <title>JavaScript Functions - Interactive Learning</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
             background: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
         }
+
         header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 2px solid #007bff;
-        }
-        h1, h2, h3 {
-            color: #007bff;
-        }
-        section {
-            margin: 20px 0;
-            padding: 15px;
-            border-left: 4px solid #007bff;
-            background: #f9f9f9;
-        }
-        .demo {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin: 10px 0;
-            background: white;
-        }
-        button {
-            background: #007bff;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin: 5px;
+            padding: 30px;
+            text-align: center;
         }
-        button:hover {
-            background: #0056b3;
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            animation: fadeInDown 1s;
         }
-        .function-card {
-            background: white;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 10px 0;
-            transition: all 0.3s;
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
         }
-        .function-card:hover {
-            border-color: #007bff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .function-card h4 {
-            margin-top: 0;
-            color: #007bff;
-        }
-        .code-example {
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
             background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            padding: 15px;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            margin: 10px 0;
+            border-bottom: 3px solid #f5576c;
             overflow-x: auto;
         }
-        .calculator-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 15px 0;
+
+        .nav-tab {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
         }
-        .calc-function {
-            background: white;
-            border: 2px solid #007bff;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-        }
-        .calc-function input {
-            width: 80px;
-            margin: 5px;
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-        }
-        .home-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 15px;
-            background: #28a745;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .home-link:hover {
-            background: #218838;
-        }
-        .interview-section {
+
+        .nav-tab:hover {
             background: #e9ecef;
-            padding: 20px;
-            margin-top: 30px;
+            color: #f5576c;
         }
-        .question {
-            margin-bottom: 15px;
-            padding: 10px;
+
+        .nav-tab.active {
             background: white;
-            border-radius: 5px;
+            color: #f5576c;
+            border-bottom: 3px solid #f5576c;
         }
-        input, select {
-            padding: 8px;
-            margin: 5px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
+
+        .content {
+            padding: 30px;
         }
-        .function-library {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #f5576c;
+        }
+
+        .section h2 {
+            color: #f5576c;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .section h3 {
+            color: #f093fb;
+            margin: 20px 0 10px 0;
+            font-size: 1.4em;
+        }
+
+        .analogy {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
             margin: 15px 0;
         }
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            .calculator-grid, .function-library {
-                grid-template-columns: 1fr;
-            }
-        }
-    
 
-    
-        /* Code Block Formatting - Universal Styles */
-        pre {
-            background: #282c34 !important;
-            color: #abb2bf !important;
-            padding: 20px !important;
-            border-radius: 8px !important;
-            overflow-x: auto !important;
-            overflow-y: auto !important;
-            margin: 15px 0 !important;
-            font-family: 'Courier New', 'Consolas', 'Monaco', monospace !important;
-            font-size: 14px !important;
-            line-height: 1.6 !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
-            white-space: pre !important;
-            word-wrap: normal !important;
-            tab-size: 4 !important;
+        .analogy::before {
+            content: "💡 ";
+            font-size: 1.5em;
         }
 
-        code {
-            font-family: 'Courier New', 'Consolas', 'Monaco', monospace !important;
-            font-size: 14px;
-            color: #e06c75;
-            background: rgba(0, 0, 0, 0.1);
-            padding: 2px 6px;
-            border-radius: 3px;
-        }
-
-        pre code {
-            background: transparent !important;
-            padding: 0 !important;
-            color: #abb2bf !important;
-            display: block !important;
-            white-space: pre !important;
-            word-wrap: normal !important;
-            overflow-wrap: normal !important;
-        }
-
-        /* Syntax Highlighting Classes */
-        .syntax-keyword { color: #c678dd; font-weight: bold; }
-        .syntax-tag { color: #e06c75; }
-        .syntax-attr { color: #d19a66; }
-        .syntax-string { color: #98c379; }
-        .syntax-comment { color: #5c6370; font-style: italic; }
-        .syntax-number { color: #d19a66; }
-        .syntax-function { color: #61afef; }
-        .syntax-operator { color: #56b6c2; }
-        .syntax-variable { color: #e5c07b; }
-
-        /* Code Block Container */
-        .code-block {
-            background: #282c34;
-            border-radius: 8px;
-            margin: 20px 0;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .code-block pre {
-            margin: 0;
-            border-radius: 0;
-            box-shadow: none;
-        }
-
-        /* Code Example Container */
-        .code-example {
+        .code-container {
             background: #282c34;
             color: #abb2bf;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             margin: 15px 0;
-            overflow-x: auto;
             position: relative;
+            overflow-x: auto;
         }
 
-        .code-example pre {
+        .code-container pre {
             margin: 0;
-            background: transparent;
-            padding: 0;
-            box-shadow: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
         }
 
-        /* Demo Box Code */
-        .demo-box pre {
-            background: #1e2127;
-            padding: 15px;
-            border-radius: 6px;
+        .code-container code {
+            color: #61dafb;
         }
 
-        /* Inline Code */
-        p code, li code, td code, th code {
-            background: rgba(0, 0, 0, 0.1);
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 0.9em;
-            color: #e06c75;
+        .run-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: all 0.3s;
         }
 
-        /* Dark Mode Support */
-        body.dark-mode pre {
+        .run-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .output {
             background: #1e1e1e;
-            border-color: rgba(255, 255, 255, 0.2);
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            min-height: 50px;
+            display: none;
         }
 
-        body.dark-mode code {
-            background: rgba(255, 255, 255, 0.1);
+        .output.show {
+            display: block;
+            animation: slideDown 0.3s;
         }
 
-        /* Scrollbar Styling for Code Blocks */
-        pre::-webkit-scrollbar {
-            height: 8px;
+        .toggle-lang {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            transition: all 0.3s;
         }
 
-        pre::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 4px;
+        .toggle-lang:hover {
+            background: #138496;
         }
 
-        pre::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
+        .explanation {
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #f5576c;
         }
 
-        pre::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
+        .hinglish {
+            display: none;
         }
 
+        .collapsible {
+            background: #f5576c;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            border: none;
+            text-align: left;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 10px;
+            margin: 10px 0;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .collapsible:hover {
+            background: #e04560;
+        }
+
+        .collapsible::after {
+            content: ' ▼';
+            float: right;
+        }
+
+        .collapsible.active::after {
+            content: ' ▲';
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: white;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .collapsible-content.show {
+            max-height: 3000px;
+            padding: 20px;
+            border: 2px solid #f5576c;
+            border-top: none;
+        }
+
+        .interview-question {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #007bff;
+        }
+
+        .interview-question h4 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .definition {
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #28a745;
+        }
+
+        .definition strong {
+            color: #155724;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: #f5576c;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .interactive-demo {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 3px solid #f5576c;
+        }
+
+        .demo-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .demo-btn {
+            background: #f5576c;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .demo-btn:hover {
+            background: #e04560;
+            transform: translateY(-2px);
+        }
+
+        .demo-output {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            min-height: 50px;
+            font-family: monospace;
+        }
+
+        .library-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .library-section h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .function-card {
+            background: white;
+            color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .function-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 5px 5px 5px 0;
+        }
+
+        .badge-declaration {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .badge-expression {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-arrow {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .nav-tab {
+                min-width: 120px;
+                padding: 12px 15px;
+                font-size: 0.9em;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .section {
+                padding: 15px;
+            }
+
+            .section h2 {
+                font-size: 1.4em;
+            }
+
+            .comparison-table {
+                font-size: 0.9em;
+            }
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .emoji {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .warning {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+
+        .warning::before {
+            content: "⚠️ ";
+            font-size: 1.5em;
+        }
+
+        .tip {
+            background: #d1ecf1;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #17a2b8;
+            margin: 15px 0;
+        }
+
+        .tip::before {
+            content: "💡 ";
+            font-size: 1.5em;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="home-link" aria-label="Return to JavaScript course homepage">🏠 Back to Course Home</a>
-        
         <header>
-            <h1>Day 6: Functions in JavaScript</h1>
-            <p><em>Function declarations, expressions, arrow functions, parameters, return values</em></p>
+            <h1>⚡ JavaScript Functions</h1>
+            <p>Master Functions with Interactive Examples & Practice</p>
         </header>
 
-        <section id="function-basics">
-            <h2>Functions Kya Hain? - Complete Deep Dive</h2>
-            <p>Functions JavaScript mein first-class citizens hain - matlab yeh values ki tarah treat hote hain. Functions reusable code blocks hain jo specific tasks perform karte hain, parameters accept kar sakte hain, aur values return kar sakte hain. Yeh code organization, reusability, aur modularity ke liye essential hain.</p>
-            
-            <h3>Function Fundamentals aur Concepts:</h3>
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;">
-                <h4>🧠 Core Function Concepts:</h4>
-                <ul>
-                    <li><strong>First-Class Functions:</strong> Variables mein store kar sakte hain, parameters mein pass kar sakte hain</li>
-                    <li><strong>Higher-Order Functions:</strong> Functions jo dusre functions ko accept ya return karte hain</li>
-                    <li><strong>Pure Functions:</strong> Same input ke liye same output, no side effects</li>
-                    <li><strong>Function Scope:</strong> Functions apna local scope create karte hain</li>
-                    <li><strong>Closures:</strong> Inner functions outer function ke variables access kar sakte hain</li>
-                </ul>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="openTab('basics')">Function Basics</button>
+            <button class="nav-tab" onclick="openTab('types')">Types & Syntax</button>
+            <button class="nav-tab" onclick="openTab('parameters')">Parameters</button>
+            <button class="nav-tab" onclick="openTab('library')">Function Library</button>
+            <button class="nav-tab" onclick="openTab('interview')">Interview Q&A</button>
+        </div>
+
+        <div class="content">
+            <!-- BASICS TAB -->
+            <div id="basics" class="tab-content active">
+                <div class="section">
+                    <h2><span class="emoji">📚</span>What are Functions?</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p><strong>Functions</strong> are reusable blocks of code that perform a specific task. They help organize code, avoid repetition, and make programs more maintainable.</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p><strong>Functions</strong> code ke reusable blocks hain jo ek specific task perform karte hain. Ye code ko organize karne, repetition avoid karne, aur programs ko maintainable banane mein help karte hain.</p>
+                    </div>
+
+                    <div class="analogy">
+                        <strong>Analogy:</strong> Think of a function like a recipe! You write the recipe once (define function), and then you can cook the dish anytime by following that recipe (calling function). You don't need to remember all steps every time!
+                    </div>
+
+                    <div class="definition">
+                        <strong>Key Definition:</strong> A <span class="highlight">function</span> is a named block of code that can be executed whenever needed by calling its name.
+                    </div>
+
+                    <h3>Why Use Functions?</h3>
+                    <div class="explanation english">
+                        <ul>
+                            <li><strong>Reusability:</strong> Write once, use multiple times</li>
+                            <li><strong>Organization:</strong> Break complex problems into smaller parts</li>
+                            <li><strong>Maintainability:</strong> Easy to update and debug</li>
+                            <li><strong>Abstraction:</strong> Hide complex logic behind simple names</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2><span class="emoji">🔧</span>Basic Function Syntax</h2>
+                    
+                    <h3>Creating and Calling Functions</h3>
+                    <div class="code-container">
+                        <pre><code>// Function Declaration
+function functionName(parameters) {
+    // code to be executed
+    return value; // optional
+}
+
+// Function Call
+functionName(arguments);</code></pre>
+                    </div>
+
+                    <h3>Example: Simple Greeting Function</h3>
+                    <div class="code-container">
+                        <pre><code id="code1">// Define the function
+function greet(name) {
+    return "Hello, " + name + "! Welcome to JavaScript!";
+}
+
+// Call the function
+console.log(greet("Rahul"));
+console.log(greet("Priya"));
+console.log(greet("Amit"));</code></pre>
+                        <button class="run-btn" onclick="runCode('code1', 'output1')">▶ Run Code</button>
+                        <div id="output1" class="output"></div>
+                    </div>
+
+                    <h3>Example: Function without Return</h3>
+                    <div class="code-container">
+                        <pre><code id="code2">function printMessage(message) {
+    console.log("📢 " + message);
+}
+
+printMessage("Functions are awesome!");
+printMessage("Learning JavaScript is fun!");</code></pre>
+                        <button class="run-btn" onclick="runCode('code2', 'output2')">▶ Run Code</button>
+                        <div id="output2" class="output"></div>
+                    </div>
+
+                    <div class="tip">
+                        <strong>Tip:</strong> Functions without a return statement automatically return <code>undefined</code>.
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2><span class="emoji">🎯</span>Function Components</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p><strong>1. Function Name:</strong> Identifier to call the function</p>
+                        <p><strong>2. Parameters:</strong> Variables listed in function definition (placeholders)</p>
+                        <p><strong>3. Arguments:</strong> Actual values passed when calling the function</p>
+                        <p><strong>4. Function Body:</strong> Code block that executes when function is called</p>
+                        <p><strong>5. Return Value:</strong> Value sent back to the caller</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p><strong>1. Function Name:</strong> Function ko call karne ke liye identifier</p>
+                        <p><strong>2. Parameters:</strong> Function definition mein listed variables (placeholders)</p>
+                        <p><strong>3. Arguments:</strong> Function call karte waqt pass kiye gaye actual values</p>
+                        <p><strong>4. Function Body:</strong> Code block jo function call hone par execute hota hai</p>
+                        <p><strong>5. Return Value:</strong> Caller ko wapas bheji gayi value</p>
+                    </div>
+
+                    <h3>Example: Understanding Components</h3>
+                    <div class="code-container">
+                        <pre><code id="code3">// Function with all components labeled
+function calculateSum(num1, num2) {  // num1, num2 are parameters
+    let sum = num1 + num2;           // function body
+    return sum;                       // return value
+}
+
+// Function call with arguments
+let result = calculateSum(10, 20);   // 10, 20 are arguments
+console.log("Sum: " + result);
+
+// Another call with different arguments
+console.log("Sum: " + calculateSum(50, 75));</code></pre>
+                        <button class="run-btn" onclick="runCode('code3', 'output3')">▶ Run Code</button>
+                        <div id="output3" class="output"></div>
+                    </div>
+                </div>
             </div>
-            
-            <h3>Function Declaration Methods - Detailed Comparison:</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px; margin: 15px 0;">
-                <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; border: 1px solid #007bff;">
-                    <h4>🔵 Function Declaration</h4>
-                    <div class="code-example"><pre><code>function functionName(parameters) {
 
-  // function body
+            <!-- TYPES TAB -->
+            <div id="types" class="tab-content">
+                <div class="section">
+                    <h2><span class="emoji">🔀</span>Function Declaration vs Expression</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p>JavaScript has multiple ways to create functions. The two main types are <strong>Function Declarations</strong> and <strong>Function Expressions</strong>.</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p>JavaScript mein functions banane ke kai tarike hain. Do main types hain: <strong>Function Declarations</strong> aur <strong>Function Expressions</strong>.</p>
+                    </div>
 
-  return value;
+                    <h3>1. Function Declaration</h3>
+                    <div class="code-container">
+                        <pre><code id="code4">// Function Declaration
+function add(a, b) {
+    return a + b;
+}
 
-}</code></pre></div>
-                    <p><strong>Hoisting:</strong> ✅ Fully hoisted</p>
-                    <p><strong>this Binding:</strong> Dynamic</p>
-                    <p><strong>Constructor:</strong> ✅ Can be used with 'new'</p>
-                    <p><strong>Use Case:</strong> Main functions, methods</p>
-                </div>
-                <div style="background: #f0f8e7; padding: 15px; border-radius: 8px; border: 1px solid #28a745;">
-                    <h4>🟢 Function Expression</h4>
-                    <div class="code-example"><pre><code>const functionName = function(parameters) {
+console.log("5 + 3 = " + add(5, 3));
 
-  // function body
+// Can be called before declaration (Hoisting)
+console.log("10 + 20 = " + multiply(10, 20));
 
-  return value;
+function multiply(a, b) {
+    return a * b;
+}</code></pre>
+                        <button class="run-btn" onclick="runCode('code4', 'output4')">▶ Run Code</button>
+                        <div id="output4" class="output"></div>
+                    </div>
 
-};</code></pre></div>
-                    <p><strong>Hoisting:</strong> ❌ Variable hoisted, function not</p>
-                    <p><strong>this Binding:</strong> Dynamic</p>
-                    <p><strong>Constructor:</strong> ✅ Can be used with 'new'</p>
-                    <p><strong>Use Case:</strong> Conditional functions, callbacks</p>
-                </div>
-                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffc107;">
-                    <h4>🟡 Arrow Function (ES6)</h4>
-                    <div class="code-example"><pre><code>const functionName = (parameters) => {
-
-  // function body
-
-  return value;
-
+                    <h3>2. Function Expression</h3>
+                    <div class="code-container">
+                        <pre><code id="code5">// Function Expression (Anonymous)
+const subtract = function(a, b) {
+    return a - b;
 };
 
-// Short: const fn = x => x * 2;</code></pre></div>
-                    <p><strong>Hoisting:</strong> ❌ Not hoisted</p>
-                    <p><strong>this Binding:</strong> Lexical (inherited)</p>
-                    <p><strong>Constructor:</strong> ❌ Cannot use with 'new'</p>
-                    <p><strong>Use Case:</strong> Callbacks, short functions</p>
-                </div>
-                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border: 1px solid #dc3545;">
-                    <h4>🔴 IIFE (Immediately Invoked)</h4>
-                    <div class="code-example"><pre><code>(function(parameters) {
+console.log("10 - 3 = " + subtract(10, 3));
 
-  // function body
-
-  // executes immediately
-
-})(arguments);
-
-// Arrow IIFE: (() => {})();</code></pre></div>
-                    <p><strong>Hoisting:</strong> N/A (executes immediately)</p>
-                    <p><strong>this Binding:</strong> Depends on type</p>
-                    <p><strong>Constructor:</strong> ❌ Cannot use</p>
-                    <p><strong>Use Case:</strong> Module pattern, avoid pollution</p>
-                </div>
-            </div>
-            
-            <div class="demo">
-                <h3>Interactive Function Types Comparison</h3>
-                <div class="function-card">
-                    <h4>1. Function Declaration</h4>
-                    <div class="code-example"><pre><code>function greet(name) {
-    return "Hello " + name + "!";
-}</code></pre></div>
-                    <button onclick="testFunctionDeclaration()">Test Declaration</button>
-                </div>
-                
-                <div class="function-card">
-                    <h4>2. Function Expression</h4>
-                    <div class="code-example"><pre><code>const greet = function(name) {
-    return "Hello " + name + "!";
-};</code></pre></div>
-                    <button onclick="testFunctionExpression()">Test Expression</button>
-                </div>
-                
-                <div class="function-card">
-                    <h4>3. Arrow Function</h4>
-                    <div class="code-example"><pre><code>const greet = (name) => {
-    return "Hello " + name + "!";
+// Named Function Expression
+const divide = function divideNumbers(a, b) {
+    if (b === 0) {
+        return "Cannot divide by zero!";
+    }
+    return a / b;
 };
-// Or shorter: const greet = name => "Hello " + name + "!";</code></pre></div>
-                    <button onclick="testArrowFunction()">Test Arrow Function</button>
+
+console.log("20 / 4 = " + divide(20, 4));
+console.log("10 / 0 = " + divide(10, 0));</code></pre>
+                        <button class="run-btn" onclick="runCode('code5', 'output5')">▶ Run Code</button>
+                        <div id="output5" class="output"></div>
+                    </div>
+
+                    <h3>Comparison Table</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Function Declaration</th>
+                                <th>Function Expression</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Syntax</strong></td>
+                                <td><code>function name() {}</code></td>
+                                <td><code>const name = function() {}</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Hoisting</strong></td>
+                                <td>✅ Yes (can call before declaration)</td>
+                                <td>❌ No (must declare before calling)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Name Required</strong></td>
+                                <td>✅ Yes</td>
+                                <td>❌ No (can be anonymous)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Use Case</strong></td>
+                                <td>General purpose functions</td>
+                                <td>Callbacks, conditional functions</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="warning">
+                        <strong>Important:</strong> Function expressions are NOT hoisted. You must define them before calling!
+                    </div>
                 </div>
-                
-                <div class="function-card">
-                    <h4>4. IIFE (Immediately Invoked Function Expression)</h4>
-                    <div class="code-example"><pre><code>(function(name) {
-    console.log("IIFE executed with:", name);
-})("World");</code></pre></div>
-                    <button onclick="testIIFE()">Test IIFE</button>
-                </div>
-                
-                <div id="function-test-output"></div>
-                
-                <h3>Advanced Function Concepts</h3>
-                <div style="margin: 15px 0;">
-                    <button onclick="demonstrateHoisting()">⬆️ Function Hoisting</button>
-                    <button onclick="demonstrateThisBinding()">🎯 'this' Binding</button>
-                    <button onclick="demonstrateClosures()">🔒 Closures</button>
-                    <button onclick="demonstrateHigherOrder()">🔝 Higher-Order Functions</button>
-                </div>
-                <div id="advanced-function-result"></div>
-            </div>
-        </section>
 
-        <section id="function-advanced-concepts">
-            <h2>Advanced Function Concepts</h2>
-            <p>JavaScript functions mein kuch advanced concepts hain jo powerful programming patterns enable karte hain:</p>
-            
-            <h3>Function Composition aur Currying:</h3>
-            <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;">
-                <h4>🔗 Function Composition:</h4>
-                <p>Multiple functions ko combine karke complex operations banana:</p>
-                <div class="code-example"><pre><code>const add = x => y => x + y;
-
-const multiply = x => y => x * y;
-
-const compose = (f, g) => x => f(g(x));
-
-
-const addThenMultiply = compose(multiply(2), add(3));
-
-console.log(addThenMultiply(5)); // (5 + 3) * 2 = 16</code></pre></div>
-            </div>
-            
-            <h3>Callback Functions aur Event Handling:</h3>
-            <div style="background: #f0f8e7; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #28a745;">
-                <h4>📞 Callback Patterns:</h4>
-                <ul>
-                    <li><strong>Synchronous Callbacks:</strong> Array methods (map, filter, reduce)</li>
-                    <li><strong>Asynchronous Callbacks:</strong> setTimeout, event listeners</li>
-                    <li><strong>Error-First Callbacks:</strong> Node.js style (err, data) => {}</li>
-                    <li><strong>Event Callbacks:</strong> DOM event handling</li>
-                </ul>
-            </div>
-            
-            <div class="demo">
-                <h3>Advanced Function Patterns Demo</h3>
-                <div style="margin: 15px 0;">
-                    <button onclick="demonstrateCurrying()">🍛 Currying</button>
-                    <button onclick="demonstrateComposition()">🔗 Function Composition</button>
-                    <button onclick="demonstrateCallbacks()">📞 Callback Patterns</button>
-                    <button onclick="demonstrateRecursion()">🔄 Recursion</button>
-                </div>
-                <div id="advanced-patterns-result"></div>
-            </div>
-        </section>
-
-        <section id="parameters">
-            <h2>Parameters aur Arguments</h2>
-            <p>Functions mein data pass karne ke different ways:</p>
-            
-            <div class="demo">
-                <h3>Parameter Types Demo</h3>
-                <div>
-                    <label>Name: <input type="text" id="param-name" value="Rahul"></label>
-                    <label>Age: <input type="number" id="param-age" value="25"></label>
-                    <label>City: <input type="text" id="param-city" value="Mumbai"></label>
-                </div>
-                <div style="margin: 10px 0;">
-                    <button onclick="testDefaultParams()">Default Parameters</button>
-                    <button onclick="testRestParams()">Rest Parameters</button>
-                    <button onclick="testDestructuring()">Destructuring</button>
-                </div>
-                <div id="parameters-output"></div>
-            </div>
-        </section>
-
-        <section id="return-values">
-            <h2>Return Values</h2>
-            <p>Functions se data wapas kaise laayein:</p>
-            
-            <div class="demo">
-                <h3>Return Examples</h3>
-                <button onclick="testReturnTypes()">Test Different Returns</button>
-                <div id="return-output"></div>
-            </div>
-        </section>
-
-        <section id="arrow-functions">
-            <h2>Arrow Functions Deep Dive</h2>
-            <p>ES6 ka modern syntax, shorter aur cleaner:</p>
-            
-            <div class="demo">
-                <h3>Arrow Function Variations</h3>
-                <div class="code-example"><pre><code>// Different arrow function syntaxes
-const add = (a, b) => a + b;                    // Implicit return
-const square = x => x * x;                      // Single parameter
-const greet = () => "Hello World!";             // No parameters
-const complex = (a, b) => {                     // Multiple statements
-    const sum = a + b;
-    return sum * 2;
-};</code></pre></div>
-                <button onclick="demonstrateArrowVariations()">Test All Variations</button>
-                <div id="arrow-output"></div>
-            </div>
-        </section>
-
-        <section id="calculator-functions">
-            <h2>Practice: Math Utility Library</h2>
-            <p>Different types ke functions use karke calculator banayenge:</p>
-            
-            <div class="demo">
-                <h3>Interactive Calculator Functions</h3>
-                <div class="calculator-grid">
-                    <div class="calc-function">
-                        <h4>Addition</h4>
-                        <input type="number" id="add-a" placeholder="a" value="5">
-                        <input type="number" id="add-b" placeholder="b" value="3">
-                        <button onclick="calculateAdd()">Add</button>
-                        <div id="add-result"></div>
+                <div class="section">
+                    <h2><span class="emoji">➡️</span>Arrow Functions</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p><strong>Arrow functions</strong> are a shorter syntax for writing function expressions. Introduced in ES6, they provide a more concise way to write functions.</p>
                     </div>
                     
-                    <div class="calc-function">
-                        <h4>Power</h4>
-                        <input type="number" id="pow-base" placeholder="base" value="2">
-                        <input type="number" id="pow-exp" placeholder="exp" value="3">
-                        <button onclick="calculatePower()">Power</button>
-                        <div id="pow-result"></div>
+                    <div class="explanation hinglish">
+                        <p><strong>Arrow functions</strong> function expressions likhne ka ek shorter syntax hai. ES6 mein introduce hua, ye functions likhne ka zyada concise tarika provide karta hai.</p>
+                    </div>
+
+                    <div class="analogy">
+                        <strong>Analogy:</strong> Arrow functions are like shortcuts on your phone - they do the same thing as the full app, but faster and with less typing!
+                    </div>
+
+                    <h3>Basic Syntax</h3>
+                    <div class="code-container">
+                        <pre><code>// Traditional Function Expression
+const func1 = function(param) {
+    return param * 2;
+};
+
+// Arrow Function
+const func2 = (param) => {
+    return param * 2;
+};
+
+// Arrow Function with Implicit Return (one-liner)
+const func3 = param => param * 2;</code></pre>
+                    </div>
+
+                    <h3>Example: Different Arrow Function Styles</h3>
+                    <div class="code-container">
+                        <pre><code id="code6">// No parameters
+const sayHello = () => "Hello, World!";
+console.log(sayHello());
+
+// One parameter (parentheses optional)
+const square = num => num * num;
+console.log("Square of 5: " + square(5));
+
+// Multiple parameters
+const add = (a, b) => a + b;
+console.log("10 + 20 = " + add(10, 20));
+
+// Multiple lines (need curly braces and return)
+const greetUser = (name, age) => {
+    const message = `Hello ${name}, you are ${age} years old!`;
+    return message;
+};
+console.log(greetUser("Rahul", 25));</code></pre>
+                        <button class="run-btn" onclick="runCode('code6', 'output6')">▶ Run Code</button>
+                        <div id="output6" class="output"></div>
+                    </div>
+
+                    <h3>Implicit Return</h3>
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p><strong>Implicit return</strong> means the function automatically returns the expression without using the <code>return</code> keyword. Works only with single-line arrow functions.</p>
                     </div>
                     
-                    <div class="calc-function">
-                        <h4>Factorial</h4>
-                        <input type="number" id="fact-n" placeholder="n" value="5">
-                        <button onclick="calculateFactorial()">Factorial</button>
-                        <div id="fact-result"></div>
+                    <div class="explanation hinglish">
+                        <p><strong>Implicit return</strong> matlab function automatically expression ko return kar deta hai bina <code>return</code> keyword use kiye. Sirf single-line arrow functions ke saath kaam karta hai.</p>
+                    </div>
+
+                    <div class="code-container">
+                        <pre><code id="code7">// Explicit return (with return keyword)
+const multiply1 = (a, b) => {
+    return a * b;
+};
+
+// Implicit return (without return keyword)
+const multiply2 = (a, b) => a * b;
+
+console.log("Explicit: " + multiply1(5, 3));
+console.log("Implicit: " + multiply2(5, 3));
+
+// Implicit return with object (need parentheses)
+const createPerson = (name, age) => ({
+    name: name,
+    age: age
+});
+
+console.log(createPerson("Priya", 22));</code></pre>
+                        <button class="run-btn" onclick="runCode('code7', 'output7')">▶ Run Code</button>
+                        <div id="output7" class="output"></div>
+                    </div>
+
+                    <div class="tip">
+                        <strong>Tip:</strong> To implicitly return an object, wrap it in parentheses: <code>() => ({ key: value })</code>
+                    </div>
+
+                    <h3>Arrow Functions with Arrays</h3>
+                    <div class="code-container">
+                        <pre><code id="code8">const numbers = [1, 2, 3, 4, 5];
+
+// Using arrow functions with array methods
+const doubled = numbers.map(num => num * 2);
+console.log("Doubled: " + doubled);
+
+const evens = numbers.filter(num => num % 2 === 0);
+console.log("Even numbers: " + evens);
+
+const sum = numbers.reduce((acc, num) => acc + num, 0);
+console.log("Sum: " + sum);</code></pre>
+                        <button class="run-btn" onclick="runCode('code8', 'output8')">▶ Run Code</button>
+                        <div id="output8" class="output"></div>
+                    </div>
+
+                    <h3>Comparison: Regular vs Arrow Functions</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Regular Function</th>
+                                <th>Arrow Function</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Syntax</strong></td>
+                                <td>More verbose</td>
+                                <td>Shorter, concise</td>
+                            </tr>
+                            <tr>
+                                <td><strong>this binding</strong></td>
+                                <td>Has its own <code>this</code></td>
+                                <td>Inherits <code>this</code> from parent</td>
+                            </tr>
+                            <tr>
+                                <td><strong>arguments object</strong></td>
+                                <td>✅ Has <code>arguments</code></td>
+                                <td>❌ No <code>arguments</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Implicit return</strong></td>
+                                <td>❌ No</td>
+                                <td>✅ Yes (single expression)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Use as constructor</strong></td>
+                                <td>✅ Yes (with <code>new</code>)</td>
+                                <td>❌ No</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PARAMETERS TAB -->
+            <div id="parameters" class="tab-content">
+                <div class="section">
+                    <h2><span class="emoji">📥</span>Function Parameters & Arguments</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p><strong>Parameters</strong> are variables listed in the function definition. <strong>Arguments</strong> are the actual values passed to the function when calling it.</p>
                     </div>
                     
-                    <div class="calc-function">
-                        <h4>Average</h4>
-                        <input type="text" id="avg-numbers" placeholder="1,2,3,4,5" value="1,2,3,4,5">
-                        <button onclick="calculateAverage()">Average</button>
-                        <div id="avg-result"></div>
+                    <div class="explanation hinglish">
+                        <p><strong>Parameters</strong> function definition mein listed variables hain. <strong>Arguments</strong> function call karte waqt pass ki gayi actual values hain.</p>
+                    </div>
+
+                    <h3>Basic Parameters</h3>
+                    <div class="code-container">
+                        <pre><code id="code9">// Function with parameters
+function introduce(name, age, city) {
+    return `Hi! I'm ${name}, ${age} years old, from ${city}.`;
+}
+
+// Calling with arguments
+console.log(introduce("Rahul", 25, "Mumbai"));
+console.log(introduce("Priya", 22, "Delhi"));
+
+// Missing arguments become undefined
+console.log(introduce("Amit", 30));</code></pre>
+                        <button class="run-btn" onclick="runCode('code9', 'output9')">▶ Run Code</button>
+                        <div id="output9" class="output"></div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2><span class="emoji">🎁</span>Default Parameters</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p><strong>Default parameters</strong> allow you to set default values for parameters. If no argument is passed, the default value is used.</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p><strong>Default parameters</strong> se aap parameters ke liye default values set kar sakte ho. Agar koi argument pass nahi kiya to default value use hoti hai.</p>
+                    </div>
+
+                    <div class="analogy">
+                        <strong>Analogy:</strong> Like ordering pizza - if you don't specify toppings (arguments), you get the default cheese pizza (default parameters)!
+                    </div>
+
+                    <h3>Example: Default Parameters</h3>
+                    <div class="code-container">
+                        <pre><code id="code10">// Function with default parameters
+function greet(name = "Guest", greeting = "Hello") {
+    return `${greeting}, ${name}!`;
+}
+
+// Using default values
+console.log(greet());
+
+// Overriding first default
+console.log(greet("Rahul"));
+
+// Overriding both defaults
+console.log(greet("Priya", "Namaste"));
+
+// Practical example: Calculate price with tax
+function calculatePrice(price, taxRate = 0.18) {
+    const total = price + (price * taxRate);
+    return `Price: ₹${price}, Tax: ${taxRate * 100}%, Total: ₹${total}`;
+}
+
+console.log(calculatePrice(1000));
+console.log(calculatePrice(1000, 0.12));</code></pre>
+                        <button class="run-btn" onclick="runCode('code10', 'output10')">▶ Run Code</button>
+                        <div id="output10" class="output"></div>
+                    </div>
+
+                    <div class="tip">
+                        <strong>Tip:</strong> Default parameters should come after regular parameters in the function definition.
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2><span class="emoji">📦</span>Rest Parameters</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p><strong>Rest parameters</strong> allow a function to accept an indefinite number of arguments as an array. Use three dots (<code>...</code>) before the parameter name.</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p><strong>Rest parameters</strong> se function unlimited arguments ko array ke roop mein accept kar sakta hai. Parameter name se pehle teen dots (<code>...</code>) use karo.</p>
+                    </div>
+
+                    <div class="analogy">
+                        <strong>Analogy:</strong> Like a shopping bag that can hold any number of items - you don't need to know in advance how many items you'll buy!
+                    </div>
+
+                    <h3>Example: Rest Parameters</h3>
+                    <div class="code-container">
+                        <pre><code id="code11">// Function with rest parameters
+function sum(...numbers) {
+    console.log("Received " + numbers.length + " numbers");
+    let total = 0;
+    for (let num of numbers) {
+        total += num;
+    }
+    return total;
+}
+
+console.log("Sum of 1, 2, 3: " + sum(1, 2, 3));
+console.log("Sum of 10, 20, 30, 40: " + sum(10, 20, 30, 40));
+console.log("Sum of 5, 15, 25, 35, 45, 55: " + sum(5, 15, 25, 35, 45, 55));
+
+// Combining regular and rest parameters
+function introduce(name, age, ...hobbies) {
+    console.log(`Name: ${name}, Age: ${age}`);
+    console.log("Hobbies: " + hobbies.join(", "));
+}
+
+introduce("Rahul", 25, "Cricket", "Reading", "Coding", "Gaming");</code></pre>
+                        <button class="run-btn" onclick="runCode('code11', 'output11')">▶ Run Code</button>
+                        <div id="output11" class="output"></div>
+                    </div>
+
+                    <h3>Example: Finding Maximum with Rest Parameters</h3>
+                    <div class="code-container">
+                        <pre><code id="code12">function findMax(...numbers) {
+    if (numbers.length === 0) {
+        return "No numbers provided!";
+    }
+    
+    let max = numbers[0];
+    for (let num of numbers) {
+        if (num > max) {
+            max = num;
+        }
+    }
+    return max;
+}
+
+console.log("Max of 5, 12, 8, 3: " + findMax(5, 12, 8, 3));
+console.log("Max of 45, 23, 89, 12, 67: " + findMax(45, 23, 89, 12, 67));
+
+// Using with arrow function
+const multiply = (...nums) => nums.reduce((acc, num) => acc * num, 1);
+console.log("Product of 2, 3, 4: " + multiply(2, 3, 4));</code></pre>
+                        <button class="run-btn" onclick="runCode('code12', 'output12')">▶ Run Code</button>
+                        <div id="output12" class="output"></div>
+                    </div>
+
+                    <div class="warning">
+                        <strong>Important:</strong> Rest parameter must be the last parameter in the function definition!
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2><span class="emoji">↩️</span>Return Values</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p>The <strong>return statement</strong> ends function execution and specifies a value to be returned to the caller. Functions without return automatically return <code>undefined</code>.</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p><strong>Return statement</strong> function execution ko end karta hai aur caller ko ek value return karta hai. Return ke bina functions automatically <code>undefined</code> return karte hain.</p>
+                    </div>
+
+                    <h3>Example: Different Return Types</h3>
+                    <div class="code-container">
+                        <pre><code id="code13">// Return number
+function add(a, b) {
+    return a + b;
+}
+
+// Return string
+function getFullName(firstName, lastName) {
+    return firstName + " " + lastName;
+}
+
+// Return boolean
+function isEven(num) {
+    return num % 2 === 0;
+}
+
+// Return object
+function createUser(name, age) {
+    return {
+        name: name,
+        age: age,
+        isAdult: age >= 18
+    };
+}
+
+// Return array
+function getEvenNumbers(limit) {
+    const evens = [];
+    for (let i = 2; i <= limit; i += 2) {
+        evens.push(i);
+    }
+    return evens;
+}
+
+console.log("Sum: " + add(10, 20));
+console.log("Full Name: " + getFullName("Rahul", "Sharma"));
+console.log("Is 7 even? " + isEven(7));
+console.log("User:", createUser("Priya", 22));
+console.log("Even numbers up to 10:", getEvenNumbers(10));</code></pre>
+                        <button class="run-btn" onclick="runCode('code13', 'output13')">▶ Run Code</button>
+                        <div id="output13" class="output"></div>
+                    </div>
+
+                    <h3>Example: Early Return</h3>
+                    <div class="code-container">
+                        <pre><code id="code14">// Using early return for validation
+function divide(a, b) {
+    if (b === 0) {
+        return "Error: Cannot divide by zero!";
+    }
+    return a / b;
+}
+
+console.log("10 / 2 = " + divide(10, 2));
+console.log("10 / 0 = " + divide(10, 0));
+
+// Multiple return statements
+function checkAge(age) {
+    if (age < 0) {
+        return "Invalid age!";
+    }
+    if (age < 18) {
+        return "Minor";
+    }
+    if (age < 60) {
+        return "Adult";
+    }
+    return "Senior Citizen";
+}
+
+console.log("Age 15: " + checkAge(15));
+console.log("Age 25: " + checkAge(25));
+console.log("Age 65: " + checkAge(65));</code></pre>
+                        <button class="run-btn" onclick="runCode('code14', 'output14')">▶ Run Code</button>
+                        <div id="output14" class="output"></div>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <section id="function-library">
-            <h2>Practice: Complete Function Library</h2>
-            <p>Real-world utility functions ka collection:</p>
-            
-            <div class="demo">
-                <h3>Utility Functions</h3>
-                <div class="function-library">
+            <!-- LIBRARY TAB -->
+            <div id="library" class="tab-content">
+                <div class="section">
+                    <h2><span class="emoji">📚</span>Function Library - Math Utilities</h2>
+                    
+                    <button class="toggle-lang" onclick="toggleLanguage(this)">Switch to Hinglish</button>
+                    
+                    <div class="explanation english">
+                        <p>Let's create a comprehensive <strong>Math Utilities Library</strong> with reusable functions for common mathematical operations. This demonstrates real-world function usage!</p>
+                    </div>
+                    
+                    <div class="explanation hinglish">
+                        <p>Chaliye ek comprehensive <strong>Math Utilities Library</strong> banate hain reusable functions ke saath common mathematical operations ke liye. Ye real-world function usage demonstrate karta hai!</p>
+                    </div>
+                </div>
+
+                <div class="library-section">
+                    <h3>🧮 Complete Math Library</h3>
+                    
                     <div class="function-card">
-                        <h4>String Utils</h4>
-                        <input type="text" id="string-input" placeholder="Enter text" value="hello world">
-                        <div>
-                            <button onclick="testCapitalize()">Capitalize</button>
-                            <button onclick="testReverse()">Reverse</button>
-                            <button onclick="testWordCount()">Word Count</button>
+                        <h4>1. Basic Operations</h4>
+                        <span class="badge badge-arrow">Arrow Function</span>
+                        <div class="code-container">
+                            <pre><code id="code15">// Math Library - Basic Operations
+const MathLib = {
+    // Addition
+    add: (...nums) => nums.reduce((sum, num) => sum + num, 0),
+    
+    // Subtraction
+    subtract: (a, b) => a - b,
+    
+    // Multiplication
+    multiply: (...nums) => nums.reduce((product, num) => product * num, 1),
+    
+    // Division
+    divide: (a, b) => b !== 0 ? a / b : "Cannot divide by zero",
+    
+    // Modulus
+    modulus: (a, b) => a % b,
+    
+    // Power
+    power: (base, exponent) => Math.pow(base, exponent)
+};
+
+// Test basic operations
+console.log("Add: " + MathLib.add(5, 10, 15, 20));
+console.log("Subtract: " + MathLib.subtract(50, 20));
+console.log("Multiply: " + MathLib.multiply(2, 3, 4));
+console.log("Divide: " + MathLib.divide(100, 5));
+console.log("Modulus: " + MathLib.modulus(17, 5));
+console.log("Power: " + MathLib.power(2, 8));</code></pre>
+                            <button class="run-btn" onclick="runCode('code15', 'output15')">▶ Run Code</button>
+                            <div id="output15" class="output"></div>
                         </div>
-                        <div id="string-output"></div>
                     </div>
-                    
+
                     <div class="function-card">
-                        <h4>Array Utils</h4>
-                        <input type="text" id="array-input" placeholder="1,2,3,4,5" value="1,2,3,4,5">
-                        <div>
-                            <button onclick="testArrayMax()">Find Max</button>
-                            <button onclick="testArraySum()">Sum All</button>
-                            <button onclick="testArrayUnique()">Remove Duplicates</button>
+                        <h4>2. Advanced Math Functions</h4>
+                        <span class="badge badge-declaration">Function Declaration</span>
+                        <div class="code-container">
+                            <pre><code id="code16">// Square root
+function sqrt(num) {
+    return num >= 0 ? Math.sqrt(num) : "Cannot calculate square root of negative number";
+}
+
+// Absolute value
+function abs(num) {
+    return num < 0 ? -num : num;
+}
+
+// Round to decimal places
+function roundTo(num, decimals = 2) {
+    const factor = Math.pow(10, decimals);
+    return Math.round(num * factor) / factor;
+}
+
+// Percentage calculation
+function percentage(value, total) {
+    return roundTo((value / total) * 100, 2) + "%";
+}
+
+// Test advanced functions
+console.log("Square root of 144: " + sqrt(144));
+console.log("Absolute value of -25: " + abs(-25));
+console.log("Round 3.14159 to 2 decimals: " + roundTo(3.14159, 2));
+console.log("30 out of 150: " + percentage(30, 150));</code></pre>
+                            <button class="run-btn" onclick="runCode('code16', 'output16')">▶ Run Code</button>
+                            <div id="output16" class="output"></div>
                         </div>
-                        <div id="array-output"></div>
                     </div>
-                    
+
                     <div class="function-card">
-                        <h4>Validation Utils</h4>
-                        <input type="text" id="validation-input" placeholder="test@email.com" value="test@email.com">
-                        <div>
-                            <button onclick="testEmailValidation()">Validate Email</button>
-                            <button onclick="testPhoneValidation()">Validate Phone</button>
-                            <button onclick="testPasswordStrength()">Password Strength</button>
+                        <h4>3. Statistical Functions</h4>
+                        <span class="badge badge-arrow">Arrow Function</span>
+                        <div class="code-container">
+                            <pre><code id="code17">// Find maximum
+const max = (...nums) => Math.max(...nums);
+
+// Find minimum
+const min = (...nums) => Math.min(...nums);
+
+// Calculate average
+const average = (...nums) => {
+    if (nums.length === 0) return 0;
+    return nums.reduce((sum, num) => sum + num, 0) / nums.length;
+};
+
+// Calculate median
+const median = (...nums) => {
+    const sorted = [...nums].sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    return sorted.length % 2 === 0 
+        ? (sorted[mid - 1] + sorted[mid]) / 2 
+        : sorted[mid];
+};
+
+// Calculate range
+const range = (...nums) => max(...nums) - min(...nums);
+
+// Test statistical functions
+const data = [10, 20, 30, 40, 50];
+console.log("Data: " + data);
+console.log("Max: " + max(...data));
+console.log("Min: " + min(...data));
+console.log("Average: " + average(...data));
+console.log("Median: " + median(...data));
+console.log("Range: " + range(...data));</code></pre>
+                            <button class="run-btn" onclick="runCode('code17', 'output17')">▶ Run Code</button>
+                            <div id="output17" class="output"></div>
                         </div>
-                        <div id="validation-output"></div>
                     </div>
-                    
+
                     <div class="function-card">
-                        <h4>Date Utils</h4>
-                        <div>
-                            <button onclick="testDateFormatting()">Format Date</button>
-                            <button onclick="testAgeCalculator()">Calculate Age</button>
-                            <button onclick="testDaysDifference()">Days Difference</button>
+                        <h4>4. Number Validation & Checks</h4>
+                        <span class="badge badge-expression">Function Expression</span>
+                        <div class="code-container">
+                            <pre><code id="code18">// Check if even
+const isEven = num => num % 2 === 0;
+
+// Check if odd
+const isOdd = num => num % 2 !== 0;
+
+// Check if prime
+const isPrime = function(num) {
+    if (num <= 1) return false;
+    if (num <= 3) return true;
+    if (num % 2 === 0 || num % 3 === 0) return false;
+    
+    for (let i = 5; i * i <= num; i += 6) {
+        if (num % i === 0 || num % (i + 2) === 0) return false;
+    }
+    return true;
+};
+
+// Check if positive
+const isPositive = num => num > 0;
+
+// Check if negative
+const isNegative = num => num < 0;
+
+// Test validation functions
+console.log("Is 10 even? " + isEven(10));
+console.log("Is 7 odd? " + isOdd(7));
+console.log("Is 17 prime? " + isPrime(17));
+console.log("Is 20 prime? " + isPrime(20));
+console.log("Is 5 positive? " + isPositive(5));
+console.log("Is -3 negative? " + isNegative(-3));</code></pre>
+                            <button class="run-btn" onclick="runCode('code18', 'output18')">▶ Run Code</button>
+                            <div id="output18" class="output"></div>
                         </div>
-                        <div id="date-output"></div>
+                    </div>
+
+                    <div class="function-card">
+                        <h4>5. Sequence Generators</h4>
+                        <span class="badge badge-declaration">Function Declaration</span>
+                        <div class="code-container">
+                            <pre><code id="code19">// Generate factorial
+function factorial(n) {
+    if (n < 0) return "Factorial not defined for negative numbers";
+    if (n === 0 || n === 1) return 1;
+    
+    let result = 1;
+    for (let i = 2; i <= n; i++) {
+        result *= i;
+    }
+    return result;
+}
+
+// Generate Fibonacci sequence
+function fibonacci(n) {
+    if (n <= 0) return [];
+    if (n === 1) return [0];
+    
+    const fib = [0, 1];
+    for (let i = 2; i < n; i++) {
+        fib.push(fib[i - 1] + fib[i - 2]);
+    }
+    return fib;
+}
+
+// Generate prime numbers up to n
+function getPrimes(limit) {
+    const primes = [];
+    for (let num = 2; num <= limit; num++) {
+        let isPrime = true;
+        for (let i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i === 0) {
+                isPrime = false;
+                break;
+            }
+        }
+        if (isPrime) primes.push(num);
+    }
+    return primes;
+}
+
+// Test sequence generators
+console.log("Factorial of 5: " + factorial(5));
+console.log("First 10 Fibonacci numbers: " + fibonacci(10));
+console.log("Prime numbers up to 30: " + getPrimes(30));</code></pre>
+                            <button class="run-btn" onclick="runCode('code19', 'output19')">▶ Run Code</button>
+                            <div id="output19" class="output"></div>
+                        </div>
+                    </div>
+
+                    <div class="function-card">
+                        <h4>6. Geometry Functions</h4>
+                        <span class="badge badge-arrow">Arrow Function</span>
+                        <div class="code-container">
+                            <pre><code id="code20">// Circle calculations
+const circleArea = radius => Math.PI * radius * radius;
+const circleCircumference = radius => 2 * Math.PI * radius;
+
+// Rectangle calculations
+const rectangleArea = (length, width) => length * width;
+const rectanglePerimeter = (length, width) => 2 * (length + width);
+
+// Triangle calculations
+const triangleArea = (base, height) => 0.5 * base * height;
+
+// Pythagorean theorem
+const pythagorean = (a, b) => Math.sqrt(a * a + b * b);
+
+// Test geometry functions
+console.log("Circle (radius 5):");
+console.log("  Area: " + circleArea(5).toFixed(2));
+console.log("  Circumference: " + circleCircumference(5).toFixed(2));
+
+console.log("\nRectangle (10 x 5):");
+console.log("  Area: " + rectangleArea(10, 5));
+console.log("  Perimeter: " + rectanglePerimeter(10, 5));
+
+console.log("\nTriangle (base 8, height 6):");
+console.log("  Area: " + triangleArea(8, 6));
+
+console.log("\nPythagorean (3, 4): " + pythagorean(3, 4));</code></pre>
+                            <button class="run-btn" onclick="runCode('code20', 'output20')">▶ Run Code</button>
+                            <div id="output20" class="output"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2><span class="emoji">🎮</span>Interactive Math Library Demo</h2>
+                    
+                    <div class="interactive-demo">
+                        <h3>Try the Math Library!</h3>
+                        
+                        <select id="mathOperation" class="demo-input">
+                            <option value="add">Addition</option>
+                            <option value="multiply">Multiplication</option>
+                            <option value="average">Average</option>
+                            <option value="factorial">Factorial</option>
+                            <option value="fibonacci">Fibonacci</option>
+                            <option value="isPrime">Check Prime</option>
+                        </select>
+                        
+                        <input type="text" id="mathInput" class="demo-input" placeholder="Enter numbers (comma-separated for multiple)">
+                        
+                        <button class="demo-btn" onclick="executeMathOperation()">Calculate</button>
+                        <button class="demo-btn" onclick="clearMathDemo()" style="background: #6c757d;">Clear</button>
+                        
+                        <div id="mathOutput" class="demo-output"></div>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <section class="interview-section">
-            <h2>Interview Questions</h2>
-            <div class="question">
-                <h3>1. Basic: Function declaration aur function expression mein kya difference hai?</h3>
-                <p>Answer: Declaration hoisted hoti hai (pehle use kar sakte hain), expression nahi. Declaration: function name() {}, Expression: const name = function() {}</p>
+            <!-- INTERVIEW TAB -->
+            <div id="interview" class="tab-content">
+                <div class="section">
+                    <h2><span class="emoji">💼</span>Common Interview Questions</h2>
+                    
+                    <button class="collapsible">Q1: What is the difference between function declaration and function expression?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p><strong>Function Declaration:</strong></p>
+                            <ul>
+                                <li>Defined using <code>function</code> keyword with a name</li>
+                                <li>Hoisted - can be called before declaration</li>
+                                <li>Syntax: <code>function name() {}</code></li>
+                            </ul>
+                            <p><strong>Function Expression:</strong></p>
+                            <ul>
+                                <li>Function assigned to a variable</li>
+                                <li>Not hoisted - must be defined before calling</li>
+                                <li>Can be anonymous or named</li>
+                                <li>Syntax: <code>const name = function() {}</code></li>
+                            </ul>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>Function Declaration:</strong></p>
+                            <ul>
+                                <li><code>function</code> keyword se naam ke saath define hota hai</li>
+                                <li>Hoisted hai - declaration se pehle call kar sakte hain</li>
+                                <li>Syntax: <code>function name() {}</code></li>
+                            </ul>
+                            <p><strong>Function Expression:</strong></p>
+                            <ul>
+                                <li>Function ko variable mein assign karte hain</li>
+                                <li>Hoisted nahi hai - define karne ke baad hi call kar sakte hain</li>
+                                <li>Anonymous ya named ho sakta hai</li>
+                                <li>Syntax: <code>const name = function() {}</code></li>
+                            </ul>
+                            
+                            <div class="code-container">
+                                <pre><code>// Declaration - Hoisted ✅
+console.log(add(5, 3)); // Works!
+function add(a, b) {
+    return a + b;
+}
+
+// Expression - Not Hoisted ❌
+console.log(subtract(5, 3)); // Error!
+const subtract = function(a, b) {
+    return a - b;
+};</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q2: What are arrow functions and how are they different from regular functions?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p><strong>Arrow Functions:</strong> Shorter syntax for writing functions, introduced in ES6.</p>
+                            <p><strong>Key Differences:</strong></p>
+                            <ul>
+                                <li><strong>Syntax:</strong> More concise with <code>=></code></li>
+                                <li><strong>this binding:</strong> Inherits <code>this</code> from parent scope (lexical)</li>
+                                <li><strong>arguments:</strong> No <code>arguments</code> object</li>
+                                <li><strong>Constructor:</strong> Cannot be used with <code>new</code></li>
+                                <li><strong>Implicit return:</strong> Single expressions return automatically</li>
+                            </ul>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>Arrow Functions:</strong> Functions likhne ka shorter syntax, ES6 mein aaya.</p>
+                            <p><strong>Main Differences:</strong></p>
+                            <ul>
+                                <li><strong>Syntax:</strong> <code>=></code> ke saath zyada concise</li>
+                                <li><strong>this binding:</strong> Parent scope se <code>this</code> inherit karta hai</li>
+                                <li><strong>arguments:</strong> <code>arguments</code> object nahi hota</li>
+                                <li><strong>Constructor:</strong> <code>new</code> ke saath use nahi kar sakte</li>
+                                <li><strong>Implicit return:</strong> Single expressions automatically return hote hain</li>
+                            </ul>
+                            
+                            <div class="code-container">
+                                <pre><code>// Regular function
+const regular = function(a, b) {
+    return a + b;
+};
+
+// Arrow function
+const arrow = (a, b) => a + b;
+
+// Both do the same thing!
+console.log(regular(5, 3)); // 8
+console.log(arrow(5, 3));   // 8</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q3: What are default parameters in JavaScript?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p><strong>Default parameters</strong> allow you to initialize function parameters with default values if no argument is passed or if <code>undefined</code> is passed.</p>
+                            <p><strong>Benefits:</strong></p>
+                            <ul>
+                                <li>Prevents <code>undefined</code> errors</li>
+                                <li>Makes functions more flexible</li>
+                                <li>Reduces need for manual checks</li>
+                                <li>Improves code readability</li>
+                            </ul>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>Default parameters</strong> se aap function parameters ko default values ke saath initialize kar sakte ho agar koi argument pass nahi kiya ya <code>undefined</code> pass kiya.</p>
+                            <p><strong>Fayde:</strong></p>
+                            <ul>
+                                <li><code>undefined</code> errors se bachata hai</li>
+                                <li>Functions ko zyada flexible banata hai</li>
+                                <li>Manual checks ki zarurat kam hoti hai</li>
+                                <li>Code readability improve hoti hai</li>
+                            </ul>
+                            
+                            <div class="code-container">
+                                <pre><code>// Without default parameters
+function greet1(name) {
+    name = name || "Guest"; // Old way
+    return "Hello, " + name;
+}
+
+// With default parameters (ES6)
+function greet2(name = "Guest") {
+    return "Hello, " + name;
+}
+
+console.log(greet2());        // "Hello, Guest"
+console.log(greet2("Rahul")); // "Hello, Rahul"</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q4: What are rest parameters and how do they work?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p><strong>Rest parameters</strong> allow a function to accept an indefinite number of arguments as an array. Syntax: <code>...paramName</code></p>
+                            <p><strong>Key Points:</strong></p>
+                            <ul>
+                                <li>Must be the last parameter</li>
+                                <li>Collects remaining arguments into an array</li>
+                                <li>Different from <code>arguments</code> object (real array)</li>
+                                <li>Works with arrow functions</li>
+                            </ul>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>Rest parameters</strong> se function unlimited arguments ko array ke roop mein accept kar sakta hai. Syntax: <code>...paramName</code></p>
+                            <p><strong>Important Points:</strong></p>
+                            <ul>
+                                <li>Last parameter hona chahiye</li>
+                                <li>Remaining arguments ko array mein collect karta hai</li>
+                                <li><code>arguments</code> object se alag hai (real array hai)</li>
+                                <li>Arrow functions ke saath kaam karta hai</li>
+                            </ul>
+                            
+                            <div class="code-container">
+                                <pre><code>// Rest parameters example
+function sum(...numbers) {
+    return numbers.reduce((total, num) => total + num, 0);
+}
+
+console.log(sum(1, 2, 3));           // 6
+console.log(sum(10, 20, 30, 40));    // 100
+
+// Combining regular and rest parameters
+function introduce(name, age, ...hobbies) {
+    console.log(`${name}, ${age} years old`);
+    console.log("Hobbies:", hobbies);
+}
+
+introduce("Rahul", 25, "Cricket", "Reading", "Coding");</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q5: What is the difference between parameters and arguments?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p><strong>Parameters:</strong> Variables listed in the function definition. They are placeholders.</p>
+                            <p><strong>Arguments:</strong> Actual values passed to the function when calling it.</p>
+                            <p><strong>Simple Rule:</strong> Parameters are in the definition, arguments are in the call.</p>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>Parameters:</strong> Function definition mein listed variables. Ye placeholders hain.</p>
+                            <p><strong>Arguments:</strong> Function call karte waqt pass ki gayi actual values.</p>
+                            <p><strong>Simple Rule:</strong> Parameters definition mein hote hain, arguments call mein hote hain.</p>
+                            
+                            <div class="code-container">
+                                <pre><code>// a and b are PARAMETERS
+function add(a, b) {
+    return a + b;
+}
+
+// 5 and 3 are ARGUMENTS
+const result = add(5, 3);
+
+// Think: Parameters = Placeholders, Arguments = Actual Values</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q6: What is implicit return in arrow functions?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p><strong>Implicit return</strong> means the arrow function automatically returns the expression without using the <code>return</code> keyword.</p>
+                            <p><strong>Rules:</strong></p>
+                            <ul>
+                                <li>Works only with single-line expressions</li>
+                                <li>No curly braces needed</li>
+                                <li>Expression is automatically returned</li>
+                                <li>For objects, wrap in parentheses: <code>() => ({ key: value })</code></li>
+                            </ul>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>Implicit return</strong> matlab arrow function automatically expression ko return kar deta hai bina <code>return</code> keyword ke.</p>
+                            <p><strong>Rules:</strong></p>
+                            <ul>
+                                <li>Sirf single-line expressions ke saath kaam karta hai</li>
+                                <li>Curly braces ki zarurat nahi</li>
+                                <li>Expression automatically return hota hai</li>
+                                <li>Objects ke liye parentheses mein wrap karo: <code>() => ({ key: value })</code></li>
+                            </ul>
+                            
+                            <div class="code-container">
+                                <pre><code>// Explicit return (with return keyword)
+const add1 = (a, b) => {
+    return a + b;
+};
+
+// Implicit return (without return keyword)
+const add2 = (a, b) => a + b;
+
+// Both are same!
+console.log(add1(5, 3)); // 8
+console.log(add2(5, 3)); // 8
+
+// Implicit return with object
+const createUser = (name, age) => ({ name, age });</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q7: Can you explain function hoisting?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p><strong>Hoisting</strong> is JavaScript's behavior of moving declarations to the top of their scope before code execution.</p>
+                            <p><strong>Function Hoisting:</strong></p>
+                            <ul>
+                                <li><strong>Function Declarations:</strong> Fully hoisted - can call before declaration</li>
+                                <li><strong>Function Expressions:</strong> Not hoisted - must declare before calling</li>
+                                <li><strong>Arrow Functions:</strong> Not hoisted - must declare before calling</li>
+                            </ul>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>Hoisting</strong> JavaScript ka behavior hai jisme declarations ko code execution se pehle scope ke top pe move kar diya jata hai.</p>
+                            <p><strong>Function Hoisting:</strong></p>
+                            <ul>
+                                <li><strong>Function Declarations:</strong> Fully hoisted - declaration se pehle call kar sakte hain</li>
+                                <li><strong>Function Expressions:</strong> Hoisted nahi - declare karne ke baad hi call kar sakte hain</li>
+                                <li><strong>Arrow Functions:</strong> Hoisted nahi - declare karne ke baad hi call kar sakte hain</li>
+                            </ul>
+                            
+                            <div class="code-container">
+                                <pre><code>// ✅ Works - Function Declaration is hoisted
+console.log(add(5, 3)); // 8
+function add(a, b) {
+    return a + b;
+}
+
+// ❌ Error - Function Expression not hoisted
+console.log(subtract(5, 3)); // ReferenceError
+const subtract = function(a, b) {
+    return a - b;
+};
+
+// ❌ Error - Arrow Function not hoisted
+console.log(multiply(5, 3)); // ReferenceError
+const multiply = (a, b) => a * b;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q8: What happens if you don't return anything from a function?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p>If a function doesn't have a <code>return</code> statement, it automatically returns <code>undefined</code>.</p>
+                            <p><strong>Important Points:</strong></p>
+                            <ul>
+                                <li>Functions without return still execute their code</li>
+                                <li>Useful for side effects (logging, DOM manipulation)</li>
+                                <li>Explicitly returning <code>undefined</code> is same as no return</li>
+                                <li>Empty return statement also returns <code>undefined</code></li>
+                            </ul>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p>Agar function mein <code>return</code> statement nahi hai to wo automatically <code>undefined</code> return karta hai.</p>
+                            <p><strong>Important Points:</strong></p>
+                            <ul>
+                                <li>Return ke bina bhi functions apna code execute karte hain</li>
+                                <li>Side effects ke liye useful hai (logging, DOM manipulation)</li>
+                                <li>Explicitly <code>undefined</code> return karna aur no return same hai</li>
+                                <li>Empty return statement bhi <code>undefined</code> return karta hai</li>
+                            </ul>
+                            
+                            <div class="code-container">
+                                <pre><code>// No return statement
+function greet(name) {
+    console.log("Hello, " + name);
+}
+
+const result = greet("Rahul"); // Prints: Hello, Rahul
+console.log(result);            // undefined
+
+// Empty return
+function doSomething() {
+    console.log("Doing something...");
+    return;
+}
+
+console.log(doSomething()); // undefined</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q9: How do you write a function that returns another function?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p>Functions that return other functions are called <strong>Higher-Order Functions</strong>. This is a powerful concept in JavaScript.</p>
+                            <p><strong>Use Cases:</strong></p>
+                            <ul>
+                                <li>Creating function factories</li>
+                                <li>Currying and partial application</li>
+                                <li>Closures and private variables</li>
+                                <li>Event handlers and callbacks</li>
+                            </ul>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p>Functions jo dusre functions return karte hain unhe <strong>Higher-Order Functions</strong> kehte hain. Ye JavaScript mein ek powerful concept hai.</p>
+                            <p><strong>Use Cases:</strong></p>
+                            <ul>
+                                <li>Function factories banana</li>
+                                <li>Currying aur partial application</li>
+                                <li>Closures aur private variables</li>
+                                <li>Event handlers aur callbacks</li>
+                            </ul>
+                            
+                            <div class="code-container">
+                                <pre><code>// Function returning a function
+function createMultiplier(multiplier) {
+    return function(number) {
+        return number * multiplier;
+    };
+}
+
+const double = createMultiplier(2);
+const triple = createMultiplier(3);
+
+console.log(double(5));  // 10
+console.log(triple(5));  // 15
+
+// Arrow function version
+const createAdder = (x) => (y) => x + y;
+
+const add5 = createAdder(5);
+console.log(add5(10)); // 15</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q10: What is the difference between function scope and block scope?</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>English Answer:</h4>
+                            <p><strong>Function Scope:</strong> Variables declared with <code>var</code> are function-scoped. They're accessible throughout the entire function.</p>
+                            <p><strong>Block Scope:</strong> Variables declared with <code>let</code> and <code>const</code> are block-scoped. They're only accessible within the block <code>{}</code> they're declared in.</p>
+                            
+                            <h4>Hinglish Answer:</h4>
+                            <p><strong>Function Scope:</strong> <code>var</code> se declare kiye gaye variables function-scoped hote hain. Ye pure function mein accessible hote hain.</p>
+                            <p><strong>Block Scope:</strong> <code>let</code> aur <code>const</code> se declare kiye gaye variables block-scoped hote hain. Ye sirf us block <code>{}</code> mein accessible hote hain jisme declare kiye gaye hain.</p>
+                            
+                            <div class="code-container">
+                                <pre><code>function testScope() {
+    // Function scope (var)
+    if (true) {
+        var x = 10;
+    }
+    console.log(x); // 10 - accessible outside if block
+    
+    // Block scope (let)
+    if (true) {
+        let y = 20;
+    }
+    console.log(y); // ReferenceError - not accessible
+}
+
+// Best practice: Use let and const for better scoping</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q11: Write a function to check if a number is prime.</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>Solution:</h4>
+                            <div class="code-container">
+                                <pre><code id="code21">// Method 1: Basic approach
+function isPrime1(num) {
+    if (num <= 1) return false;
+    if (num <= 3) return true;
+    
+    for (let i = 2; i < num; i++) {
+        if (num % i === 0) return false;
+    }
+    return true;
+}
+
+// Method 2: Optimized (check up to square root)
+function isPrime2(num) {
+    if (num <= 1) return false;
+    if (num <= 3) return true;
+    if (num % 2 === 0 || num % 3 === 0) return false;
+    
+    for (let i = 5; i * i <= num; i += 6) {
+        if (num % i === 0 || num % (i + 2) === 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Test both methods
+console.log("Testing isPrime:");
+[2, 3, 4, 17, 20, 29, 30].forEach(num => {
+    console.log(`${num}: ${isPrime2(num)}`);
+});</code></pre>
+                                <button class="run-btn" onclick="runCode('code21', 'output21')">▶ Run Code</button>
+                                <div id="output21" class="output"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="collapsible">Q12: Write a function to reverse a string.</button>
+                    <div class="collapsible-content">
+                        <div class="interview-question">
+                            <h4>Solution:</h4>
+                            <div class="code-container">
+                                <pre><code id="code22">// Method 1: Using built-in methods
+const reverseString1 = str => str.split('').reverse().join('');
+
+// Method 2: Using loop
+function reverseString2(str) {
+    let reversed = '';
+    for (let i = str.length - 1; i >= 0; i--) {
+        reversed += str[i];
+    }
+    return reversed;
+}
+
+// Method 3: Using reduce
+const reverseString3 = str => 
+    str.split('').reduce((rev, char) => char + rev, '');
+
+// Method 4: Recursive
+function reverseString4(str) {
+    if (str === '') return '';
+    return reverseString4(str.substr(1)) + str[0];
+}
+
+// Test all methods
+const testStr = "JavaScript";
+console.log("Original: " + testStr);
+console.log("Method 1: " + reverseString1(testStr));
+console.log("Method 2: " + reverseString2(testStr));
+console.log("Method 3: " + reverseString3(testStr));
+console.log("Method 4: " + reverseString4(testStr));</code></pre>
+                                <button class="run-btn" onclick="runCode('code22', 'output22')">▶ Run Code</button>
+                                <div id="output22" class="output"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2><span class="emoji">📝</span>Key Definitions</h2>
+                    
+                    <div class="definition">
+                        <strong>Function:</strong> A reusable block of code that performs a specific task and can be called by name.
+                    </div>
+
+                    <div class="definition">
+                        <strong>Parameter:</strong> A variable listed in the function definition that acts as a placeholder for values.
+                    </div>
+
+                    <div class="definition">
+                        <strong>Argument:</strong> The actual value passed to a function when it is called.
+                    </div>
+
+                    <div class="definition">
+                        <strong>Return Value:</strong> The value that a function sends back to the code that called it using the return statement.
+                    </div>
+
+                    <div class="definition">
+                        <strong>Arrow Function:</strong> A concise syntax for writing function expressions using the <code>=></code> operator.
+                    </div>
+
+                    <div class="definition">
+                        <strong>Default Parameter:</strong> A parameter that has a default value if no argument is provided.
+                    </div>
+
+                    <div class="definition">
+                        <strong>Rest Parameter:</strong> A parameter that collects all remaining arguments into an array using <code>...paramName</code> syntax.
+                    </div>
+
+                    <div class="definition">
+                        <strong>Implicit Return:</strong> Automatic return of an expression in arrow functions without using the return keyword.
+                    </div>
+
+                    <div class="definition">
+                        <strong>Higher-Order Function:</strong> A function that takes another function as an argument or returns a function.
+                    </div>
+
+                    <div class="definition">
+                        <strong>Hoisting:</strong> JavaScript's behavior of moving function declarations to the top of their scope before execution.
+                    </div>
+                </div>
             </div>
-            <div class="question">
-                <h3>2. Basic: Arrow function kya hai aur regular function se kya different hai?</h3>
-                <p>Answer: ES6 syntax, shorter hai. Main difference: 'this' binding different hai, hoisting nahi hoti, constructor nahi ban sakta.</p>
-            </div>
-            <div class="question">
-                <h3>3. Intermediate: Default parameters kya hain? Example do.</h3>
-                <p>Answer: Function parameters ki default values. Example: function greet(name = "Guest") { return "Hello " + name; }</p>
-            </div>
-            <div class="question">
-                <h3>4. Intermediate: Rest parameters (...args) kya karte hain?</h3>
-                <p>Answer: Variable number of arguments ko array mein collect karte hain. function sum(...numbers) { return numbers.reduce((a,b) => a+b); }</p>
-            </div>
-            <div class="question">
-                <h3>5. Advanced: Function hoisting kya hai? Arrow functions hoist hote hain?</h3>
-                <p>Answer: Function declarations top pe move ho jaati hain. Arrow functions hoist nahi hote kyunki yeh variables mein store hote hain.</p>
-            </div>
-            <div class="question">
-                <h3>6. Advanced: Higher-order functions kya hain? Example do.</h3>
-                <p>Answer: Functions jo dusre functions ko parameter mein lete hain ya return karte hain. Example: map, filter, reduce.</p>
-            </div>
-        </section>
+        </div>
     </div>
 
     <script>
-        // Function declarations (hoisted)
-        function greetDeclaration(name) {
-            return `Hello ${name}! (from declaration)`;
-        }
-
-        // Function expressions (not hoisted)
-        const greetExpression = function(name) {
-            return `Hello ${name}! (from expression)`;
-        };
-
-        // Arrow functions (not hoisted)
-        const greetArrow = (name) => `Hello ${name}! (from arrow function)`;
-
-        function testFunctionDeclaration() {
-            const output = document.getElementById('function-test-output');
-            const result = greetDeclaration('Rahul');
-            output.innerHTML = `<p><strong>Declaration Result:</strong> ${result}</p>`;
-        }
-
-        function testFunctionExpression() {
-            const output = document.getElementById('function-test-output');
-            const result = greetExpression('Priya');
-            output.innerHTML += `<p><strong>Expression Result:</strong> ${result}</p>`;
-        }
-
-        function testArrowFunction() {
-            const output = document.getElementById('function-test-output');
-            const result = greetArrow('Amit');
-            output.innerHTML += `<p><strong>Arrow Function Result:</strong> ${result}</p>`;
-        }
-
-        // Parameter examples
-        function greetWithDefaults(name = "Guest", age = 0, city = "Unknown") {
-            return `Hello ${name}, age ${age}, from ${city}`;
-        }
-
-        function greetWithRest(greeting, ...names) {
-            return `${greeting} ${names.join(', ')}!`;
-        }
-
-        function greetWithDestructuring({name, age, city}) {
-            return `Hello ${name}, age ${age}, from ${city}`;
-        }
-
-        function testDefaultParams() {
-            const name = document.getElementById('param-name').value || undefined;
-            const age = parseInt(document.getElementById('param-age').value) || undefined;
-            const city = document.getElementById('param-city').value || undefined;
+        // Tab switching
+        function openTab(tabName) {
+            const contents = document.getElementsByClassName('tab-content');
+            const tabs = document.getElementsByClassName('nav-tab');
             
-            const result1 = greetWithDefaults();
-            const result2 = greetWithDefaults(name, age, city);
-            
-            document.getElementById('parameters-output').innerHTML = `
-                <h4>Default Parameters:</h4>
-                <p><strong>No params:</strong> ${result1}</p>
-                <p><strong>With params:</strong> ${result2}</p>
-            `;
-        }
-
-        function testRestParams() {
-            const names = ['Rahul', 'Priya', 'Amit', 'Sneha'];
-            const result = greetWithRest('Namaste', ...names);
-            
-            document.getElementById('parameters-output').innerHTML += `
-                <h4>Rest Parameters:</h4>
-                <p><strong>Result:</strong> ${result}</p>
-                <p><em>Used spread operator to pass array as individual arguments</em></p>
-            `;
-        }
-
-        function testDestructuring() {
-            const name = document.getElementById('param-name').value;
-            const age = parseInt(document.getElementById('param-age').value);
-            const city = document.getElementById('param-city').value;
-            
-            const person = { name, age, city };
-            const result = greetWithDestructuring(person);
-            
-            document.getElementById('parameters-output').innerHTML += `
-                <h4>Destructuring Parameters:</h4>
-                <p><strong>Object:</strong> ${JSON.stringify(person)}</p>
-                <p><strong>Result:</strong> ${result}</p>
-            `;
-        }
-
-        function testReturnTypes() {
-            // Different return types
-            const returnString = () => "I'm a string";
-            const returnNumber = () => 42;
-            const returnBoolean = () => true;
-            const returnArray = () => [1, 2, 3];
-            const returnObject = () => ({name: "Rahul", age: 25});
-            const returnNothing = () => { console.log("No return"); };
-            
-            const output = document.getElementById('return-output');
-            output.innerHTML = `
-                <h4>Different Return Types:</h4>
-                <p><strong>String:</strong> ${returnString()} (${typeof returnString()})</p>
-                <p><strong>Number:</strong> ${returnNumber()} (${typeof returnNumber()})</p>
-                <p><strong>Boolean:</strong> ${returnBoolean()} (${typeof returnBoolean()})</p>
-                <p><strong>Array:</strong> [${returnArray()}] (${typeof returnArray()})</p>
-                <p><strong>Object:</strong> ${JSON.stringify(returnObject())} (${typeof returnObject()})</p>
-                <p><strong>Undefined:</strong> ${returnNothing()} (${typeof returnNothing()})</p>
-            `;
-        }
-
-        function demonstrateArrowVariations() {
-            const add = (a, b) => a + b;
-            const square = x => x * x;
-            const greet = () => "Hello World!";
-            const complex = (a, b) => {
-                const sum = a + b;
-                return sum * 2;
-            };
-            
-            const output = document.getElementById('arrow-output');
-            output.innerHTML = `
-                <h4>Arrow Function Variations:</h4>
-                <p><strong>Two params:</strong> add(5, 3) = ${add(5, 3)}</p>
-                <p><strong>Single param:</strong> square(4) = ${square(4)}</p>
-                <p><strong>No params:</strong> greet() = ${greet()}</p>
-                <p><strong>Complex:</strong> complex(3, 7) = ${complex(3, 7)}</p>
-            `;
-        }
-
-        // Calculator functions
-        const mathUtils = {
-            add: (a, b) => a + b,
-            power: (base, exp) => Math.pow(base, exp),
-            factorial: (n) => {
-                if (n <= 1) return 1;
-                return n * mathUtils.factorial(n - 1);
-            },
-            average: (...numbers) => {
-                const sum = numbers.reduce((acc, num) => acc + num, 0);
-                return sum / numbers.length;
+            for (let content of contents) {
+                content.classList.remove('active');
             }
-        };
-
-        function calculateAdd() {
-            const a = parseFloat(document.getElementById('add-a').value) || 0;
-            const b = parseFloat(document.getElementById('add-b').value) || 0;
-            const result = mathUtils.add(a, b);
-            document.getElementById('add-result').innerHTML = `<strong>${result}</strong>`;
-        }
-
-        function calculatePower() {
-            const base = parseFloat(document.getElementById('pow-base').value) || 0;
-            const exp = parseFloat(document.getElementById('pow-exp').value) || 0;
-            const result = mathUtils.power(base, exp);
-            document.getElementById('pow-result').innerHTML = `<strong>${result}</strong>`;
-        }
-
-        function calculateFactorial() {
-            const n = parseInt(document.getElementById('fact-n').value) || 0;
-            if (n < 0 || n > 20) {
-                document.getElementById('fact-result').innerHTML = '<span style="color: #dc3545;">0-20 range mein enter karo</span>';
-                return;
+            
+            for (let tab of tabs) {
+                tab.classList.remove('active');
             }
-            const result = mathUtils.factorial(n);
-            document.getElementById('fact-result').innerHTML = `<strong>${result}</strong>`;
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
         }
 
-        function calculateAverage() {
-            const input = document.getElementById('avg-numbers').value;
-            const numbers = input.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
-            if (numbers.length === 0) {
-                document.getElementById('avg-result').innerHTML = '<span style="color: #dc3545;">Valid numbers enter karo</span>';
-                return;
-            }
-            const result = mathUtils.average(...numbers);
-            document.getElementById('avg-result').innerHTML = `<strong>${result.toFixed(2)}</strong>`;
-        }
-
-        // Utility functions
-        const stringUtils = {
-            capitalize: str => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(),
-            reverse: str => str.split('').reverse().join(''),
-            wordCount: str => str.trim().split(/\s+/).length
-        };
-
-        const arrayUtils = {
-            max: arr => Math.max(...arr),
-            sum: arr => arr.reduce((acc, num) => acc + num, 0),
-            unique: arr => [...new Set(arr)]
-        };
-
-        const validationUtils = {
-            isEmail: email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
-            isPhone: phone => /^[\+]?[1-9][\d]{0,15}$/.test(phone.replace(/\s/g, '')),
-            passwordStrength: password => {
-                let strength = 0;
-                if (password.length >= 8) strength++;
-                if (/[a-z]/.test(password)) strength++;
-                if (/[A-Z]/.test(password)) strength++;
-                if (/[0-9]/.test(password)) strength++;
-                if (/[^A-Za-z0-9]/.test(password)) strength++;
-                return ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'][strength];
-            }
-        };
-
-        const dateUtils = {
-            formatDate: date => date.toLocaleDateString('en-IN'),
-            calculateAge: birthDate => {
-                const today = new Date();
-                const birth = new Date(birthDate);
-                let age = today.getFullYear() - birth.getFullYear();
-                const monthDiff = today.getMonth() - birth.getMonth();
-                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-                    age--;
+        // Language toggle
+        function toggleLanguage(button) {
+            const section = button.closest('.section');
+            const englishExps = section.querySelectorAll('.explanation.english');
+            const hinglishExps = section.querySelectorAll('.explanation.hinglish');
+            
+            englishExps.forEach(exp => {
+                if (exp.style.display === 'none') {
+                    exp.style.display = 'block';
+                    button.textContent = 'Switch to Hinglish';
+                } else {
+                    exp.style.display = 'none';
+                    button.textContent = 'Switch to English';
                 }
-                return age;
-            },
-            daysDifference: (date1, date2) => {
-                const diffTime = Math.abs(date2 - date1);
-                return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            }
-        };
-
-        function testCapitalize() {
-            const input = document.getElementById('string-input').value;
-            const result = stringUtils.capitalize(input);
-            document.getElementById('string-output').innerHTML = `<p><strong>Capitalized:</strong> ${result}</p>`;
+            });
+            
+            hinglishExps.forEach(exp => {
+                if (exp.style.display === 'none') {
+                    exp.style.display = 'block';
+                } else {
+                    exp.style.display = 'none';
+                }
+            });
         }
 
-        function testReverse() {
-            const input = document.getElementById('string-input').value;
-            const result = stringUtils.reverse(input);
-            document.getElementById('string-output').innerHTML += `<p><strong>Reversed:</strong> ${result}</p>`;
-        }
-
-        function testWordCount() {
-            const input = document.getElementById('string-input').value;
-            const result = stringUtils.wordCount(input);
-            document.getElementById('string-output').innerHTML += `<p><strong>Word Count:</strong> ${result}</p>`;
-        }
-
-        function testArrayMax() {
-            const input = document.getElementById('array-input').value;
-            const numbers = input.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
-            const result = arrayUtils.max(numbers);
-            document.getElementById('array-output').innerHTML = `<p><strong>Max:</strong> ${result}</p>`;
-        }
-
-        function testArraySum() {
-            const input = document.getElementById('array-input').value;
-            const numbers = input.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
-            const result = arrayUtils.sum(numbers);
-            document.getElementById('array-output').innerHTML += `<p><strong>Sum:</strong> ${result}</p>`;
-        }
-
-        function testArrayUnique() {
-            const input = document.getElementById('array-input').value;
-            const items = input.split(',').map(item => item.trim());
-            const result = arrayUtils.unique(items);
-            document.getElementById('array-output').innerHTML += `<p><strong>Unique:</strong> [${result.join(', ')}]</p>`;
-        }
-
-        function testEmailValidation() {
-            const input = document.getElementById('validation-input').value;
-            const result = validationUtils.isEmail(input);
-            const color = result ? '#28a745' : '#dc3545';
-            document.getElementById('validation-output').innerHTML = `<p style="color: ${color};"><strong>Email Valid:</strong> ${result}</p>`;
-        }
-
-        function testPhoneValidation() {
-            const input = document.getElementById('validation-input').value;
-            const result = validationUtils.isPhone(input);
-            const color = result ? '#28a745' : '#dc3545';
-            document.getElementById('validation-output').innerHTML += `<p style="color: ${color};"><strong>Phone Valid:</strong> ${result}</p>`;
-        }
-
-        function testPasswordStrength() {
-            const input = document.getElementById('validation-input').value;
-            const result = validationUtils.passwordStrength(input);
-            const colors = {
-                'Very Weak': '#dc3545',
-                'Weak': '#fd7e14',
-                'Fair': '#ffc107',
-                'Good': '#17a2b8',
-                'Strong': '#28a745'
+        // Run code
+        function runCode(codeId, outputId) {
+            const code = document.getElementById(codeId).textContent;
+            const output = document.getElementById(outputId);
+            
+            output.innerHTML = '';
+            output.classList.add('show');
+            
+            const logs = [];
+            const originalLog = console.log;
+            console.log = function(...args) {
+                logs.push(args.map(arg => 
+                    typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+                ).join(' '));
+                originalLog.apply(console, args);
             };
-            document.getElementById('validation-output').innerHTML += `<p style="color: ${colors[result]};"><strong>Password Strength:</strong> ${result}</p>`;
+            
+            try {
+                eval(code);
+                output.innerHTML = logs.join('\n') || 'Code executed successfully!';
+            } catch (error) {
+                output.innerHTML = '❌ Error: ' + error.message;
+                output.style.color = '#ff6b6b';
+            }
+            
+            console.log = originalLog;
         }
 
-        function testDateFormatting() {
-            const today = new Date();
-            const result = dateUtils.formatDate(today);
-            document.getElementById('date-output').innerHTML = `<p><strong>Today:</strong> ${result}</p>`;
+        // Collapsible sections
+        const collapsibles = document.getElementsByClassName('collapsible');
+        for (let collapsible of collapsibles) {
+            collapsible.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                content.classList.toggle('show');
+            });
         }
 
-        function testAgeCalculator() {
-            const birthDate = '1998-05-15'; // Example birth date
-            const result = dateUtils.calculateAge(birthDate);
-            document.getElementById('date-output').innerHTML += `<p><strong>Age (for ${birthDate}):</strong> ${result} years</p>`;
+        // Math Library Demo Functions
+        function executeMathOperation() {
+            const operation = document.getElementById('mathOperation').value;
+            const input = document.getElementById('mathInput').value;
+            const output = document.getElementById('mathOutput');
+            
+            if (!input.trim()) {
+                output.innerHTML = '⚠️ Please enter a value!';
+                return;
+            }
+            
+            try {
+                let result;
+                const numbers = input.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+                
+                if (numbers.length === 0) {
+                    output.innerHTML = '⚠️ Please enter valid numbers!';
+                    return;
+                }
+                
+                switch(operation) {
+                    case 'add':
+                        result = numbers.reduce((sum, num) => sum + num, 0);
+                        output.innerHTML = `<strong>Sum:</strong> ${result}`;
+                        break;
+                    case 'multiply':
+                        result = numbers.reduce((product, num) => product * num, 1);
+                        output.innerHTML = `<strong>Product:</strong> ${result}`;
+                        break;
+                    case 'average':
+                        result = numbers.reduce((sum, num) => sum + num, 0) / numbers.length;
+                        output.innerHTML = `<strong>Average:</strong> ${result.toFixed(2)}`;
+                        break;
+                    case 'factorial':
+                        const num = numbers[0];
+                        if (num < 0 || !Number.isInteger(num)) {
+                            output.innerHTML = '⚠️ Factorial requires a non-negative integer!';
+                            return;
+                        }
+                        result = 1;
+                        for (let i = 2; i <= num; i++) result *= i;
+                        output.innerHTML = `<strong>Factorial of ${num}:</strong> ${result}`;
+                        break;
+                    case 'fibonacci':
+                        const n = numbers[0];
+                        if (n < 1 || !Number.isInteger(n)) {
+                            output.innerHTML = '⚠️ Fibonacci requires a positive integer!';
+                            return;
+                        }
+                        const fib = [0, 1];
+                        for (let i = 2; i < n; i++) {
+                            fib.push(fib[i-1] + fib[i-2]);
+                        }
+                        output.innerHTML = `<strong>First ${n} Fibonacci numbers:</strong><br>${fib.slice(0, n).join(', ')}`;
+                        break;
+                    case 'isPrime':
+                        const checkNum = numbers[0];
+                        const isPrime = (num) => {
+                            if (num <= 1) return false;
+                            if (num <= 3) return true;
+                            if (num % 2 === 0 || num % 3 === 0) return false;
+                            for (let i = 5; i * i <= num; i += 6) {
+                                if (num % i === 0 || num % (i + 2) === 0) return false;
+                            }
+                            return true;
+                        };
+                        result = isPrime(checkNum);
+                        output.innerHTML = `<strong>${checkNum} is ${result ? 'PRIME' : 'NOT PRIME'}</strong>`;
+                        break;
+                }
+            } catch (error) {
+                output.innerHTML = '❌ Error: ' + error.message;
+            }
         }
 
-        function testDaysDifference() {
-            const date1 = new Date('2024-01-01');
-            const date2 = new Date();
-            const result = dateUtils.daysDifference(date1, date2);
-            document.getElementById('date-output').innerHTML += `<p><strong>Days since New Year:</strong> ${result} days</p>`;
+        function clearMathDemo() {
+            document.getElementById('mathInput').value = '';
+            document.getElementById('mathOutput').innerHTML = '';
         }
     </script>
 </body>
