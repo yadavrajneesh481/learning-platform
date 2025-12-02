@@ -1,0 +1,2796 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redux Complete Learning Guide - Interactive Study Notes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #764abc;
+            --primary-dark: #5e3a94;
+            --secondary: #f50057;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --info: #2196f3;
+            --bg-light: #f5f5f5;
+            --bg-dark: #1a1a2e;
+            --card-light: #ffffff;
+            --card-dark: #16213e;
+            --text-light: #333333;
+            --text-dark: #e0e0e0;
+            --border-light: #e0e0e0;
+            --border-dark: #2d3748;
+            --code-bg-light: #f8f9fa;
+            --code-bg-dark: #0f1419;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-light);
+            line-height: 1.6;
+            transition: var(--transition);
+        }
+
+        body.dark-mode {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 15s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            50% {
+                transform: scale(1.1) rotate(180deg);
+            }
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: var(--card-light);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        body.dark-mode .controls {
+            background: var(--card-dark);
+        }
+
+        .search-container {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 2px solid var(--border-light);
+            border-radius: 10px;
+            font-size: 1rem;
+            background: var(--bg-light);
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+
+        body.dark-mode .search-input {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+            border-color: var(--border-dark);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(118, 74, 188, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+        }
+
+        .progress-container {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .progress-label {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 35px;
+            background: var(--border-light);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .progress-bar {
+            background: var(--border-dark);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--primary));
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 8px rgba(118, 74, 188, 0.4);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: var(--transition);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(118, 74, 188, 0.4);
+        }
+
+        .dark-mode-toggle {
+            background: var(--card-light);
+            color: var(--text-light);
+            border: 2px solid var(--border-light);
+        }
+
+        body.dark-mode .dark-mode-toggle {
+            background: var(--card-dark);
+            color: var(--text-dark);
+            border-color: var(--border-dark);
+        }
+
+        .dark-mode-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: thin;
+        }
+
+        .nav-tabs::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .nav-tabs::-webkit-scrollbar-track {
+            background: var(--border-light);
+            border-radius: 4px;
+        }
+
+        body.dark-mode .nav-tabs::-webkit-scrollbar-track {
+            background: var(--border-dark);
+        }
+
+        .nav-tabs::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .tab-btn {
+            padding: 14px 28px;
+            background: var(--card-light);
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        body.dark-mode .tab-btn {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            color: var(--text-dark);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(118, 74, 188, 0.4);
+        }
+
+        .tab-btn:hover:not(.active) {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: var(--card-light);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+
+        body.dark-mode .card {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        body.dark-mode .card:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--border-light);
+        }
+
+        body.dark-mode .card-header {
+            border-bottom-color: var(--border-dark);
+        }
+
+        .card-title {
+            font-size: 2rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-badge {
+            padding: 6px 18px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-core {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .badge-toolkit {
+            background: #f3e5f5;
+            color: #6a1b9a;
+        }
+
+        .badge-edge {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .badge-interview {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        /* Definition Box */
+        .definition-box {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 6px solid var(--warning);
+            box-shadow: 0 5px 20px rgba(118, 74, 188, 0.3);
+        }
+
+        .definition-box h3 {
+            margin-bottom: 12px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .definition-box p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .definition-box code {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        /* Hinglish Explanation */
+        .hinglish-toggle {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border: 3px solid var(--warning);
+            color: #e65100;
+            padding: 15px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: var(--transition);
+            font-size: 1.05rem;
+        }
+
+        .hinglish-toggle:hover {
+            background: linear-gradient(135deg, #ffe0b2, #ffcc80);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(230, 81, 0, 0.3);
+        }
+
+        .hinglish-toggle .arrow {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .hinglish-toggle.open .arrow {
+            transform: rotate(180deg);
+        }
+
+        .hinglish-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.5s ease;
+            background: #fff8e1;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        body.dark-mode .hinglish-content {
+            background: #3e2723;
+        }
+
+        .hinglish-content.open {
+            max-height: 5000px;
+            padding: 25px;
+            border: 3px solid var(--warning);
+            margin-top: -10px;
+        }
+
+        .hinglish-content p {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .hinglish-content ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        .hinglish-content li {
+            margin: 10px 0;
+        }
+
+        /* Child Explanation */
+        .child-explanation {
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 6px solid #ffd54f;
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .child-explanation h4 {
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .child-explanation p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        /* Code Block */
+        .code-container {
+            position: relative;
+            margin: 25px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-header {
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        pre {
+            margin: 0;
+            padding: 25px;
+            background: var(--code-bg-light);
+            overflow-x: auto;
+            border: 1px solid var(--border-light);
+            font-size: 0.95rem;
+        }
+
+        body.dark-mode pre {
+            background: var(--code-bg-dark);
+            border-color: var(--border-dark);
+        }
+
+        code {
+            font-family: 'Courier New', Consolas, Monaco, monospace;
+            line-height: 1.8;
+        }
+
+        /* Syntax Highlighting */
+        .keyword {
+            color: #d73a49;
+            font-weight: bold;
+        }
+
+        .string {
+            color: #032f62;
+        }
+
+        .function {
+            color: #6f42c1;
+            font-weight: 600;
+        }
+
+        .comment {
+            color: #6a737d;
+            font-style: italic;
+        }
+
+        .number {
+            color: #005cc5;
+        }
+
+        .operator {
+            color: #d73a49;
+        }
+
+        body.dark-mode .keyword {
+            color: #ff7b72;
+        }
+
+        body.dark-mode .string {
+            color: #a5d6ff;
+        }
+
+        body.dark-mode .function {
+            color: #d2a8ff;
+        }
+
+        body.dark-mode .comment {
+            color: #8b949e;
+        }
+
+        body.dark-mode .number {
+            color: #79c0ff;
+        }
+
+        body.dark-mode .operator {
+            color: #ff7b72;
+        }
+
+        /* Interview Questions */
+        .question-card {
+            background: var(--card-light);
+            border-left: 6px solid var(--primary);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        body.dark-mode .question-card {
+            background: var(--card-dark);
+        }
+
+        .question-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(118, 74, 188, 0.3);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.15rem;
+            color: var(--primary);
+        }
+
+        .question-number {
+            background: var(--primary);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .question-text {
+            flex: 1;
+        }
+
+        .question-arrow {
+            transition: transform 0.3s ease;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .question-card.open .question-arrow {
+            transform: rotate(180deg);
+        }
+
+        .question-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.5s ease;
+        }
+
+        .question-answer.open {
+            max-height: 5000px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-light);
+        }
+
+        body.dark-mode .question-answer.open {
+            border-top-color: var(--border-dark);
+        }
+
+        /* Visual Diagram */
+        .diagram {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            padding: 35px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .diagram {
+            background: linear-gradient(135deg, #1a237e 0%, #4a148c 100%);
+        }
+
+        .diagram h3 {
+            margin-bottom: 25px;
+            font-size: 1.6rem;
+            color: var(--primary);
+        }
+
+        .flow-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .flow-box {
+            padding: 25px 35px;
+            border-radius: 15px;
+            font-weight: 600;
+            min-width: 180px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+
+        .flow-box:hover {
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        .flow-action {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 4px solid #2196f3;
+        }
+
+        .flow-reducer {
+            background: #f3e5f5;
+            color: #6a1b9a;
+            border: 4px solid #9c27b0;
+        }
+
+        .flow-store {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 4px solid #4caf50;
+        }
+
+        .flow-view {
+            background: #fff3e0;
+            color: #e65100;
+            border: 4px solid #ff9800;
+        }
+
+        .arrow {
+            font-size: 2.5rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 6px solid #ffd54f;
+            box-shadow: 0 5px 20px rgba(33, 150, 243, 0.3);
+        }
+
+        .info-box h4 {
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 6px solid #f44336;
+            box-shadow: 0 5px 20px rgba(255, 152, 0, 0.3);
+        }
+
+        .warning-box h4 {
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .error-box {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 6px solid #b71c1c;
+            box-shadow: 0 5px 20px rgba(244, 67, 54, 0.3);
+        }
+
+        .error-box h4 {
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 6px solid #ffd54f;
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .success-box h4 {
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 15px;
+            margin: 10px 0;
+            background: var(--code-bg-light);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: var(--transition);
+        }
+
+        body.dark-mode .checklist li {
+            background: var(--code-bg-dark);
+        }
+
+        .checklist li:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(10px);
+        }
+
+        .checklist li::before {
+            content: '✓';
+            background: var(--success);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Completion Checkbox */
+        .completion-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 25px;
+            padding: 18px;
+            background: var(--code-bg-light);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        body.dark-mode .completion-checkbox {
+            background: var(--code-bg-dark);
+        }
+
+        .completion-checkbox:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .completion-checkbox input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .completion-checkbox label {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(118, 74, 188, 0.4);
+            transition: var(--transition);
+            z-index: 1000;
+            font-size: 1.5rem;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(118, 74, 188, 0.6);
+        }
+
+        .scroll-top.show {
+            display: flex;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .card-title {
+                font-size: 1.5rem;
+            }
+
+            .nav-tabs {
+                flex-wrap: nowrap;
+            }
+
+            .tab-btn {
+                padding: 12px 20px;
+                font-size: 0.95rem;
+            }
+
+            .flow-container {
+                flex-direction: column;
+            }
+
+            .arrow {
+                transform: rotate(90deg);
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn-group {
+                width: 100%;
+                justify-content: center;
+            }
+
+            pre {
+                font-size: 0.85rem;
+                padding: 15px;
+            }
+
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+
+        /* Additional styling */
+        h3 {
+            color: var(--primary);
+            margin: 25px 0 15px 0;
+            font-size: 1.5rem;
+        }
+
+        p {
+            margin: 15px 0;
+            font-size: 1.05rem;
+        }
+
+        strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        ul,
+        ol {
+            margin: 20px 0;
+            padding-left: 35px;
+        }
+
+        li {
+            margin: 12px 0;
+            line-height: 1.7;
+        }
+
+        li strong {
+            color: var(--primary);
+        }
+
+        .emoji {
+            font-size: 1.3em;
+            margin-right: 5px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 18px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        td {
+            padding: 18px;
+            border-bottom: 1px solid var(--border-light);
+            background: var(--card-light);
+        }
+
+        body.dark-mode td {
+            border-bottom-color: var(--border-dark);
+            background: var(--card-dark);
+        }
+
+        tr:hover td {
+            background: var(--code-bg-light);
+        }
+
+        body.dark-mode tr:hover td {
+            background: var(--code-bg-dark);
+        }
+
+        td code {
+            background: var(--code-bg-light);
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        body.dark-mode td code {
+            background: var(--code-bg-dark);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🔄 Redux Complete Learning Guide</h1>
+            <p>Master Redux with Interactive Visual Notes, Interview Q&A, and Comprehensive Definitions</p>
+        </header>
+
+        <div class="controls">
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search topics...">
+                <span class="search-icon">🔍</span>
+            </div>
+            <div class="progress-container">
+                <div class="progress-label">📊 Learning Progress</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill">0% Complete</div>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn dark-mode-toggle" onclick="toggleDarkMode()">
+                    <span id="modeIcon">🌙</span> Dark Mode
+                </button>
+                <button class="btn btn-primary" onclick="resetProgress()">
+                    🔄 Reset Progress
+                </button>
+            </div>
+        </div>
+
+        <div class="nav-tabs" id="navTabs">
+            <button class="tab-btn active" onclick="showTab('visual')">🎨 Visual Notes</button>
+            <button class="tab-btn" onclick="showTab('interview')">💼 Interview Q&A</button>
+            <button class="tab-btn" onclick="showTab('definitions')">📚 Definitions</button>
+        </div>
+
+        <!-- VISUAL NOTES TAB -->
+        <div class="content-section active" id="visual">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="emoji">🎨</span> What is Redux?</h2>
+                    <span class="card-badge badge-core">Core Concept</span>
+                </div>
+
+                <div class="child-explanation">
+                    <h4>👶 Explain Like I'm 5</h4>
+                    <p>Imagine you have a big toy box (Store) where all your toys are kept. When you want to play with a
+                        toy, you tell your mom (Dispatch an Action). Your mom follows the rules (Reducer) to get the toy
+                        from the box and give it to you. Everyone in the family can see which toys are in the box
+                        (State), but only mom can put toys in or take them out following the rules!</p>
+                </div>
+
+                <div class="definition-box">
+                    <h3 style="color: #0f1419;">📖 Simple Definition</h3>
+                    <p>Redux is a <strong style="color: #0f1419;">predictable state container</strong> for JavaScript
+                        apps. It helps you manage the "global" state - data that many parts of your app need to access
+                        and update. Think of it as a central database for your app's data!</p>
+                </div>
+
+                <div class="diagram">
+                    <h3>Redux Data Flow</h3>
+                    <div class="flow-container">
+                        <div class="flow-box flow-view">👁️ VIEW<br><small>User clicks button</small></div>
+                        <div class="arrow">→</div>
+                        <div class="flow-box flow-action">📤 ACTION<br><small>What happened</small></div>
+                        <div class="arrow">→</div>
+                        <div class="flow-box flow-reducer">⚙️ REDUCER<br><small>How to update</small></div>
+                        <div class="arrow">→</div>
+                        <div class="flow-box flow-store">🗄️ STORE<br><small>New state</small></div>
+                        <div class="arrow">→</div>
+                        <div class="flow-box flow-view">👁️ VIEW<br><small>UI updates</small></div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h4>💡 When to Use Redux?</h4>
+                    <ul>
+                        <li><strong>Large apps</strong> with lots of state that changes frequently</li>
+                        <li><strong>Many components</strong> need to access the same state</li>
+                        <li>State needs to be <strong>shared across different parts</strong> of your app</li>
+                        <li>You want <strong>predictable state updates</strong> with clear rules</li>
+                        <li>You need <strong>time-travel debugging</strong> (undo/redo functionality)</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h4>⚠️ When NOT to Use Redux?</h4>
+                    <ul>
+                        <li>Small apps with simple state</li>
+                        <li>State is only used in one component</li>
+                        <li>You're just starting to learn React (learn React first!)</li>
+                        <li>Your app doesn't have complex state management needs</li>
+                    </ul>
+                </div>
+
+                <div class="completion-checkbox" onclick="toggleCompletion(this, 'visual-intro')">
+                    <input type="checkbox" id="check-visual-intro">
+                    <label>✓ I understand what Redux is and when to use it</label>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="emoji">🏗️</span> Core Concepts</h2>
+                    <span class="card-badge badge-core">Essential</span>
+                </div>
+
+                <h3>1. Store 🗄️</h3>
+                <div class="child-explanation">
+                    <h4>👶 Simple Explanation</h4>
+                    <p>The Store is like a big treasure chest that holds ALL the data for your entire app. There's only
+                        ONE treasure chest, and everyone can look inside it, but only special people (reducers) can
+                        change what's inside!</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Creating a Store with Redux Toolkit</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="keyword">import</span> { <span class="function">configureStore</span> } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+<span class="keyword">import</span> counterReducer <span class="keyword">from</span> <span class="string">'./counterSlice'</span>;
+
+<span class="keyword">const</span> store <span class="operator">=</span> <span class="function">configureStore</span>({
+  reducer: {
+    counter: counterReducer,
+    <span class="comment">// Add more reducers here</span>
+  },
+});
+
+<span class="keyword">export default</span> store;</code></pre>
+                </div>
+
+                <h3>2. Action 📤</h3>
+                <div class="child-explanation">
+                    <h4>👶 Simple Explanation</h4>
+                    <p>An Action is like a message or instruction. It's like saying "Hey, I want to add 1 to the
+                        counter!" or "I want to delete this item!". It describes WHAT happened, not HOW to do it.</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Action Example</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="comment">// Action is just a plain JavaScript object</span>
+<span class="keyword">const</span> action <span class="operator">=</span> {
+  type: <span class="string">'counter/increment'</span>, <span class="comment">// What happened</span>
+  payload: <span class="number">5</span> <span class="comment">// Optional data</span>
+};
+
+<span class="comment">// With Redux Toolkit, actions are created automatically!</span>
+<span class="keyword">import</span> { <span class="function">createSlice</span> } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+
+<span class="keyword">const</span> counterSlice <span class="operator">=</span> <span class="function">createSlice</span>({
+  name: <span class="string">'counter'</span>,
+  initialState: { value: <span class="number">0</span> },
+  reducers: {
+    <span class="function">increment</span>(state) {
+      state.value <span class="operator">+=</span> <span class="number">1</span>;
+    },
+    <span class="function">incrementByAmount</span>(state, action) {
+      state.value <span class="operator">+=</span> action.payload;
+    }
+  }
+});
+
+<span class="comment">// Actions are automatically created!</span>
+<span class="keyword">export const</span> { increment, incrementByAmount } <span class="operator">=</span> counterSlice.actions;</code></pre>
+                </div>
+
+                <h3>3. Reducer ⚙️</h3>
+                <div class="child-explanation">
+                    <h4>👶 Simple Explanation</h4>
+                    <p>A Reducer is like a rule book. It says "IF this action happens, THEN do this to the state". It's
+                        a function that takes the old state and an action, and returns the NEW state. It's like a recipe
+                        - you follow the steps to make something new!</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Reducer with Redux Toolkit</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="keyword">import</span> { <span class="function">createSlice</span> } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+
+<span class="keyword">const</span> todoSlice <span class="operator">=</span> <span class="function">createSlice</span>({
+  name: <span class="string">'todos'</span>,
+  initialState: [],
+  reducers: {
+    <span class="comment">// Redux Toolkit allows "mutating" logic!</span>
+    <span class="comment">// It uses Immer library internally</span>
+    <span class="function">addTodo</span>(state, action) {
+      state.<span class="function">push</span>({
+        id: <span class="function">Date</span>.<span class="function">now</span>(),
+        text: action.payload,
+        completed: <span class="keyword">false</span>
+      });
+    },
+    <span class="function">toggleTodo</span>(state, action) {
+      <span class="keyword">const</span> todo <span class="operator">=</span> state.<span class="function">find</span>(t <span class="operator">=></span> t.id <span class="operator">===</span> action.payload);
+      <span class="keyword">if</span> (todo) {
+        todo.completed <span class="operator">=</span> <span class="operator">!</span>todo.completed;
+      }
+    },
+    <span class="function">deleteTodo</span>(state, action) {
+      <span class="keyword">return</span> state.<span class="function">filter</span>(t <span class="operator">=></span> t.id <span class="operator">!==</span> action.payload);
+    }
+  }
+});
+
+<span class="keyword">export const</span> { addTodo, toggleTodo, deleteTodo } <span class="operator">=</span> todoSlice.actions;
+<span class="keyword">export default</span> todoSlice.reducer;</code></pre>
+                </div>
+
+                <h3>4. Dispatch 🚀</h3>
+                <div class="child-explanation">
+                    <h4>👶 Simple Explanation</h4>
+                    <p>Dispatch is like pressing a button or sending a letter. When you want something to happen, you
+                        "dispatch" an action. It's the ONLY way to change the state in Redux!</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Using Dispatch in React</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="keyword">import</span> { <span class="function">useDispatch</span> } <span class="keyword">from</span> <span class="string">'react-redux'</span>;
+<span class="keyword">import</span> { increment, incrementByAmount } <span class="keyword">from</span> <span class="string">'./counterSlice'</span>;
+
+<span class="keyword">function</span> <span class="function">Counter</span>() {
+  <span class="keyword">const</span> dispatch <span class="operator">=</span> <span class="function">useDispatch</span>();
+
+  <span class="keyword">return</span> (
+    <span class="operator"><</span>div<span class="operator">></span>
+      <span class="operator"><</span>button <span class="function">onClick</span><span class="operator">=</span>{() <span class="operator">=></span> <span class="function">dispatch</span>(<span class="function">increment</span>())}
+        Add 1
+      <span class="operator"><</span>/button<span class="operator">></span>
+      
+      <span class="operator"><</span>button <span class="function">onClick</span><span class="operator">=</span>{() <span class="operator">=></span> <span class="function">dispatch</span>(<span class="function">incrementByAmount</span>(<span class="number">5</span>))}
+        Add 5
+      <span class="operator"><</span>/button<span class="operator">></span>
+    <span class="operator"><</span>/div<span class="operator">></span>
+  );
+}</code></pre>
+                </div>
+
+                <h3>5. Selector 🎯</h3>
+                <div class="child-explanation">
+                    <h4>👶 Simple Explanation</h4>
+                    <p>A Selector is like a magnifying glass that helps you look at specific parts of the treasure chest
+                        (store). Instead of looking at everything, you can use a selector to find exactly what you need!
+                    </p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Using Selectors</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="keyword">import</span> { <span class="function">useSelector</span> } <span class="keyword">from</span> <span class="string">'react-redux'</span>;
+
+<span class="keyword">function</span> <span class="function">Counter</span>() {
+  <span class="comment">// Select specific data from the store</span>
+  <span class="keyword">const</span> count <span class="operator">=</span> <span class="function">useSelector</span>(state <span class="operator">=></span> state.counter.value);
+  <span class="keyword">const</span> todos <span class="operator">=</span> <span class="function">useSelector</span>(state <span class="operator">=></span> state.todos);
+  
+  <span class="comment">// You can also compute derived data</span>
+  <span class="keyword">const</span> completedTodos <span class="operator">=</span> <span class="function">useSelector</span>(state <span class="operator">=></span> 
+    state.todos.<span class="function">filter</span>(t <span class="operator">=></span> t.completed)
+  );
+
+  <span class="keyword">return</span> (
+    <span class="operator"><</span>div<span class="operator">></span>
+      <span class="operator"><</span>p<span class="operator">></span>Count: {count}<span class="operator"><</span>/p<span class="operator">></span>
+      <span class="operator"><</span>p<span class="operator">></span>Completed: {completedTodos.length}<span class="operator"><</span>/p<span class="operator">></span>
+    <span class="operator"><</span>/div<span class="operator">></span>
+  );
+}</code></pre>
+                </div>
+
+                <h3>6. Middleware 🔌</h3>
+                <div class="child-explanation">
+                    <h4>👶 Simple Explanation</h4>
+                    <p>Middleware is like a security guard or helper that stands between you sending a message (action)
+                        and it reaching the rule book (reducer). It can check the message, change it, or even stop it!
+                        It's useful for things like logging, making API calls, or handling errors.</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Middleware Example - Logging</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="keyword">const</span> <span class="function">loggerMiddleware</span> <span class="operator">=</span> store <span class="operator">=></span> next <span class="operator">=></span> action <span class="operator">=></span> {
+  <span class="function">console</span>.<span class="function">log</span>(<span class="string">'Dispatching:'</span>, action);
+  <span class="keyword">const</span> result <span class="operator">=</span> <span class="function">next</span>(action);
+  <span class="function">console</span>.<span class="function">log</span>(<span class="string">'Next state:'</span>, store.<span class="function">getState</span>());
+  <span class="keyword">return</span> result;
+};
+
+<span class="comment">// Redux Toolkit includes Redux Thunk middleware by default!</span>
+<span class="keyword">import</span> { <span class="function">configureStore</span> } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+
+<span class="keyword">const</span> store <span class="operator">=</span> <span class="function">configureStore</span>({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) <span class="operator">=></span>
+    <span class="function">getDefaultMiddleware</span>().<span class="function">concat</span>(loggerMiddleware),
+});</code></pre>
+                </div>
+
+                <div class="completion-checkbox" onclick="toggleCompletion(this, 'visual-core')">
+                    <input type="checkbox" id="check-visual-core">
+                    <label>✓ I understand all core Redux concepts</label>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="emoji">🛠️</span> Redux Toolkit Best Practices</h2>
+                    <span class="card-badge badge-toolkit">Modern Redux</span>
+                </div>
+
+                <div class="success-box">
+                    <h4>✨ Why Redux Toolkit?</h4>
+                    <p>Redux Toolkit is the <strong>official, recommended way</strong> to write Redux logic. It
+                        simplifies Redux code and includes best practices by default!</p>
+                </div>
+
+                <h3>Best Practices Checklist</h3>
+                <ul class="checklist">
+                    <li>Use <code>configureStore</code> instead of <code>createStore</code></li>
+                    <li>Use <code>createSlice</code> to create reducers and actions together</li>
+                    <li>Use <code>createAsyncThunk</code> for async logic</li>
+                    <li>Use Immer for immutable updates (built into Redux Toolkit)</li>
+                    <li>Keep reducers pure (no side effects)</li>
+                    <li>Normalize complex/nested state</li>
+                    <li>Use selectors to access state</li>
+                    <li>Use <code>createSelector</code> for memoized selectors</li>
+                    <li>Keep actions serializable (no functions, promises, etc.)</li>
+                    <li>Use TypeScript for type safety</li>
+                </ul>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Complete Redux Toolkit Example</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="keyword">import</span> { <span class="function">createSlice</span>, <span class="function">createAsyncThunk</span> } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+
+<span class="comment">// Async thunk for API calls</span>
+<span class="keyword">export const</span> fetchUsers <span class="operator">=</span> <span class="function">createAsyncThunk</span>(
+  <span class="string">'users/fetchUsers'</span>,
+  <span class="keyword">async</span> () <span class="operator">=></span> {
+    <span class="keyword">const</span> response <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/users'</span>);
+    <span class="keyword">return</span> response.<span class="function">json</span>();
+  }
+);
+
+<span class="keyword">const</span> usersSlice <span class="operator">=</span> <span class="function">createSlice</span>({
+  name: <span class="string">'users'</span>,
+  initialState: {
+    entities: [],
+    loading: <span class="string">'idle'</span>,
+    error: <span class="keyword">null</span>
+  },
+  reducers: {
+    <span class="function">userAdded</span>(state, action) {
+      state.entities.<span class="function">push</span>(action.payload);
+    },
+    <span class="function">userUpdated</span>(state, action) {
+      <span class="keyword">const</span> { id, changes } <span class="operator">=</span> action.payload;
+      <span class="keyword">const</span> user <span class="operator">=</span> state.entities.<span class="function">find</span>(u <span class="operator">=></span> u.id <span class="operator">===</span> id);
+      <span class="keyword">if</span> (user) {
+        <span class="function">Object</span>.<span class="function">assign</span>(user, changes);
+      }
+    }
+  },
+  extraReducers: (builder) <span class="operator">=></span> {
+    builder
+      .<span class="function">addCase</span>(fetchUsers.pending, (state) <span class="operator">=></span> {
+        state.loading <span class="operator">=</span> <span class="string">'pending'</span>;
+      })
+      .<span class="function">addCase</span>(fetchUsers.fulfilled, (state, action) <span class="operator">=></span> {
+        state.loading <span class="operator">=</span> <span class="string">'idle'</span>;
+        state.entities <span class="operator">=</span> action.payload;
+      })
+      .<span class="function">addCase</span>(fetchUsers.rejected, (state, action) <span class="operator">=></span> {
+        state.loading <span class="operator">=</span> <span class="string">'idle'</span>;
+        state.error <span class="operator">=</span> action.error.message;
+      });
+  }
+});
+
+<span class="keyword">export const</span> { userAdded, userUpdated } <span class="operator">=</span> usersSlice.actions;
+<span class="keyword">export default</span> usersSlice.reducer;</code></pre>
+                </div>
+
+                <div class="completion-checkbox" onclick="toggleCompletion(this, 'visual-toolkit')">
+                    <input type="checkbox" id="check-visual-toolkit">
+                    <label>✓ I understand Redux Toolkit best practices</label>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="emoji">⚠️</span> Common Edge Cases</h2>
+                    <span class="card-badge badge-edge">Important</span>
+                </div>
+
+                <h3>1. Direct State Mutation ❌</h3>
+                <div class="error-box">
+                    <h4>🚨 The Problem</h4>
+                    <p>Directly mutating state breaks Redux's immutability principle and causes bugs!</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>❌ Wrong vs ✅ Right</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="comment">// ❌ WRONG - Direct mutation (without Redux Toolkit)</span>
+<span class="keyword">function</span> <span class="function">todosReducer</span>(state <span class="operator">=</span> [], action) {
+  <span class="keyword">switch</span> (action.type) {
+    <span class="keyword">case</span> <span class="string">'ADD_TODO'</span>:
+      state.<span class="function">push</span>(action.payload); <span class="comment">// ❌ Mutates state!</span>
+      <span class="keyword">return</span> state;
+  }
+}
+
+<span class="comment">// ✅ CORRECT - Immutable update (without Redux Toolkit)</span>
+<span class="keyword">function</span> <span class="function">todosReducer</span>(state <span class="operator">=</span> [], action) {
+  <span class="keyword">switch</span> (action.type) {
+    <span class="keyword">case</span> <span class="string">'ADD_TODO'</span>:
+      <span class="keyword">return</span> [...state, action.payload]; <span class="comment">// ✅ New array!</span>
+  }
+}
+
+<span class="comment">// ✅ BEST - Redux Toolkit (Immer handles immutability)</span>
+<span class="keyword">const</span> todosSlice <span class="operator">=</span> <span class="function">createSlice</span>({
+  name: <span class="string">'todos'</span>,
+  initialState: [],
+  reducers: {
+    <span class="function">addTodo</span>(state, action) {
+      state.<span class="function">push</span>(action.payload); <span class="comment">// ✅ Looks like mutation, but Immer makes it immutable!</span>
+    }
+  }
+});</code></pre>
+                </div>
+
+                <h3>2. Non-Serializable State ⚠️</h3>
+                <div class="warning-box">
+                    <h4>⚠️ The Problem</h4>
+                    <p>Redux state should only contain plain JavaScript objects, arrays, and primitives. No functions,
+                        Promises, Dates, or class instances!</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Non-Serializable Values</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="comment">// ❌ WRONG - Non-serializable values</span>
+<span class="keyword">const</span> badState <span class="operator">=</span> {
+  user: {
+    name: <span class="string">'John'</span>,
+    createdAt: <span class="keyword">new</span> <span class="function">Date</span>(), <span class="comment">// ❌ Date object</span>
+    fetchData: () <span class="operator">=></span> {}, <span class="comment">// ❌ Function</span>
+    promise: <span class="function">fetch</span>(<span class="string">'/api'</span>) <span class="comment">// ❌ Promise</span>
+  }
+};
+
+<span class="comment">// ✅ CORRECT - Serializable values</span>
+<span class="keyword">const</span> goodState <span class="operator">=</span> {
+  user: {
+    name: <span class="string">'John'</span>,
+    createdAt: <span class="string">'2024-01-01T00:00:00Z'</span>, <span class="comment">// ✅ ISO string</span>
+    isLoading: <span class="keyword">false</span>, <span class="comment">// ✅ Boolean</span>
+    data: <span class="keyword">null</span> <span class="comment">// ✅ Null</span>
+  }
+};</code></pre>
+                </div>
+
+                <h3>3. Async Race Conditions 🏃</h3>
+                <div class="warning-box">
+                    <h4>⚠️ The Problem</h4>
+                    <p>Multiple async operations can complete in unexpected order, causing stale data!</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Handling Race Conditions</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="keyword">import</span> { <span class="function">createAsyncThunk</span> } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+
+<span class="comment">// ✅ Solution: Use createAsyncThunk with condition</span>
+<span class="keyword">export const</span> fetchUser <span class="operator">=</span> <span class="function">createAsyncThunk</span>(
+  <span class="string">'users/fetchUser'</span>,
+  <span class="keyword">async</span> (userId, { getState, requestId }) <span class="operator">=></span> {
+    <span class="keyword">const</span> { currentRequestId, loading } <span class="operator">=</span> <span class="function">getState</span>().users;
+    
+    <span class="comment">// Cancel if there's already a request in progress</span>
+    <span class="keyword">if</span> (loading <span class="operator">!==</span> <span class="string">'pending'</span> <span class="operator">||</span> requestId <span class="operator">!==</span> currentRequestId) {
+      <span class="keyword">return</span>;
+    }
+    
+    <span class="keyword">const</span> response <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">`/api/users/${userId}`</span>);
+    <span class="keyword">return</span> response.<span class="function">json</span>();
+  },
+  {
+    condition: (userId, { getState }) <span class="operator">=></span> {
+      <span class="keyword">const</span> { loading } <span class="operator">=</span> <span class="function">getState</span>().users;
+      <span class="comment">// Don't fetch if already loading</span>
+      <span class="keyword">return</span> loading <span class="operator">!==</span> <span class="string">'pending'</span>;
+    }
+  }
+);</code></pre>
+                </div>
+
+                <h3>4. Nested State Performance 🐌</h3>
+                <div class="info-box">
+                    <h4>💡 Solution: Normalize State</h4>
+                    <p>Instead of deeply nested objects, use a flat structure with IDs as keys!</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Normalized State Structure</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="comment">// ❌ BAD - Nested structure</span>
+<span class="keyword">const</span> badState <span class="operator">=</span> {
+  posts: [
+    {
+      id: <span class="number">1</span>,
+      title: <span class="string">'Post 1'</span>,
+      author: {
+        id: <span class="number">1</span>,
+        name: <span class="string">'John'</span>,
+        posts: [<span class="comment">/* circular reference! */</span>]
+      },
+      comments: [
+        { id: <span class="number">1</span>, text: <span class="string">'Comment 1'</span>, author: {<span class="comment">/* ... */</span>} }
+      ]
+    }
+  ]
+};
+
+<span class="comment">// ✅ GOOD - Normalized structure</span>
+<span class="keyword">const</span> goodState <span class="operator">=</span> {
+  posts: {
+    byId: {
+      <span class="number">1</span>: { id: <span class="number">1</span>, title: <span class="string">'Post 1'</span>, authorId: <span class="number">1</span>, commentIds: [<span class="number">1</span>] }
+    },
+    allIds: [<span class="number">1</span>]
+  },
+  users: {
+    byId: {
+      <span class="number">1</span>: { id: <span class="number">1</span>, name: <span class="string">'John'</span>, postIds: [<span class="number">1</span>] }
+    },
+    allIds: [<span class="number">1</span>]
+  },
+  comments: {
+    byId: {
+      <span class="number">1</span>: { id: <span class="number">1</span>, text: <span class="string">'Comment 1'</span>, authorId: <span class="number">1</span> }
+    },
+    allIds: [<span class="number">1</span>]
+  }
+};
+
+<span class="comment">// Use createEntityAdapter for automatic normalization!</span>
+<span class="keyword">import</span> { <span class="function">createEntityAdapter</span> } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+
+<span class="keyword">const</span> postsAdapter <span class="operator">=</span> <span class="function">createEntityAdapter</span>();
+<span class="keyword">const</span> initialState <span class="operator">=</span> postsAdapter.<span class="function">getInitialState</span>();</code></pre>
+                </div>
+
+                <div class="completion-checkbox" onclick="toggleCompletion(this, 'visual-edge')">
+                    <input type="checkbox" id="check-visual-edge">
+                    <label>✓ I understand common Redux edge cases</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- INTERVIEW Q&A TAB -->
+        <div class="content-section" id="interview">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="emoji">💼</span> Interview Questions (Hinglish)</h2>
+                    <span class="card-badge badge-interview">Must Know</span>
+                </div>
+
+                <div class="question-card" onclick="toggleQuestion(this)">
+                    <div class="question-header">
+                        <div style="display: flex; align-items: center;">
+                            <div class="question-number">1</div>
+                            <div class="question-text">Redux kya hai aur iska use kab karna chahiye?</div>
+                        </div>
+                        <div class="question-arrow">▼</div>
+                    </div>
+                    <div class="question-answer">
+                        <p><strong>Answer:</strong></p>
+                        <p>Redux ek <strong>predictable state container</strong> hai JavaScript apps ke liye. Ye ek
+                            central store hai jahan app ka saara data ek jagah store hota hai.</p>
+
+                        <p><strong>Kab use karein:</strong></p>
+                        <ul>
+                            <li><strong>Large applications:</strong> Jab app bada ho aur bahut saare components ko same
+                                data chahiye</li>
+                            <li><strong>Complex state:</strong> Jab state management complex ho jaye aur props drilling
+                                problem ho</li>
+                            <li><strong>Shared state:</strong> Jab multiple components ko same state access aur update
+                                karna ho</li>
+                            <li><strong>Predictability:</strong> Jab aapko chahiye ki state changes predictable aur
+                                traceable ho</li>
+                        </ul>
+
+                        <p><strong>Kab use NAHI karein:</strong></p>
+                        <ul>
+                            <li>Small apps with simple state</li>
+                            <li>Jab sirf ek component ko state chahiye</li>
+                            <li>Jab aap React seekh rahe ho (pehle React master karo!)</li>
+                        </ul>
+
+                        <p><strong>Real example:</strong> E-commerce app mein user info, cart items, product list - ye
+                            sab different components mein chahiye. Redux se ye sab ek jagah manage ho jata hai!</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleQuestion(this)">
+                    <div class="question-header">
+                        <div style="display: flex; align-items: center;">
+                            <div class="question-number">2</div>
+                            <div class="question-text">Redux ka data flow explain karo - Action, Reducer, Store kaise
+                                kaam karte hain?</div>
+                        </div>
+                        <div class="question-arrow">▼</div>
+                    </div>
+                    <div class="question-answer">
+                        <p><strong>Answer:</strong></p>
+                        <p><strong>Redux ka data flow ek one-way street hai:</strong></p>
+
+                        <p><strong>1. Action (📤):</strong></p>
+                        <ul>
+                            <li>Ye ek plain JavaScript object hai jo batata hai KYA hua</li>
+                            <li>Isme <code>type</code> (mandatory) aur <code>payload</code> (optional data) hota hai
+                            </li>
+                            <li>Example: <code>{ type: 'ADD_TODO', payload: 'Buy milk' }</code></li>
+                        </ul>
+
+                        <p><strong>2. Dispatch (🚀):</strong></p>
+                        <ul>
+                            <li>Action ko store tak bhejne ka tarika</li>
+                            <li><code>dispatch(addTodo('Buy milk'))</code></li>
+                            <li>Ye ONLY way hai state change karne ka</li>
+                        </ul>
+
+                        <p><strong>3. Reducer (⚙️):</strong></p>
+                        <ul>
+                            <li>Pure function jo batata hai state KAISE change hoga</li>
+                            <li>Input: <code>(previousState, action)</code></li>
+                            <li>Output: <code>newState</code></li>
+                            <li>Ye state ko directly mutate NAHI karta, new state return karta hai</li>
+                        </ul>
+
+                        <p><strong>4. Store (🗄️):</strong></p>
+                        <ul>
+                            <li>Central place jahan puri app ka state rehta hai</li>
+                            <li>Sirf ek hi store hota hai puri app mein</li>
+                            <li>Components store se data read kar sakte hain (useSelector)</li>
+                        </ul>
+
+                        <p><strong>Flow:</strong> User clicks button → Dispatch action → Reducer processes → Store
+                            updates → Components re-render</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleQuestion(this)">
+                    <div class="question-header">
+                        <div style="display: flex; align-items: center;">
+                            <div class="question-number">3</div>
+                            <div class="question-text">Redux Toolkit kya hai aur purane Redux se kaise better hai?</div>
+                        </div>
+                        <div class="question-arrow">▼</div>
+                    </div>
+                    <div class="question-answer">
+                        <p><strong>Answer:</strong></p>
+                        <p>Redux Toolkit (RTK) Redux ka <strong>official, recommended way</strong> hai. Ye Redux ko
+                            simple aur powerful banata hai!</p>
+
+                        <p><strong>Purane Redux ki problems:</strong></p>
+                        <ul>
+                            <li>Bahut zyada boilerplate code</li>
+                            <li>Manual immutable updates (spread operators ka maze)</li>
+                            <li>Manually action types aur action creators banana</li>
+                            <li>Middleware setup complex tha</li>
+                        </ul>
+
+                        <p><strong>Redux Toolkit ke benefits:</strong></p>
+                        <ul>
+                            <li><strong>createSlice:</strong> Reducers aur actions ek saath automatically create ho jate
+                                hain</li>
+                            <li><strong>Immer built-in:</strong> "Mutating" logic likh sakte ho, Immer immutability
+                                handle karta hai</li>
+                            <li><strong>configureStore:</strong> Store setup simple, Redux DevTools aur middleware by
+                                default</li>
+                            <li><strong>createAsyncThunk:</strong> Async logic handle karna easy</li>
+                            <li><strong>Less code:</strong> 50-60% kam code likhna padta hai!</li>
+                        </ul>
+
+                        <p><strong>Example comparison:</strong></p>
+                        <p>Purana Redux: 50 lines of code</p>
+                        <p>Redux Toolkit: 15 lines of code (same functionality!)</p>
+
+                        <p><strong>Interview tip:</strong> Hamesha bolo ki aap Redux Toolkit use karte ho, purana way
+                            outdated hai!</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleQuestion(this)">
+                    <div class="question-header">
+                        <div style="display: flex; align-items: center;">
+                            <div class="question-number">4</div>
+                            <div class="question-text">Reducer pure function kyu hona chahiye? Side effects kya hain?
+                            </div>
+                        </div>
+                        <div class="question-arrow">▼</div>
+                    </div>
+                    <div class="question-answer">
+                        <p><strong>Answer:</strong></p>
+                        <p><strong>Pure function ka matlab:</strong></p>
+                        <ul>
+                            <li>Same input → Always same output</li>
+                            <li>No side effects (external state change nahi karta)</li>
+                            <li>Predictable aur testable</li>
+                        </ul>
+
+                        <p><strong>Reducer pure kyu ho:</strong></p>
+                        <ul>
+                            <li><strong>Predictability:</strong> Debugging easy ho jati hai</li>
+                            <li><strong>Time-travel debugging:</strong> Redux DevTools mein actions replay kar sakte ho
+                            </li>
+                            <li><strong>Testing:</strong> Test karna bahut easy</li>
+                            <li><strong>Performance:</strong> React optimization techniques kaam karti hain</li>
+                        </ul>
+
+                        <p><strong>Side effects examples (❌ Reducer mein NAHI karna):</strong></p>
+                        <ul>
+                            <li>API calls</li>
+                            <li>localStorage access</li>
+                            <li>console.log</li>
+                            <li>Math.random() ya Date.now()</li>
+                            <li>DOM manipulation</li>
+                        </ul>
+
+                        <p><strong>Side effects kahan karein (✅):</strong></p>
+                        <ul>
+                            <li><strong>Middleware:</strong> Redux Thunk, Redux Saga</li>
+                            <li><strong>createAsyncThunk:</strong> Redux Toolkit ka built-in solution</li>
+                            <li><strong>Components:</strong> useEffect mein</li>
+                        </ul>
+
+                        <p><strong>Interview tip:</strong> Agar interviewer puchhe "API call kahan karoge?" - kabhi mat
+                            bolo "reducer mein"! Bolo "createAsyncThunk ya middleware mein"</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleQuestion(this)">
+                    <div class="question-header">
+                        <div style="display: flex; align-items: center;">
+                            <div class="question-number">5</div>
+                            <div class="question-text">State ko directly mutate kyu nahi karna chahiye? Redux Toolkit
+                                mein kaise handle hota hai?</div>
+                        </div>
+                        <div class="question-arrow">▼</div>
+                    </div>
+                    <div class="question-answer">
+                        <p><strong>Answer:</strong></p>
+                        <p><strong>Direct mutation ki problem:</strong></p>
+                        <ul>
+                            <li>React ko pata nahi chalta ki state change hua (reference same rehta hai)</li>
+                            <li>Component re-render nahi hota</li>
+                            <li>Redux DevTools kaam nahi karta</li>
+                            <li>Time-travel debugging break ho jata hai</li>
+                            <li>Bugs jo debug karna mushkil hai</li>
+                        </ul>
+
+                        <p><strong>Purane Redux mein solution:</strong></p>
+                        <ul>
+                            <li>Spread operators: <code>{ ...state, newProp: value }</code></li>
+                            <li>Array methods: <code>[...state, newItem]</code></li>
+                            <li>Bahut verbose aur error-prone</li>
+                        </ul>
+
+                        <p><strong>Redux Toolkit ka magic (Immer):</strong></p>
+                        <ul>
+                            <li>Redux Toolkit internally <strong>Immer library</strong> use karta hai</li>
+                            <li>Tum "mutating" code likh sakte ho: <code>state.value += 1</code></li>
+                            <li>Immer automatically immutable update kar deta hai</li>
+                            <li>Code simple aur readable ho jata hai</li>
+                        </ul>
+
+                        <p><strong>Example:</strong></p>
+                        <pre><code><span class="comment">// Purana Redux - Complex</span>
+<span class="keyword">return</span> {
+  ...state,
+  todos: state.todos.<span class="function">map</span>(todo <span class="operator">=></span>
+    todo.id <span class="operator">===</span> action.id
+      ? { ...todo, completed: <span class="operator">!</span>todo.completed }
+      : todo
+  )
+};
+
+<span class="comment">// Redux Toolkit - Simple!</span>
+<span class="keyword">const</span> todo <span class="operator">=</span> state.todos.<span class="function">find</span>(t <span class="operator">=></span> t.id <span class="operator">===</span> action.id);
+todo.completed <span class="operator">=</span> <span class="operator">!</span>todo.completed;</code></pre>
+
+                        <p><strong>Interview tip:</strong> Bolo "Redux Toolkit mein Immer built-in hai, isliye mutating
+                            syntax use kar sakte hain safely!"</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleQuestion(this)">
+                    <div class="question-header">
+                        <div style="display: flex; align-items: center;">
+                            <div class="question-number">6</div>
+                            <div class="question-text">useSelector aur useDispatch hooks kaise kaam karte hain?</div>
+                        </div>
+                        <div class="question-arrow">▼</div>
+                    </div>
+                    <div class="question-answer">
+                        <p><strong>Answer:</strong></p>
+
+                        <p><strong>useSelector (🎯):</strong></p>
+                        <ul>
+                            <li>Redux store se data read karne ke liye</li>
+                            <li>Selector function pass karte ho jo state se specific data return karta hai</li>
+                            <li>Jab selected data change hota hai, component re-render hota hai</li>
+                            <li>Multiple useSelector calls kar sakte ho ek component mein</li>
+                        </ul>
+
+                        <p><strong>useDispatch (🚀):</strong></p>
+                        <ul>
+                            <li>Actions dispatch karne ke liye</li>
+                            <li>Store ka dispatch function return karta hai</li>
+                            <li>Isse actions trigger kar sakte ho</li>
+                        </ul>
+
+                        <p><strong>Performance tip:</strong></p>
+                        <ul>
+                            <li>useSelector by default <strong>strict equality (===)</strong> check karta hai</li>
+                            <li>Agar new object/array return karte ho, har render pe re-render hoga</li>
+                            <li>Solution: <strong>createSelector</strong> use karo (memoization)</li>
+                        </ul>
+
+                        <p><strong>Example:</strong></p>
+                        <pre><code><span class="keyword">import</span> { <span class="function">useSelector</span>, <span class="function">useDispatch</span> } <span class="keyword">from</span> <span class="string">'react-redux'</span>;
+
+<span class="keyword">function</span> <span class="function">TodoList</span>() {
+  <span class="comment">// Read data from store</span>
+  <span class="keyword">const</span> todos <span class="operator">=</span> <span class="function">useSelector</span>(state <span class="operator">=></span> state.todos);
+  <span class="keyword">const</span> count <span class="operator">=</span> <span class="function">useSelector</span>(state <span class="operator">=></span> state.todos.length);
+  
+  <span class="comment">// Get dispatch function</span>
+  <span class="keyword">const</span> dispatch <span class="operator">=</span> <span class="function">useDispatch</span>();
+  
+  <span class="comment">// Dispatch actions</span>
+  <span class="keyword">const</span> <span class="function">handleAdd</span> <span class="operator">=</span> () <span class="operator">=></span> {
+    <span class="function">dispatch</span>(<span class="function">addTodo</span>(<span class="string">'New todo'</span>));
+  };
+}</code></pre>
+
+                        <p><strong>Interview tip:</strong> Agar performance question aaye, bolo "createSelector use
+                            karta hun memoization ke liye"</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleQuestion(this)">
+                    <div class="question-header">
+                        <div style="display: flex; align-items: center;">
+                            <div class="question-number">7</div>
+                            <div class="question-text">Async operations Redux mein kaise handle karte hain?
+                                createAsyncThunk explain karo.</div>
+                        </div>
+                        <div class="question-arrow">▼</div>
+                    </div>
+                    <div class="question-answer">
+                        <p><strong>Answer:</strong></p>
+                        <p>Reducers pure functions hain, isliye async operations directly nahi kar sakte. Redux Toolkit
+                            mein <strong>createAsyncThunk</strong> use karte hain!</p>
+
+                        <p><strong>createAsyncThunk kya karta hai:</strong></p>
+                        <ul>
+                            <li>Automatically 3 action types create karta hai: pending, fulfilled, rejected</li>
+                            <li>API call ya async operation handle karta hai</li>
+                            <li>Loading states automatically manage ho jati hain</li>
+                            <li>Error handling built-in</li>
+                        </ul>
+
+                        <p><strong>3 States:</strong></p>
+                        <ul>
+                            <li><strong>pending:</strong> Request start hua (loading = true)</li>
+                            <li><strong>fulfilled:</strong> Success! Data mil gaya</li>
+                            <li><strong>rejected:</strong> Error hua</li>
+                        </ul>
+
+                        <p><strong>Complete example:</strong></p>
+                        <pre><code><span class="keyword">import</span> { <span class="function">createAsyncThunk</span>, <span class="function">createSlice</span> } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+
+<span class="comment">// Create async thunk</span>
+<span class="keyword">export const</span> fetchUsers <span class="operator">=</span> <span class="function">createAsyncThunk</span>(
+  <span class="string">'users/fetchUsers'</span>,
+  <span class="keyword">async</span> () <span class="operator">=></span> {
+    <span class="keyword">const</span> response <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/users'</span>);
+    <span class="keyword">return</span> response.<span class="function">json</span>();
+  }
+);
+
+<span class="keyword">const</span> usersSlice <span class="operator">=</span> <span class="function">createSlice</span>({
+  name: <span class="string">'users'</span>,
+  initialState: {
+    data: [],
+    loading: <span class="keyword">false</span>,
+    error: <span class="keyword">null</span>
+  },
+  extraReducers: (builder) <span class="operator">=></span> {
+    builder
+      .<span class="function">addCase</span>(fetchUsers.pending, (state) <span class="operator">=></span> {
+        state.loading <span class="operator">=</span> <span class="keyword">true</span>;
+      })
+      .<span class="function">addCase</span>(fetchUsers.fulfilled, (state, action) <span class="operator">=></span> {
+        state.loading <span class="operator">=</span> <span class="keyword">false</span>;
+        state.data <span class="operator">=</span> action.payload;
+      })
+      .<span class="function">addCase</span>(fetchUsers.rejected, (state, action) <span class="operator">=></span> {
+        state.loading <span class="operator">=</span> <span class="keyword">false</span>;
+        state.error <span class="operator">=</span> action.error.message;
+      });
+  }
+});</code></pre>
+
+                        <p><strong>Alternative:</strong> Redux Thunk (purana way) ya Redux Saga (complex apps ke liye)
+                        </p>
+
+                        <p><strong>Interview tip:</strong> Bolo "createAsyncThunk Redux Toolkit ka recommended way hai
+                            async operations ke liye"</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleQuestion(this)">
+                    <div class="question-header">
+                        <div style="display: flex; align-items: center;">
+                            <div class="question-number">8</div>
+                            <div class="question-text">Middleware kya hai Redux mein? Example do.</div>
+                        </div>
+                        <div class="question-arrow">▼</div>
+                    </div>
+                    <div class="question-answer">
+                        <p><strong>Answer:</strong></p>
+                        <p>Middleware ek <strong>interceptor</strong> hai jo action dispatch hone aur reducer tak
+                            pahunchne ke beech mein kaam karta hai.</p>
+
+                        <p><strong>Middleware ka use:</strong></p>
+                        <ul>
+                            <li><strong>Logging:</strong> Har action aur state change log karo</li>
+                            <li><strong>Async operations:</strong> API calls handle karo</li>
+                            <li><strong>Error handling:</strong> Errors catch aur report karo</li>
+                            <li><strong>Analytics:</strong> User actions track karo</li>
+                            <li><strong>Routing:</strong> Navigation handle karo</li>
+                        </ul>
+
+                        <p><strong>Popular middleware:</strong></p>
+                        <ul>
+                            <li><strong>Redux Thunk:</strong> Async actions (Redux Toolkit mein by default)</li>
+                            <li><strong>Redux Saga:</strong> Complex async flows</li>
+                            <li><strong>Redux Logger:</strong> Development logging</li>
+                        </ul>
+
+                        <p><strong>Custom middleware example:</strong></p>
+                        <pre><code><span class="comment">// Logger middleware</span>
+<span class="keyword">const</span> <span class="function">logger</span> <span class="operator">=</span> store <span class="operator">=></span> next <span class="operator">=></span> action <span class="operator">=></span> {
+  <span class="function">console</span>.<span class="function">log</span>(<span class="string">'Dispatching:'</span>, action);
+  <span class="keyword">const</span> result <span class="operator">=</span> <span class="function">next</span>(action);
+  <span class="function">console</span>.<span class="function">log</span>(<span class="string">'Next state:'</span>, store.<span class="function">getState</span>());
+  <span class="keyword">return</span> result;
+};
+
+<span class="comment">// Add to store</span>
+<span class="keyword">const</span> store <span class="operator">=</span> <span class="function">configureStore</span>({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) <span class="operator">=></span>
+    <span class="function">getDefaultMiddleware</span>().<span class="function">concat</span>(logger)
+});</code></pre>
+
+                        <p><strong>Flow:</strong> Dispatch → Middleware 1 → Middleware 2 → Reducer → Store</p>
+
+                        <p><strong>Interview tip:</strong> Bolo "Redux Toolkit mein Redux Thunk by default included hai,
+                            isliye async operations easily handle ho jate hain"</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleQuestion(this)">
+                    <div class="question-header">
+                        <div style="display: flex; align-items: center;">
+                            <div class="question-number">9</div>
+                            <div class="question-text">Redux DevTools kya hai aur kaise use karte hain?</div>
+                        </div>
+                        <div class="question-arrow">▼</div>
+                    </div>
+                    <div class="question-answer">
+                        <p><strong>Answer:</strong></p>
+                        <p>Redux DevTools ek <strong>browser extension</strong> hai jo Redux debugging ko super easy
+                            banata hai!</p>
+
+                        <p><strong>Features:</strong></p>
+                        <ul>
+                            <li><strong>Action history:</strong> Saare dispatched actions dekh sakte ho</li>
+                            <li><strong>State inspection:</strong> Har action ke baad state kya tha</li>
+                            <li><strong>Time-travel debugging:</strong> Actions ko undo/redo kar sakte ho</li>
+                            <li><strong>State diff:</strong> State mein kya change hua, clearly dikhta hai</li>
+                            <li><strong>Action replay:</strong> Actions ko replay kar sakte ho</li>
+                            <li><strong>Export/Import:</strong> State aur actions export kar sakte ho</li>
+                        </ul>
+
+                        <p><strong>Setup (Redux Toolkit mein automatic!):</strong></p>
+                        <pre><code><span class="keyword">import</span> { <span class="function">configureStore</span> } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+
+<span class="comment">// Redux Toolkit automatically enables DevTools!</span>
+<span class="keyword">const</span> store <span class="operator">=</span> <span class="function">configureStore</span>({
+  reducer: rootReducer,
+  <span class="comment">// DevTools enabled by default in development</span>
+});</code></pre>
+
+                        <p><strong>Kaise use karein:</strong></p>
+                        <ol>
+                            <li>Chrome/Firefox mein Redux DevTools extension install karo</li>
+                            <li>App run karo</li>
+                            <li>Browser DevTools open karo (F12)</li>
+                            <li>"Redux" tab mein jao</li>
+                            <li>Actions aur state changes dekho!</li>
+                        </ol>
+
+                        <p><strong>Pro tips:</strong></p>
+                        <ul>
+                            <li>Production mein DevTools disable karo (security)</li>
+                            <li>Time-travel debugging se bugs easily find ho jate hain</li>
+                            <li>State diff se exactly pata chalta hai kya change hua</li>
+                        </ul>
+
+                        <p><strong>Interview tip:</strong> Bolo "Redux DevTools development mein bahut helpful hai,
+                            time-travel debugging se bugs quickly fix ho jate hain"</p>
+                    </div>
+                </div>
+
+                <div class="question-card" onclick="toggleQuestion(this)">
+                    <div class="question-header">
+                        <div style="display: flex; align-items: center;">
+                            <div class="question-number">10</div>
+                            <div class="question-text">Redux vs Context API - kab kya use karein?</div>
+                        </div>
+                        <div class="question-arrow">▼</div>
+                    </div>
+                    <div class="question-answer">
+                        <p><strong>Answer:</strong></p>
+                        <p>Ye bahut common interview question hai! Dono ka apna use case hai.</p>
+
+                        <p><strong>Context API use karo jab:</strong></p>
+                        <ul>
+                            <li>Simple state sharing (theme, language, user info)</li>
+                            <li>State rarely change hota hai</li>
+                            <li>Small to medium apps</li>
+                            <li>No complex state logic</li>
+                            <li>Props drilling avoid karna hai</li>
+                        </ul>
+
+                        <p><strong>Redux use karo jab:</strong></p>
+                        <ul>
+                            <li>Large, complex applications</li>
+                            <li>State frequently change hota hai</li>
+                            <li>Complex state logic aur transformations</li>
+                            <li>Time-travel debugging chahiye</li>
+                            <li>Middleware chahiye (logging, analytics)</li>
+                            <li>Multiple developers kaam kar rahe hain</li>
+                            <li>Predictable state updates chahiye</li>
+                        </ul>
+
+                        <p><strong>Performance difference:</strong></p>
+                        <ul>
+                            <li><strong>Context API:</strong> Jab context value change hota hai, saare consumers
+                                re-render hote hain (even if unko wo data nahi chahiye)</li>
+                            <li><strong>Redux:</strong> Sirf wo components re-render hote hain jinko selected data
+                                change hua hai</li>
+                        </ul>
+
+                        <p><strong>Comparison table:</strong></p>
+                        <table>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Context API</th>
+                                <th>Redux</th>
+                            </tr>
+                            <tr>
+                                <td>Setup</td>
+                                <td>Simple</td>
+                                <td>More setup needed</td>
+                            </tr>
+                            <tr>
+                                <td>Performance</td>
+                                <td>Can cause unnecessary re-renders</td>
+                                <td>Optimized with selectors</td>
+                            </tr>
+                            <tr>
+                                <td>DevTools</td>
+                                <td>No</td>
+                                <td>Yes (Redux DevTools)</td>
+                            </tr>
+                            <tr>
+                                <td>Middleware</td>
+                                <td>No</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>Learning curve</td>
+                                <td>Easy</td>
+                                <td>Steeper</td>
+                            </tr>
+                        </table>
+
+                        <p><strong>Best practice:</strong> Dono ko saath mein bhi use kar sakte ho! Context API for
+                            simple things, Redux for complex state.</p>
+
+                        <p><strong>Interview tip:</strong> Bolo "Context API aur Redux competitors nahi hain, dono ka
+                            apna use case hai. Small apps mein Context API sufficient hai, large apps mein Redux better
+                            hai"</p>
+                    </div>
+                </div>
+
+                <div class="completion-checkbox" onclick="toggleCompletion(this, 'interview-all')">
+                    <input type="checkbox" id="check-interview-all">
+                    <label>✓ I've reviewed all interview questions</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEFINITIONS TAB -->
+        <div class="content-section" id="definitions">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="emoji">📚</span> Redux Definitions & Concepts</h2>
+                    <span class="card-badge badge-core">Reference Guide</span>
+                </div>
+
+                <h3>1. Redux</h3>
+                <div class="definition-box">
+                    <h3>📖 Formal Definition</h3>
+                    <p>Redux is a <strong>predictable state container</strong> for JavaScript applications. It helps you
+                        write applications that behave consistently, run in different environments (client, server, and
+                        native), and are easy to test. Redux centralizes your application's state and logic, enabling
+                        powerful capabilities like undo/redo, state persistence, and time-travel debugging.</p>
+                </div>
+
+                <div class="child-explanation">
+                    <h4>👶 Simple Explanation</h4>
+                    <p>Redux is like a big toy box for your app's data. Instead of every room (component) having its own
+                        toys (data), there's ONE central toy box where all toys are kept. Everyone can see what's in the
+                        box, but there are rules about how to add or remove toys. This makes it easy to know where
+                        everything is and what's happening!</p>
+                </div>
+
+                <div class="info-box">
+                    <h4>💡 Real-World Example</h4>
+                    <p><strong>E-commerce Application:</strong> In an online shopping app, you need to manage user
+                        authentication, shopping cart items, product listings, order history, and user preferences.
+                        Without Redux, passing this data between components becomes messy (props drilling). With Redux,
+                        all this data lives in one central store, and any component can access what it needs!</p>
+                </div>
+
+                <h3>2. Store</h3>
+                <div class="definition-box">
+                    <h3>📖 Formal Definition</h3>
+                    <p>The <strong>Store</strong> is the central repository that holds the entire state tree of your
+                        application. There is only one store in a Redux application. The store has the following
+                        responsibilities: holds application state, allows access to state via <code>getState()</code>,
+                        allows state to be updated via <code>dispatch(action)</code>, registers listeners via
+                        <code>subscribe(listener)</code>, and handles unregistering of listeners.</p>
+                </div>
+
+                <div class="child-explanation">
+                    <h4>👶 Simple Explanation</h4>
+                    <p>The Store is like a bank vault. It safely keeps all your app's important information
+                        (money/data). You can check what's inside (getState), but you can't just walk in and take
+                        things. You have to follow the bank's rules (dispatch actions) to make changes. The bank also
+                        tells you when something changes (subscribe)!</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Creating a Store</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="keyword">import</span> { <span class="function">configureStore</span> } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+<span class="keyword">import</span> counterReducer <span class="keyword">from</span> <span class="string">'./features/counter/counterSlice'</span>;
+<span class="keyword">import</span> userReducer <span class="keyword">from</span> <span class="string">'./features/user/userSlice'</span>;
+
+<span class="keyword">const</span> store <span class="operator">=</span> <span class="function">configureStore</span>({
+  reducer: {
+    counter: counterReducer,
+    user: userReducer,
+  },
+  <span class="comment">// Redux DevTools enabled by default</span>
+  <span class="comment">// Middleware (Redux Thunk) included by default</span>
+});
+
+<span class="keyword">export default</span> store;</code></pre>
+                </div>
+
+                <h3>3. Action</h3>
+                <div class="definition-box">
+                    <h3>📖 Formal Definition</h3>
+                    <p>An <strong>Action</strong> is a plain JavaScript object that describes an intention to change the
+                        state. Actions are the only way to get data into the store. Every action must have a
+                        <code>type</code> property (string) that indicates the type of action being performed. Actions
+                        can optionally have a <code>payload</code> property containing additional data needed to perform
+                        the action.</p>
+                </div>
+
+                <div class="child-explanation">
+                    <h4>👶 Simple Explanation</h4>
+                    <p>An Action is like a note or message you write. It says "Hey, I want to do something!" For
+                        example, "I want to add a toy to the box" or "I want to remove this toy". The note describes
+                        WHAT you want to do, not HOW to do it. Someone else (the reducer) will read the note and do the
+                        actual work!</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Action Examples</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="comment">// Simple action (no payload)</span>
+{
+  type: <span class="string">'counter/increment'</span>
+}
+
+<span class="comment">// Action with payload</span>
+{
+  type: <span class="string">'counter/incrementByAmount'</span>,
+  payload: <span class="number">5</span>
+}
+
+<span class="comment">// Complex action</span>
+{
+  type: <span class="string">'todos/todoAdded'</span>,
+  payload: {
+    id: <span class="number">1</span>,
+    text: <span class="string">'Learn Redux'</span>,
+    completed: <span class="keyword">false</span>
+  }
+}</code></pre>
+                </div>
+
+                <h3>4. Reducer</h3>
+                <div class="definition-box">
+                    <h3>📖 Formal Definition</h3>
+                    <p>A <strong>Reducer</strong> is a pure function that takes the previous state and an action, and
+                        returns the next state: <code>(previousState, action) => newState</code>. Reducers specify how
+                        the application's state changes in response to actions. They must be pure functions - same
+                        inputs always produce the same output, with no side effects. Reducers should never mutate the
+                        existing state; instead, they should return a new state object.</p>
+                </div>
+
+                <div class="child-explanation">
+                    <h4>👶 Simple Explanation</h4>
+                    <p>A Reducer is like a recipe book with rules. When someone gives you a note (action) saying "add a
+                        toy", you look in the recipe book to see HOW to add the toy. The recipe says "take the old toy
+                        box, make a NEW toy box with all the old toys PLUS the new toy". You never change the old toy
+                        box directly - you always make a new one!</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Reducer with Redux Toolkit</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="keyword">import</span> { <span class="function">createSlice</span> } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+
+<span class="keyword">const</span> counterSlice <span class="operator">=</span> <span class="function">createSlice</span>({
+  name: <span class="string">'counter'</span>,
+  initialState: {
+    value: <span class="number">0</span>,
+    history: []
+  },
+  reducers: {
+    <span class="comment">// Redux Toolkit uses Immer, so we can "mutate" state</span>
+    <span class="function">increment</span>(state) {
+      state.value <span class="operator">+=</span> <span class="number">1</span>;
+      state.history.<span class="function">push</span>(<span class="string">'increment'</span>);
+    },
+    <span class="function">decrement</span>(state) {
+      state.value <span class="operator">-=</span> <span class="number">1</span>;
+      state.history.<span class="function">push</span>(<span class="string">'decrement'</span>);
+    },
+    <span class="function">incrementByAmount</span>(state, action) {
+      state.value <span class="operator">+=</span> action.payload;
+      state.history.<span class="function">push</span>(<span class="string">`increment by ${action.payload}`</span>);
+    },
+    <span class="function">reset</span>(state) {
+      state.value <span class="operator">=</span> <span class="number">0</span>;
+      state.history <span class="operator">=</span> [];
+    }
+  }
+});
+
+<span class="keyword">export const</span> { increment, decrement, incrementByAmount, reset } <span class="operator">=</span> counterSlice.actions;
+<span class="keyword">export default</span> counterSlice.reducer;</code></pre>
+                </div>
+
+                <h3>5. Dispatch</h3>
+                <div class="definition-box">
+                    <h3>📖 Formal Definition</h3>
+                    <p><strong>Dispatch</strong> is a function provided by the Redux store that is used to send
+                        (dispatch) actions to the store. It is the only way to trigger a state change. When you call
+                        <code>dispatch(action)</code>, the store runs its reducer function with the current state and
+                        the dispatched action, and saves the returned new state. It then notifies all subscribers that
+                        the state has been updated.</p>
+                </div>
+
+                <div class="child-explanation">
+                    <h4>👶 Simple Explanation</h4>
+                    <p>Dispatch is like pressing a doorbell or sending a letter. When you want something to happen, you
+                        "dispatch" (send) a message. It's like telling the mailman "Please deliver this letter to the
+                        toy box manager!" The dispatch function makes sure your message (action) gets to the right place
+                        (reducer).</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Using Dispatch in React</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="keyword">import</span> { <span class="function">useDispatch</span>, <span class="function">useSelector</span> } <span class="keyword">from</span> <span class="string">'react-redux'</span>;
+<span class="keyword">import</span> { increment, decrement, incrementByAmount } <span class="keyword">from</span> <span class="string">'./counterSlice'</span>;
+
+<span class="keyword">function</span> <span class="function">Counter</span>() {
+  <span class="keyword">const</span> count <span class="operator">=</span> <span class="function">useSelector</span>(state <span class="operator">=></span> state.counter.value);
+  <span class="keyword">const</span> dispatch <span class="operator">=</span> <span class="function">useDispatch</span>();
+
+  <span class="keyword">return</span> (
+    <span class="operator"><</span>div<span class="operator">></span>
+      <span class="operator"><</span>h1<span class="operator">></span>{count}<span class="operator"><</span>/h1<span class="operator">></span>
+      <span class="operator"><</span>button <span class="function">onClick</span><span class="operator">=</span>{() <span class="operator">=></span> <span class="function">dispatch</span>(<span class="function">increment</span>())}
+        +1
+      <span class="operator"><</span>/button<span class="operator">></span>
+      <span class="operator"><</span>button <span class="function">onClick</span><span class="operator">=</span>{() <span class="operator">=></span> <span class="function">dispatch</span>(<span class="function">decrement</span>())}
+        -1
+      <span class="operator"><</span>/button<span class="operator">></span>
+      <span class="operator"><</span>button <span class="function">onClick</span><span class="operator">=</span>{() <span class="operator">=></span> <span class="function">dispatch</span>(<span class="function">incrementByAmount</span>(<span class="number">10</span>))}
+        +10
+      <span class="operator"><</span>/button<span class="operator">></span>
+    <span class="operator"><</span>/div<span class="operator">></span>
+  );
+}</code></pre>
+                </div>
+
+                <h3>6. Selector</h3>
+                <div class="definition-box">
+                    <h3>📖 Formal Definition</h3>
+                    <p>A <strong>Selector</strong> is a function that extracts specific pieces of data from the Redux
+                        store state. Selectors can compute derived data, allowing Redux to store the minimal possible
+                        state. They are efficient because they can be memoized using libraries like Reselect, preventing
+                        unnecessary recalculations. Selectors help keep your components decoupled from the exact shape
+                        of the state tree.</p>
+                </div>
+
+                <div class="child-explanation">
+                    <h4>👶 Simple Explanation</h4>
+                    <p>A Selector is like a magnifying glass or a search tool. Instead of looking at the entire toy box
+                        (which might be huge!), you use the selector to find exactly what you need. "Show me only the
+                        red toys" or "Count how many toys I have". It helps you find specific things quickly without
+                        looking through everything!</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Using Selectors</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="keyword">import</span> { <span class="function">useSelector</span> } <span class="keyword">from</span> <span class="string">'react-redux'</span>;
+<span class="keyword">import</span> { <span class="function">createSelector</span> } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+
+<span class="comment">// Simple selector</span>
+<span class="keyword">const</span> <span class="function">selectTodos</span> <span class="operator">=</span> state <span class="operator">=></span> state.todos;
+
+<span class="comment">// Memoized selector (better performance)</span>
+<span class="keyword">const</span> selectCompletedTodos <span class="operator">=</span> <span class="function">createSelector</span>(
+  [selectTodos],
+  (todos) <span class="operator">=></span> todos.<span class="function">filter</span>(todo <span class="operator">=></span> todo.completed)
+);
+
+<span class="keyword">const</span> selectTodoStats <span class="operator">=</span> <span class="function">createSelector</span>(
+  [selectTodos],
+  (todos) <span class="operator">=></span> ({
+    total: todos.length,
+    completed: todos.<span class="function">filter</span>(t <span class="operator">=></span> t.completed).length,
+    active: todos.<span class="function">filter</span>(t <span class="operator">=></span> <span class="operator">!</span>t.completed).length
+  })
+);
+
+<span class="comment">// Using in component</span>
+<span class="keyword">function</span> <span class="function">TodoList</span>() {
+  <span class="keyword">const</span> todos <span class="operator">=</span> <span class="function">useSelector</span>(selectTodos);
+  <span class="keyword">const</span> completedTodos <span class="operator">=</span> <span class="function">useSelector</span>(selectCompletedTodos);
+  <span class="keyword">const</span> stats <span class="operator">=</span> <span class="function">useSelector</span>(selectTodoStats);
+  
+  <span class="comment">// ...</span>
+}</code></pre>
+                </div>
+
+                <h3>7. Middleware</h3>
+                <div class="definition-box">
+                    <h3>📖 Formal Definition</h3>
+                    <p><strong>Middleware</strong> provides a third-party extension point between dispatching an action
+                        and the moment it reaches the reducer. Middleware can be used for logging, crash reporting,
+                        performing asynchronous tasks, routing, and more. Redux middleware is implemented as a chain of
+                        functions that wrap the store's dispatch method. Each middleware receives
+                        <code>store's dispatch</code> and <code>getState</code> functions as named arguments, and
+                        returns a function.</p>
+                </div>
+
+                <div class="child-explanation">
+                    <h4>👶 Simple Explanation</h4>
+                    <p>Middleware is like a security guard or helper who stands between you and the toy box. When you
+                        send a message (action), the middleware can: 1) Read the message and write it down (logging), 2)
+                        Check if the message is allowed (validation), 3) Change the message before it goes through, 4)
+                        Do extra work like calling the internet (API calls), or 5) Stop the message completely if
+                        something's wrong!</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Custom Middleware Example</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="comment">// Logger middleware</span>
+<span class="keyword">const</span> <span class="function">loggerMiddleware</span> <span class="operator">=</span> store <span class="operator">=></span> next <span class="operator">=></span> action <span class="operator">=></span> {
+  <span class="function">console</span>.<span class="function">group</span>(action.type);
+  <span class="function">console</span>.<span class="function">info</span>(<span class="string">'dispatching'</span>, action);
+  <span class="keyword">const</span> result <span class="operator">=</span> <span class="function">next</span>(action);
+  <span class="function">console</span>.<span class="function">log</span>(<span class="string">'next state'</span>, store.<span class="function">getState</span>());
+  <span class="function">console</span>.<span class="function">groupEnd</span>();
+  <span class="keyword">return</span> result;
+};
+
+<span class="comment">// Error handling middleware</span>
+<span class="keyword">const</span> <span class="function">errorMiddleware</span> <span class="operator">=</span> store <span class="operator">=></span> next <span class="operator">=></span> action <span class="operator">=></span> {
+  <span class="keyword">try</span> {
+    <span class="keyword">return</span> <span class="function">next</span>(action);
+  } <span class="keyword">catch</span> (err) {
+    <span class="function">console</span>.<span class="function">error</span>(<span class="string">'Error in action:'</span>, action.type, err);
+    <span class="comment">// Send to error tracking service</span>
+    <span class="keyword">throw</span> err;
+  }
+};
+
+<span class="comment">// Add to store</span>
+<span class="keyword">const</span> store <span class="operator">=</span> <span class="function">configureStore</span>({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) <span class="operator">=></span>
+    <span class="function">getDefaultMiddleware</span>()
+      .<span class="function">concat</span>(loggerMiddleware)
+      .<span class="function">concat</span>(errorMiddleware)
+});</code></pre>
+                </div>
+
+                <h3>8. Immutability</h3>
+                <div class="definition-box">
+                    <h3>📖 Formal Definition</h3>
+                    <p><strong>Immutability</strong> is the concept that data should not be changed after it's created.
+                        In Redux, state must be treated as immutable - you never modify the existing state object
+                        directly. Instead, you create a new state object with the desired changes. This is crucial for
+                        Redux's change detection mechanism, time-travel debugging, and React's rendering optimization.
+                        Redux Toolkit uses the Immer library internally to allow "mutating" syntax while maintaining
+                        immutability.</p>
+                </div>
+
+                <div class="child-explanation">
+                    <h4>👶 Simple Explanation</h4>
+                    <p>Immutability means "don't change the original". Imagine you have a drawing. Instead of erasing
+                        and changing the original drawing, you make a NEW drawing with the changes. This way, you can
+                        always go back and see what the old drawing looked like! In Redux, we never change the old state
+                        - we always make a new one with our changes.</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Immutability Examples</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                    </div>
+                    <pre><code><span class="comment">// ❌ WRONG - Mutating state directly</span>
+<span class="keyword">function</span> <span class="function">badReducer</span>(state, action) {
+  state.count<span class="operator">++</span>; <span class="comment">// Mutates original state!</span>
+  state.todos.<span class="function">push</span>(action.payload); <span class="comment">// Mutates array!</span>
+  <span class="keyword">return</span> state; <span class="comment">// Returns same reference</span>
+}
+
+<span class="comment">// ✅ CORRECT - Immutable updates (without Redux Toolkit)</span>
+<span class="keyword">function</span> <span class="function">goodReducer</span>(state, action) {
+  <span class="keyword">return</span> {
+    ...state, <span class="comment">// Copy all properties</span>
+    count: state.count <span class="operator">+</span> <span class="number">1</span>, <span class="comment">// New value</span>
+    todos: [...state.todos, action.payload] <span class="comment">// New array</span>
+  };
+}
+
+<span class="comment">// ✅ BEST - Redux Toolkit with Immer</span>
+<span class="keyword">const</span> slice <span class="operator">=</span> <span class="function">createSlice</span>({
+  name: <span class="string">'example'</span>,
+  initialState: { count: <span class="number">0</span>, todos: [] },
+  reducers: {
+    <span class="function">increment</span>(state) {
+      state.count<span class="operator">++</span>; <span class="comment">// Looks like mutation, but Immer handles it!</span>
+    },
+    <span class="function">addTodo</span>(state, action) {
+      state.todos.<span class="function">push</span>(action.payload); <span class="comment">// Immer makes it immutable!</span>
+    }
+  }
+});</code></pre>
+                </div>
+
+                <div class="completion-checkbox" onclick="toggleCompletion(this, 'definitions-all')">
+                    <input type="checkbox" id="check-definitions-all">
+                    <label>✓ I've reviewed all definitions</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-top" id="scrollTop" onclick="scrollToTop()">
+            ↑
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function showTab(tabName) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle Hinglish explanation
+        function toggleHinglish(element) {
+            const content = element.nextElementSibling;
+            content.classList.toggle('open');
+            element.classList.toggle('open');
+        }
+
+        // Copy code to clipboard
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-container').querySelector('code');
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = '✓ Copied!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.textContent = '📋 Copy';
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Toggle question answer
+        function toggleQuestion(element) {
+            const answer = element.querySelector('.question-answer');
+            answer.classList.toggle('open');
+            element.classList.toggle('open');
+        }
+
+        // Toggle completion
+        function toggleCompletion(element, sectionId) {
+            const checkbox = element.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+
+            const completions = JSON.parse(localStorage.getItem('redux-completions') || '{}');
+            completions[sectionId] = checkbox.checked;
+            localStorage.setItem('redux-completions', JSON.stringify(completions));
+
+            updateProgress();
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const completions = JSON.parse(localStorage.getItem('redux-completions') || '{}');
+            const total = document.querySelectorAll('.completion-checkbox').length;
+            const completed = Object.values(completions).filter(Boolean).length;
+            const percentage = Math.round((completed / total) * 100);
+
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = percentage + '%';
+            progressFill.textContent = percentage + '% Complete';
+        }
+
+        // Reset progress
+        function resetProgress() {
+            if (confirm('Are you sure you want to reset all progress?')) {
+                localStorage.removeItem('redux-completions');
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                    cb.checked = false;
+                });
+                updateProgress();
+            }
+        }
+
+        // Dark mode toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('redux-darkMode', isDark);
+
+            const icon = document.getElementById('modeIcon');
+            icon.textContent = isDark ? '☀️' : '🌙';
+        }
+
+        // Scroll to top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Show/hide scroll to top button
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.getElementById('scrollTop');
+            if (window.pageYOffset > 300) {
+                scrollTop.classList.add('show');
+            } else {
+                scrollTop.classList.remove('show');
+            }
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function (e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Load dark mode preference
+            const isDark = localStorage.getItem('redux-darkMode') === 'true';
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('modeIcon').textContent = '☀️';
+            }
+
+            // Load completion status
+            const completions = JSON.parse(localStorage.getItem('redux-completions') || '{}');
+            Object.keys(completions).forEach(sectionId => {
+                const checkbox = document.getElementById('check-' + sectionId);
+                if (checkbox) {
+                    checkbox.checked = completions[sectionId];
+                }
+            });
+
+            updateProgress();
+        });
+    </script>
+</body>
+
+</html>

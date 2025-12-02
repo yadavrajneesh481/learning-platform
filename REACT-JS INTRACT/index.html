@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -282,9 +283,9 @@
                 padding: 24px;
             }
         }
-    
 
-    
+
+
         /* Code Block Formatting - Universal Styles */
         pre {
             background: #282c34 !important;
@@ -324,15 +325,43 @@
         }
 
         /* Syntax Highlighting Classes */
-        .syntax-keyword { color: #c678dd; font-weight: bold; }
-        .syntax-tag { color: #e06c75; }
-        .syntax-attr { color: #d19a66; }
-        .syntax-string { color: #98c379; }
-        .syntax-comment { color: #5c6370; font-style: italic; }
-        .syntax-number { color: #d19a66; }
-        .syntax-function { color: #61afef; }
-        .syntax-operator { color: #56b6c2; }
-        .syntax-variable { color: #e5c07b; }
+        .syntax-keyword {
+            color: #c678dd;
+            font-weight: bold;
+        }
+
+        .syntax-tag {
+            color: #e06c75;
+        }
+
+        .syntax-attr {
+            color: #d19a66;
+        }
+
+        .syntax-string {
+            color: #98c379;
+        }
+
+        .syntax-comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+
+        .syntax-number {
+            color: #d19a66;
+        }
+
+        .syntax-function {
+            color: #61afef;
+        }
+
+        .syntax-operator {
+            color: #56b6c2;
+        }
+
+        .syntax-variable {
+            color: #e5c07b;
+        }
 
         /* Code Block Container */
         .code-block {
@@ -375,7 +404,10 @@
         }
 
         /* Inline Code */
-        p code, li code, td code, th code {
+        p code,
+        li code,
+        td code,
+        th code {
             background: rgba(0, 0, 0, 0.1);
             padding: 2px 6px;
             border-radius: 3px;
@@ -411,9 +443,9 @@
         pre::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.5);
         }
-
     </style>
 </head>
+
 <body>
     <!-- Scroll Progress Bar -->
     <div class="scroll-progress" id="scrollProgress"></div>
@@ -425,7 +457,8 @@
         <header>
             <h1>React.js Master Course</h1>
             <p>40-60 Days | Beginner → Advanced → Industry-Ready</p>
-            <p style="font-size: 0.95em; margin-top: 8px; color: #9ca3af;">React 18+ | Hooks | Redux Toolkit | Router v6 | TypeScript | Testing | Performance</p>
+            <p style="font-size: 0.95em; margin-top: 8px; color: #9ca3af;">React 18+ | Hooks | Redux Toolkit | Router v6
+                | TypeScript | Testing | Performance</p>
         </header>
 
         <div class="timeline">
@@ -433,7 +466,7 @@
             <div class="week-section">
                 <div class="week-marker">W1-2</div>
                 <div class="week-header">WEEK 1-2: React Foundations + Modern JavaScript</div>
-                
+
                 <div class="day-card">
                     <div class="day-title">
                         <span class="day-icon">1-2</span>
@@ -520,7 +553,7 @@
             <div class="week-section">
                 <div class="week-marker">W3-4</div>
                 <div class="week-header">WEEK 3-4: Intermediate React + APIs + UI</div>
-                
+
                 <div class="day-card">
                     <div class="day-title">
                         <span class="day-icon">14-16</span>
@@ -588,7 +621,7 @@
             <div class="week-section">
                 <div class="week-marker">W5-6</div>
                 <div class="week-header">WEEK 5-6: Advanced State Management</div>
-                
+
                 <div class="day-card">
                     <div class="day-title">
                         <span class="day-icon">25-26</span>
@@ -639,7 +672,7 @@
             <div class="week-section">
                 <div class="week-marker">W7-8</div>
                 <div class="week-header">WEEK 7-8: Routing + Performance + Patterns</div>
-                
+
                 <div class="day-card">
                     <div class="day-title">
                         <span class="day-icon">32-33</span>
@@ -691,7 +724,7 @@
             <div class="week-section">
                 <div class="week-marker">W9-10</div>
                 <div class="week-header">WEEK 9-10: Hooks, Testing, Security & Patterns</div>
-                
+
                 <div class="day-card">
                     <div class="day-title">
                         <span class="day-icon">39-41</span>
@@ -745,7 +778,7 @@
             <div class="week-section">
                 <div class="week-marker">W11-12</div>
                 <div class="week-header">WEEK 11-12: Real-World Topics (Industry-Level)</div>
-                
+
                 <div class="day-card">
                     <div class="day-title">
                         <span class="day-icon">46-48</span>
@@ -866,6 +899,23 @@
                     </ul>
                     <a href="day58-60end.html" class="link-button">Start Learning →</a>
                 </div>
+
+                <!-- -------------------------------  -->
+                <div class="day-card">
+                    <div class="day-title">
+                        <span class="day-icon">Expert</span>
+                        Redux
+                    </div>
+                    <ul class="topics-list">
+                        <li>Redux</li>
+                        <li>Redux Toolkit</li>
+                        <li>Redux todo app</li>
+                        <li>Redux guide</li>
+
+                    </ul>
+                    <a href="redux-guide.html" class="link-button">Redux Guide →</a>
+                    <a href="reduxtodo.html" class="link-button">Redux Todo App →</a>
+                </div>
             </div>
         </div>
 
@@ -894,7 +944,7 @@
 
         // Floating Action Button - Scroll to Top
         const fab = document.getElementById('fab');
-        
+
         fab.addEventListener('click', () => {
             window.scrollTo({
                 top: 0,
@@ -912,4 +962,5 @@
         });
     </script>
 </body>
+
 </html>

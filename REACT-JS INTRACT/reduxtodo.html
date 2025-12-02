@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redux Todo App - Complete Project with Explanation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #764abc;
+            --primary-dark: #5e3a94;
+            --secondary: #f50057;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --info: #2196f3;
+            --bg-light: #f5f5f5;
+            --bg-dark: #1a1a2e;
+            --card-light: #ffffff;
+            --card-dark: #16213e;
+            --text-light: #333333;
+            --text-dark: #e0e0e0;
+            --border-light: #e0e0e0;
+            --border-dark: #2d3748;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .section-header h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        .emoji {
+            font-size: 2rem;
+        }
+
+        /* App Section */
+        .app-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .app-section .section-header {
+            border-bottom-color: white;
+        }
+
+        .app-section .section-header h2 {
+            color: white;
+        }
+
+        .todo-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .todo-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .todo-input:focus {
+            outline: none;
+            border-color: white;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-add {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-btn.active {
+            background: white;
+            color: var(--primary);
+            border-color: white;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .todo-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .todo-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .todo-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .todo-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .todo-item {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .todo-item:hover {
+            transform: translateX(5px);
+            border-color: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .todo-item.completed {
+            opacity: 0.7;
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .todo-checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .todo-text {
+            flex: 1;
+            font-size: 1.1rem;
+            color: var(--text-light);
+            word-break: break-word;
+        }
+
+        .todo-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-delete {
+            background: #ffebee;
+            color: var(--danger);
+        }
+
+        .btn-delete:hover {
+            background: var(--danger);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .empty-state .emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Code Section */
+        .code-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .code-tab {
+            padding: 12px 24px;
+            background: var(--bg-light);
+            border: 2px solid var(--border-light);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .code-tab:hover {
+            border-color: var(--primary);
+        }
+
+        .code-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .code-content {
+            display: none;
+        }
+
+        .code-content.active {
+            display: block;
+        }
+
+        .code-container {
+            position: relative;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-header {
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        pre {
+            margin: 0;
+            padding: 25px;
+            background: #282c34;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: 'Courier New', Consolas, Monaco, monospace;
+            color: #abb2bf;
+        }
+
+        .keyword {
+            color: #c678dd;
+            font-weight: bold;
+        }
+
+        .string {
+            color: #98c379;
+        }
+
+        .function {
+            color: #61afef;
+            font-weight: 600;
+        }
+
+        .comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+
+        .number {
+            color: #d19a66;
+        }
+
+        .operator {
+            color: #56b6c2;
+        }
+
+        .property {
+            color: #e06c75;
+        }
+
+        /* Explanation Section */
+        .explanation-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-left: 6px solid var(--warning);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .explanation-box h3 {
+            color: #e65100;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .explanation-box p {
+            color: #5d4037;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .explanation-box ul {
+            margin-left: 25px;
+            color: #5d4037;
+        }
+
+        .explanation-box li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .explanation-box strong {
+            color: #e65100;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-left: 6px solid var(--info);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .info-box h3 {
+            color: #1565c0;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-box p {
+            color: #0d47a1;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-left: 6px solid var(--success);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .success-box h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .success-box p {
+            color: #1b5e20;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .flow-diagram {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .flow-diagram h3 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
+
+        .flow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+            border-radius: 12px;
+            border-left: 6px solid var(--primary);
+        }
+
+        .flow-step-number {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .flow-step-content h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+
+        .flow-step-content p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .todo-input-container {
+                flex-direction: column;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .code-tabs {
+                flex-direction: column;
+            }
+        }
+
+        .highlight {
+            background: yellow;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🔄 Redux Todo App - Complete Project</h1>
+            <p>Live Working App + Complete Code + Hinglish Explanation</p>
+        </header>
+
+        <div class="main-grid">
+            <!-- Live App Section -->
+            <div class="section app-section">
+                <div class="section-header">
+                    <span class="emoji">🎯</span>
+                    <h2>Live Todo App (Working!)</h2>
+                </div>
+
+                <div class="todo-input-container">
+                    <input type="text" class="todo-input" id="todoInput" placeholder="Enter your todo..."
+                        onkeypress="if(event.key==='Enter') addTodo()">
+                    <button class="btn btn-add" onclick="addTodo()">
+                        <span>➕</span> Add Todo
+                    </button>
+                </div>
+
+                <div class="filters">
+                    <button class="filter-btn active" onclick="setFilter('all')">
+                        All
+                    </button>
+                    <button class="filter-btn" onclick="setFilter('active')">
+                        Active
+                    </button>
+                    <button class="filter-btn" onclick="setFilter('completed')">
+                        Completed
+                    </button>
+                    <button class="filter-btn" onclick="clearCompleted()">
+                        🗑️ Clear Completed
+                    </button>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCount">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="activeCount">0</div>
+                        <div class="stat-label">Active</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="completedCount">0</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                </div>
+
+                <div class="todo-list" id="todoList">
+                    <div class="empty-state">
+                        <div class="emoji">📝</div>
+                        <h3>No todos yet!</h3>
+                        <p>Add your first todo above to get started</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code & Explanation Section -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="emoji">💻</span>
+                    <h2>Complete Code</h2>
+                </div>
+
+                <div class="code-tabs">
+                    <button class="code-tab active" onclick="showCode('store')">1. Store Setup</button>
+                    <button class="code-tab" onclick="showCode('slice')">2. Todo Slice</button>
+                    <button class="code-tab" onclick="showCode('component')">3. Component</button>
+                    <button class="code-tab" onclick="showCode('app')">4. App Setup</button>
+                </div>
+
+                <div class="code-content active" id="code-store">
+                    <div class="explanation-box">
+                        <h3>🎯 Store Setup - Hinglish Explanation</h3>
+                        <p><strong>Ye kya hai?</strong> Redux store ek central database hai jahan app ka saara data
+                            store hota hai.</p>
+                        <p><strong>Kaise kaam karta hai?</strong></p>
+                        <ul>
+                            <li><code>configureStore</code> Redux Toolkit ka function hai jo store create karta hai</li>
+                            <li>Isme hum apne saare reducers add karte hain</li>
+                            <li>Redux DevTools automatically enable ho jata hai</li>
+                            <li>Middleware (Redux Thunk) by default included hai</li>
+                        </ul>
+                        <p><strong>Real example:</strong> Ye ek bank vault jaisa hai - saara paisa (data) ek jagah safe
+                            rehta hai!</p>
+                    </div>
+
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>store.js - Redux Store Configuration</span>
+                            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                        </div>
+                        <pre><code><span class="comment">// store.js</span>
+<span class="keyword">import</span> { <span class="function">configureStore</span> } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+<span class="keyword">import</span> todoReducer <span class="keyword">from</span> <span class="string">'./todoSlice'</span>;
+
+<span class="comment">// Store create karo - ye app ka central database hai</span>
+<span class="keyword">const</span> store = <span class="function">configureStore</span>({
+  <span class="property">reducer</span>: {
+    <span class="comment">// Yahan saare reducers add karo</span>
+    <span class="property">todos</span>: todoReducer,
+    <span class="comment">// Aur reducers add kar sakte ho:</span>
+    <span class="comment">// user: userReducer,</span>
+    <span class="comment">// cart: cartReducer,</span>
+  },
+  <span class="comment">// Redux DevTools automatically enabled!</span>
+  <span class="comment">// Middleware (Thunk) by default included!</span>
+});
+
+<span class="keyword">export default</span> store;</code></pre>
+                    </div>
+                </div>
+
+                <div class="code-content" id="code-slice">
+                    <div class="explanation-box">
+                        <h3>🎯 Todo Slice - Hinglish Explanation</h3>
+                        <p><strong>Slice kya hai?</strong> Slice ek feature ka complete code hai - reducer + actions sab
+                            ek jagah!</p>
+                        <p><strong>Is slice mein kya hai?</strong></p>
+                        <ul>
+                            <li><strong>initialState:</strong> Starting data - empty array aur 'all' filter</li>
+                            <li><strong>reducers:</strong> Functions jo state ko change karte hain</li>
+                            <li><strong>addTodo:</strong> Naya todo add karta hai</li>
+                            <li><strong>toggleTodo:</strong> Todo ko complete/incomplete mark karta hai</li>
+                            <li><strong>deleteTodo:</strong> Todo delete karta hai</li>
+                            <li><strong>setFilter:</strong> Filter change karta hai (all/active/completed)</li>
+                        </ul>
+                        <p><strong>Magic:</strong> Redux Toolkit mein "mutating" code likh sakte ho!
+                            <code>state.push()</code> safe hai kyunki Immer library internally immutability handle karti
+                            hai!</p>
+                    </div>
+
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>todoSlice.js - Todo Logic</span>
+                            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                        </div>
+                        <pre><code><span class="comment">// todoSlice.js</span>
+<span class="keyword">import</span> { <span class="function">createSlice</span> } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+
+<span class="comment">// Initial state - app start hone pe ye data hoga</span>
+<span class="keyword">const</span> initialState = {
+  <span class="property">items</span>: [], <span class="comment">// Saare todos yahan</span>
+  <span class="property">filter</span>: <span class="string">'all'</span> <span class="comment">// Current filter</span>
+};
+
+<span class="comment">// Slice create karo - reducer + actions ek saath!</span>
+<span class="keyword">const</span> todoSlice = <span class="function">createSlice</span>({
+  <span class="property">name</span>: <span class="string">'todos'</span>, <span class="comment">// Slice ka naam</span>
+  <span class="property">initialState</span>,
+  <span class="property">reducers</span>: {
+    <span class="comment">// Naya todo add karo</span>
+    <span class="function">addTodo</span>(state, action) {
+      <span class="comment">// Redux Toolkit mein "mutating" code safe hai!</span>
+      <span class="comment">// Immer library internally immutability handle karti hai</span>
+      state.items.<span class="function">push</span>({
+        <span class="property">id</span>: <span class="function">Date</span>.<span class="function">now</span>(), <span class="comment">// Unique ID</span>
+        <span class="property">text</span>: action.payload, <span class="comment">// Todo text</span>
+        <span class="property">completed</span>: <span class="keyword">false</span> <span class="comment">// Initially incomplete</span>
+      });
+    },
+
+    <span class="comment">// Todo ko toggle karo (complete/incomplete)</span>
+    <span class="function">toggleTodo</span>(state, action) {
+      <span class="keyword">const</span> todo = state.items.<span class="function">find</span>(t => t.id === action.payload);
+      <span class="keyword">if</span> (todo) {
+        todo.completed = !todo.completed; <span class="comment">// Toggle!</span>
+      }
+    },
+
+    <span class="comment">// Todo delete karo</span>
+    <span class="function">deleteTodo</span>(state, action) {
+      <span class="comment">// Filter se naya array banao (without deleted todo)</span>
+      state.items = state.items.<span class="function">filter</span>(t => t.id !== action.payload);
+    },
+
+    <span class="comment">// Filter set karo</span>
+    <span class="function">setFilter</span>(state, action) {
+      state.filter = action.payload; <span class="comment">// 'all', 'active', or 'completed'</span>
+    },
+
+    <span class="comment">// Completed todos clear karo</span>
+    <span class="function">clearCompleted</span>(state) {
+      state.items = state.items.<span class="function">filter</span>(t => !t.completed);
+    }
+  }
+});
+
+<span class="comment">// Actions export karo - components mein use karenge</span>
+<span class="keyword">export const</span> { 
+  addTodo, 
+  toggleTodo, 
+  deleteTodo, 
+  setFilter, 
+  clearCompleted 
+} = todoSlice.actions;
+
+<span class="comment">// Reducer export karo - store mein use karenge</span>
+<span class="keyword">export default</span> todoSlice.reducer;</code></pre>
+                    </div>
+                </div>
+
+                <div class="code-content" id="code-component">
+                    <div class="explanation-box">
+                        <h3>🎯 Component - Hinglish Explanation</h3>
+                        <p><strong>Component kya karta hai?</strong> Ye UI render karta hai aur user interactions handle
+                            karta hai.</p>
+                        <p><strong>Important hooks:</strong></p>
+                        <ul>
+                            <li><strong>useSelector:</strong> Store se data read karta hai. Jab data change hota hai,
+                                component re-render hota hai</li>
+                            <li><strong>useDispatch:</strong> Actions dispatch karne ke liye. Ye ONLY way hai state
+                                change karne ka</li>
+                        </ul>
+                        <p><strong>Selectors:</strong></p>
+                        <ul>
+                            <li><strong>selectFilteredTodos:</strong> Current filter ke according todos return karta hai
+                            </li>
+                            <li><strong>selectStats:</strong> Total, active, completed count calculate karta hai</li>
+                        </ul>
+                        <p><strong>Flow:</strong> User clicks button → dispatch(action) → Reducer updates state →
+                            Component re-renders with new data!</p>
+                    </div>
+
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>TodoApp.jsx - React Component</span>
+                            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                        </div>
+                        <pre><code><span class="comment">// TodoApp.jsx</span>
+<span class="keyword">import</span> React, { useState } <span class="keyword">from</span> <span class="string">'react'</span>;
+<span class="keyword">import</span> { <span class="function">useSelector</span>, <span class="function">useDispatch</span> } <span class="keyword">from</span> <span class="string">'react-redux'</span>;
+<span class="keyword">import</span> { 
+  addTodo, 
+  toggleTodo, 
+  deleteTodo, 
+  setFilter, 
+  clearCompleted 
+} <span class="keyword">from</span> <span class="string">'./todoSlice'</span>;
+
+<span class="keyword">function</span> <span class="function">TodoApp</span>() {
+  <span class="comment">// Local state for input field</span>
+  <span class="keyword">const</span> [input, setInput] = <span class="function">useState</span>(<span class="string">''</span>);
+
+  <span class="comment">// Get dispatch function - actions dispatch karne ke liye</span>
+  <span class="keyword">const</span> dispatch = <span class="function">useDispatch</span>();
+
+  <span class="comment">// Store se data read karo using selectors</span>
+  <span class="keyword">const</span> todos = <span class="function">useSelector</span>(state => state.todos.items);
+  <span class="keyword">const</span> filter = <span class="function">useSelector</span>(state => state.todos.filter);
+
+  <span class="comment">// Filtered todos calculate karo</span>
+  <span class="keyword">const</span> filteredTodos = todos.<span class="function">filter</span>(todo => {
+    <span class="keyword">if</span> (filter === <span class="string">'active'</span>) <span class="keyword">return</span> !todo.completed;
+    <span class="keyword">if</span> (filter === <span class="string">'completed'</span>) <span class="keyword">return</span> todo.completed;
+    <span class="keyword">return</span> <span class="keyword">true</span>; <span class="comment">// 'all'</span>
+  });
+
+  <span class="comment">// Stats calculate karo</span>
+  <span class="keyword">const</span> stats = {
+    <span class="property">total</span>: todos.length,
+    <span class="property">active</span>: todos.<span class="function">filter</span>(t => !t.completed).length,
+    <span class="property">completed</span>: todos.<span class="function">filter</span>(t => t.completed).length
+  };
+
+  <span class="comment">// Add todo handler</span>
+  <span class="keyword">const</span> <span class="function">handleAddTodo</span> = () => {
+    <span class="keyword">if</span> (input.trim()) {
+      <span class="function">dispatch</span>(<span class="function">addTodo</span>(input)); <span class="comment">// Action dispatch!</span>
+      <span class="function">setInput</span>(<span class="string">''</span>); <span class="comment">// Clear input</span>
+    }
+  };
+
+  <span class="keyword">return</span> (
+    &lt;<span class="function">div</span>&gt;
+      <span class="comment">{/* Input Section */}</span>
+      &lt;<span class="function">input</span>
+        <span class="property">value</span>={input}
+        <span class="property">onChange</span>={e => <span class="function">setInput</span>(e.target.value)}
+        <span class="property">placeholder</span>=<span class="string">"Enter todo..."</span>
+      /&gt;
+      &lt;<span class="function">button</span> <span class="property">onClick</span>={handleAddTodo}&gt;Add&lt;/<span class="function">button</span>&gt;
+
+      <span class="comment">{/* Filter Buttons */}</span>
+      &lt;<span class="function">button</span> <span class="property">onClick</span>={() => <span class="function">dispatch</span>(<span class="function">setFilter</span>(<span class="string">'all'</span>))}&gt;All&lt;/<span class="function">button</span>&gt;
+      &lt;<span class="function">button</span> <span class="property">onClick</span>={() => <span class="function">dispatch</span>(<span class="function">setFilter</span>(<span class="string">'active'</span>))}&gt;Active&lt;/<span class="function">button</span>&gt;
+      &lt;<span class="function">button</span> <span class="property">onClick</span>={() => <span class="function">dispatch</span>(<span class="function">setFilter</span>(<span class="string">'completed'</span>))}&gt;Completed&lt;/<span class="function">button</span>&gt;
+
+      <span class="comment">{/* Stats */}</span>
+      &lt;<span class="function">div</span>&gt;Total: {stats.total}&lt;/<span class="function">div</span>&gt;
+      &lt;<span class="function">div</span>&gt;Active: {stats.active}&lt;/<span class="function">div</span>&gt;
+      &lt;<span class="function">div</span>&gt;Completed: {stats.completed}&lt;/<span class="function">div</span>&gt;
+
+      <span class="comment">{/* Todo List */}</span>
+      {filteredTodos.<span class="function">map</span>(todo => (
+        &lt;<span class="function">div</span> <span class="property">key</span>={todo.id}&gt;
+          &lt;<span class="function">input</span>
+            <span class="property">type</span>=<span class="string">"checkbox"</span>
+            <span class="property">checked</span>={todo.completed}
+            <span class="property">onChange</span>={() => <span class="function">dispatch</span>(<span class="function">toggleTodo</span>(todo.id))}
+          /&gt;
+          &lt;<span class="function">span</span>&gt;{todo.text}&lt;/<span class="function">span</span>&gt;
+          &lt;<span class="function">button</span> <span class="property">onClick</span>={() => <span class="function">dispatch</span>(<span class="function">deleteTodo</span>(todo.id))}&gt;
+            Delete
+          &lt;/<span class="function">button</span>&gt;
+        &lt;/<span class="function">div</span>&gt;
+      ))}
+    &lt;/<span class="function">div</span>&gt;
+  );
+}
+
+<span class="keyword">export default</span> TodoApp;</code></pre>
+                    </div>
+                </div>
+
+                <div class="code-content" id="code-app">
+                    <div class="explanation-box">
+                        <h3>🎯 App Setup - Hinglish Explanation</h3>
+                        <p><strong>Provider kya hai?</strong> Provider ek wrapper component hai jo Redux store ko puri
+                            app mein available karata hai.</p>
+                        <p><strong>Kaise kaam karta hai?</strong></p>
+                        <ul>
+                            <li>Provider ko root level pe wrap karo</li>
+                            <li>Store prop mein apna Redux store pass karo</li>
+                            <li>Ab koi bhi child component useSelector aur useDispatch use kar sakta hai!</li>
+                        </ul>
+                        <p><strong>Real example:</strong> Provider ek WiFi router jaisa hai - ek baar setup karo, phir
+                            puri ghar (app) mein internet (store) available hai!</p>
+                    </div>
+
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>index.js - App Entry Point</span>
+                            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                        </div>
+                        <pre><code><span class="comment">// index.js</span>
+<span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;
+<span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom/client'</span>;
+<span class="keyword">import</span> { <span class="function">Provider</span> } <span class="keyword">from</span> <span class="string">'react-redux'</span>;
+<span class="keyword">import</span> store <span class="keyword">from</span> <span class="string">'./store'</span>;
+<span class="keyword">import</span> TodoApp <span class="keyword">from</span> <span class="string">'./TodoApp'</span>;
+
+<span class="comment">// Root element</span>
+<span class="keyword">const</span> root = ReactDOM.<span class="function">createRoot</span>(
+  document.<span class="function">getElementById</span>(<span class="string">'root'</span>)
+);
+
+<span class="comment">// App render karo with Redux Provider</span>
+root.<span class="function">render</span>(
+  &lt;React.StrictMode&gt;
+    <span class="comment">{/* Provider se puri app ko wrap karo */}</span>
+    <span class="comment">{/* Store prop mein Redux store pass karo */}</span>
+    &lt;<span class="function">Provider</span> <span class="property">store</span>={store}&gt;
+      &lt;<span class="function">TodoApp</span> /&gt;
+    &lt;/<span class="function">Provider</span>&gt;
+  &lt;/React.StrictMode&gt;
+);</code></pre>
+                    </div>
+
+                    <div class="info-box">
+                        <h3>📦 Package.json Dependencies</h3>
+                        <p>Ye packages install karne honge:</p>
+                    </div>
+
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>package.json</span>
+                            <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+                        </div>
+                        <pre><code>{
+  <span class="string">"dependencies"</span>: {
+    <span class="string">"react"</span>: <span class="string">"^18.2.0"</span>,
+    <span class="string">"react-dom"</span>: <span class="string">"^18.2.0"</span>,
+    <span class="string">"react-redux"</span>: <span class="string">"^8.1.0"</span>,
+    <span class="string">"@reduxjs/toolkit"</span>: <span class="string">"^1.9.5"</span>
+  }
+}
+
+<span class="comment">// Install command:</span>
+<span class="comment">// npm install react react-dom react-redux @reduxjs/toolkit</span></code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flow Diagram Section -->
+            <div class="section full-width">
+                <div class="section-header">
+                    <span class="emoji">🔄</span>
+                    <h2>Redux Data Flow - Step by Step</h2>
+                </div>
+
+                <div class="flow-diagram">
+                    <h3>Complete Redux Flow (Hinglish Explanation)</h3>
+                    <div class="flow-steps">
+                        <div class="flow-step">
+                            <div class="flow-step-number">1</div>
+                            <div class="flow-step-content">
+                                <h4>User Interaction (UI Event)</h4>
+                                <p><strong>Kya hota hai:</strong> User button click karta hai ya form submit karta hai
+                                </p>
+                                <p><strong>Example:</strong> User "Add Todo" button pe click karta hai</p>
+                            </div>
+                        </div>
+
+                        <div class="flow-step">
+                            <div class="flow-step-number">2</div>
+                            <div class="flow-step-content">
+                                <h4>Dispatch Action</h4>
+                                <p><strong>Kya hota hai:</strong> Component <code>dispatch(action)</code> call karta hai
+                                </p>
+                                <p><strong>Example:</strong> <code>dispatch(addTodo('Buy milk'))</code></p>
+                                <p><strong>Action object:</strong>
+                                    <code>{ type: 'todos/addTodo', payload: 'Buy milk' }</code></p>
+                            </div>
+                        </div>
+
+                        <div class="flow-step">
+                            <div class="flow-step-number">3</div>
+                            <div class="flow-step-content">
+                                <h4>Middleware (Optional)</h4>
+                                <p><strong>Kya hota hai:</strong> Action reducer tak pahunchne se pehle middleware se
+                                    guzarta hai</p>
+                                <p><strong>Example:</strong> Logger middleware action ko console mein log karta hai</p>
+                                <p><strong>Use case:</strong> API calls, logging, analytics</p>
+                            </div>
+                        </div>
+
+                        <div class="flow-step">
+                            <div class="flow-step-number">4</div>
+                            <div class="flow-step-content">
+                                <h4>Reducer Processes Action</h4>
+                                <p><strong>Kya hota hai:</strong> Reducer action ko dekh kar state update karta hai</p>
+                                <p><strong>Example:</strong> <code>addTodo</code> reducer naya todo items array mein add
+                                    karta hai</p>
+                                <p><strong>Important:</strong> Reducer pure function hai - no side effects!</p>
+                            </div>
+                        </div>
+
+                        <div class="flow-step">
+                            <div class="flow-step-number">5</div>
+                            <div class="flow-step-content">
+                                <h4>Store Updates</h4>
+                                <p><strong>Kya hota hai:</strong> Redux store new state save karta hai</p>
+                                <p><strong>Example:</strong> Store mein todos array update ho jata hai with new todo</p>
+                                <p><strong>Note:</strong> Old state replace nahi hota, new state object create hota hai
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flow-step">
+                            <div class="flow-step-number">6</div>
+                            <div class="flow-step-content">
+                                <h4>Components Re-render</h4>
+                                <p><strong>Kya hota hai:</strong> Store subscribers ko notify karta hai</p>
+                                <p><strong>Example:</strong> TodoApp component re-render hota hai with new todos</p>
+                                <p><strong>Optimization:</strong> Sirf wo components re-render hote hain jinko selected
+                                    data change hua hai</p>
+                            </div>
+                        </div>
+
+                        <div class="flow-step">
+                            <div class="flow-step-number">7</div>
+                            <div class="flow-step-content">
+                                <h4>UI Updates</h4>
+                                <p><strong>Kya hota hai:</strong> Screen pe naya data dikhta hai</p>
+                                <p><strong>Example:</strong> Naya todo list mein appear hota hai</p>
+                                <p><strong>Result:</strong> User ko updated UI dikhta hai! 🎉</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <h3>✅ Key Takeaways (Important Points)</h3>
+                    <p><strong>1. One-way data flow:</strong> Data hamesha ek hi direction mein flow hota hai -
+                        predictable aur debug karna easy!</p>
+                    <p><strong>2. Single source of truth:</strong> Saara data ek jagah (store) mein hai - no confusion!
+                    </p>
+                    <p><strong>3. State is read-only:</strong> State ko directly change nahi kar sakte - sirf actions
+                        dispatch karke!</p>
+                    <p><strong>4. Pure reducers:</strong> Reducers pure functions hain - same input = same output, no
+                        side effects!</p>
+                    <p><strong>5. Redux Toolkit FTW:</strong> Redux Toolkit use karo - less code, more power! 💪</p>
+                </div>
+
+                <div class="info-box">
+                    <h3>🎓 Learning Path (Next Steps)</h3>
+                    <p><strong>Beginner level complete! Ab kya seekhein?</strong></p>
+                    <ul style="margin-left: 25px; color: #0d47a1;">
+                        <li><strong>Async operations:</strong> createAsyncThunk se API calls handle karna</li>
+                        <li><strong>Selectors:</strong> createSelector se memoized selectors banana</li>
+                        <li><strong>Middleware:</strong> Custom middleware banana</li>
+                        <li><strong>Normalization:</strong> createEntityAdapter se complex state manage karna</li>
+                        <li><strong>TypeScript:</strong> Type-safe Redux code likhna</li>
+                        <li><strong>Testing:</strong> Redux logic ko test karna</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Redux Store Implementation (Vanilla JS for demo)
+        class ReduxStore {
+            constructor() {
+                this.state = {
+                    items: [],
+                    filter: 'all'
+                };
+                this.listeners = [];
+            }
+
+            getState() {
+                return this.state;
+            }
+
+            dispatch(action) {
+                // Reducer logic
+                switch (action.type) {
+                    case 'ADD_TODO':
+                        this.state = {
+                            ...this.state,
+                            items: [...this.state.items, {
+                                id: Date.now(),
+                                text: action.payload,
+                                completed: false
+                            }]
+                        };
+                        break;
+
+                    case 'TOGGLE_TODO':
+                        this.state = {
+                            ...this.state,
+                            items: this.state.items.map(todo =>
+                                todo.id === action.payload
+                                    ? { ...todo, completed: !todo.completed }
+                                    : todo
+                            )
+                        };
+                        break;
+
+                    case 'DELETE_TODO':
+                        this.state = {
+                            ...this.state,
+                            items: this.state.items.filter(todo => todo.id !== action.payload)
+                        };
+                        break;
+
+                    case 'SET_FILTER':
+                        this.state = {
+                            ...this.state,
+                            filter: action.payload
+                        };
+                        break;
+
+                    case 'CLEAR_COMPLETED':
+                        this.state = {
+                            ...this.state,
+                            items: this.state.items.filter(todo => !todo.completed)
+                        };
+                        break;
+                }
+
+                // Notify all listeners
+                this.listeners.forEach(listener => listener());
+            }
+
+            subscribe(listener) {
+                this.listeners.push(listener);
+                return () => {
+                    this.listeners = this.listeners.filter(l => l !== listener);
+                };
+            }
+        }
+
+        // Create store instance
+        const store = new ReduxStore();
+
+        // Subscribe to store updates
+        store.subscribe(() => {
+            renderTodos();
+            updateStats();
+        });
+
+        // Add todo
+        function addTodo() {
+            const input = document.getElementById('todoInput');
+            const text = input.value.trim();
+
+            if (text) {
+                store.dispatch({
+                    type: 'ADD_TODO',
+                    payload: text
+                });
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // Toggle todo
+        function toggleTodo(id) {
+            store.dispatch({
+                type: 'TOGGLE_TODO',
+                payload: id
+            });
+        }
+
+        // Delete todo
+        function deleteTodo(id) {
+            store.dispatch({
+                type: 'DELETE_TODO',
+                payload: id
+            });
+        }
+
+        // Set filter
+        function setFilter(filter) {
+            store.dispatch({
+                type: 'SET_FILTER',
+                payload: filter
+            });
+
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Clear completed
+        function clearCompleted() {
+            store.dispatch({
+                type: 'CLEAR_COMPLETED'
+            });
+        }
+
+        // Render todos
+        function renderTodos() {
+            const state = store.getState();
+            const todoList = document.getElementById('todoList');
+
+            // Filter todos
+            let filteredTodos = state.items;
+            if (state.filter === 'active') {
+                filteredTodos = state.items.filter(todo => !todo.completed);
+            } else if (state.filter === 'completed') {
+                filteredTodos = state.items.filter(todo => todo.completed);
+            }
+
+            // Render
+            if (filteredTodos.length === 0) {
+                todoList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="emoji">📝</div>
+                        <h3>${state.items.length === 0 ? 'No todos yet!' : 'No ' + state.filter + ' todos!'}</h3>
+                        <p>${state.items.length === 0 ? 'Add your first todo above to get started' : 'Try a different filter'}</p>
+                    </div>
+                `;
+            } else {
+                todoList.innerHTML = filteredTodos.map(todo => `
+                    <div class="todo-item ${todo.completed ? 'completed' : ''}">
+                        <input 
+                            type="checkbox" 
+                            class="todo-checkbox" 
+                            ${todo.completed ? 'checked' : ''}
+                            onchange="toggleTodo(${todo.id})"
+                        >
+                        <div class="todo-text">${escapeHtml(todo.text)}</div>
+                        <div class="todo-actions">
+                            <button class="btn-icon btn-delete" onclick="deleteTodo(${todo.id})">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Update stats
+        function updateStats() {
+            const state = store.getState();
+            const total = state.items.length;
+            const active = state.items.filter(t => !t.completed).length;
+            const completed = state.items.filter(t => t.completed).length;
+
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('activeCount').textContent = active;
+            document.getElementById('completedCount').textContent = completed;
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Code tab switching
+        function showCode(tabName) {
+            document.querySelectorAll('.code-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.code-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.getElementById('code-' + tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Copy code
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-container').querySelector('code');
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = '✓ Copied!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.textContent = '📋 Copy';
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Initial render
+        renderTodos();
+        updateStats();
+
+        // Add some demo todos
+        setTimeout(() => {
+            store.dispatch({ type: 'ADD_TODO', payload: 'Learn Redux basics 📚' });
+            store.dispatch({ type: 'ADD_TODO', payload: 'Build a todo app 🚀' });
+            store.dispatch({ type: 'ADD_TODO', payload: 'Master Redux Toolkit 💪' });
+        }, 500);
+    </script>
+</body>
+
+</html>
