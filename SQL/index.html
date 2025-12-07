@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +24,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
         }
 
@@ -135,13 +136,14 @@
         }
 
         @keyframes fadeIn {
-            from { 
-                opacity: 0; 
-                transform: translateY(20px); 
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-            to { 
-                opacity: 1; 
-                transform: translateY(0); 
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
@@ -246,11 +248,11 @@
             margin-bottom: 15px;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .interview-question:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             transform: translateY(-2px);
         }
 
@@ -295,13 +297,14 @@
         }
 
         @keyframes slideDown {
-            from { 
-                opacity: 0; 
-                max-height: 0; 
+            from {
+                opacity: 0;
+                max-height: 0;
             }
-            to { 
-                opacity: 1; 
-                max-height: 1000px; 
+
+            to {
+                opacity: 1;
+                max-height: 1000px;
             }
         }
 
@@ -327,7 +330,7 @@
             font-weight: 600;
         }
 
-        .tab-btn:hover, 
+        .tab-btn:hover,
         .tab-btn.active {
             background: #667eea;
             color: white;
@@ -386,6 +389,10 @@
 
         /* Mobile responsive */
         @media (max-width: 768px) {
+            .breadcrumb {
+                
+            }
+
             body {
                 padding: 10px;
             }
@@ -442,17 +449,106 @@
                 padding: 4px 10px;
             }
         }
+
+        /* Breadcrumb Navigation Styles - Universal */
+        .breadcrumb {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: linear-gradient(135deg, rgba(0, 123, 255, 0.95) 0%, rgba(102, 126, 234, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            padding: 12px 25px;
+            border-radius: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-bottom: 2px solid rgba(0, 123, 255, 0.6);
+        }
+
+        .breadcrumb-item {
+            color: #ffffff !important;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .breadcrumb-item:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: #ffffff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        .breadcrumb-separator {
+            color: #ffffff !important;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .breadcrumb-current {
+            color: #ffd700 !important;
+            font-weight: 700;
+            font-size: 0.95rem;
+            background: rgba(255, 215, 0, 0.2);
+            padding: 5px 12px;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .breadcrumb {
+                padding: 10px 15px;
+            }
+
+            .breadcrumb-item,
+            .breadcrumb-current {
+                font-size: 0.85rem;
+            }
+        }
     </style>
+
+    
+    <style>
+        /* Sticky Breadcrumb - Desktop Only */
+        .breadcrumb {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1000 !important;
+        }
+        
+        /* Hide on Mobile/Small Devices */
+        @media (max-width: 768px) {
+            .breadcrumb {
+                display: none !important;
+            }
+        }
+    </style>
+
 </head>
+
 <body>
     <div class="container">
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="../index.html" class="breadcrumb-item">🏠 Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">MySQL</span>
+        </nav>
+
         <div class="header">
             <h1>🗄️ MySQL Learning Dashboard</h1>
             <p>Your Complete Interactive Study Guide & Interview Prep Resource</p>
         </div>
 
         <div class="search-container">
-            <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search topics, keywords, or concepts...">
+            <input type="text" class="search-box" id="searchBox"
+                placeholder="🔍 Search topics, keywords, or concepts...">
         </div>
 
         <div class="tab-container" id="tabContainer"></div>
@@ -2304,7 +2400,7 @@ WHERE id = 1;`,
         function renderSidebar() {
             const sidebar = document.getElementById('sidebar');
             const categories = [...new Set(topics.map(t => t.category))];
-            
+
             let html = '<h3>📚 Topics</h3>';
             categories.forEach(category => {
                 html += `<div class="category-label">${category}</div>`;
@@ -2312,7 +2408,7 @@ WHERE id = 1;`,
                     html += `<div class="nav-item" onclick="showTopic('${topic.id}')">${topic.title}</div>`;
                 });
             });
-            
+
             sidebar.innerHTML = html;
         }
 
@@ -2401,7 +2497,7 @@ WHERE id = 1;`,
         function toggleAnswer(index) {
             const answer = document.getElementById(`answer-${index}`);
             const icon = event.currentTarget.querySelector('.toggle-icon');
-            
+
             if (answer.classList.contains('show')) {
                 answer.classList.remove('show');
                 icon.textContent = '+';
@@ -2415,7 +2511,7 @@ WHERE id = 1;`,
             const searchBox = document.getElementById('searchBox');
             searchBox.addEventListener('input', (e) => {
                 const query = e.target.value.toLowerCase();
-                
+
                 if (query.length === 0) {
                     renderSidebar();
                     renderTabs();
@@ -2424,10 +2520,10 @@ WHERE id = 1;`,
 
                 const filtered = topics.filter(topic => {
                     return topic.title.toLowerCase().includes(query) ||
-                           topic.simpleExplanation.toLowerCase().includes(query) ||
-                           topic.definition.toLowerCase().includes(query) ||
-                           topic.keyPoints.some(p => p.toLowerCase().includes(query)) ||
-                           topic.codeExample.toLowerCase().includes(query);
+                        topic.simpleExplanation.toLowerCase().includes(query) ||
+                        topic.definition.toLowerCase().includes(query) ||
+                        topic.keyPoints.some(p => p.toLowerCase().includes(query)) ||
+                        topic.codeExample.toLowerCase().includes(query);
                 });
 
                 // Update sidebar
@@ -2466,4 +2562,5 @@ WHERE id = 1;`,
         window.onload = initializeApp;
     </script>
 </body>
+
 </html>

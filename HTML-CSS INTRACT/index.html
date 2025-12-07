@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,6 +38,7 @@
                 opacity: 0;
                 transform: scale(0.9);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -59,6 +61,7 @@
                 opacity: 0;
                 transform: translateY(-30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -77,6 +80,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -139,9 +143,9 @@
                 padding: 30px;
             }
         }
-    
 
-    
+
+
         /* Code Block Formatting - Universal Styles */
         pre {
             background: #282c34 !important;
@@ -181,15 +185,43 @@
         }
 
         /* Syntax Highlighting Classes */
-        .syntax-keyword { color: #c678dd; font-weight: bold; }
-        .syntax-tag { color: #e06c75; }
-        .syntax-attr { color: #d19a66; }
-        .syntax-string { color: #98c379; }
-        .syntax-comment { color: #5c6370; font-style: italic; }
-        .syntax-number { color: #d19a66; }
-        .syntax-function { color: #61afef; }
-        .syntax-operator { color: #56b6c2; }
-        .syntax-variable { color: #e5c07b; }
+        .syntax-keyword {
+            color: #c678dd;
+            font-weight: bold;
+        }
+
+        .syntax-tag {
+            color: #e06c75;
+        }
+
+        .syntax-attr {
+            color: #d19a66;
+        }
+
+        .syntax-string {
+            color: #98c379;
+        }
+
+        .syntax-comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+
+        .syntax-number {
+            color: #d19a66;
+        }
+
+        .syntax-function {
+            color: #61afef;
+        }
+
+        .syntax-operator {
+            color: #56b6c2;
+        }
+
+        .syntax-variable {
+            color: #e5c07b;
+        }
 
         /* Code Block Container */
         .code-block {
@@ -232,7 +264,10 @@
         }
 
         /* Inline Code */
-        p code, li code, td code, th code {
+        p code,
+        li code,
+        td code,
+        th code {
             background: rgba(0, 0, 0, 0.1);
             padding: 2px 6px;
             border-radius: 3px;
@@ -269,10 +304,106 @@
             background: rgba(255, 255, 255, 0.5);
         }
 
+        /* Breadcrumb Navigation Styles - Universal */
+        .breadcrumb {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: linear-gradient(135deg, rgba(0, 123, 255, 0.95) 0%, rgba(102, 126, 234, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            padding: 12px 25px;
+            border-radius: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-bottom: 2px solid rgba(0, 123, 255, 0.6);
+        }
+
+        .breadcrumb-item {
+            color: #ffffff !important;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .breadcrumb-item:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: #ffffff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        .breadcrumb-separator {
+            color: #ffffff !important;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .breadcrumb-current {
+            color: #ffd700 !important;
+            font-weight: 700;
+            font-size: 0.95rem;
+            background: rgba(255, 215, 0, 0.2);
+            padding: 5px 12px;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .breadcrumb {
+                
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 30px;
+            }
+
+            .week-button {
+                padding: 25px;
+                font-size: 1.2rem;
+            }
+        }
     </style>
+
+    
+    <style>
+        /* Sticky Breadcrumb - Desktop Only */
+        .breadcrumb {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1000 !important;
+        }
+        
+        /* Hide on Mobile/Small Devices */
+        @media (max-width: 768px) {
+            .breadcrumb {
+                display: none !important;
+            }
+        }
+    </style>
+
 </head>
+
 <body>
     <div class="container">
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="../index.html" class="breadcrumb-item">🏠 Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">HTML & CSS</span>
+        </nav>
+
         <h1>Welcome to HTML/CSS Tutorial</h1>
         <div class="button-grid">
             <a href="week1.html" class="week-button">Week 1</a>
@@ -290,4 +421,5 @@
         }
     </script>
 </body>
+
 </html>

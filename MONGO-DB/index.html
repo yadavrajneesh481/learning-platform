@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -199,6 +200,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -288,7 +290,8 @@
             font-size: 20px;
         }
 
-        .formal-box p, .formal-box ul {
+        .formal-box p,
+        .formal-box ul {
             color: var(--text-dark);
             font-size: 16px;
             line-height: 1.8;
@@ -373,6 +376,10 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            .breadcrumb {
+                
+            }
+
             .sidebar {
                 transform: translateX(-100%);
             }
@@ -418,8 +425,89 @@
             font-size: 24px;
             margin-right: 8px;
         }
+
+        /* Breadcrumb Navigation Styles - Universal */
+        .breadcrumb {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: linear-gradient(135deg, rgba(0, 123, 255, 0.95) 0%, rgba(102, 126, 234, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            padding: 12px 25px;
+            border-radius: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-bottom: 2px solid rgba(0, 123, 255, 0.6);
+        }
+
+        .breadcrumb-item {
+            color: #ffffff !important;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .breadcrumb-item:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: #ffffff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        .breadcrumb-separator {
+            color: #ffffff !important;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .breadcrumb-current {
+            color: #ffd700 !important;
+            font-weight: 700;
+            font-size: 0.95rem;
+            background: rgba(255, 215, 0, 0.2);
+            padding: 5px 12px;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .breadcrumb {
+                padding: 10px 15px;
+            }
+
+            .breadcrumb-item,
+            .breadcrumb-current {
+                font-size: 0.85rem;
+            }
+        }
     </style>
+
+    
+    <style>
+        /* Sticky Breadcrumb - Desktop Only */
+        .breadcrumb {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1000 !important;
+        }
+        
+        /* Hide on Mobile/Small Devices */
+        @media (max-width: 768px) {
+            .breadcrumb {
+                display: none !important;
+            }
+        }
+    </style>
+
 </head>
+
 <body>
     <div class="progress-bar" id="progressBar"></div>
     <button class="menu-toggle" id="menuToggle">☰</button>
@@ -438,6 +526,13 @@
 
         <!-- Main Content Area -->
         <main class="main-content">
+            <!-- Breadcrumb Navigation -->
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="../index.html" class="breadcrumb-item">🏠 Home</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current">MongoDB</span>
+            </nav>
+
             <div class="header">
                 <h1>🍃 MongoDB Complete Study Guide</h1>
                 <p>Interactive learning resource for MongoDB mastery - From basics to advanced concepts</p>
@@ -1517,7 +1612,7 @@ main().catch(console.error);`,
                 navItem.addEventListener('click', () => loadTopic(key));
                 nav.appendChild(navItem);
             });
-            
+
             // Load first topic by default
             loadTopic('mongodb-home');
         }
@@ -1526,7 +1621,7 @@ main().catch(console.error);`,
         function loadTopic(topicKey) {
             const topic = studyData[topicKey];
             const container = document.getElementById('contentContainer');
-            
+
             // Update active nav item
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
@@ -1541,7 +1636,7 @@ main().catch(console.error);`,
 
             // Generate content based on mode
             let content = '';
-            
+
             if (mode === 'simple') {
                 content = `
                     <div class="content-card">
@@ -1637,7 +1732,7 @@ main().catch(console.error);`,
             }
 
             container.innerHTML = content;
-            
+
             // Close mobile menu after selection
             document.getElementById('sidebar').classList.remove('active');
         }
@@ -1647,7 +1742,7 @@ main().catch(console.error);`,
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
-                
+
                 // Reload current topic with new mode
                 const activeTopic = document.querySelector('.nav-item.active');
                 if (activeTopic) {
@@ -1673,4 +1768,5 @@ main().catch(console.error);`,
         generateNavigation();
     </script>
 </body>
+
 </html>
