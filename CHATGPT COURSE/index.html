@@ -1,0 +1,2338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineering Mastery - Complete Learning Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--gradient-1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--gradient-1);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s 0.2s backwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            animation: fadeInUp 1s 0.4s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .floating-card {
+            position: absolute;
+            font-size: 3rem;
+            animation: float 6s infinite;
+            opacity: 0.3;
+        }
+
+        .floating-card:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-card:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-card:nth-child(3) {
+            bottom: 20%;
+            left: 50%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Section */
+        .section {
+            padding: 4rem 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 3rem;
+        }
+
+        /* Intro Grid */
+        .intro-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .intro-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .intro-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .intro-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        /* Accordion */
+        .accordion {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .accordion-item {
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .accordion-header {
+            width: 100%;
+            padding: 1.5rem;
+            background: white;
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+            transition: all 0.3s;
+        }
+
+        .accordion-header:hover {
+            background: var(--light);
+        }
+
+        .toggle-icon {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            transition: transform 0.3s;
+        }
+
+        .accordion-item.active .toggle-icon {
+            transform: rotate(45deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 3000px;
+        }
+
+        .content-wrapper {
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .content-wrapper h4 {
+            color: var(--primary);
+            margin: 1.5rem 0 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #10b981;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .code-block p {
+            margin: 0.5rem 0;
+        }
+
+        .key-points {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .key-points li {
+            padding: 0.5rem 0 0.5rem 2rem;
+            position: relative;
+        }
+
+        .key-points li:before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+        }
+
+        /* Techniques Grid */
+        .techniques-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .technique-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .technique-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+        }
+
+        .technique-header {
+            background: var(--gradient-1);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .technique-header h3 {
+            font-size: 1.3rem;
+        }
+
+        .difficulty {
+            background: rgba(255,255,255,0.3);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .technique-body {
+            padding: 1.5rem;
+        }
+
+        .technique-body p {
+            margin-bottom: 1rem;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+        }
+
+        .project-header {
+            background: var(--gradient-2);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-header h3 {
+            font-size: 1.3rem;
+        }
+
+        .project-level {
+            background: rgba(255,255,255,0.3);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .project-body {
+            padding: 1.5rem;
+        }
+
+        .project-body p {
+            margin-bottom: 1rem;
+        }
+
+        /* Interview Section */
+        .interview-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab-button {
+            padding: 1rem 2rem;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-button.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .interview-tab {
+            display: none;
+        }
+
+        .interview-tab.active {
+            display: block;
+        }
+
+        .qa-grid {
+            display: grid;
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .qa-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .qa-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .qa-header h4 {
+            color: var(--primary);
+            font-size: 1.1rem;
+            flex: 1;
+        }
+
+        .toggle-answer {
+            padding: 0.5rem 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .toggle-answer:hover {
+            background: var(--secondary);
+        }
+
+        .qa-answer {
+            padding-top: 1rem;
+            border-top: 2px solid var(--light);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.8rem;
+            text-align: left;
+            border: 1px solid #e2e8f0;
+        }
+
+        .comparison-table th {
+            background: var(--primary);
+            color: white;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: var(--light);
+        }
+
+        /* Definitions Section */
+        .definitions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .definition-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid var(--primary);
+        }
+
+        .definition-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .definition-card .term {
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .intro-grid,
+            .techniques-grid,
+            .projects-grid,
+            .definitions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scroll to top */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .scroll-top.show {
+            display: flex;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Project Detail Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 1200px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .project-detail h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .project-tabs {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .project-tab-btn {
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .project-tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .project-tab-content {
+            display: none;
+        }
+
+        .project-tab-content.active {
+            display: block;
+        }
+
+        .file-structure {
+            background: #1e293b;
+            color: #10b981;
+            padding: 1.5rem;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+        }
+
+        .code-file {
+            margin: 2rem 0;
+        }
+
+        .code-file-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-code-btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .code-file-body {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 0 0 10px 10px;
+            overflow-x: auto;
+        }
+
+        .code-file-body pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .hinglish-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 5px solid var(--warning);
+            margin: 1rem 0;
+        }
+
+        .hinglish-box::before {
+            content: "🗣️ Hinglish Explanation: ";
+            font-weight: bold;
+            color: var(--warning);
+        }
+    </style>
+    <style>
+        
+        /* Breadcrumb Navigation Styles - Universal */
+
+
+        .breadcrumb-item {
+            color: #ffffff !important;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;justify-content: center;align-items: center;
+            font-size: 1.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            /* padding: 5px 10px; */
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .breadcrumb-item:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: #ffffff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+        }
+
+
+        @media (max-width: 768px) {
+             
+
+            .breadcrumb-item {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+  
+    <!-- Navbar -->
+    <nav class="navbar">
+ 
+         
+
+        <div class="nav-container">
+           
+        
+            <div class="logo">
+                <a href="../index.html" class="breadcrumb-item">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="10"></circle>
+  <polyline points="12 8 8 12 12 16"></polyline>
+  <line x1="16" y1="12" x2="8" y2="12"></line>
+</svg>
+
+
+                </a>
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">PromptMastery</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#concepts" class="nav-link">Concepts</a></li>
+                <li><a href="#techniques" class="nav-link">Techniques</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#interview" class="nav-link">Interview Q&A</a></li>
+                <li><a href="#definitions" class="nav-link">Definitions</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Master Prompt Engineering</h1>
+            <p class="hero-subtitle">Learn to communicate with AI like a pro 🚀</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="scrollToSection('concepts')">Start Learning</button>
+                <button class="btn btn-secondary" onclick="scrollToSection('projects')">Jump to Projects</button>
+            </div>
+        </div>
+        <div class="hero-animation">
+            <div class="floating-card">📝</div>
+            <div class="floating-card">🤖</div>
+            <div class="floating-card">⚙️</div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section id="introduction" class="section">
+        <div class="container">
+            <h2 class="section-title">What is Prompt Engineering?</h2>
+            <div class="intro-grid">
+                <div class="intro-card">
+                    <div class="card-icon">📚</div>
+                    <h3>Definition</h3>
+                    <p>Prompt engineering is the art and science of crafting instructions to communicate with AI models effectively. It's like learning to speak the AI's language!</p>
+                    <div class="hinglish-box">
+                        Prompt engineering matlab AI se baat karne ka sahi tarika. Jaise tum kisi se achhe se baat karoge toh woh samajh jayega, waise hi AI ko bhi clear instructions chahiye!
+                    </div>
+                </div>
+                <div class="intro-card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Why It Matters</h3>
+                    <p>Good prompts = Better results. It's the difference between asking a question clearly vs. confusing someone with unclear instructions.</p>
+                    <div class="hinglish-box">
+                        Achhe prompts se achhe results milte hain. Jaise agar tum kisi se clearly puchoge toh woh sahi jawab dega, waise hi AI ke saath bhi hai!
+                    </div>
+                </div>
+                <div class="intro-card">
+                    <div class="card-icon">🔄</div>
+                    <h3>How It Works</h3>
+                    <p>You give clear instructions → AI understands → AI gives you exactly what you want. Simple as that!</p>
+                    <div class="hinglish-box">
+                        Tum clear instructions do → AI samajh jata hai → AI exactly wahi deta hai jo tum chahte ho. Bilkul simple!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Concepts Section -->
+    <section id="concepts" class="section">
+        <div class="container">
+            <h2 class="section-title">Core Concepts Explained Simply</h2>
+            
+            <div class="accordion">
+                <!-- Concept 1 -->
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>📋 Instruction Design</span>
+                        <span class="toggle-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="content-wrapper">
+                            <h4>What is it?</h4>
+                            <p>It's about writing clear, specific instructions that tell the AI exactly what to do.</p>
+                            
+                            <h4>Simple Analogy 👶</h4>
+                            <p>Imagine telling a friend to make tea. If you say "Make tea," they might be confused. But if you say "Boil water for 5 minutes, add tea bag, let it steep for 3 minutes, add milk," they'll do it perfectly!</p>
+                            
+                            <div class="hinglish-box">
+                                Jaise tum apne dost ko chai banane ko kehte ho. Agar sirf "chai bana" bologe toh confuse ho jayega. Lekin agar step-by-step batao toh perfect banega!
+                            </div>
+                            
+                            <h4>Example:</h4>
+                            <div class="code-block">
+                                <p><strong>❌ Bad:</strong> "Write something about cats"</p>
+                                <p><strong>✅ Good:</strong> "Write a 100-word paragraph about why cats make good pets, using simple language for kids aged 8-10"</p>
+                            </div>
+
+                            <h4>Key Points:</h4>
+                            <ul class="key-points">
+                                <li>Be specific about what you want</li>
+                                <li>Mention the format (paragraph, list, code, etc.)</li>
+                                <li>Give word/length limits if needed</li>
+                                <li>Specify the audience or tone</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Concept 2 -->
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>🎬 Context Setting</span>
+                        <span class="toggle-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="content-wrapper">
+                            <h4>What is it?</h4>
+                            <p>Providing background information so the AI understands the situation better.</p>
+                            
+                            <h4>Simple Analogy 👶</h4>
+                            <p>If you tell someone "I'm tired," they might suggest coffee. But if you say "I'm tired because I worked 12 hours," they'll suggest rest instead. Context changes the response!</p>
+                            
+                            <div class="hinglish-box">
+                                Context matlab background information dena. Jaise agar tum kehte ho "main thak gaya" toh koi coffee suggest karega. Lekin agar kehte ho "12 ghante kaam kiya isliye thak gaya" toh rest suggest karenge. Context se response change hota hai!
+                            </div>
+                            
+                            <h4>Example:</h4>
+                            <div class="code-block">
+                                <p><strong>❌ Without context:</strong> "Write an email"</p>
+                                <p><strong>✅ With context:</strong> "Write a professional email to my boss requesting a day off next Friday. I've been working on a big project and need to rest."</p>
+                            </div>
+
+                            <h4>Key Points:</h4>
+                            <ul class="key-points">
+                                <li>Explain the situation/background</li>
+                                <li>Mention who the audience is</li>
+                                <li>Share any relevant constraints</li>
+                                <li>Provide previous attempts if available</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Concept 3 -->
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>🎭 Role Assignment</span>
+                        <span class="toggle-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="content-wrapper">
+                            <h4>What is it?</h4>
+                            <p>Telling the AI what role or expertise it should take on.</p>
+                            
+                            <h4>Simple Analogy 👶</h4>
+                            <p>If you ask a doctor vs. a chef about food, you'll get different answers. The doctor talks about nutrition, the chef talks about taste. Roles matter!</p>
+                            
+                            <div class="hinglish-box">
+                                Role assignment matlab AI ko batana ki woh kaun hai. Jaise doctor se food ke baare mein puchoge toh nutrition batayega, chef se puchoge toh taste batayega. Role matter karta hai!
+                            </div>
+                            
+                            <h4>Example:</h4>
+                            <div class="code-block">
+                                <p><strong>❌ No role:</strong> "Explain quantum physics"</p>
+                                <p><strong>✅ With role:</strong> "You are a physics teacher explaining to 10-year-olds. Explain quantum physics using everyday examples."</p>
+                            </div>
+
+                            <h4>Key Points:</h4>
+                            <ul class="key-points">
+                                <li>Start with "You are a..."</li>
+                                <li>Choose relevant expertise</li>
+                                <li>Match the role to your need</li>
+                                <li>Examples: teacher, doctor, chef, programmer, etc.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Concept 4 -->
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>🔄 Input-Output Framing</span>
+                        <span class="toggle-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="content-wrapper">
+                            <h4>What is it?</h4>
+                            <p>Clearly defining what you're giving the AI (input) and what you want back (output).</p>
+                            
+                            <h4>Simple Analogy 👶</h4>
+                            <p>Like a vending machine: You put money in (input) and get snacks out (output). Clear exchange!</p>
+                            
+                            <div class="hinglish-box">
+                                Jaise vending machine mein paisa dalte ho (input) aur snacks milta hai (output). Clear exchange! Waise hi AI ko batao ki kya de rahe ho aur kya chahiye.
+                            </div>
+                            
+                            <h4>Example:</h4>
+                            <div class="code-block">
+                                <p><strong>Input:</strong> A list of 5 products with prices</p>
+                                <p><strong>Output:</strong> A table showing which product is cheapest</p>
+                            </div>
+
+                            <h4>Key Points:</h4>
+                            <ul class="key-points">
+                                <li>Specify input format (text, list, table, etc.)</li>
+                                <li>Specify output format clearly</li>
+                                <li>Give examples of both if possible</li>
+                                <li>Be explicit about structure</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Concept 5 -->
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>⚙️ Constraints Definition</span>
+                        <span class="toggle-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="content-wrapper">
+                            <h4>What is it?</h4>
+                            <p>Setting rules and limits for how the AI should respond.</p>
+                            
+                            <h4>Simple Analogy 👶</h4>
+                            <p>Like rules in a game. Without rules, the game is chaos. With rules, everyone knows what to do!</p>
+                            
+                            <div class="hinglish-box">
+                                Constraints matlab rules. Jaise game mein rules hote hain, waise hi AI ko bhi rules do. Bina rules ke chaos hoga, rules ke saath sab clear hai!
+                            </div>
+                            
+                            <h4>Example:</h4>
+                            <div class="code-block">
+                                <p><strong>Constraints:</strong></p>
+                                <p>- Use simple language (no technical jargon)</p>
+                                <p>- Maximum 100 words</p>
+                                <p>- Friendly and encouraging tone</p>
+                                <p>- Include 2 examples</p>
+                            </div>
+
+                            <h4>Key Points:</h4>
+                            <ul class="key-points">
+                                <li>Tone (formal, casual, friendly, etc.)</li>
+                                <li>Format (bullet points, paragraphs, code, etc.)</li>
+                                <li>Length (word count, number of items)</li>
+                                <li>Style (technical, simple, creative, etc.)</li>
+                                <li>What to avoid or include</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Concept 6 -->
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>🏷️ Use of Delimiters</span>
+                        <span class="toggle-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="content-wrapper">
+                            <h4>What is it?</h4>
+                            <p>Using special symbols to clearly separate different parts of your prompt.</p>
+                            
+                            <h4>Simple Analogy 👶</h4>
+                            <p>Like using folders to organize files. Instead of mixing everything, you put each thing in its own folder!</p>
+                            
+                            <div class="hinglish-box">
+                                Delimiters matlab special symbols jo different parts ko separate karte hain. Jaise folders mein files organize karte ho, waise hi prompts mein delimiters use karo!
+                            </div>
+                            
+                            <h4>Example:</h4>
+                            <div class="code-block">
+                                <p><strong>Using delimiters:</strong></p>
+                                <p>---TASK---</p>
+                                <p>Summarize this text</p>
+                                <p>---TEXT---</p>
+                                <p>[Your text here]</p>
+                                <p>---FORMAT---</p>
+                                <p>3 bullet points</p>
+                            </div>
+
+                            <h4>Key Points:</h4>
+                            <ul class="key-points">
+                                <li>Use ---, ###, """, *** to separate sections</li>
+                                <li>Makes prompts clearer and organized</li>
+                                <li>Helps AI understand structure better</li>
+                                <li>Reduces confusion and errors</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Techniques Section -->
+    <section id="techniques" class="section" style="background: var(--light);">
+        <div class="container">
+            <h2 class="section-title">Prompting Techniques Explained</h2>
+            
+            <div class="techniques-grid">
+                <!-- Zero-Shot -->
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <h3>🎯 Zero-Shot Prompting</h3>
+                        <span class="difficulty">Easy</span>
+                    </div>
+                    <div class="technique-body">
+                        <p><strong>What is it?</strong> Asking the AI to do something without giving any examples.</p>
+                        
+                        <p><strong>Analogy:</strong> Like asking someone to cook a dish without showing them a recipe first. They use their general knowledge!</p>
+                        
+                        <div class="hinglish-box">
+                            Zero-shot matlab bina example ke seedha kaam karna. Jaise kisi ko bina recipe dikhaye dish banana bolo - woh apne knowledge se banayega!
+                        </div>
+                        
+                        <p><strong>Example:</strong></p>
+                        <div class="code-block">
+                            <p>Prompt: "Translate 'Hello' to Spanish"</p>
+                            <p>AI: "Hola"</p>
+                        </div>
+
+                        <p><strong>When to use:</strong> Simple tasks, general knowledge questions</p>
+                        <p><strong>Pros:</strong> Quick, no examples needed</p>
+                        <p><strong>Cons:</strong> May not work for complex tasks</p>
+                    </div>
+                </div>
+
+                <!-- Few-Shot -->
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <h3>📚 Few-Shot Prompting</h3>
+                        <span class="difficulty">Medium</span>
+                    </div>
+                    <div class="technique-body">
+                        <p><strong>What is it?</strong> Giving 2-3 examples before asking the AI to do the task.</p>
+                        
+                        <p><strong>Analogy:</strong> Like showing someone 2-3 examples of how to fold paper before asking them to fold a new one.</p>
+                        
+                        <div class="hinglish-box">
+                            Few-shot matlab pehle 2-3 examples dikhao, phir AI ko kaam karne bolo. Jaise teacher pehle examples solve karta hai, phir tumse kehta hai "ab tum karo"!
+                        </div>
+                        
+                        <p><strong>Example:</strong></p>
+                        <div class="code-block">
+                            <p>Example 1: "Happy" → Positive</p>
+                            <p>Example 2: "Sad" → Negative</p>
+                            <p>Now classify: "Excited"</p>
+                            <p>AI: "Positive"</p>
+                        </div>
+
+                        <p><strong>When to use:</strong> Complex tasks, specific patterns needed</p>
+                        <p><strong>Pros:</strong> Better accuracy, AI learns from examples</p>
+                        <p><strong>Cons:</strong> Need to create examples</p>
+                    </div>
+                </div>
+
+                <!-- Chain-of-Thought -->
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <h3>🔗 Chain-of-Thought (CoT)</h3>
+                        <span class="difficulty">Hard</span>
+                    </div>
+                    <div class="technique-body">
+                        <p><strong>What is it?</strong> Asking the AI to show its thinking step-by-step.</p>
+                        
+                        <p><strong>Analogy:</strong> Like asking someone to explain their math solution step-by-step instead of just giving the answer.</p>
+                        
+                        <div class="hinglish-box">
+                            Chain-of-thought matlab AI ko step-by-step sochne bolo. Jaise maths mein har step likhte ho, waise hi AI ko bhi har step batane bolo!
+                        </div>
+                        
+                        <p><strong>Example:</strong></p>
+                        <div class="code-block">
+                            <p>Prompt: "If I have 5 apples and buy 3 more, then give 2 to my friend, how many do I have? Think step-by-step."</p>
+                            <p>AI: "Step 1: Start with 5 apples. Step 2: Buy 3 more = 5+3=8. Step 3: Give 2 away = 8-2=6. Answer: 6 apples"</p>
+                        </div>
+
+                        <p><strong>When to use:</strong> Complex math, reasoning tasks</p>
+                        <p><strong>Pros:</strong> Better accuracy, easier to debug</p>
+                        <p><strong>Cons:</strong> Takes longer</p>
+                    </div>
+                </div>
+
+                <!-- Self-Consistency -->
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <h3>🔄 Self-Consistency</h3>
+                        <span class="difficulty">Hard</span>
+                    </div>
+                    <div class="technique-body">
+                        <p><strong>What is it?</strong> Asking the AI the same question multiple times and finding the most common answer.</p>
+                        
+                        <p><strong>Analogy:</strong> Like asking 5 people the same question and going with the answer most people give.</p>
+                        
+                        <div class="hinglish-box">
+                            Self-consistency matlab same question 3-5 baar poocho aur jo answer sabse zyada baar aaye woh lo. Jaise 5 logo se puchoge aur jo sabse common answer ho woh sahi hoga!
+                        </div>
+                        
+                        <p><strong>Example:</strong></p>
+                        <div class="code-block">
+                            <p>Ask same question 3 times → Get 3 answers → Pick the most common one</p>
+                        </div>
+
+                        <p><strong>When to use:</strong> When you need very accurate answers</p>
+                        <p><strong>Pros:</strong> Very accurate</p>
+                        <p><strong>Cons:</strong> Expensive, takes time</p>
+                    </div>
+                </div>
+
+                <!-- RAG -->
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <h3>📖 RAG (Retrieval-Augmented)</h3>
+                        <span class="difficulty">Expert</span>
+                    </div>
+                    <div class="technique-body">
+                        <p><strong>What is it?</strong> Giving the AI relevant documents/information before asking a question.</p>
+                        
+                        <p><strong>Analogy:</strong> Like giving someone a textbook before asking them a question about the topic.</p>
+                        
+                        <div class="hinglish-box">
+                            RAG matlab AI ko pehle documents do, phir question poocho. Jaise exam mein open book test - book se answer dhundho!
+                        </div>
+                        
+                        <p><strong>Example:</strong></p>
+                        <div class="code-block">
+                            <p>[Provide: Wikipedia article about Python]</p>
+                            <p>Prompt: "Based on the article, what is Python?"</p>
+                        </div>
+
+                        <p><strong>When to use:</strong> Specific domain knowledge needed</p>
+                        <p><strong>Pros:</strong> More accurate, uses real data</p>
+                        <p><strong>Cons:</strong> Complex to set up</p>
+                    </div>
+                </div>
+
+                <!-- ReAct -->
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <h3>⚡ ReAct (Reason + Act)</h3>
+                        <span class="difficulty">Expert</span>
+                    </div>
+                    <div class="technique-body">
+                        <p><strong>What is it?</strong> AI reasons about what to do, then takes action, then observes the result.</p>
+                        
+                        <p><strong>Analogy:</strong> Like a detective: Think about what to do → Do it → See what happens → Think again.</p>
+                        
+                        <div class="hinglish-box">
+                            ReAct matlab pehle socho, phir karo, phir result dekho. Jaise detective kaam karta hai - clue dhundho, action lo, result dekho!
+                        </div>
+                        
+                        <p><strong>Example:</strong></p>
+                        <div class="code-block">
+                            <p>Thought: "I need to search for current weather"</p>
+                            <p>Action: "Search for weather in Delhi"</p>
+                            <p>Observation: "It's 35°C and sunny"</p>
+                            <p>Thought: "Now I can answer the question"</p>
+                        </div>
+
+                        <p><strong>When to use:</strong> Complex tasks needing tools/actions</p>
+                        <p><strong>Pros:</strong> Can use external tools</p>
+                        <p><strong>Cons:</strong> Very complex</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <div class="container">
+            <h2 class="section-title">Real-World Projects to Practice</h2>
+            <p class="section-subtitle">Learn by building! Each project starts from scratch.</p>
+
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Project 1: Sentiment Analyzer</h3>
+                        <span class="project-level">Beginner</span>
+                    </div>
+                    <div class="project-body">
+                        <p><strong>What you'll build:</strong> An app that reads text and tells you if it's positive, negative, or neutral.</p>
+                        
+                        <p><strong>Real-world use:</strong> Companies use this to analyze customer reviews, social media posts, and feedback.</p>
+                        
+                        <div class="hinglish-box">
+                            Ek app banayenge jo text padh ke batayega ki positive hai, negative hai ya neutral. Companies isse customer reviews analyze karti hain!
+                        </div>
+                        
+                        <p><strong>Concepts used:</strong> Zero-shot prompting, Role assignment, Constraints</p>
+                        
+                        <p><strong>Time needed:</strong> 30 minutes</p>
+                        
+                        <button class="btn btn-primary" onclick="openProject('project1')">Start Project</button>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Project 2: Data Extractor</h3>
+                        <span class="project-level">Intermediate</span>
+                    </div>
+                    <div class="project-body">
+                        <p><strong>What you'll build:</strong> Extract specific information (names, emails, dates) from messy text.</p>
+                        
+                        <p><strong>Real-world use:</strong> Businesses use this to extract data from invoices, emails, and documents.</p>
+                        
+                        <div class="hinglish-box">
+                            Messy text se specific information nikalna - jaise names, emails, dates. Businesses isse invoices aur documents se data nikalti hain!
+                        </div>
+                        
+                        <p><strong>Concepts used:</strong> Few-shot prompting, Context setting, Input-output framing</p>
+                        
+                        <p><strong>Time needed:</strong> 45 minutes</p>
+                        
+                        <button class="btn btn-primary" onclick="openProject('project2')">Start Project</button>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Project 3: Smart Chatbot</h3>
+                        <span class="project-level">Advanced</span>
+                    </div>
+                    <div class="project-body">
+                        <p><strong>What you'll build:</strong> A chatbot that remembers context and gives helpful responses.</p>
+                        
+                        <p><strong>Real-world use:</strong> Customer service, FAQ bots, personal assistants.</p>
+                        
+                        <div class="hinglish-box">
+                            Ek smart chatbot jo context yaad rakhta hai aur helpful responses deta hai. Customer service aur FAQ bots mein use hota hai!
+                        </div>
+                        
+                        <p><strong>Concepts used:</strong> Chain-of-thought, Role assignment, Memory management</p>
+                        
+                        <p><strong>Time needed:</strong> 60 minutes</p>
+                        
+                        <button class="btn btn-primary" onclick="openProject('project3')">Start Project</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interview Section -->
+    <section id="interview" class="section" style="background: var(--light);">
+        <div class="container">
+            <h2 class="section-title">Interview Questions & Answers</h2>
+            <p class="section-subtitle">Prepare for your interviews with these common questions!</p>
+
+            <div class="interview-tabs">
+                <button class="tab-button active" onclick="switchInterviewTab('english')">English</button>
+                <button class="tab-button" onclick="switchInterviewTab('hinglish')">Hinglish (हिंग्लिश)</button>
+            </div>
+
+            <div class="interview-container">
+                <!-- English Questions -->
+                <div id="english" class="interview-tab active">
+                    <div class="qa-grid">
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q1: What is Prompt Engineering?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Show Answer</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Answer:</strong> Prompt engineering is the practice of designing and optimizing instructions (prompts) to communicate effectively with AI language models. It involves crafting clear, specific, and well-structured inputs to get the desired outputs from AI systems.</p>
+                                <p><strong>Key Points:</strong></p>
+                                <ul class="key-points">
+                                    <li>It's about clarity and specificity</li>
+                                    <li>Good prompts = Better results</li>
+                                    <li>It's both an art and a science</li>
+                                    <li>It requires understanding how AI thinks</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q2: What's the difference between Zero-Shot and Few-Shot prompting?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Show Answer</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Answer:</strong></p>
+                                <p><strong>Zero-Shot:</strong> You ask the AI to do something without any examples. The AI uses its general knowledge.</p>
+                                <p><strong>Few-Shot:</strong> You provide 2-3 examples first, then ask the AI to do the task. The AI learns from the examples.</p>
+                                <p><strong>Comparison:</strong></p>
+                                <table class="comparison-table">
+                                    <tr>
+                                        <th>Aspect</th>
+                                        <th>Zero-Shot</th>
+                                        <th>Few-Shot</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Examples needed</td>
+                                        <td>No</td>
+                                        <td>Yes (2-3)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Accuracy</td>
+                                        <td>Lower</td>
+                                        <td>Higher</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Complexity</td>
+                                        <td>Simple</td>
+                                        <td>More complex</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Best for</td>
+                                        <td>Simple tasks</td>
+                                        <td>Complex tasks</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q3: How do you reduce hallucinations in AI responses?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Show Answer</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Answer:</strong> Hallucinations are when AI makes up false information. Here are ways to reduce them:</p>
+                                <ul class="key-points">
+                                    <li><strong>Be specific:</strong> Clear instructions reduce confusion</li>
+                                    <li><strong>Use RAG:</strong> Provide real documents for reference</li>
+                                    <li><strong>Ask for sources:</strong> "Cite your sources" or "Provide references"</li>
+                                    <li><strong>Use constraints:</strong> "Only use information from the provided text"</li>
+                                    <li><strong>Chain-of-thought:</strong> Ask AI to show its reasoning</li>
+                                    <li><strong>Validation:</strong> Ask follow-up questions to verify answers</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q4: What is Chain-of-Thought prompting and why is it useful?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Show Answer</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Answer:</strong> Chain-of-Thought (CoT) prompting asks the AI to show its thinking process step-by-step before giving the final answer.</p>
+                                <p><strong>Why it's useful:</strong></p>
+                                <ul class="key-points">
+                                    <li>Better accuracy for complex problems</li>
+                                    <li>Easier to debug if something goes wrong</li>
+                                    <li>Shows the reasoning process</li>
+                                    <li>Helps catch logical errors</li>
+                                </ul>
+                                <p><strong>Example:</strong></p>
+                                <p>Instead of: "What's 15 × 8?"</p>
+                                <p>Use: "What's 15 × 8? Show your work step-by-step."</p>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q5: What are the main components of a good prompt?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Show Answer</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Answer:</strong> A good prompt should include:</p>
+                                <ul class="key-points">
+                                    <li><strong>Role:</strong> "You are a..." - What expertise should the AI have?</li>
+                                    <li><strong>Context:</strong> Background information about the situation</li>
+                                    <li><strong>Task:</strong> What exactly do you want the AI to do?</li>
+                                    <li><strong>Format:</strong> How should the answer be structured?</li>
+                                    <li><strong>Constraints:</strong> Any rules or limitations (tone, length, etc.)</li>
+                                    <li><strong>Examples:</strong> If possible, show what good looks like</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q6: What is RAG (Retrieval-Augmented Generation)?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Show Answer</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Answer:</strong> RAG is a technique where you provide relevant documents or information to the AI before asking a question.</p>
+                                <p><strong>How it works:</strong></p>
+                                <ol class="key-points">
+                                    <li>You provide relevant documents/text</li>
+                                    <li>AI reads and understands them</li>
+                                    <li>You ask your question</li>
+                                    <li>AI answers based on the provided information</li>
+                                </ol>
+                                <p><strong>Benefits:</strong></p>
+                                <ul class="key-points">
+                                    <li>More accurate answers</li>
+                                    <li>Uses real, verified data</li>
+                                    <li>Reduces hallucinations</li>
+                                    <li>Great for domain-specific questions</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q7: How do you optimize prompts for better results?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Show Answer</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Answer:</strong> Here are key optimization strategies:</p>
+                                <ul class="key-points">
+                                    <li><strong>Be specific:</strong> Avoid vague words like "good" or "better"</li>
+                                    <li><strong>Use examples:</strong> Few-shot prompting improves accuracy</li>
+                                    <li><strong>Break it down:</strong> Split complex tasks into smaller steps</li>
+                                    <li><strong>Test and refine:</strong> Try different versions and see what works</li>
+                                    <li><strong>Use constraints:</strong> Specify tone, format, length</li>
+                                    <li><strong>Add context:</strong> More background = better understanding</li>
+                                    <li><strong>Iterative improvement:</strong> Learn from each attempt</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q8: What are common mistakes in prompt engineering?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Show Answer</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Answer:</strong> Common mistakes to avoid:</p>
+                                <ul class="key-points">
+                                    <li><strong>Being too vague:</strong> "Write something good" is too unclear</li>
+                                    <li><strong>No context:</strong> AI doesn't understand the situation</li>
+                                    <li><strong>Unclear format:</strong> AI doesn't know how to structure the answer</li>
+                                    <li><strong>Too many constraints:</strong> Can confuse the AI</li>
+                                    <li><strong>No examples:</strong> For complex tasks, examples help a lot</li>
+                                    <li><strong>Expecting perfection:</strong> Sometimes you need to refine</li>
+                                    <li><strong>Not testing:</strong> Always verify the output</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q9: Explain the importance of temperature in prompts</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Show Answer</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Answer:</strong> Temperature controls how creative or random the AI's responses are.</p>
+                                <p><strong>Low temperature (0-0.3):</strong></p>
+                                <ul class="key-points">
+                                    <li>More focused and deterministic</li>
+                                    <li>Best for factual tasks, code generation</li>
+                                    <li>Consistent outputs</li>
+                                </ul>
+                                <p><strong>High temperature (0.7-1.0):</strong></p>
+                                <ul class="key-points">
+                                    <li>More creative and diverse</li>
+                                    <li>Best for creative writing, brainstorming</li>
+                                    <li>Varied outputs</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q10: What is the difference between system, user, and assistant messages?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Show Answer</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Answer:</strong></p>
+                                <p><strong>System Message:</strong> Sets the AI's behavior and personality. This persists across the conversation.</p>
+                                <p>Example: "You are a helpful coding tutor who explains concepts simply."</p>
+                                
+                                <p><strong>User Message:</strong> The actual query or request from the user.</p>
+                                <p>Example: "How do I create a for loop in Python?"</p>
+                                
+                                <p><strong>Assistant Message:</strong> Previous responses from the AI, used for context in multi-turn conversations.</p>
+                                <p>Example: "A for loop in Python is used to iterate..."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hinglish Questions -->
+                <div id="hinglish" class="interview-tab">
+                    <div class="qa-grid">
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q1: Prompt Engineering kya hai?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Jawab Dikhao</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Jawab:</strong> Prompt engineering matlab AI ko sahi tarike se instructions dena. Jaise tum kisi se kuch kaam karwana chahte ho, toh clear batana padta hai na? Waise hi AI ko bhi clear, specific instructions chahiye.</p>
+                                <p><strong>Important Points:</strong></p>
+                                <ul class="key-points">
+                                    <li>Clear aur specific hona chahiye</li>
+                                    <li>Achhe prompts se achhe results milte hain</li>
+                                    <li>Yeh ek art bhi hai aur science bhi</li>
+                                    <li>AI kaise sochta hai yeh samajhna zaroori hai</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q2: Zero-Shot aur Few-Shot prompting mein kya farak hai?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Jawab Dikhao</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Jawab:</strong></p>
+                                <p><strong>Zero-Shot:</strong> Bina example ke seedha AI se kaam karwana. AI apne general knowledge se kaam karta hai.</p>
+                                <p><strong>Few-Shot:</strong> Pehle 2-3 examples do, phir AI se kaam karwao. AI examples se seekhta hai.</p>
+                                <p><strong>Comparison:</strong></p>
+                                <table class="comparison-table">
+                                    <tr>
+                                        <th>Cheez</th>
+                                        <th>Zero-Shot</th>
+                                        <th>Few-Shot</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Examples chahiye?</td>
+                                        <td>Nahi</td>
+                                        <td>Haan (2-3)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Accuracy</td>
+                                        <td>Kam</td>
+                                        <td>Zyada</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Complexity</td>
+                                        <td>Simple</td>
+                                        <td>Thoda complex</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Best for</td>
+                                        <td>Simple kaam</td>
+                                        <td>Complex kaam</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q3: AI hallucinations ko kaise kam karein?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Jawab Dikhao</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Jawab:</strong> Hallucinations matlab jab AI jhooth bol raha hai ya galat information de raha hai. Isse rokne ke tarike:</p>
+                                <ul class="key-points">
+                                    <li><strong>Specific bano:</strong> Clear instructions se confusion kam hota hai</li>
+                                    <li><strong>RAG use karo:</strong> Real documents do reference ke liye</li>
+                                    <li><strong>Sources maango:</strong> "Apne sources batao" ya "References do"</li>
+                                    <li><strong>Constraints lagao:</strong> "Sirf diye gaye text ki information use karo"</li>
+                                    <li><strong>Chain-of-thought:</strong> AI ko apni reasoning dikhane bolo</li>
+                                    <li><strong>Validation:</strong> Follow-up questions poocho verify karne ke liye</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q4: Chain-of-Thought prompting kya hai aur kyun useful hai?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Jawab Dikhao</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Jawab:</strong> Chain-of-Thought (CoT) matlab AI ko step-by-step sochne bolo final answer dene se pehle.</p>
+                                <p><strong>Kyun useful hai:</strong></p>
+                                <ul class="key-points">
+                                    <li>Complex problems mein better accuracy</li>
+                                    <li>Agar kuch galat ho toh debug karna easy</li>
+                                    <li>Reasoning process dikh jaata hai</li>
+                                    <li>Logical errors pakadne mein help karta hai</li>
+                                </ul>
+                                <p><strong>Example:</strong></p>
+                                <p>Aise mat poocho: "15 × 8 kitna hota hai?"</p>
+                                <p>Aise poocho: "15 × 8 kitna hota hai? Step-by-step dikhao."</p>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q5: Achhe prompt ke main components kya hain?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Jawab Dikhao</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Jawab:</strong> Achhe prompt mein yeh sab hona chahiye:</p>
+                                <ul class="key-points">
+                                    <li><strong>Role:</strong> "Tum ek... ho" - AI ko kya expertise chahiye?</li>
+                                    <li><strong>Context:</strong> Situation ke baare mein background information</li>
+                                    <li><strong>Task:</strong> Exactly kya karna hai?</li>
+                                    <li><strong>Format:</strong> Answer kaise structured hona chahiye?</li>
+                                    <li><strong>Constraints:</strong> Koi rules ya limitations (tone, length, etc.)</li>
+                                    <li><strong>Examples:</strong> Agar possible ho toh achha example dikhao</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q6: RAG (Retrieval-Augmented Generation) kya hai?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Jawab Dikhao</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Jawab:</strong> RAG ek technique hai jisme tum AI ko relevant documents ya information dete ho question poochne se pehle.</p>
+                                <p><strong>Kaise kaam karta hai:</strong></p>
+                                <ol class="key-points">
+                                    <li>Tum relevant documents/text do</li>
+                                    <li>AI unhe padhta aur samajhta hai</li>
+                                    <li>Tum apna question poochte ho</li>
+                                    <li>AI provided information ke basis pe answer deta hai</li>
+                                </ol>
+                                <p><strong>Fayde:</strong></p>
+                                <ul class="key-points">
+                                    <li>Zyada accurate answers</li>
+                                    <li>Real, verified data use hota hai</li>
+                                    <li>Hallucinations kam hote hain</li>
+                                    <li>Domain-specific questions ke liye best</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q7: Prompts ko better results ke liye kaise optimize karein?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Jawab Dikhao</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Jawab:</strong> Optimization ke liye yeh strategies use karo:</p>
+                                <ul class="key-points">
+                                    <li><strong>Specific bano:</strong> Vague words jaise "achha" ya "better" avoid karo</li>
+                                    <li><strong>Examples use karo:</strong> Few-shot prompting se accuracy badhti hai</li>
+                                    <li><strong>Break it down:</strong> Complex tasks ko chote steps mein todo</li>
+                                    <li><strong>Test aur refine karo:</strong> Different versions try karo aur dekho kya kaam karta hai</li>
+                                    <li><strong>Constraints use karo:</strong> Tone, format, length specify karo</li>
+                                    <li><strong>Context do:</strong> Zyada background = better understanding</li>
+                                    <li><strong>Iterative improvement:</strong> Har attempt se seekho</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q8: Prompt engineering mein common mistakes kya hain?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Jawab Dikhao</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Jawab:</strong> Yeh mistakes avoid karo:</p>
+                                <ul class="key-points">
+                                    <li><strong>Bahut vague hona:</strong> "Kuch achha likho" bahut unclear hai</li>
+                                    <li><strong>Context nahi dena:</strong> AI situation nahi samajh paata</li>
+                                    <li><strong>Unclear format:</strong> AI ko nahi pata answer kaise structure karna hai</li>
+                                    <li><strong>Bahut zyada constraints:</strong> AI confuse ho sakta hai</li>
+                                    <li><strong>Examples nahi dena:</strong> Complex tasks ke liye examples bahut help karte hain</li>
+                                    <li><strong>Perfection expect karna:</strong> Kabhi kabhi refine karna padta hai</li>
+                                    <li><strong>Testing nahi karna:</strong> Hamesha output verify karo</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q9: Temperature ka prompts mein kya importance hai?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Jawab Dikhao</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Jawab:</strong> Temperature control karta hai ki AI kitna creative ya random hoga.</p>
+                                <p><strong>Low temperature (0-0.3):</strong></p>
+                                <ul class="key-points">
+                                    <li>Zyada focused aur deterministic</li>
+                                    <li>Factual tasks, code generation ke liye best</li>
+                                    <li>Consistent outputs</li>
+                                </ul>
+                                <p><strong>High temperature (0.7-1.0):</strong></p>
+                                <ul class="key-points">
+                                    <li>Zyada creative aur diverse</li>
+                                    <li>Creative writing, brainstorming ke liye best</li>
+                                    <li>Varied outputs</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-card">
+                            <div class="qa-header">
+                                <h4>Q10: System, user, aur assistant messages mein kya farak hai?</h4>
+                                <button class="toggle-answer" onclick="toggleAnswer(this)">Jawab Dikhao</button>
+                            </div>
+                            <div class="qa-answer" style="display: none;">
+                                <p><strong>Jawab:</strong></p>
+                                <p><strong>System Message:</strong> AI ka behavior aur personality set karta hai. Yeh poori conversation mein rahta hai.</p>
+                                <p>Example: "Tum ek helpful coding tutor ho jo concepts simply explain karta hai."</p>
+                                
+                                <p><strong>User Message:</strong> User ka actual query ya request.</p>
+                                <p>Example: "Python mein for loop kaise banate hain?"</p>
+                                
+                                <p><strong>Assistant Message:</strong> AI ke previous responses, jo multi-turn conversations mein context ke liye use hote hain.</p>
+                                <p>Example: "Python mein for loop iterate karne ke liye use hota hai..."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Definitions Section -->
+    <section id="definitions" class="section">
+        <div class="container">
+            <h2 class="section-title">Important Definitions</h2>
+            <p class="section-subtitle">Key terms you need to know</p>
+
+            <div class="definitions-grid">
+                <div class="definition-card">
+                    <h3>🎯 Prompt</h3>
+                    <p class="term">Definition:</p>
+                    <p>A prompt is the input text or instruction you give to an AI model to generate a response.</p>
+                    <div class="hinglish-box">
+                        Prompt matlab woh instruction jo tum AI ko dete ho kuch karne ke liye. Jaise tum kisi ko kehte ho "chai bana do" - yeh ek prompt hai!
+                    </div>
+                </div>
+
+                <div class="definition-card">
+                    <h3>🤖 LLM (Large Language Model)</h3>
+                    <p class="term">Definition:</p>
+                    <p>A Large Language Model is an AI system trained on massive amounts of text data to understand and generate human-like text.</p>
+                    <div class="hinglish-box">
+                        LLM matlab bahut bada AI model jo bahut saare text pe trained hai. Jaise GPT, Claude, Gemini - yeh sab LLMs hain!
+                    </div>
+                </div>
+
+                <div class="definition-card">
+                    <h3>🎨 Temperature</h3>
+                    <p class="term">Definition:</p>
+                    <p>Temperature is a parameter that controls the randomness and creativity of AI responses. Lower = more focused, Higher = more creative.</p>
+                    <div class="hinglish-box">
+                        Temperature control karta hai ki AI kitna creative hoga. Kam temperature = serious answers, zyada temperature = creative answers!
+                    </div>
+                </div>
+
+                <div class="definition-card">
+                    <h3>🔢 Tokens</h3>
+                    <p class="term">Definition:</p>
+                    <p>Tokens are pieces of text that the AI processes. Roughly, 1 token ≈ 4 characters or 0.75 words in English.</p>
+                    <div class="hinglish-box">
+                        Tokens matlab text ke chote pieces. AI tokens mein sochta hai. Jaise "Hello World" approximately 2 tokens hai!
+                    </div>
+                </div>
+
+                <div class="definition-card">
+                    <h3>🎭 Hallucination</h3>
+                    <p class="term">Definition:</p>
+                    <p>When an AI generates false or made-up information that sounds plausible but isn't true.</p>
+                    <div class="hinglish-box">
+                        Hallucination matlab jab AI jhooth bol raha hai ya galat information de raha hai jo sach lagti hai lekin hai nahi!
+                    </div>
+                </div>
+
+                <div class="definition-card">
+                    <h3>📚 Context Window</h3>
+                    <p class="term">Definition:</p>
+                    <p>The maximum amount of text (in tokens) that an AI can process at once, including both input and output.</p>
+                    <div class="hinglish-box">
+                        Context window matlab kitna text AI ek baar mein process kar sakta hai. Jaise kuch models 4K tokens, kuch 128K tokens handle kar sakte hain!
+                    </div>
+                </div>
+
+                <div class="definition-card">
+                    <h3>🔄 Fine-tuning</h3>
+                    <p class="term">Definition:</p>
+                    <p>The process of further training a pre-trained model on specific data to specialize it for particular tasks.</p>
+                    <div class="hinglish-box">
+                        Fine-tuning matlab ek trained model ko aur specific kaam ke liye train karna. Jaise ek doctor ko heart specialist banana!
+                    </div>
+                </div>
+
+                <div class="definition-card">
+                    <h3>📖 Embeddings</h3>
+                    <p class="term">Definition:</p>
+                    <p>Numerical representations of text that capture semantic meaning, allowing AI to understand relationships between words.</p>
+                    <div class="hinglish-box">
+                        Embeddings matlab text ko numbers mein convert karna taaki AI samajh sake. Jaise "king" aur "queen" ke numbers similar honge!
+                    </div>
+                </div>
+
+                <div class="definition-card">
+                    <h3>🎯 Zero-Shot Learning</h3>
+                    <p class="term">Definition:</p>
+                    <p>The ability of an AI to perform tasks it wasn't explicitly trained on, without any examples.</p>
+                    <div class="hinglish-box">
+                        Zero-shot matlab AI bina training ke naye kaam kar sakta hai. Jaise tum kabhi cycle nahi chalayi lekin scooter chala sakte ho!
+                    </div>
+                </div>
+
+                <div class="definition-card">
+                    <h3>📊 Few-Shot Learning</h3>
+                    <p class="term">Definition:</p>
+                    <p>Learning to perform a task from just a few examples provided in the prompt.</p>
+                    <div class="hinglish-box">
+                        Few-shot matlab sirf 2-3 examples se seekhna. Jaise teacher ne 2 examples solve kiye aur tum samajh gaye!
+                    </div>
+                </div>
+
+                <div class="definition-card">
+                    <h3>🔗 Chain-of-Thought</h3>
+                    <p class="term">Definition:</p>
+                    <p>A prompting technique where the AI shows its reasoning process step-by-step.</p>
+                    <div class="hinglish-box">
+                        Chain-of-thought matlab step-by-step sochna. Jaise maths mein har step likhte ho, waise hi AI bhi karta hai!
+                    </div>
+                </div>
+
+                <div class="definition-card">
+                    <h3>📖 RAG (Retrieval-Augmented Generation)</h3>
+                    <p class="term">Definition:</p>
+                    <p>A technique that combines information retrieval with text generation by providing relevant documents to the AI.</p>
+                    <div class="hinglish-box">
+                        RAG matlab AI ko documents dena aur phir question poochna. Jaise open book exam - book se answer dhundho!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
+
+    <!-- Project Modal -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProject()">×</button>
+            <div id="projectDetail"></div>
+        </div>
+    </div>
+
+    <script>
+        // Accordion functionality
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                item.classList.toggle('active');
+            });
+        });
+
+        // Scroll to section
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Scroll to top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Show/hide scroll to top button
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.getElementById('scrollTop');
+            if (window.pageYOffset > 300) {
+                scrollTop.classList.add('show');
+            } else {
+                scrollTop.classList.remove('show');
+            }
+        });
+
+        // Toggle answer
+        function toggleAnswer(button) {
+            const answer = button.parentElement.nextElementSibling;
+            if (answer.style.display === 'none') {
+                answer.style.display = 'block';
+                button.textContent = button.textContent.includes('Show') ? 'Hide Answer' : 'Jawab Chhupao';
+            } else {
+                answer.style.display = 'none';
+                button.textContent = button.textContent.includes('Hide') ? 'Show Answer' : 'Jawab Dikhao';
+            }
+        }
+
+        // Switch interview tab
+        function switchInterviewTab(tabName) {
+            document.querySelectorAll('.interview-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Open project modal
+        function openProject(projectId) {
+            const modal = document.getElementById('projectModal');
+            const detail = document.getElementById('projectDetail');
+            
+            let content = '';
+            
+            if (projectId === 'project1') {
+                content = `
+                    <div class="project-detail">
+                        <h2>Project 1: Sentiment Analyzer</h2>
+                        <p>Build a web app that analyzes text sentiment using AI prompts.</p>
+                        
+                        <div class="project-tabs">
+                            <button class="project-tab-btn active" onclick="switchProjectTab('overview1')">Overview</button>
+                            <button class="project-tab-btn" onclick="switchProjectTab('structure1')">Structure</button>
+                            <button class="project-tab-btn" onclick="switchProjectTab('code1')">Code</button>
+                            <button class="project-tab-btn" onclick="switchProjectTab('explanation1')">Explanation</button>
+                        </div>
+                        
+                        <div id="overview1" class="project-tab-content active">
+                            <h3>Project Overview</h3>
+                            <p><strong>What you'll learn:</strong></p>
+                            <ul class="key-points">
+                                <li>Zero-shot prompting for sentiment analysis</li>
+                                <li>Role assignment in prompts</li>
+                                <li>Structured output (JSON)</li>
+                                <li>API integration</li>
+                            </ul>
+                            
+                            <div class="hinglish-box">
+                                Is project mein hum ek web app banayenge jo text padh ke batayega ki sentiment positive hai, negative hai ya neutral. Jaise movie review padh ke pata lagana!
+                            </div>
+                            
+                            <p><strong>Features:</strong></p>
+                            <ul class="key-points">
+                                <li>Text input for analysis</li>
+                                <li>Sentiment classification (Positive/Negative/Neutral)</li>
+                                <li>Confidence score</li>
+                                <li>Explanation of the sentiment</li>
+                            </ul>
+                        </div>
+                        
+                        <div id="structure1" class="project-tab-content">
+                            <h3>Project Structure</h3>
+                            <div class="file-structure">
+sentiment-analyzer/
+│
+├── index.html          (Main HTML file)
+├── style.css           (Styling)
+├── script.js           (JavaScript logic)
+└── README.md           (Documentation)
+                            </div>
+                            
+                            <p><strong>Files Explanation:</strong></p>
+                            <ul class="key-points">
+                                <li><strong>index.html:</strong> Contains the UI structure</li>
+                                <li><strong>style.css:</strong> Makes it look beautiful</li>
+                                <li><strong>script.js:</strong> Handles the AI logic and API calls</li>
+                                <li><strong>README.md:</strong> Project documentation</li>
+                            </ul>
+                        </div>
+                        
+                        <div id="code1" class="project-tab-content">
+                            <h3>Complete Code</h3>
+                            
+                            <div class="code-file">
+                                <div class="code-file-header">
+                                    <span>📄 index.html</span>
+                                    <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-file-body">
+                                    <pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Sentiment Analyzer&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;🎭 Sentiment Analyzer&lt;/h1&gt;
+        &lt;p class="subtitle"&gt;Analyze the emotion behind any text&lt;/p&gt;
+        
+        &lt;div class="input-section"&gt;
+            &lt;label&gt;Enter text to analyze:&lt;/label&gt;
+            &lt;textarea id="textInput" rows="5" placeholder="Type your text here..."&gt;&lt;/textarea&gt;
+            
+            &lt;label&gt;OpenAI API Key:&lt;/label&gt;
+            &lt;input type="password" id="apiKey" placeholder="sk-..."&gt;
+            
+            &lt;button onclick="analyzeSentiment()"&gt;Analyze&lt;/button&gt;
+        &lt;/div&gt;
+        
+        &lt;div id="results" class="results" style="display:none;"&gt;
+            &lt;h2&gt;Results&lt;/h2&gt;
+            &lt;div class="result-card"&gt;
+                &lt;div id="sentiment" class="sentiment-badge"&gt;&lt;/div&gt;
+                &lt;p&gt;Confidence: &lt;span id="confidence"&gt;&lt;/span&gt;&lt;/p&gt;
+                &lt;p id="explanation"&gt;&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                                </div>
+                            </div>
+                            
+                            <div class="code-file">
+                                <div class="code-file-header">
+                                    <span>📄 script.js</span>
+                                    <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-file-body">
+                                    <pre>async function analyzeSentiment() {
+    const text = document.getElementById('textInput').value;
+    const apiKey = document.getElementById('apiKey').value;
+    
+    if (!text || !apiKey) {
+        alert('Please enter both text and API key');
+        return;
+    }
+    
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': \`Bearer \${apiKey}\`
+            },
+            body: JSON.stringify({
+                model: 'gpt-3.5-turbo',
+                messages: [{
+                    role: 'system',
+                    content: 'You are a sentiment analysis expert. Analyze text and return JSON with: sentiment (positive/negative/neutral), confidence (0-100), explanation.'
+                }, {
+                    role: 'user',
+                    content: \`Analyze: "\${text}"\`
+                }],
+                temperature: 0.3
+            })
+        });
+        
+        const data = await response.json();
+        const result = JSON.parse(data.choices[0].message.content);
+        
+        displayResults(result);
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+function displayResults(result) {
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('sentiment').textContent = result.sentiment.toUpperCase();
+    document.getElementById('sentiment').className = 'sentiment-badge ' + result.sentiment;
+    document.getElementById('confidence').textContent = result.confidence + '%';
+    document.getElementById('explanation').textContent = result.explanation;
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="explanation1" class="project-tab-content">
+                            <h3>Code Explanation</h3>
+                            
+                            <h4>How it works:</h4>
+                            <ol class="key-points">
+                                <li><strong>User Input:</strong> User enters text and API key</li>
+                                <li><strong>API Call:</strong> We send a request to OpenAI with a system message (role) and user message (text to analyze)</li>
+                                <li><strong>System Message:</strong> Tells AI to be a sentiment expert and return JSON</li>
+                                <li><strong>Temperature 0.3:</strong> Low temperature for consistent, factual results</li>
+                                <li><strong>Response:</strong> AI returns JSON with sentiment, confidence, explanation</li>
+                                <li><strong>Display:</strong> We show the results with appropriate styling</li>
+                            </ol>
+                            
+                            <div class="hinglish-box">
+                                <strong>Kaise kaam karta hai:</strong><br>
+                                1. User text aur API key enter karta hai<br>
+                                2. Hum OpenAI ko request bhejte hain with system message (AI ka role) aur user message (analyze karne ke liye text)<br>
+                                3. System message AI ko batata hai ki woh sentiment expert hai aur JSON return kare<br>
+                                4. Temperature 0.3 rakha hai taaki consistent results mile<br>
+                                5. AI JSON return karta hai with sentiment, confidence, explanation<br>
+                                6. Hum results ko achhe se display karte hain
+                            </div>
+                            
+                            <h4>Key Prompt Engineering Concepts:</h4>
+                            <ul class="key-points">
+                                <li><strong>Role Assignment:</strong> "You are a sentiment analysis expert"</li>
+                                <li><strong>Output Format:</strong> Specified JSON structure</li>
+                                <li><strong>Constraints:</strong> Temperature set to 0.3 for consistency</li>
+                                <li><strong>Clear Task:</strong> "Analyze text and return..."</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            } else if (projectId === 'project2') {
+                content = `
+                    <div class="project-detail">
+                        <h2>Project 2: Data Extractor</h2>
+                        <p>Extract structured information from unstructured text using few-shot prompting.</p>
+                        
+                        <div class="hinglish-box">
+                            Is project mein hum messy text se specific information extract karenge - jaise names, emails, phone numbers, dates. Few-shot prompting use karenge!
+                        </div>
+                        
+                        <p><strong>Coming soon...</strong> This project will teach you how to extract structured data from unstructured text using few-shot prompting techniques.</p>
+                    </div>
+                `;
+            } else if (projectId === 'project3') {
+                content = `
+                    <div class="project-detail">
+                        <h2>Project 3: Smart Chatbot</h2>
+                        <p>Build an intelligent chatbot that remembers context and provides helpful responses.</p>
+                        
+                        <div class="hinglish-box">
+                            Is project mein hum ek smart chatbot banayenge jo conversation yaad rakhta hai aur helpful responses deta hai. Chain-of-thought aur memory management use karenge!
+                        </div>
+                        
+                        <p><strong>Coming soon...</strong> This project will teach you how to build a context-aware chatbot using advanced prompting techniques.</p>
+                    </div>
+                `;
+            }
+            
+            detail.innerHTML = content;
+            modal.classList.add('active');
+        }
+
+        // Close project modal
+        function closeProject() {
+            document.getElementById('projectModal').classList.remove('active');
+        }
+
+        // Switch project tab
+        function switchProjectTab(tabId) {
+            document.querySelectorAll('.project-tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.project-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Copy code
+        function copyCode(button) {
+            const code = button.parentElement.nextElementSibling.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+
+        // Active nav link on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
